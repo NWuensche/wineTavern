@@ -1,0 +1,1 @@
+In diesen Ordner sind entstehende Dateien wie z.B. UML-Modelle abzulegen.
