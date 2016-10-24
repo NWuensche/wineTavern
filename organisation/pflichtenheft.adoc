@@ -22,10 +22,10 @@ Einleitung für fachfremde Personen
 == Systemgrenze und Top-Level-Architektur
 
 === Kontextdiagramm
-Das Kontextdiagramm zeigt das geplante Software-System in seiner Umgebung. Zur Umgebung gehören alle Nutzergruppen des Systems und Nachbarsysteme. Die Grafik kann auch informell gehalten sein. Überlegen Sie sich dann geeignete Symbole. Die Grafik kann beispielsweise mit Visio erstellt werden. Wenn nötig, erläutern Sie diese Grafik.
+image::src/Kontextdiagramm.jpg[Kontextdiagramm, 362, 170, link=src/Kontextdiagramm.jpg]
 
 === Top-level architecture
-Dokumentieren Sie ihre Top-Level-Architektur mit Hilfe eines Komponentendiagramm.
+image::src/Top-Level-Architektur.jpg[Top-Level-Architektur, 678, 411, link=src/Top-Level-Architektur.jpg]
 
 == Anwendungsfälle
 
