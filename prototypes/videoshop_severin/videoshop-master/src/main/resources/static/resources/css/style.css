@@ -15,8 +15,8 @@ body {
 /* Nav */
 
 nav {
-	width:1000px;
-	float:right;
+	/*width:1000px;*/
+	/*float:right;*/
 	color: white;
 	background: #B9D3F3; 
 }
@@ -58,7 +58,7 @@ a {
 /* �berschriften */
 
 h1 {
-	color: #ffffff;
+	color: #254899;
 	font: 2em sans-serif;
 	font-variant: small-caps;
 	padding-top: 10px;
