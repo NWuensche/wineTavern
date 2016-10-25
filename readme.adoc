@@ -1,0 +1,26 @@
+# Fahrgastinformationssystem
+
+Dieses Programm wird im Rahmen des Softwaretechnologie-Projektes im Studiengang Informatik der http://tu-dresden.de[Technischen Universität Dresden] erstellt. Es soll als Hilfs- und Demonstrationswerkzeug im http://tu-dresden.de/die_tu_dresden/fakultaeten/vkw/ibv/iel/EBL/index_html[Eisenbahnbetriebslabor] der Fakultät Verkehrswissenschaften _"Friedrich List"_ eingesetzt werden.
+
+## Quicklinks
+
+* link:app/src/main/asciidoc/pflichtenheft.adoc[Pflichtenheft]
+* link:app/src/main/asciidoc/entwickler_doku.adoc[Entwicklerdokumentation]
+* link:app/src/main/asciidoc/enduserdocumentation/benutzerhandbuch.adoc[Benutzerhandbuch]
+
+## Start des Systems
+
+```shell
+$cd ./app
+$mvn spring-boot:run
+```
+
+## Autoren
+
+* Niklas Wünsche (https://github.com/luux[@luux])
+* Louis Wilke (https://github.com/kloppstock[@kloppstock])
+* Severin  (https://github.com/schmittlauch[@schmittlauch])
+* Robert Mörseburg (https://github.com/fl4m[@fl4m])
+* Zdravko Yanakiev (https://github.com/z-yan[@z-yan])
+
+Betreuung durch Fabian Tolkemit (https://github.com/), Lehrstuhl Softwaretechnologie, Institut für Software- und Multimediatechnik, Fakultät Informatik der TU Dresden.
