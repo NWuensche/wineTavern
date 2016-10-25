@@ -1,1 +1,3 @@
 In diesen Ordner sind entstehende Dateien wie z.B. UML-Modelle abzulegen.
+
+Die UML-Diagramme aus dem Pflichtenheft liegen jetzt unter swt16w17/organisation/src.

@@ -15,7 +15,10 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 == Severin
 |===
 |Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+| 14.10.2016 | 13:00 | 14:30 | Gierke Docs lesen
+| 15.10.2016 | 10:00 | 12:00 | Einarbeitung Springboot & IntelliJ
+| 22.10.2016 | 17:00 | 18:00 | Einarbeitung MagicDraw, Erstellung Klassendiagramm
+| 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
 |===
 
 == Louis
