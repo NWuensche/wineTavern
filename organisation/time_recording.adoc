@@ -12,6 +12,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |18.10.2016 | 16:50 |18:20 | Gierke: Spring
 |25.10.2016 | 16:50 |18:20 | Gierke: Salespoint
 |01.11.2016 | 16:50 |18:20 | ?
+|===
 
 == Meeting
 |===
