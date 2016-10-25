@@ -5,7 +5,40 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 
 // See http://asciidoctor.org/docs/user-manual/#tables
 [option="headers"]
+== Meeting
 |===
-|Von |Bis |Dev1 |Dev2 |Dev3 |Dev4 |Dev5 |Dev6 |Meeting
-|…   |…   |…    |…    |…    |…    |…    |…    |…
+|Datum |Von |Bis |Beschreibung
+|14.10.2016 | 09:20 |11:20 | Erste Ideen und git Einführung
+|21.10.2016 | 09:20 |13:00 | Erarbeitung Fragenkatalog und Prototypenprogrammierung (Videoshop)
+|===
+
+== Severin
+|===
+|Datum |Von |Bis |Beschreibung
+|…   |…   |…    |…
+|===
+
+== Louis
+|===
+|Datum |Von |Bis |Beschreibung
+|…   |…   |…    |…
+|===
+
+== Niklas
+|===
+|Datum |Von |Bis |Beschreibung
+|…   |…   |…    |…
+|===
+
+== Katharina
+|===
+|Datum |Von |Bis |Beschreibung
+|…   |…   |…    |…
+|===
+
+== Michel
+|===
+|Datum |Von |Bis |Beschreibung
+|22.10.2016 |13:00 |14:00 |Videshopmodifikation und UseCase Diagramm 
+|25.10.2016 |14:00 |14:30 |Erarbeiten Klassendiagramm
 |===
