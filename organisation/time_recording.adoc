@@ -29,8 +29,13 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 
 == Niklas
 |===
-|Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+|Datum          |Von        |Bis        |Beschreibung
+| 13.10.2016    | 09:00     | 11:00     | DDD, Salespoint verstehen
+| 15.10.2016    | 13:00     | 16:00     | Videoshop verstehen
+| 18.10.2016    | 19:00     | 21:00     | In UML einlesen
+| 20.10.2016    | 16:00     | 19:30     | Guestbook Prototype
+| 23.10.2016    | 08:30     | 11:45     | Sequenzdiagramme zeichnen
+| 24.10.2016    | 19:00     | 20:00     | Sequenzdiagramme beenden
 |===
 
 == Katharina
