@@ -69,19 +69,25 @@ Für jeden Dialog:
 3. Maskenelemente (Ein/Ausgabefelder, Aktionen wie Buttons, Listen, …)
 4. Evtl. Maskendetails, spezielle Widgets
 
+
 == Datenmodell
 
 === Überblick: Klassendiagramm
 UML-Analyseklassendiagramm
 
 === Klassen und Enumerationen
-Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Klassen/Enumerationen dar. Jede Klasse und Enumeration wird in Form eines Glossars textuell beschrieben. Zusätzlich werden eventuellen Konsistenz- und Formatierungsregeln aufgeführt.
 
 // See http://asciidoctor.org/docs/user-manual/#tables
 [options="header"]
 |===
-|Klasse/Enumeration |Beschreibung |
-|…                  |…            |
+|Klasse/Enumeration |Beschreibung
+|Event|Sammelt alle Informationen zu den Veranstaltungen.
+|Person|Sammelt alle Informationen für jede angestellte Person, samt Login.
+|Produkt|Sammelt alle Informationen über ein Produkt(bspw. Name, Kategorie, Menge, ...)
+|Rechnung|Sammlung für alle gekauften Produkte pro Tisch und Bedienung samt Stückzahl.
+|Rolle (Enumeration)|Rechtemanagement für Personal
+|Termin|Zeitspanne, mit Datum, Anfangs- und Endzeit
+|Tisch|...
 |===
 
 == Aktzeptanztestfälle
