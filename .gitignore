@@ -4,3 +4,5 @@ target/
 .classpath
 .springBeans
 .DS_Store
+.idea
+
