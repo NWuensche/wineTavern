@@ -24,8 +24,15 @@ Einleitung für fachfremde Personen
 === Kontextdiagramm
 image::src/Kontextdiagramm.jpg[Kontextdiagramm, 362, 170, link=src/Kontextdiagramm.jpg]
 
-=== Top-level architecture
+=== Top-Level Architektur
 image::src/Top-Level-Architektur.jpg[Top-Level-Architektur, 678, 411, link=src/Top-Level-Architektur.jpg]
+
+=== Sequenzdiagramme
+image::src/Sequenzdiagramme/Event.png[Sequenzdiagramm 1, 600,400 link=src/Sequenzdiagramme/Event.png]
+image::src/Sequenzdiagramme/Tagesrechnung.png[Sequenzdiagramm 1, 600,400 link=src/Sequenzdiagramme/Tagesrechnung.png]
+image::src/Sequenzdiagramme/Tischreservierung.png[Sequenzdiagramm 1, 600,400 link=src/Sequenzdiagramme/Tischreservierung.png]
+image::src/Sequenzdiagramme/Weinkauf.png[Sequenzdiagramm 1, 600,400 link=src/Sequenzdiagramme/Weinkauf.png]
+
 
 == Anwendungsfälle
 
