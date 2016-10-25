@@ -25,7 +25,7 @@ Einleitung für fachfremde Personen
 image::src/Kontextdiagramm.jpg[Kontextdiagramm, 362, 170, link=src/Kontextdiagramm.jpg]
 
 === Top-level architecture
-image::src/Top-Level-Architektur.jpg[Top-Level-Architektur, 678, 411, link=src/Top-Level-Architektur.jpg]
+image::src/Top-Level-Architecture.png[Top-Level-Architektur, 763, 469, link=src/Top-Level-Architecture.png]
 
 == Anwendungsfälle
 
