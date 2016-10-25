@@ -33,7 +33,11 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 == Louis
 |===
 |Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+| 19.10.2016 | 16:00 | 19:00 | Einlesen in Spring
+| 20.10.2016 | 16:00 | 17:30 | Erstellen der Diagramme für das Pflichtenheft
+| 23.10.2016 | 11:00 | 13:00 | Überarbeitung Prototyp
+| 24.10.2016 | 16:45 | 17:30 | Einrichten von GIT (wieder)
+| 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
 |===
 
 == Niklas
