@@ -1,10 +1,19 @@
-= Zeiterfassung für Gruppe XX
+= Zeiterfassung für Gruppe 17
 
 Notieren Sie die Zeit in Minuten für jeden Entwickler und für Team-Treffen pro Woche.
 Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen mit Teamkollegen und sonstige auf das Praktikum bezogene Aufgaben.
 
 // See http://asciidoctor.org/docs/user-manual/#tables
 [option="headers"]
+== Vorlesungen
+|===
+|Datum |Von |Bis |Beschreibung
+|11.10.2016 | 16:50 |18:20 | Demuth: Kennenlernen
+|18.10.2016 | 16:50 |18:20 | Gierke: Spring
+|25.10.2016 | 16:50 |18:20 | Gierke: Salespoint
+|01.11.2016 | 16:50 |18:20 | ?
+|===
+
 == Meeting
 |===
 |Datum |Von |Bis |Beschreibung
@@ -15,19 +24,31 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 == Severin
 |===
 |Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+| 14.10.2016 | 13:00 | 14:30 | Gierke Docs lesen
+| 15.10.2016 | 10:00 | 12:00 | Einarbeitung Springboot & IntelliJ
+| 22.10.2016 | 17:00 | 18:00 | Einarbeitung MagicDraw, Erstellung Klassendiagramm
+| 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
 |===
 
 == Louis
 |===
 |Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+| 19.10.2016 | 16:00 | 19:00 | Einlesen in Spring
+| 20.10.2016 | 16:00 | 17:30 | Erstellen der Diagramme für das Pflichtenheft
+| 23.10.2016 | 11:00 | 13:00 | Überarbeitung Prototyp
+| 24.10.2016 | 16:45 | 17:30 | Einrichten von GIT (wieder)
+| 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
 |===
 
 == Niklas
 |===
-|Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+|Datum          |Von        |Bis        |Beschreibung
+| 13.10.2016    | 09:00     | 11:00     | DDD, Salespoint verstehen
+| 15.10.2016    | 13:00     | 16:00     | Videoshop verstehen
+| 18.10.2016    | 19:00     | 21:00     | In UML einlesen
+| 20.10.2016    | 16:00     | 19:30     | Guestbook Prototype
+| 23.10.2016    | 08:30     | 11:45     | Sequenzdiagramme zeichnen
+| 24.10.2016    | 19:00     | 20:00     | Sequenzdiagramme beenden
 |===
 
 == Katharina

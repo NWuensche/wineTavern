@@ -6,3 +6,15 @@ target/
 .DS_Store
 .idea
 
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
