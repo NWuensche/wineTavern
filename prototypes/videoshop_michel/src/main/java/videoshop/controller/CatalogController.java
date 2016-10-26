@@ -87,8 +87,10 @@ class CatalogController {
 		if(SecurityContextHolder.getContext().getAuthentication()
 				instanceof AnonymousAuthenticationToken)
 			return "login";
-		model.addAttribute("catalog", videoCatalog.findByAdult(true));
+	    model.addAttribute("catalog", videoCatalog.findByAdult(true));
 		model.addAttribute("title", "Porn");
+
+		model.addAttribute("pornStyle", "background-image: url('resources/img/cds_porn.jpg')");
 
 		return "discCatalog";
 	}
