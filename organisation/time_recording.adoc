@@ -1,4 +1,4 @@
-= Zeiterfassung für Gruppe 17
+﻿= Zeiterfassung für Gruppe 17
 
 Notieren Sie die Zeit in Minuten für jeden Entwickler und für Team-Treffen pro Woche.
 Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen mit Teamkollegen und sonstige auf das Praktikum bezogene Aufgaben.
@@ -28,6 +28,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 15.10.2016 | 10:00 | 12:00 | Einarbeitung Springboot & IntelliJ
 | 22.10.2016 | 17:00 | 18:00 | Einarbeitung MagicDraw, Erstellung Klassendiagramm
 | 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
+| 26.10.2016 | 11:00 | 12:10 | Überarbeiten des Pflichtenhefts
 |===
 
 == Louis
@@ -38,6 +39,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 23.10.2016 | 11:00 | 13:00 | Überarbeitung Prototyp
 | 24.10.2016 | 16:45 | 17:30 | Einrichten von GIT (wieder)
 | 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
+| 26.10.2016 | 11:00 | 12:10 | Überarbeiten des Pflichtenhefts
 |===
 
 == Niklas

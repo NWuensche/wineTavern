@@ -6,15 +6,30 @@ __Version:__    *1.0*
 
 __Status:__     *In Arbeit*
 
-__Stand:__      *Bearbeitungsdatum*
+__Stand:__      *26.10.2016*
 
 == Zusammenfassung
 Eine kurze Beschreibung des Dokuments. Wenige Absätze.
 
 == Inhaltsverzeichnis
+<<aufgabenstellung-und-zielsetzung>>
+<<fachlicher-Überblick>>
+<<systemgrenze-und-top-level-architektur>>
+<<anwendungsfälle>>
+<<anforderungen>>
+<<gui-prototyp>>
+<<datenmodell>>
+<<aktzeptanztestfälle>>
+<<offene-punkte>>
 
 == Aufgabenstellung und Zielsetzung
-Text aus Aufgabenstellung kopieren und ggfs. präzisieren.
+.Das vorliegende Projekt umfasst die Erstellung eines Salespoints mit folgenden Funktionen:
+* Erstellung eines Kassensystems
+* Zusammenstellen einer Tageskarte
+* Nachbestellungen bei Lieferanten und Abrechnung
+* Veranstaltungsprogramm und Abrechnung mit Künstlern
+* täglich Abrechnung des Betriebsergebnisses
+* Personalverwaltung
 
 == Fachlicher Überblick
 Einleitung für fachfremde Personen
@@ -33,7 +48,6 @@ image::src/Sequenzdiagramme/Tagesrechnung.png[Sequenzdiagramm 1, 600,400 link=sr
 image::src/Sequenzdiagramme/Tischreservierung.png[Sequenzdiagramm 1, 600,400 link=src/Sequenzdiagramme/Tischreservierung.png]
 image::src/Sequenzdiagramme/Weinkauf.png[Sequenzdiagramm 1, 600,400 link=src/Sequenzdiagramme/Weinkauf.png]
 
-
 == Anwendungsfälle
 
 === Überblick Anwendungsfalldiagramm
@@ -47,8 +61,12 @@ Akteure sind die Benutzer des Software-Systems oder Nachbarsysteme, welche darau
 // See http://asciidoctor.org/docs/user-manual/#tables
 [options="header"]
 |===
-|Name |Beschreibung |
-|…    |…            |
+|Name       |Beschreibung
+|Boss/Admin |Hat Rechte um auf alle Funktionen des Systems zuzugreifen
+|Accountant |Bürokraft, zuständig für Personal und Rechnungswesen
+|Service    |Vermittler/in zwischen Gast und Kassensystem
+|Cook       |Angestellter in der Küche. Erhält Sicht auf offene Bestellungen
+|Visitor    |Externer Besucher der Website. Nur öffentliche Sicht auf das System
 |===
 
 === Anwendungsfallbeschreibungen
