@@ -12,15 +12,15 @@ __Stand:__      *26.10.2016*
 Eine kurze Beschreibung des Dokuments. Wenige Absätze.
 
 == Inhaltsverzeichnis
-<<aufgabenstellung-und-zielsetzung>>
-<<fachlicher-Überblick>>
-<<systemgrenze-und-top-level-architektur>>
-<<anwendungsfälle>>
-<<anforderungen>>
-<<gui-prototyp>>
-<<datenmodell>>
-<<aktzeptanztestfälle>>
-<<offene-punkte>>
+<<aufgabenstellung-und-zielsetzung>> +
+<<fachlicher-Überblick>> +
+<<systemgrenze-und-top-level-architektur>> +
+<<anwendungsfälle>> +
+<<anforderungen>> +
+<<gui-prototyp>> +
+<<datenmodell>> +
+<<aktzeptanztestfälle>> +
+<<offene-punkte>> +
 
 == Aufgabenstellung und Zielsetzung
 .Das vorliegende Projekt umfasst die Erstellung eines Salespoints mit folgenden Funktionen:
