@@ -1,12 +1,12 @@
-# Fahrgastinformationssystem
+# Winetavern
 
-Dieses Programm wird im Rahmen des Softwaretechnologie-Projektes im Studiengang Informatik der http://tu-dresden.de[Technischen Universität Dresden] erstellt. Es soll als Hilfs- und Demonstrationswerkzeug im http://tu-dresden.de/die_tu_dresden/fakultaeten/vkw/ibv/iel/EBL/index_html[Eisenbahnbetriebslabor] der Fakultät Verkehrswissenschaften _"Friedrich List"_ eingesetzt werden.
+Dieses Programm wird im Rahmen des Softwaretechnologie-Projektes im Studiengang Informatik der http://tu-dresden.de[Technischen Universität Dresden] erstellt.
 
 ## Quicklinks
 
-* link:app/src/main/asciidoc/pflichtenheft.adoc[Pflichtenheft]
-* link:app/src/main/asciidoc/entwickler_doku.adoc[Entwicklerdokumentation]
-* link:app/src/main/asciidoc/enduserdocumentation/benutzerhandbuch.adoc[Benutzerhandbuch]
+* link:organisation/pflichtenheft.adoc[Pflichtenheft]
+* link:organisation/entwickler_doku.adoc[Entwicklerdokumentation]
+* link:organisation/benutzerhandbuch.adoc[Benutzerhandbuch]
 
 ## Start des Systems
 
@@ -17,10 +17,10 @@ $mvn spring-boot:run
 
 ## Autoren
 
-* Niklas Wünsche (https://github.com/luux[@luux])
-* Louis Wilke (https://github.com/kloppstock[@kloppstock])
-* Severin  (https://github.com/schmittlauch[@schmittlauch])
-* Robert Mörseburg (https://github.com/fl4m[@fl4m])
-* Zdravko Yanakiev (https://github.com/z-yan[@z-yan])
+* Niklas Wünsche (https://github.com/NWuensche[@NWuensche])
+* Louis Wilke (https://github.com/SoulKa[@SoulKa])
+* Severin Engert (https://github.com/sev01[@sev01])
+* Katharina Letz (https://github.com/koezaah[@koezaah])
+* Michel Kunkler (https://github.com/ltsstar[@ltsstar])
 
-Betreuung durch Fabian Tolkemit (https://github.com/), Lehrstuhl Softwaretechnologie, Institut für Software- und Multimediatechnik, Fakultät Informatik der TU Dresden.
+Betreuung durch Fabian Tolkmitt (https://github.com/ftolkmitt[@ftolkmitt]), Lehrstuhl Softwaretechnologie, Institut für Software- und Multimediatechnik, Fakultät Informatik der TU Dresden.
