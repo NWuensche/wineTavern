@@ -1,6 +1,20 @@
-db/
 target/
 .settings/
 .project
 .classpath
 .springBeans
+.DS_Store
+.idea
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
