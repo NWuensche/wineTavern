@@ -28,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
  *
  * @author Oliver Gierke
  */
+
 @EnableSalespoint
 public class VideoShop {
 
