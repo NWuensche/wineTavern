@@ -36,8 +36,9 @@ public class Application {
 
 			http.csrf().disable();
 
-			http.authorizeRequests().antMatchers("/**").permitAll().and().formLogin().loginProcessingUrl("/login").and()
-					.logout().logoutUrl("/logout").logoutSuccessUrl("/");
+			http.authorizeRequests().antMatchers("/**").permitAll().and().//
+					formLogin().loginPage("/login").loginProcessingUrl("/login").and(). //
+					logout().logoutUrl("/logout").logoutSuccessUrl("/");
 		}
 	}
 }
