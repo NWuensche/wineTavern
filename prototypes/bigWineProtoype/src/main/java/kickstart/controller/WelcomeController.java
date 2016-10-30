@@ -15,14 +15,30 @@
  */
 package kickstart.controller;
 
+import kickstart.model.WeinCatalog;
+import kickstart.model.Wein;
+
+import org.javamoney.moneta.Money;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static org.salespointframework.core.Currencies.EURO;
+
+
 @Controller
 public class WelcomeController {
+	private final WeinCatalog weinCatalog;
+
+	@Autowired
+	public WelcomeController(WeinCatalog weinCatalog) {
+		this.weinCatalog = weinCatalog;
+	}
+
 
 	@RequestMapping("/")
 	public String index() {
+		this.weinCatalog.save(new Wein("Tetrapack Wein", Money.of(1.90, EURO)));
 		return "welcome";
 	}
 }
