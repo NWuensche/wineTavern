@@ -53,6 +53,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 20.10.2016    | 16:00     | 19:30     | Guestbook Prototype
 | 23.10.2016    | 08:30     | 11:45     | Sequenzdiagramme zeichnen
 | 24.10.2016    | 19:00     | 20:00     | Sequenzdiagramme beenden
+| 28.10.2016    | 15:00     | 17:00     | Akzeptanztests schreiben
+| 30.10.2016    | 08:00     | 15:00     | AKD weiter, JUnit einrichten
 |===
 
 == Katharina
