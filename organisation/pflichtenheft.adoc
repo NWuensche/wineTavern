@@ -1,4 +1,4 @@
-= Pflichtenheft
+﻿= Pflichtenheft
 
 == Projektname
 
@@ -78,10 +78,29 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 == Anforderungen
 
 === Muss-Kriterien
-Was das zu erstellende Programm auf alle Fälle leisten muss.
+* Personalverwaltung
+* Kassensystem
+    ** Korrekte Berechnung der Preise: Bedienstete zahlen 90% des Kartenpreises
+    ** Erstellung von Rechnungen mit der Option diese zu teilen
+    ** Nachbestellungen auf vorhandene Rechnung möglich
+    ** Aufnahme von Bestellungen pro Tisch (identifiziert durch eine Nummer)
+    ** Tägliche Abrechnung des Betriebsereignisses
+        *** Personengebungene Abrechnung
+        *** Nicht bezahlte Waren werden von der Bedienung getragen
+    ** Abrechnung mit Künstlern
+* Weiterleitung der Bestellungen an die Küche
+* Zusammenstellen einer Tageskarte (durch modifizieren der Karte des vergangenen Tages)
+* Nachbestellungen bei Liferanten und Nachbestellung
+* Events verwalten
+    ** Weinproben
+        *** Ausschließlicher ausschank von Weinen des Winzers, diese Weine kosten 50% des Normalpreise
+    ** Kleinkunstveranstaltungen
 
 === Kann-Kriterien
-Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
+//Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
+* Graphische verwaltung der Tische
+* Graphische verwaltung der Tischreservierungen
+* Automatische Nachbestellung von Waren
 
 == GUI Prototyp
 
