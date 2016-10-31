@@ -21,9 +21,12 @@ import kickstart.model.Wein;
 import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import static org.salespointframework.core.Currencies.EURO;
+
+import kickstart.RegisterCredentials;
 
 
 @Controller
@@ -37,12 +40,9 @@ public class WelcomeController {
 
 
 	@RequestMapping("/")
-	public String index() {
-<<<<<<< HEAD
-		this.weinCatalog.save(new Wein("Tetrapack Wein", Money.of(1.90, EURO)));
-		return "welcome";
-=======
+	public String index(Model model) {
+		RegisterCredentials registerCredentials = new RegisterCredentials();
+        model.addAttribute("registercredentials", registerCredentials);
 		return "login";
->>>>>>> 4-login-templ
 	}
 }
