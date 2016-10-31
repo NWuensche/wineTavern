@@ -21,7 +21,7 @@ public class RegisterCredentials {
         this.name = name;
     }
 
-    public void setPassword(String pw) {
+    public void setPassword(String password) {
         this.password = password;
     }
 }
