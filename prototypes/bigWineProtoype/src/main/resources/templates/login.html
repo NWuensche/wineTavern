@@ -81,17 +81,17 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <form th:action="@{/addNew}" method="post">
+                    <form th:action="@{/addNew}" th:object="${registercredentials}" method="post">
                         <div class="form-group row">
                             <label for="name" class="col-xs-6 form-control-label">Username</label>
                             <div class="col-xs-6">
-                                <input name="name" id="name" type="text" required="true" size="15"/>
+                                <input name="name" id="name" type="text" required="true" size="15" th:field="*{name}"/>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="pw" class="col-xs-6 form-control-label">Login-Code:</label>
                             <div class="col-xs-6">
-                                <input name="pw" id="pw" type="password" pattern="[0-9]{4}" required="true" size="4"/>
+                                <input name="password" th:field="*{password}" type="password" pattern="[0-9]{4}" required="true" size="4"/>
                             </div>
                         </div>
                         <button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>
