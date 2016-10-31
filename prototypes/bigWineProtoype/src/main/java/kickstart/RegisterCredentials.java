@@ -6,6 +6,7 @@ package kickstart;
  */
 
 public class RegisterCredentials {
+
     private String name;
     private String password;
 

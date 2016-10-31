@@ -7,8 +7,6 @@ import kickstart.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 /**
  * Web integration tests for the {@link ErrorController}
  */

@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class ErrorController {
+
     @RequestMapping("/err0r")
     public String index() {
         return "welcome";
     }
+
 }
