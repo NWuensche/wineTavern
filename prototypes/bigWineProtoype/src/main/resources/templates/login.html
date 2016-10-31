@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
+          th:href="@{//cdn.jsdelivr.net/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen" />
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}"/>
+    <link th:href="@{//cdn.jsdelivr.net/fontawesome/4.6.3/css/font-awesome.min.css}"
+          rel="stylesheet"/>
+    <script th:src="@{//cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js}"></script>
+    <script th:src="@{//cdn.jsdelivr.net/tether/1.3.7/tether.min.js}"></script>
+    <script th:src="@{//cdn.jsdelivr.net/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js}"></script>
+    <title>Login</title>
+</head>
+<body>
+<div class="navbar-fixed-top text-xs-center bg-faded" th:include="navigation :: navigation-top"></div>
+<div class="container-fluid">
+    <!--<div class="col-xs-3" th:include="navigation :: navigation-left"></div>
+    <div class="col-xs-3">MENU HERE</div>
+    <div class="col-xs-9">-->
+        <div class="card-columns">
+            <div class="card" th:each="staff : ${staffCollection}">
+                <img class="card-img-top" src="" alt="Profilbild"/>
+                <div class="card-block">
+                    <h2 class="card-title" th:text="${staff.name}"></h2>
+                    <button type="button" class="btn btn-primary btn-lg"
+                            data-toggle="modal" data-target="#loginfield" th:text="LOGIN"
+                            onclick="login(this.parentElement.getElementsByTagName('h2')[0].innerHTML)">
+                    </button>
+                </div>
+            </div>
+            <div class="card">
+                <img class="card-img-top" src="" alt="AnonymousPicture"/>
+                <div class="card-block">
+                    <h2 class="card-title">+ Mitarbeiter</h2>
+                    <button type="button" class="btn btn-primary btn-lg"
+                            data-toggle="modal" data-target="#addNew">
+                        <span class="fa fa-plus fa-lg"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="modal fade" id="loginfield" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Login: <span id="title"></span></h3>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form th:action="@{/login}" method="post">
+                        <input name="name" id="name" type="hidden"/>
+                        <div class="form-group row">
+                            <label for="pw" class="col-xs-6 form-control-label">Login-Code:</label>
+                            <div class="col-xs-6">
+                                <input name="pw" id="pw" type="password" pattern="[0-9]{4}" required="true" size="4"/>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-lg">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">+ Mitarbeiter</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form th:action="@{/addNew}" method="post">
+                        <div class="form-group row">
+                            <label for="name" class="col-xs-6 form-control-label">Username</label>
+                            <div class="col-xs-6">
+                                <input name="name" id="name" type="text" required="true" size="15"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="pw" class="col-xs-6 form-control-label">Login-Code:</label>
+                            <div class="col-xs-6">
+                                <input name="pw" id="pw" type="password" pattern="[0-9]{4}" required="true" size="4"/>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-fixed-bottom bg-danger text-xs-center" th:if="${loginError}">
+    <span style="font-size:2rem; line-height:3rem;"><b>Wrong Password!</b></span>
+</nav>
+
+<script>
+    $(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function login(username){
+        document.getElementById("name").value=username;
+        document.getElementById("title").innerHTML=username;
+    }
+</script>
+</body>
+</html>

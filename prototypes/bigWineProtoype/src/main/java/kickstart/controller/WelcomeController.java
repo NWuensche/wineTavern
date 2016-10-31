@@ -38,7 +38,11 @@ public class WelcomeController {
 
 	@RequestMapping("/")
 	public String index() {
+<<<<<<< HEAD
 		this.weinCatalog.save(new Wein("Tetrapack Wein", Money.of(1.90, EURO)));
 		return "welcome";
+=======
+		return "login";
+>>>>>>> 4-login-templ
 	}
 }
