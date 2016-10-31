@@ -40,5 +40,6 @@ public class Application {
 					formLogin().loginPage("/login").loginProcessingUrl("/login").and(). //
 					logout().logoutUrl("/logout").logoutSuccessUrl("/");
 		}
+
 	}
 }
