@@ -31,4 +31,11 @@ public class WelcomeController {
 		return "login";
 	}
 
+	@RequestMapping("/users")
+	public String users(Model model) {
+		RegisterCredentials registerCredentials = new RegisterCredentials();
+		model.addAttribute("registercredentials", registerCredentials);
+		return "users";
+	}
+
 }
