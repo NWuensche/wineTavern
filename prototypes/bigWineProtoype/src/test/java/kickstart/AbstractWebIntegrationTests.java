@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * Base class, to add web functionality in tests
+ * Base class, which connects tests to {@link Application} and adds web layer in tests e.g. simulating HTTP requests.
+ *
  * @author Niklas Wünsche
  */
 
@@ -29,7 +30,7 @@ public abstract class AbstractWebIntegrationTests {
     protected MockMvc mvc;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         context.getServletContext().setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);
 
         mvc = MockMvcBuilders.webAppContextSetup(context)
