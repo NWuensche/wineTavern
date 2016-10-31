@@ -15,29 +15,14 @@
  */
 package kickstart.controller;
 
-import kickstart.model.WeinCatalog;
-import kickstart.model.Wein;
-
-import org.javamoney.moneta.Money;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import static org.salespointframework.core.Currencies.EURO;
-
 import kickstart.RegisterCredentials;
 
 
 @Controller
 public class WelcomeController {
-	private final WeinCatalog weinCatalog;
-
-	@Autowired
-	public WelcomeController(WeinCatalog weinCatalog) {
-		this.weinCatalog = weinCatalog;
-	}
-
 
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -45,4 +30,5 @@ public class WelcomeController {
         model.addAttribute("registercredentials", registerCredentials);
 		return "login";
 	}
+
 }
