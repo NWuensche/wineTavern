@@ -29,6 +29,7 @@ public class WelcomeController {
 		RegisterCredentials registerCredentials = new RegisterCredentials();
         model.addAttribute("registercredentials", registerCredentials);
 		return "login";
+
 	}
 
 	@RequestMapping("/users")

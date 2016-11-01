@@ -5,28 +5,53 @@
     <title>Navigation</title>
 </head>
 <body>
-    <nav th:fragment="navigation-left">
-        <ul class="nav nav-pills nav-stacked">
-            <li class="nav-item">
-                <a class="nav-link active" th:href="@{#}" href="#">Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}" href="#">Reservierungen</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}" href="#">Karte</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}" href="#">Abrechnung</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}" href="#">Lager</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}" href="#">Settings</a>
-            </li>
-        </ul>
-    </nav>
+    <div th:fragment="navigation-left" class="navigation-left text-xs-center">
+        <div class="hide" onclick="change();"><span
+                class="fa fa-caret-square-o-left"></span></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-4">
+                    <img src="../resources/img/pika.jpg" class="rounded-circle"/>
+                </div>
+                <div class="col-xs-8">
+                    <p><b>USERNAME</b><br/>Admin</p>
+                </div>
+            </div>
+            <div class="row active">
+                <div class="col-xs-3">
+                    <span class="fa fa-table"></span>
+                </div>
+                <div class="col-xs-9">
+                    <p>Dashboard</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <span class="fa fa-eur"></span>
+                </div>
+                <div class="col-xs-9">
+                    <p>Abrechnung</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <span class="fa fa-cutlery"></span>
+                </div>
+                <div class="col-xs-9">
+                    <p>Tageskarte</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <span class="fa fa-clock-o"></span>
+                </div>
+                <div class="col-xs-9">
+                    <p>Reservierung</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <nav th:fragment="navigation-top">
         <ul class="nav nav-inline" style="font-size:2rem;line-height:2rem;">
             <li class="nav-item">
@@ -45,5 +70,6 @@
         </ul>
 
     </nav>
+
 </body>
 </html>
