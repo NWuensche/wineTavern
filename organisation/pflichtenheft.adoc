@@ -137,8 +137,20 @@ UML-Analyseklassendiagramm
 |===
 
 == Aktzeptanztestfälle
-Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwartungen und Anforderungen im Gebrauch erfüllt. Diese sollen und können aus den Anwendungsfallbeschreibungen und den UML-Sequenzdiagrammen abgeleitet werden. D.h., pro (komplexen) Anwendungsfall gibt es typischerweise mindestens ein Sequenzdiagramm (welches ein Szenarium beschreibt). Für jedes Szenarium sollte es einen Akzeptanztestfall geben. Listen Sie alle Akzeptanztestfälle in tabellarischer Form auf.
-Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumenten (z.B. im Test-Plan) referenzieren zu können.
+[options="header"]
+|======================
+|ID |Test
+|1  |Ein Besucher der Website kann die Homepage aufrufen. Er kann nun die Termine der nächsten Events sehen, ohne sich einloggen zu müssen.
+|2  |Ein Buchhalter lässt sich nach dem Login alle ausgestellten Rechnungen anzeigen. Dazu wurden vorher alle Rechnungen gespeichert.
+|3  |Der Boss loggt sich ein. Daraufhin entlässt er 2 Kellner und fügt einen neuen hinzu.
+|4  |Der Boss kann nach einem Gespräch mit einem Künstler oder einem Winzer ein Event festlegen. Bei einem Künstler wird zusätzlich die feste Gage festgelegt, während bei einem Winzerabend der Wein billiger verkauft wird.
+|5  |Der Admin kann die Tageskarte erstellen. Dabei kann er den vorherigen Tag als Vorlage nehmen und zusätzliche Gegenstände aus dem Lager zur Tageskarte hinzufügen und andere Gegenstände von der Karte entfernen.
+|6  |Wenn ein Gast die Weinstube anruft, kann der Kellner einen Tisch für ihn reservieren. Hierbei loggt sich der Kellner zuerst in das System ein, um dann den Tisch für den Gast zu reservieren.
+|7  |Nachdem die Kellnerin eine Bestellung aufgenommen hat, kann sie die entsprechenden Speisen und Getränke kaufen. Dafür muss sie sich einloggen, um danach die entsprechenden Gegenstände zu kaufen. Dies wird auf die Endabrechnung der Kellnerin geschreiben.
+|8  |Wenn ein Kellner kein Wechselgeld mehr hat, kann er sich bei einem Kollegen Geld ausleihen oder sich aus der Zentralkasse Geld holen. All das wird auch auf die Endabrechnung des Kellners geschrieben.
+|9  |Nachdem ein Teil der Personen an Tisch 17 die Rechnung bezahlen wollen, um dann zu gehen, hat die Kellnerin die Rechnung gesplitet. Der Rest des Tisches kauft sich danach noch jeweils einen Wein. Nach einiger Zeit bezahlt ein Mann die Rechnung für den restlichen Tisch.
+|10  |Als nach einer Bestellung die Menge von Brot im Lager die Mindestmenge unterschreitet, wird dies vom System erkannt. Das System benachrichtigt automatisch den Admin, dass er sich um die Bestellung kümmert, damit der Soll-Wert für Brot im Lager wieder erreicht wird. Nachdem der Admin die Lieferung als eingetroffen bestätigt, werden die Brotbestände im Lager aufgefüllt.
+|======================
 
 == Offene Punkte
 Offene Punkte werden entweder direkt in der Spezifikation notiert. Wenn das Pflichtenheft  zum finalen Review vorgelegt wird, sollte es keine offenen Punkte mehr geben.
