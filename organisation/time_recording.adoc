@@ -30,6 +30,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 22.10.2016 | 17:00 | 18:00 | Einarbeitung MagicDraw, Erstellung Klassendiagramm
 | 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
 | 26.10.2016 | 11:00 | 12:10 | Überarbeiten des Pflichtenhefts
+| 28.10.2016 | 13:00 | 16:00 | Üerarbeitung Klassendiagramm, Einarbeitung Salespoint
+| 29.10.2016 | 10:00 | 13:00 | Erstellung login-template für bigPrototyp
 |===
 
 == Louis
@@ -42,6 +44,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 25.10.2016 | 14:00 | 14:30 | Erweiterung Klassendiagramm
 | 26.10.2016 | 11:00 | 12:10 | Überarbeiten des Pflichtenhefts
 | 28.10.2016 | 14:30 | 16:00 | Überarbeiten Klassendiagramm, Pflichtenheft
+| 28.10.2016 | 13:00 | 13:30 | Üerarbeitung Klassendiagramm, Einarbeitung Salespoint
 |===
 
 == Niklas
