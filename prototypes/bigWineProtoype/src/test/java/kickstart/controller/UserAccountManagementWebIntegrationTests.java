@@ -24,7 +24,10 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoPassword() throws Exception {
-        RequestBuilder request = createRequestBuilder("R", null);
+        String userName = "testAccount";
+        String password = null;
+
+        RequestBuilder request = createRequestBuilder(userName, password);
 
         mvc.perform(request);
     }
@@ -39,16 +42,25 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoName() throws Exception {
-        RequestBuilder request = createRequestBuilder(null, "1234");
+        String userName = null;
+        String password = "1234";
+
+        RequestBuilder request = createRequestBuilder(userName, password);
 
         mvc.perform(request);
     }
 
     @Test (expected = NestedServletException.class)
     public void throwWhenTwoUsersWithSameName() throws Exception {
-        RequestBuilder request = createRequestBuilder("N", "1234");
+        String userName = "testAccount";
+        String password = "1234";
+
+        RequestBuilder request = createRequestBuilder(userName, password);
 
         mvc.perform(request);
+        mvc.perform(request);
+    }
+
     @Test
     public void savedNewUser() throws Exception {
         String userName = "testAccount";

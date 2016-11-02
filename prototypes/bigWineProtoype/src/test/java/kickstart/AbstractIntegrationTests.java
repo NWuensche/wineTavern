@@ -13,6 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-@Transactional
+@Transactional // Rolls the database after the tests back, to remove new Accounts
 public abstract class AbstractIntegrationTests {
 }
