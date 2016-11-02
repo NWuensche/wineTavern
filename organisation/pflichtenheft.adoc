@@ -136,11 +136,11 @@ UML-Analyseklassendiagramm
 |Tisch|...
 |===
 
-== Aktzeptanztestfälle
+== Akzeptanztestfälle
 [options="header"]
 |======================
 |ID |Test
-|1  |Ein Besucher der Website kann die Homepage aufrufen. Er kann nun die Termine der nächsten Events sehen, ohne sich einloggen zu müssen.
+|1  |Ein Besucher der Website kann die Homepage aufrufen. Er kann sowohl die Termine der nächsten Events, als auch die Tageskarte sehen, ohne sich einloggen zu müssen.
 |2  |Ein Buchhalter lässt sich nach dem Login alle ausgestellten Rechnungen anzeigen. Dazu wurden vorher alle Rechnungen gespeichert.
 |3  |Der Boss loggt sich ein. Daraufhin entlässt er 2 Kellner und fügt einen neuen hinzu.
 |4  |Der Boss kann nach einem Gespräch mit einem Künstler oder einem Winzer ein Event festlegen. Bei einem Künstler wird zusätzlich die feste Gage festgelegt, während bei einem Winzerabend der Wein billiger verkauft wird.
