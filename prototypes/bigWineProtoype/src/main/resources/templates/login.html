@@ -14,107 +14,57 @@
     <title>Login</title>
 </head>
 <body>
-<div class="navbar-fixed-top text-xs-center bg-faded" th:include="navigation :: navigation-top"></div>
-<div class="container-fluid">
-    <!--<div class="col-xs-3" th:include="navigation :: navigation-left"></div>
-    <div class="col-xs-3">MENU HERE</div>
-    <div class="col-xs-9">-->
-        <div class="card-columns">
-            <div class="card" th:each="staff : ${staffCollection}">
-                <img class="card-img-top" src="" alt="Profilbild"/>
-                <div class="card-block">
-                    <h2 class="card-title" th:text="${staff.name}"></h2>
-                    <button type="button" class="btn btn-primary btn-lg"
-                            data-toggle="modal" data-target="#loginfield" th:text="LOGIN"
-                            onclick="login(this.parentElement.getElementsByTagName('h2')[0].innerHTML)">
-                    </button>
-                </div>
-            </div>
-            <div class="card">
-                <img class="card-img-top" src="" alt="AnonymousPicture"/>
-                <div class="card-block">
-                    <h2 class="card-title">+ Mitarbeiter</h2>
-                    <button type="button" class="btn btn-primary btn-lg"
-                            data-toggle="modal" data-target="#addNew">
-                        <span class="fa fa-plus fa-lg"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-</div>
-
-<div class="modal fade" id="loginfield" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3 class="modal-title">Login: <span id="title"></span></h3>
-            </div>
-            <div class="modal-body">
-                <div class="container">
+<div th:include="navigation::navigation-left" class="navigation-left h-100"></div>
+<!--<h1 style="background:white;color:#db2d39">TEST</h1>
+<img th:src="@{../resources/img/pika.jpg}" class="rounded-circle"/>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3">
+                <div class="login__container">
                     <form th:action="@{/login}" method="post">
-                        <input name="name" id="name" type="hidden"/>
-                        <div class="form-group row">
-                            <label for="pw" class="col-xs-6 form-control-label">Login-Code:</label>
-                            <div class="col-xs-6">
-                                <input name="pw" id="pw" type="password" pattern="[0-9]{4}" required="true" size="4"/>
+                        <div class="login__container-inputs">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input name="name" type="text" class="form-control" placeholder="Name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input name="pw" type="password" class="form-control" placeholder="Password" pattern="[0-9]{4}" required="true" size="4" />
+                                </div>
                             </div>
                         </div>
-                        <button class="btn btn-success btn-lg">Login</button>
+                        <div class="login__container-btns">
+                            <div class="row">
+                                <div class="col-xs-4 offset-xs-2">
+                                    <button type="submit" class="btn btn-primary">Forgot</button>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3 class="modal-title">+ Mitarbeiter</h3>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form th:action="@{/addNew}" th:object="${registercredentials}" method="post">
-                        <div class="form-group row">
-                            <label for="name" class="col-xs-6 form-control-label">Username</label>
-                            <div class="col-xs-6">
-                                <input name="name" id="name" type="text" required="true" size="15" th:field="*{name}"/>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-xs-6 form-control-label">Login-Code:</label>
-                            <div class="col-xs-6">
-                                <input name="password" th:field="*{password}" type="password" pattern="[0-9]{4}" required="true" size="4"/>
-                            </div>
-                        </div>
-                        <button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<nav class="navbar navbar-fixed-bottom bg-danger text-xs-center" th:if="${loginError}">
-    <span style="font-size:2rem; line-height:3rem;"><b>Wrong Password!</b></span>
-</nav>
-
+    <nav class="navbar navbar-fixed-bottom bg-danger text-xs-center" th:if="${loginError}">
+        <span style="font-size:2rem; line-height:3rem;"><b>Wrong Password!</b></span>
+    </nav>
 <script>
-    $(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    function login(username){
-        document.getElementById("name").value=username;
-        document.getElementById("title").innerHTML=username;
+    var hidden = false;
+    function change(){
+        if(hidden){
+            document.getElementsByClassName("hide")[0].parentElement.style.left = "0px";
+            document.getElementsByClassName("hide")[0].innerHTML =
+                    '<span class="fa fa-caret-square-o-left"></span>';
+            hidden = false;
+        } else {
+            document.getElementsByClassName("hide")[0].parentElement.style.left = "-380px";
+            document.getElementsByClassName("hide")[0].innerHTML = '<span class="fa fa-caret-square-o-right"></span>';
+            hidden = true;
+        }
     }
 </script>
 </body>

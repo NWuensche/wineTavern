@@ -38,6 +38,14 @@ public class WelcomeController {
 		addAdminToDBIfNotThereYet();
 
 		return "login";
+
+	}
+
+	@RequestMapping("/users")
+	public String users(Model model) {
+		RegisterCredentials registerCredentials = new RegisterCredentials();
+		model.addAttribute("registercredentials", registerCredentials);
+		return "users";
 	}
 
 	private void addAdminToDBIfNotThereYet() {

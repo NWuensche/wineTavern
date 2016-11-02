@@ -1,16 +1,8 @@
 /* CSS RESET */
 
-* {
-	margin: 0;
-	padding: 0;
-}
-
 body {
-	margin: 0;
-	padding: 40px 0px;
-	width: 940px;
 	font: 13px/22px Helvetica, Arial, sans-serif;
-	background: #f0f0f0;
+	background-color: white;
 }
 
 h1 {
@@ -19,16 +11,77 @@ h1 {
 	text-align:center;
 }
 
-.col-xs-3 {border:3px solid black;}
-
-.card {
-    text-align:center;
+button.btn-primary {
+    background-color: #26AA8C;
+    border-color: #26ae90;
 }
 
-.modal-dialog .container {
-    padding:10px;
+button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
+    background-color: #1D997D;
+    border-color: #26ae90;
 }
 
-.modal-dialog .form-control-label,.modal-dialog input {
+.login__container {
+	border: 1px solid #264558;
+    background-color: #274b5e;
+    margin-top: 100px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.login__container-inputs {
+    padding: 35px 35px 15px;
+}
+
+.login__container-btns {
+	background-color: #359684;
+    padding: 28px 0px;
+}
+
+.login__container .form-control {
+	margin-bottom: 25px;
+}
+
+.navigation-left {
+    background-color: #243648;
+    width:400px;
+    position:absolute;
+    top:0;
+    left:0;
+    -webkit-transition:left 1s;
+    transition:left 1s;
+    color:white;
     font-size:2rem;
+    line-height:2rem;
+}
+
+.navigation-left .hide {
+    position:relative;
+    left:400px;
+    top:10px;
+    width:40px;
+    background-color: #243648;
+    padding:5px;
+    cursor:pointer;
+    border-radius:0px 5px 5px 0px;
+}
+
+.navigation-left img {
+    height:100px;
+}
+
+.navigation-left .row {
+    padding:10px 10px;
+    border-left:10px solid #243648;
+}
+
+.navigation-left .row:hover {
+    background:#2f3f52;
+}
+
+.navigation-left .active {
+    border-left:10px solid #28b395;
+}
+
+.navigation-left .col-xs-3{
+    text-align:center;
 }
