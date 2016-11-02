@@ -63,7 +63,14 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 == Katharina
 |===
 |Datum |Von |Bis |Beschreibung
-|…   |…   |…    |…
+|19.10   |18:00   |20:45   |Design erarbeiten
+|21.10   |19:00   |20:30   |Projekt aufsetzen, einarbeiten
+|22.10   |14:00   |18:00   |Spring einarbeiten, Design abstimmen
+|23.10   |13:00   |18:00   |Design - Backend
+|24.10   |19:00   |20:30   |Bootstrap/Recherche; Prototypen umsetzen
+|25.10   |22:00   |23:30   |Prototyp; Design
+|27.10   |17:00   |18:30   |Design - Backend
+|31.10   |13:00   |17:00   |login-template bauen; Mysql
 |===
 
 == Michel
