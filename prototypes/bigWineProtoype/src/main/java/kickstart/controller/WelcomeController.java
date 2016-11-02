@@ -52,6 +52,7 @@ public class WelcomeController {
 	public String users(Model model) {
 		AccountCredentials registerCredentials = new AccountCredentials();
 		model.addAttribute("accountcredentials", registerCredentials);
+		model.addAttribute("staffCollection", manager.findEnabled());
 		return "users";
 	}
 
@@ -59,7 +60,7 @@ public class WelcomeController {
 		String adminName = "admin";
 
 		if(!isAdminInDB(adminName)) {
-			UserAccount admin = manager.create(adminName, "asdf", Role.of("ADMIN"));
+			UserAccount admin = manager.create(adminName, "1234", Role.of("ADMIN"));
 			manager.save(admin);
 		}
 	}
