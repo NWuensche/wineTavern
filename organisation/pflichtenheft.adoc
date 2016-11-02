@@ -108,6 +108,76 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur Laufzeit darstellt. Also mit welchen Aktionen zwischen den Masken navigiert wird. Die nachfolgende Abbildung zeigt eine an die Pinnwand gezeichnete Dialoglandkarte. Ihre Karte sollte zusätzlich die Buttons/Funktionen darstellen, mit deren Hilfe Sie zwischen den Masken navigieren.
 
 === Dialogbeschreibung
+
+==== 1.1 Frontend:
+
+	Seite unterteilt sich in einzelne Sections, um die Seite besser zu strukturieren
+
+* beim öffnen der Seite wird ein **Slider** angezeigt, dieser vermittelt einen genauen Eindruck der Weinstube.
+
+* im Kopf werden einzelne Reiter verlinkt die als **Navigation** dienen
+
+* unterhalb des Sliders wir ein **Willkommenstext** stehen
+
+* anschließend folgen eine Auflistung von anstehenden **Events**/News
+
+* im folgenden Abschnitt wird auf die **Speisekarte** verlinkt:
+
+    ** *Button*: auf "Speisekarte öffnen": Aus der Section schiebt sich eine Seite ein, auf deser können alle Speisen betrachtet werden
+
+* eine **Anfahrtsbeschreibung** (GoogleMaps?)
+
+* im letzten Abschnitt werden **Kontakt** und **Impressum** dargestellt und ein **Kontaktformular** angezeigt
+
+==== 1.2 Backend:
+
+* um in das Backend zu gelangen erfolgt ein einem Formular ein **Login** mit Abfrage in Form von:
+
+    ** username
+    ** password
+* bei erfolgreichem Login wird man zum **Dashbord** weiterführt
+    ** Überblick/ letzten Aktivitäten
+    ** Wochenübersicht
+    ** Kalender
+* die Seitennavigation teilt das System in einzelne Abschnitte die im folgenden weiter beschrieben werden:
+
+* im Menüpunkt **Karte** können Veränderungen in der Speisekarte vorgenommen werden, dies erfolgt durch:
+    ** *Button*: hinzufügen oder
+    ** *Button*: entfernen
+des Produkts
+
+* Anpassung der **Tageskarte** durch übernehmen der vorherigen
+
+* unter **Reservierungen** werden dem Nutzer Funktionen aufgelistet:
+
+    ** verfügbare Tische
+    ** *Button*: hinzufügen einer neuen Reservierung in Form eines Formulars
+    ** *Button*: löschen
+    ** *Button*: details der Reservierung bearbeiten
+* die **Abrechnungsfunktion **ermöglicht:
+
+    ** *Button*: neue Rechnung erstellen
+    ** *Button*: Rechnung aufzuteilen
+    ** *Button*: abschließen/bezahlt markieren
+* im Abschnitt **Lagerverwaltung** werden, unterteilt in separate Kategorien, die Produkt
+
+    ** *Button*: hinzufügen
+    ** Formular in dem Bestellung aufgegeben werden
+    ** *Button*: Produkt bearbeiten/details
+* **Event** eine Übersicht der anstehenden Events
+
+    ** *Button*: hinzufügen eines neuen Events in einem Formular
+    ** *Button*: löschen der Veranstaltung
+    ** *Button*: Event bearbeiten
+* der Abschnitt **Management** wird in zwei Bereiche unterteilt:
+    ** **Zeitpläne**: Verwaltung der Arbeitszeiten
+        *** *Button*: hinzufügen
+        *** *Button*: bearbeiten
+    ** **Mitarbeiter**: Verwaltung der Benutzerkonten
+        *** *Button*: hinzufügen
+        *** *Button*: bearbeiten
+        *** *Button*: löschen
+
 Für jeden Dialog:
 
 1. Kurze textuelle Dialogbeschreibung eingefügt: Was soll der jeweilige Dialog? Was kann man damit tun? Überblick?
