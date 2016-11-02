@@ -34,4 +34,8 @@ public class UserAccountManagementController {
         return "welcome";
     }
 
+    public UserAccountManager getUserAccountManager(){
+        return userAccountManager;
+    }
+
 }
