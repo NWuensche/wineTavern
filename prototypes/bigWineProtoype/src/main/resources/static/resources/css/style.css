@@ -2,8 +2,12 @@
 
 body {
 	font: 13px/22px Helvetica, Arial, sans-serif;
-	background-color: white;
 }
+
+.login__bg {
+    background-color: #274b5e;
+}
+
 
 h1 {
 	font-size: 3em;
@@ -14,6 +18,7 @@ h1 {
 button.btn-primary {
     background-color: #26AA8C;
     border-color: #26ae90;
+    /*width:100px;*/
 }
 
 button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
@@ -35,6 +40,10 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 .login__container-btns {
 	background-color: #359684;
     padding: 28px 0px;
+}
+
+.login__container-btns button .fa {
+    padding: 0px 15px;
 }
 
 .login__container .form-control {
@@ -84,4 +93,11 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 
 .navigation-left .col-xs-3{
     text-align:center;
+}
+
+.card-columns .card {
+    width: auto;
+    position: absolute;
+    left: 30rem;
+    top:6rem;
 }
