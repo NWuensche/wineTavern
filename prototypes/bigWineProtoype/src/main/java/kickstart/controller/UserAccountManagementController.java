@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 
 @Controller
-@PreAuthorize("isAuthenticated()")
 public class UserAccountManagementController {
 
     UserAccountManager userAccountManager;
