@@ -15,6 +15,10 @@
  */
 package kickstart.controller;
 
+import org.salespointframework.useraccount.Role;
+import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +28,29 @@ import kickstart.RegisterCredentials;
 @Controller
 public class WelcomeController {
 
+	@Autowired UserAccountManager manager;
+
 	@RequestMapping("/")
 	public String index(Model model) {
 		RegisterCredentials registerCredentials = new RegisterCredentials();
-        model.addAttribute("registercredentials", registerCredentials);
+		model.addAttribute("registercredentials", registerCredentials);
+
+		addAdminToDBIfNotThereYet();
+
 		return "login";
+	}
+
+	private void addAdminToDBIfNotThereYet() {
+		String adminName = "admin";
+
+		if(!adminInDB(adminName)) {
+			UserAccount admin = manager.create(adminName, "asdf", Role.of("ADMIN"));
+			manager.save(admin);
+		}
+	}
+
+	private boolean adminInDB(String adminName) {
+		return manager.findByUsername(adminName).isPresent();
 	}
 
 }
