@@ -19,7 +19,7 @@ Eine kurze Beschreibung des Dokuments. Wenige Absätze.
 <<anforderungen>> +
 <<gui-prototyp>> +
 <<datenmodell>> +
-<<aktzeptanztestfälle>> +
+<<akzeptanztestfälle>> +
 <<offene-punkte>> +
 
 == Aufgabenstellung und Zielsetzung
