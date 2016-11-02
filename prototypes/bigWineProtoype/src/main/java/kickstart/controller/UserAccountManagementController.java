@@ -31,7 +31,7 @@ public class UserAccountManagementController {
 
         userAccountManager.save(account);
 
-        return "redirect:users";
+        return "users";
     }
 
     public UserAccountManager getUserAccountManager(){
