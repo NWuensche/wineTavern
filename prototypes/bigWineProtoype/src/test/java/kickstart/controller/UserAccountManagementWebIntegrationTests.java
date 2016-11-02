@@ -1,10 +1,14 @@
 package kickstart.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
 
 import kickstart.AbstractWebIntegrationTests;
 import org.junit.Test;
+import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
 
@@ -44,7 +48,17 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
         RequestBuilder request = createRequestBuilder("N", "1234");
 
         mvc.perform(request);
+    @Test
+    public void savedNewUser() throws Exception {
+        String userName = "testAccount";
+        String password = "1234";
+        UserAccount user;
+
+        RequestBuilder request = createRequestBuilder(userName, password);
         mvc.perform(request);
+
+        user = controller.getUserAccountManager().findByUsername(userName).get();
+        assertThat(user.getUsername(), is(userName));
     }
 
 }
