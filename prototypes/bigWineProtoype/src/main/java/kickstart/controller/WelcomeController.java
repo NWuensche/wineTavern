@@ -15,19 +15,33 @@
  */
 package kickstart.controller;
 
+
+import org.salespointframework.useraccount.Role;
+import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.salespointframework.useraccount.AuthenticationManager;
 import kickstart.RegisterCredentials;
 
 
 @Controller
 public class WelcomeController {
+	@Autowired UserAccountManager manager;
 
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    public void WelcomeController(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 	@RequestMapping("/")
 	public String index(Model model) {
 		RegisterCredentials registerCredentials = new RegisterCredentials();
         model.addAttribute("registercredentials", registerCredentials);
+        if(this.authenticationManager.getCurrentUser().isPresent())
+            return "users";
 		return "login";
 
 	}
@@ -39,14 +53,17 @@ public class WelcomeController {
 		return "users";
 	}
 
-	@RequestMapping("/welcome")
-    public String welcome(){
-        return "welcome";
-    }
+	private void addAdminToDBIfNotThereYet() {
+		String adminName = "admin";
 
-    @RequestMapping("/login")
-    public String login(){
-        return "login";
-    }
+		if(!isAdminInDB(adminName)) {
+			UserAccount admin = manager.create(adminName, "asdf", Role.of("ADMIN"));
+			manager.save(admin);
+		}
+	}
+
+	private boolean isAdminInDB(String adminName) {
+		return manager.findByUsername(adminName).isPresent();
+	}
 
 }
