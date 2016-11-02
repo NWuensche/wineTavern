@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
  * @author Niklas Wünsche
  */
 
+@Transactional // Rolls the database after the tests back, to remove new Accounts
 public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired UserAccountManagementController controller;
