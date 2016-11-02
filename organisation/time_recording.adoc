@@ -11,7 +11,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |11.10.2016 | 16:50 |18:20 | Demuth: Kennenlernen
 |18.10.2016 | 16:50 |18:20 | Gierke: Spring
 |25.10.2016 | 16:50 |18:20 | Gierke: Salespoint
-|01.11.2016 | 16:50 |18:20 | Aßmann: ?
+|01.11.2016 | 16:50 |18:20 | Aßmann: ?!
 |===
 
 == Meeting
@@ -45,6 +45,10 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 26.10.2016 | 11:00 | 12:10 | Überarbeiten des Pflichtenhefts
 | 28.10.2016 | 14:30 | 16:00 | Überarbeiten Klassendiagramm, Pflichtenheft
 | 28.10.2016 | 13:00 | 13:30 | Üerarbeitung Klassendiagramm, Einarbeitung Salespoint
+| 31.10.2016 | 21:30 | 22:30 | SQL
+| 01.11.2016 | 13:00 | 14:50 | 
+| 02.11.2016 | 11:00 | 12:00 | fixes login / user tmpl
+| 02.11.2016 | 15:00 | 18:00 | fixes login / user tmpl
 |===
 
 == Niklas
