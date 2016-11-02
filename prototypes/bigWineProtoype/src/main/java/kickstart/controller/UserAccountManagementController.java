@@ -1,9 +1,8 @@
 package kickstart.controller;
 
-import kickstart.RegisterCredentials;
+import kickstart.AccountCredentials;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +26,8 @@ public class UserAccountManagementController {
     }
 
     @RequestMapping(value="/addNew", method=RequestMethod.POST)
-    public String index(@ModelAttribute(value="registercredentials") RegisterCredentials registerCredentials) {
-        UserAccount account = userAccountManager.create(registerCredentials.getName(), registerCredentials.getPassword());
+    public String index(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
+        UserAccount account = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword());
 
         userAccountManager.save(account);
 

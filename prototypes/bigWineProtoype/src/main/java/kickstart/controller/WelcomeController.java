@@ -24,7 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.AuthenticationManager;
-import kickstart.RegisterCredentials;
+import kickstart.AccountCredentials;
 
 
 @Controller
@@ -38,18 +38,20 @@ public class WelcomeController {
     }
 	@RequestMapping("/")
 	public String index(Model model) {
-		RegisterCredentials registerCredentials = new RegisterCredentials();
-        model.addAttribute("registercredentials", registerCredentials);
-        if(this.authenticationManager.getCurrentUser().isPresent())
-            return "users";
+        if(this.authenticationManager.getCurrentUser().isPresent()) {
+            AccountCredentials accountCredentials = new AccountCredentials();
+            accountCredentials.setUsername(this.authenticationManager.getCurrentUser().get().getUsername());
+            model.addAttribute("accountcredentials", accountCredentials);
+            return "welcome";
+        }
 		return "login";
 
 	}
 
 	@RequestMapping("/users")
 	public String users(Model model) {
-		RegisterCredentials registerCredentials = new RegisterCredentials();
-		model.addAttribute("registercredentials", registerCredentials);
+		AccountCredentials registerCredentials = new AccountCredentials();
+		model.addAttribute("accountcredentials", registerCredentials);
 		return "users";
 	}
 
