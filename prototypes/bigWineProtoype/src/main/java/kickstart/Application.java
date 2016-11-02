@@ -15,11 +15,15 @@
  */
 package kickstart;
 
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.salespointframework.EnableSalespoint;
 import org.salespointframework.SalespointSecurityConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @EnableSalespoint
 public class Application {
@@ -28,18 +32,24 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Configuration
-	static class WebSecurityConfiguration extends SalespointSecurityConfiguration {
+    @Configuration
+    static class WebSecurityConfiguration extends SalespointSecurityConfiguration {
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
+        /**
+         * Disabling Spring Security's CSRF support as we do not implement pre-flight request handling for the sake of
+         * simplicity. Setting up basic security and defining login and logout options.
+         *
+         * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter#configure(org.springframework.security.config.annotation.web.builders.HttpSecurity)
+         */
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
 
-			http.csrf().disable();
+            http.csrf().disable();
 
-			http.authorizeRequests().antMatchers("/**").permitAll().and().//
-					formLogin().loginPage("/login").loginProcessingUrl("/login").and(). //
-					logout().logoutUrl("/logout").logoutSuccessUrl("/");
-		}
+            http.authorizeRequests().antMatchers("/**").permitAll().and().//
+                    formLogin().loginPage("/login").loginProcessingUrl("/login").and(). //
+                    logout().logoutUrl("/logout").logoutSuccessUrl("/");
+        }
+    }
 
-	}
 }
