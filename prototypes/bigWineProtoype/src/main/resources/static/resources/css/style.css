@@ -2,6 +2,7 @@
 
 body {
 	font: 13px/22px Helvetica, Arial, sans-serif;
+    padding:10px;
 }
 
 .login__bg {
@@ -27,10 +28,10 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 }
 
 .login__container {
-	border: 1px solid #264558;
-    background-color: #274b5e;
-    margin-top: 100px;
+	background-color: #274b5e;
+    border: 1px solid #264558;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    margin-top: 100px;
 }
 
 .login__container-inputs {
@@ -52,26 +53,26 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 
 .navigation-left {
     background-color: #243648;
-    width:400px;
-    position:absolute;
-    top:0;
-    left:0;
-    -webkit-transition:left 1s;
-    transition:left 1s;
     color:white;
     font-size:2rem;
+    left:0;
     line-height:2rem;
+    position:absolute;
+    top:0;
+    transition:left 1s;
+    -webkit-transition:left 1s;
+    width:400px;
 }
 
 .navigation-left .hide {
-    position:relative;
+    background-color: #243648;
+    border-radius:0px 5px 5px 0px;
+    cursor:pointer;
     left:400px;
+    padding:5px;
+    position:relative;
     top:10px;
     width:40px;
-    background-color: #243648;
-    padding:5px;
-    cursor:pointer;
-    border-radius:0px 5px 5px 0px;
 }
 
 .navigation-left img {
@@ -79,8 +80,8 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 }
 
 .navigation-left .row {
-    padding:10px 10px;
     border-left:10px solid #243648;
+    padding:10px 10px;
 }
 
 .navigation-left .row:hover {
@@ -94,10 +95,18 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 .navigation-left .col-xs-3{
     text-align:center;
 }
+.card-columns {
+    position:relative;
+    margin:0px 25%;
+}
 
 .card-columns .card {
-    width: auto;
-    position: absolute;
-    left: 30rem;
-    top:6rem;
+    text-align: center;
+    padding:10px;
 }
+/*.card-columns .card {
+    left: 30rem;
+    position: absolute;
+    top:6rem;
+    width: auto;
+}*/
