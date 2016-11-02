@@ -39,4 +39,14 @@ public class WelcomeController {
 		return "users";
 	}
 
+	@RequestMapping("/welcome")
+    public String welcome(){
+        return "welcome";
+    }
+
+    @RequestMapping("/login")
+    public String login(){
+        return "login";
+    }
+
 }
