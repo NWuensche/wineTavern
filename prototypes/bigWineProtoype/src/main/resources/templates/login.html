@@ -13,10 +13,8 @@
     <script th:src="@{//cdn.jsdelivr.net/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js}"></script>
     <title>Login</title>
 </head>
-<body>
-<div th:include="navigation::navigation-left" class="navigation-left h-100"></div>
-<!--<h1 style="background:white;color:#db2d39">TEST</h1>
-<img th:src="@{../resources/img/pika.jpg}" class="rounded-circle"/>-->
+<body class="login__bg">
+<!--<div th:include="navigation::navigation-left" class="navigation-left h-100"></div>-->
     <div class="container">
         <div class="row">
             <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3">
@@ -41,8 +39,9 @@
                                     <button type="submit" class="btn btn-primary">Login</button>
                                 </div>
                                 <div class="col-xs-4">
-                                    <button type="reset"
-                                            class="btn btn-primary"><span class="fa fa-times fa-lg"></span></button>
+                                    <button type="reset" class="btn btn-primary">
+                                        <span class="fa fa-times fa-lg"></span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -54,20 +53,20 @@
     <nav class="navbar navbar-fixed-bottom bg-danger text-xs-center" th:if="${loginError}">
         <span style="font-size:2rem; line-height:3rem;"><b>Wrong Password!</b></span>
     </nav>
-<script>
-    var hidden = false;
-    function change(){
-        if(hidden){
-            document.getElementsByClassName("hide")[0].parentElement.style.left = "0px";
-            document.getElementsByClassName("hide")[0].innerHTML =
-                    '<span class="fa fa-caret-square-o-left"></span>';
-            hidden = false;
-        } else {
-            document.getElementsByClassName("hide")[0].parentElement.style.left = "-380px";
-            document.getElementsByClassName("hide")[0].innerHTML = '<span class="fa fa-caret-square-o-right"></span>';
-            hidden = true;
-        }
-    }
-</script>
+<!--<script>-->
+    <!--var hidden = false;-->
+    <!--function change(){-->
+        <!--if(hidden){-->
+            <!--document.getElementsByClassName("hide")[0].parentElement.style.left = "0px";-->
+            <!--document.getElementsByClassName("hide")[0].innerHTML =-->
+                    <!--'<span class="fa fa-caret-square-o-left"></span>';-->
+            <!--hidden = false;-->
+        <!--} else {-->
+            <!--document.getElementsByClassName("hide")[0].parentElement.style.left = "-380px";-->
+            <!--document.getElementsByClassName("hide")[0].innerHTML = '<span class="fa fa-caret-square-o-right"></span>';-->
+            <!--hidden = true;-->
+        <!--}-->
+    <!--}-->
+<!--</script>-->
 </body>
 </html>

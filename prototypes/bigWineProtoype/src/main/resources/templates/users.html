@@ -14,7 +14,8 @@
     <title>Login</title>
 </head>
 <body>
-<div class="navbar-fixed-top text-xs-center bg-faded" th:include="navigation :: navigation-top"></div>
+<div th:include="navigation::navigation-left" class="navigation-left h-100"></div>
+<!--<div class="navbar-fixed-top text-xs-center bg-faded" th:include="navigation :: navigation-top"></div>-->
 <div class="container-fluid">
     <!--<div class="col-xs-3" th:include="navigation :: navigation-left"></div>
     <div class="col-xs-3">MENU HERE</div>
@@ -115,6 +116,19 @@
     function login(username){
         document.getElementById("name").value=username;
         document.getElementById("title").innerHTML=username;
+    }
+    var hidden = false;
+    function change(){
+        if(hidden){
+            document.getElementsByClassName("hide")[0].parentElement.style.left = "0px";
+            document.getElementsByClassName("hide")[0].innerHTML =
+                    '<span class="fa fa-caret-square-o-left"></span>';
+            hidden = false;
+        } else {
+            document.getElementsByClassName("hide")[0].parentElement.style.left = "-380px";
+            document.getElementsByClassName("hide")[0].innerHTML = '<span class="fa fa-caret-square-o-right"></span>';
+            hidden = true;
+        }
     }
 </script>
 </body>
