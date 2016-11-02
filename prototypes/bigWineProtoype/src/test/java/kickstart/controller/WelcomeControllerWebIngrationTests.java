@@ -18,6 +18,7 @@ import java.util.Optional;
 
 /**
  * Web integration tests for the {@link WelcomeController}
+ * @author Niklas Wünsche
  */
 
 public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTests {
@@ -44,5 +45,5 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
         assertThat(admin.isPresent(), is(true));
         assertThat(admin.get().hasRole(adminRole), is(true));
     }
-    
+
 }

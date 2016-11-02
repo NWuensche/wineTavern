@@ -43,13 +43,13 @@ public class WelcomeController {
 	private void addAdminToDBIfNotThereYet() {
 		String adminName = "admin";
 
-		if(!adminInDB(adminName)) {
+		if(!isAdminInDB(adminName)) {
 			UserAccount admin = manager.create(adminName, "asdf", Role.of("ADMIN"));
 			manager.save(admin);
 		}
 	}
 
-	private boolean adminInDB(String adminName) {
+	private boolean isAdminInDB(String adminName) {
 		return manager.findByUsername(adminName).isPresent();
 	}
 
