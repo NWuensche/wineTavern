@@ -13,8 +13,8 @@
                 <div class="col-xs-4">
                     <img src="../resources/img/pika.jpg" class="rounded-circle"/>
                 </div>
-                <div class="col-xs-8">
-                    <p><b>USERNAME</b><br/>Admin</p>
+                <div class="col-xs-8" sec:authorize="isAuthenticated()" th:if="${accountcredentials}">
+                    <p th:text="${accountcredentials.username}"><b>USERNAME</b><br/>Admin</p>
                 </div>
             </div>
             <div class="row active">
