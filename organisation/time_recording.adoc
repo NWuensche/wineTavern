@@ -11,7 +11,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |11.10.2016 | 16:50 |18:20 | Demuth: Kennenlernen
 |18.10.2016 | 16:50 |18:20 | Gierke: Spring
 |25.10.2016 | 16:50 |18:20 | Gierke: Salespoint
-|01.11.2016 | 16:50 |18:20 | ?
+|01.11.2016 | 16:50 |18:20 | Aßmann: ?
 |===
 
 == Meeting
@@ -78,7 +78,11 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |Datum |Von |Bis |Beschreibung
 |22.10.2016 |13:00 |14:00 |Videshopmodifikation und UseCase Diagramm 
 |25.10.2016 |14:00 |14:30 |Erarbeiten Klassendiagramm
-|19.10.2016 |13:00 |16:00 |Datenbankintegration
-|20.10.2016 |11:00 |15:00 |Datenbankintegration
-|20.10.2016 |18:00 |23:00 |Datenbankintegration
+|29.10.2016 |13:00 |16:00 |Datenbankintegration
+|30.10.2016 |11:00 |15:00 |Datenbankintegration
+|30.10.2016 |18:00 |23:00 |Datenbankintegration
+|31.10.2016 |12:00 |16:00 |Datenbankintegration
+|01.11.2016 |14:00 |14:30 |Userlogin
+|02.11.2016 |11:00 |12:00 |Userlogin
+|02.11.2016 |15:00 |17:00 |Userlogin
 |===
