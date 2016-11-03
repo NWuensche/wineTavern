@@ -47,12 +47,4 @@ public class WelcomeController {
 		return "login";
 	}
 
-	@RequestMapping("/users")
-	public String users(Model model) {
-		AccountCredentials registerCredentials = new AccountCredentials();
-		model.addAttribute("accountcredentials", registerCredentials);
-		model.addAttribute("staffCollection", manager.findEnabled());
-		return "users";
-	}
-
 }
