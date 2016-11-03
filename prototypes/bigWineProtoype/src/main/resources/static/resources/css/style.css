@@ -1,8 +1,12 @@
 /* CSS RESET */
 
 body {
-	font: 13px/22px Helvetica, Arial, sans-serif;
+	background-color:lightgrey;
+    font: 13px/22px Helvetica, Arial, sans-serif;
     padding:10px;
+    padding-left:430px;
+    padding-top:100px;
+    transition: padding 1s;
 }
 
 .login__bg {
@@ -50,7 +54,7 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 .login__container .form-control {
 	margin-bottom: 25px;
 }
-
+/* left navigation --------------------------------------------------------------------------------------------------- */
 .navigation-left {
     background-color: #243648;
     color:white;
@@ -71,7 +75,7 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
     left:400px;
     padding:5px;
     position:relative;
-    top:10px;
+    top:80px;
     width:40px;
 }
 
@@ -95,14 +99,35 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 .navigation-left .col-xs-3{
     text-align:center;
 }
+
+.navigation-left a {
+    color:white;
+}
+/* top navigation ---------------------------------------------------------------------------------------------------- */
+.navigation-top {
+    background:white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    font-size:2rem;
+    left:400px;
+    line-height:2.5rem;
+    padding:12px 10px 0px 30px;
+    position:fixed;
+    right:0px;
+    top:0px;
+    transition:left 1s;
+}
+.navigation-top {
+
+}
+
 .card-columns {
+    margin:0px;
     position:relative;
-    margin:0px 25%;
 }
 
 .card-columns .card {
-    text-align: center;
     padding:10px;
+    text-align: center;
 }
 /*.card-columns .card {
     left: 30rem;
