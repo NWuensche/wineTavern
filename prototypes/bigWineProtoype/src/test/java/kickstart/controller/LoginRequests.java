@@ -7,6 +7,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 /**
  * Created by nwuensche on 03.11.16.
  */
+
 public class LoginRequests {
 
     static public RequestBuilder getLoginRequest(String username, String password) {
