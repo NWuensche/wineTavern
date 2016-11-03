@@ -57,7 +57,7 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
     font-size:2rem;
     left:0;
     line-height:2rem;
-    position:fixed;
+    position:absolute;
     top:0;
     transition:left 1s;
     -webkit-transition:left 1s;

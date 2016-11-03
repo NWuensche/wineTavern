@@ -42,8 +42,8 @@ public class Application {
 
             http.csrf().disable();
 
-            http.authorizeRequests().anyRequest().authenticated().and().
-                    formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll().and().
+            http.authorizeRequests().antMatchers("/**").permitAll().and().//
+                    formLogin().loginPage("/login").loginProcessingUrl("/login").and(). //
                     logout().logoutUrl("/logout").logoutSuccessUrl("/");
         }
     }
