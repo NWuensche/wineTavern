@@ -38,10 +38,10 @@ public class WelcomeController {
 
 	@RequestMapping("/")
 	public String index(Model model) {
-        if(this.authenticationManager.getCurrentUser().isPresent()) {
+        /*if(this.authenticationManager.getCurrentUser().isPresent()) {
             return "welcome";
-        }
-		return "login";
+        }*/
+		return "welcome";
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
