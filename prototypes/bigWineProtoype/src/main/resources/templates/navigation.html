@@ -49,6 +49,16 @@
                     <p>Reservierung</p>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <span class="fa fa-sign-out"></span>
+                </div>
+                <div class="col-xs-9">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Logout"/>
+                    </form>
+                </div>
+            </div>
 
         </div>
     </div>
