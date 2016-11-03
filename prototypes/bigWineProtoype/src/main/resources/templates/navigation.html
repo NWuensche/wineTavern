@@ -15,18 +15,12 @@
                 <div class="col-xs-4">
                     <img src="../resources/img/pika.jpg" class="rounded-circle"/>
                 </div>
-<<<<<<< HEAD
-                <div class="col-xs-8" sec:authorize="isAuthenticated()" th:if="${accountcredentials}">
-                    <p th:text="${accountcredentials.username}"><b>USERNAME</b><br/>ROLE</p>
-                </div>
-=======
                 <div class="col-xs-8" sec:authorize="isAuthenticated()"><b>
                     <p th:text="${#authentication.getName()}">USERNAME<br/></p>
                     <div th:if="${!#authentication.getAuthorities().isEmpty()}">
                         <p th:text="${#authentication.getAuthorities()[0]}">ROLE</p>
                     </div>
                 </b></div>
->>>>>>> b9024776fd60dff933ea8e47820adb710a3ec108
             </div>
             <div class="row active">
                 <a th:href="@{/}">
