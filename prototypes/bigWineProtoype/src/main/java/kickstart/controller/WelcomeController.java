@@ -37,14 +37,20 @@ public class WelcomeController {
 
 	@RequestMapping("/")
 	public String index(Model model) {
-        if(this.authenticationManager.getCurrentUser().isPresent()) {
+        AccountCredentials accountCredentials = new AccountCredentials();
+        accountCredentials.setUsername(this.authenticationManager.getCurrentUser().get().getUsername());
+        model.addAttribute("accountcredentials", accountCredentials);
+        return "welcome";
+    }
+
+	@RequestMapping("/login")
+	public  String login(Model model) {
+        /*if(this.authenticationManager.getCurrentUser().isPresent()) {
             AccountCredentials accountCredentials = new AccountCredentials();
             accountCredentials.setUsername(this.authenticationManager.getCurrentUser().get().getUsername());
             model.addAttribute("accountcredentials", accountCredentials);
-            return "welcome";
-        }
-
+            return "redirect:/";
+        }*/
 		return "login";
 	}
-
 }
