@@ -20,15 +20,15 @@
         <script th:src="@{/resources/js/script.js}"></script>
 
 
-        <title>Welcome</title>
+        <title>Willkommen</title>
 	</head>
 	<body>
     <div th:include="navigation::navigation-top" class="navigation-top text-xs-center"></div>
 
     <div th:include="navigation::navigation-left" class="navigation-left h-100"></div>
-        <h1>WELCOME</h1>
-        <h2 sec:authorize="isAuthenticated()">Logged in!</h2>
-        <h3 sec:authorize="isAuthenticated()" th:text="${'as ' + #authentication.getName()}">username</h3>
+        <h1>WILLKOMMEN</h1>
+        <h2 sec:authorize="isAuthenticated()">Eingeloggt!</h2>
+        <h3 sec:authorize="isAuthenticated()" th:text="${'als ' + #authentication.getName()}">username</h3>
         <ul>
             <li><a th:href="@{/login}">zum Login</a></li>
             <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/users}">zu den Benutzern</a></li>
