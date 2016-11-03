@@ -35,15 +35,6 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
-    public void adminInDB() throws Exception {
-        Role adminRole = Role.of("ADMIN");
-        Optional<UserAccount> admin;
-
-        mvc.perform(get("/"));
-        admin = userAccountManager.findByUsername("admin");
-
-        assertThat(admin.isPresent(), is(true));
-        assertThat(admin.get().hasRole(adminRole), is(true));
     }
 
 }
