@@ -51,7 +51,7 @@ image::src/Sequenzdiagramme/Weinkauf.png[Sequenzdiagramm 1, 600,400 link=src/Seq
 == Anwendungsfälle
 
 === Überblick Anwendungsfalldiagramm
-Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt
+//Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt
 
 image::src/UseCase.png[Anwendungsfalldiagramm]
 === Akteure und Anwendungsfallbeschreibung
@@ -85,19 +85,19 @@ image::src/UseCase.png[Anwendungsfalldiagramm]
 * Nachbestellungen bei Liferanten und Nachbestellung
 * Events verwalten
     ** Weinproben
-        *** Ausschließlicher ausschank von Weinen des Winzers, diese Weine kosten 50% des Normalpreise
+        *** Ausschließlicher Ausschank von Weinen des Winzers, diese Weine kosten 50% des Normalpreise
     ** Kleinkunstveranstaltungen
 
 === Kann-Kriterien
 //Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
-* Graphische verwaltung der Tische
-* Graphische verwaltung der Tischreservierungen
+* Graphische Verwaltung der Tische
+* Graphische Verwaltung der Tischreservierungen
 * Automatische Nachbestellung von Waren
 
 == GUI Prototyp
 
 === Überblick: Dialoglandkarte
-Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur Laufzeit darstellt. Also mit welchen Aktionen zwischen den Masken navigiert wird. Die nachfolgende Abbildung zeigt eine an die Pinnwand gezeichnete Dialoglandkarte. Ihre Karte sollte zusätzlich die Buttons/Funktionen darstellen, mit deren Hilfe Sie zwischen den Masken navigieren.
+//Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur Laufzeit darstellt. Also mit welchen Aktionen zwischen den Masken navigiert wird. Die nachfolgende Abbildung zeigt eine an die Pinnwand gezeichnete Dialoglandkarte. Ihre Karte sollte zusätzlich die Buttons/Funktionen darstellen, mit deren Hilfe Sie zwischen den Masken navigieren.
 
 === Dialogbeschreibung
 
@@ -105,17 +105,18 @@ Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur La
 
 	Seite unterteilt sich in einzelne Sections, um die Seite besser zu strukturieren
 
-* beim öffnen der Seite wird ein **Slider** angezeigt, dieser vermittelt einen genauen Eindruck der Weinstube.
+* beim Öffnen der Seite wird ein **Slider** angezeigt, dieser vermittelt einen genauen Eindruck der Weinstube.
 
 * im Kopf werden einzelne Reiter verlinkt die als **Navigation** dienen
 
-* unterhalb des Sliders wir ein **Willkommenstext** stehen
+* unterhalb des Sliders wird ein **Willkommenstext** stehen
 
-* anschließend folgen eine Auflistung von anstehenden **Events**/News
+* anschließend folgt eine Auflistung von anstehenden **Events**/News
 
 * im folgenden Abschnitt wird auf die **Speisekarte** verlinkt:
 
-    ** *Button*: auf "Speisekarte öffnen": Aus der Section schiebt sich eine Seite ein, auf deser können alle Speisen betrachtet werden
+    ** *Button*: auf "Speisekarte öffnen": Aus der Section schiebt sich eine Seite ein, auf dieser können alle
+    Speisen betrachtet werden
 
 * eine **Anfahrtsbeschreibung** (GoogleMaps?)
 
@@ -123,7 +124,7 @@ Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur La
 
 ==== 1.2 Backend:
 
-* um in das Backend zu gelangen erfolgt ein einem Formular ein **Login** mit Abfrage in Form von:
+* um in das Backend zu gelangen, nutzt man ein **Login**-Formular mit Abfrage in Form von:
 
     ** username
     ** password
@@ -131,31 +132,29 @@ Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur La
     ** Überblick/ letzten Aktivitäten
     ** Wochenübersicht
     ** Kalender
-* die Seitennavigation teilt das System in einzelne Abschnitte die im folgenden weiter beschrieben werden:
+* die Seitennavigation teilt das System in einzelne Abschnitte die im Folgenden weiter beschrieben werden:
 
 * im Menüpunkt **Karte** können Veränderungen in der Speisekarte vorgenommen werden, dies erfolgt durch:
     ** *Button*: hinzufügen oder
-    ** *Button*: entfernen
-des Produkts
+    ** *Button*: entfernen eines Produktes
 
-* Anpassung der **Tageskarte** durch übernehmen der vorherigen
+* Anpassung der **Tageskarte** nach Übernahme der Vorherigen
 
 * unter **Reservierungen** werden dem Nutzer Funktionen aufgelistet:
 
     ** verfügbare Tische
     ** *Button*: hinzufügen einer neuen Reservierung in Form eines Formulars
     ** *Button*: löschen
-    ** *Button*: details der Reservierung bearbeiten
+    ** *Button*: Details der Reservierung bearbeiten
 * die **Abrechnungsfunktion **ermöglicht:
 
     ** *Button*: neue Rechnung erstellen
     ** *Button*: Rechnung aufzuteilen
     ** *Button*: abschließen/bezahlt markieren
-* im Abschnitt **Lagerverwaltung** werden, unterteilt in separate Kategorien, die Produkt
-
-    ** *Button*: hinzufügen
-    ** Formular in dem Bestellung aufgegeben werden
-    ** *Button*: Produkt bearbeiten/details
+* im Abschnitt **Lagerverwaltung**, unterteilt in separate Kategorien, Produkt
+    ** notwendige Nachbestellungen
+    ** *Button*: Produkt hinzufügen
+    ** *Button*: Produkt bearbeiten/Details
 * **Event** eine Übersicht der anstehenden Events
 
     ** *Button*: hinzufügen eines neuen Events in einem Formular
@@ -181,7 +180,14 @@ Für jeden Dialog:
 == Datenmodell
 
 === Überblick: Klassendiagramm
-UML-Analyseklassendiagramm
+image::src/Klassendiagramm/Accountancy.jpg[Package Accountancy, 500, link=src/Klassendiagramm/Accountancy.jpg]
+image::src/Klassendiagramm/Management.jpg[Package Management, 500, link=src/Klassendiagramm/Management.jpg]
+image::src/Klassendiagramm/Menu.jpg[Package Menu, 500, link=src/Klassendiagramm/Menu.jpg]
+image::src/Klassendiagramm/Reservation.jpg[Package Reservation, 500, link=src/Klassendiagramm/Reservation.jpg]
+image::src/Klassendiagramm/Stock.jpg[Package Stock, 500, link=src/Klassendiagramm/Stock.jpg]
+image::src/Klassendiagramm/User.jpg[Package User, 500, link=src/Klassendiagramm/User.jpg]
+Alle Paket-externen Beziehungen sind in den Paketdiagrammen nicht dargestellt, aber im
+link:src/Klassendiagramm/Klassendiagramm3.jpg[kompletten Klassendiagramm] einsehbar.
 
 === Klassen und Enumerationen
 
@@ -189,13 +195,20 @@ UML-Analyseklassendiagramm
 [options="header"]
 |===
 |Klasse/Enumeration |Beschreibung
-|Event|Sammelt alle Informationen zu den Veranstaltungen.
-|Person|Sammelt alle Informationen für jede angestellte Person, samt Login.
-|Produkt|Sammelt alle Informationen über ein Produkt(bspw. Name, Kategorie, Menge, ...)
-|Rechnung|Sammlung für alle gekauften Produkte pro Tisch und Bedienung samt Stückzahl.
-|Rolle (Enumeration)|Rechtemanagement für Personal
-|Termin|Zeitspanne, mit Datum, Anfangs- und Endzeit
-|Tisch|...
+|*manager |Controller Klassen welche alle Anfragen behandeln und die Anzeige vorbereiten
+|Bill* |Rechnung, welche Service und Tisch spezifisch, alle Bestellungen sammelt
+|Expense* |Alle weiteren Ausgaben, bezüglich Events, Nachbestellungen ...
+|DayMenu |Tagespezifische Karte
+|Product |Produkt im Lager
+|ProductCategory |Produktkategorien und Oberkategorien
+|Order |nötige Nachbestellungen
+|Shift |personenbezogene Arbeitsschicht
+|Schedule |Wochenarbeitsplan
+|Person |Oberklasse für alle Personen, mit Adresse
+|ExternalPerson |Externe Personen unterteilt in Winzer und Künstler
+|Staff |Mitarbeiter, unterteilt in Chef,Servicekraft,Bürokraft,Koch
+|Reservation |Tisch- und gastspezifische Reservierung
+|Table |Tisch
 |===
 
 == Akzeptanztestfälle
