@@ -5,6 +5,8 @@
     <title>Navigation</title>
 </head>
 <body>
+
+<!-- left navigation -->
     <div th:fragment="navigation-left" class="navigation-left text-xs-center">
         <div class="hide" onclick="change();"><span
                 class="fa fa-caret-square-o-left"></span></div>
@@ -13,17 +15,32 @@
                 <div class="col-xs-4">
                     <img src="../resources/img/pika.jpg" class="rounded-circle"/>
                 </div>
-                <div class="col-xs-8" sec:authorize="isAuthenticated()" th:if="${accountcredentials}">
-                    <p th:text="${accountcredentials.username}"><b>USERNAME</b><br/>Admin</p>
-                </div>
+                <div class="col-xs-8" sec:authorize="isAuthenticated()"><b>
+                    <p th:text="${#authentication.getName()}">USERNAME<br/></p>
+                    <div th:if="${!#authentication.getAuthorities().isEmpty()}">
+                        <p th:text="${#authentication.getAuthorities()[0]}">ROLE</p>
+                    </div>
+                </b></div>
             </div>
             <div class="row active">
-                <div class="col-xs-3">
-                    <span class="fa fa-table"></span>
-                </div>
-                <div class="col-xs-9">
-                    <p>Dashboard</p>
-                </div>
+                <a th:href="@{/}">
+                    <div class="col-xs-3">
+                        <span class="fa fa-table"></span>
+                    </div>
+                    <div class="col-xs-9">
+                        <p>Dashboard</p>
+                    </div>
+                </a>
+            </div>
+            <div class="row">
+                <a th:href="@{/users}">
+                    <div class="col-xs-3">
+                        <span class="fa fa-user"></span>
+                    </div>
+                    <div class="col-xs-9">
+                        <p>Mitarbeiter</p>
+                    </div>
+                </a>
             </div>
             <div class="row">
                 <div class="col-xs-3">
@@ -49,37 +66,30 @@
                     <p>Reservierung</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-3">
-                    <span class="fa fa-sign-out"></span>
-                </div>
-                <div class="col-xs-9">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="submit" value="Logout"/>
-                    </form>
-                </div>
-            </div>
-
         </div>
     </div>
-    <nav th:fragment="navigation-top">
-        <ul class="nav nav-inline" style="font-size:2rem;line-height:2rem;">
-            <li class="nav-item">
-                WeinStube
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}"><span class="fa fa-user"></span> Mitarbeiter</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{#}"><span class="fa fa-envelope"></span> </a>
-            </li>
-            <li class="nav-item">
-                10:06
-            </li>
 
-        </ul>
+    <!-- top navigation -->
+    <div th:fragment="navigation-top">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-3">
+                    <p>Weinstube</p>
+                </div>
+                <div class="col-xs-6">
+                    <p>10:06</p>
+                </div>
+                <div class="col-xs-3">
+                    <a th:href="@{/logout}"  sec:authorize="isAuthenticated()">
+                        <button type="button" class="btn btn-primary">
+                            Logout&nbsp; <span class="fa fa-sign-out"></span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    </nav>
 
 </body>
 </html>

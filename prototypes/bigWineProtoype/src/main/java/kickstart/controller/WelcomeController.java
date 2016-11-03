@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.AuthenticationManager;
 import kickstart.AccountCredentials;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
@@ -38,13 +39,14 @@ public class WelcomeController {
 	@RequestMapping("/")
 	public String index(Model model) {
         if(this.authenticationManager.getCurrentUser().isPresent()) {
-            AccountCredentials accountCredentials = new AccountCredentials();
-            accountCredentials.setUsername(this.authenticationManager.getCurrentUser().get().getUsername());
-            model.addAttribute("accountcredentials", accountCredentials);
             return "welcome";
         }
-
 		return "login";
 	}
+
+	@RequestMapping(value="/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
 
 }
