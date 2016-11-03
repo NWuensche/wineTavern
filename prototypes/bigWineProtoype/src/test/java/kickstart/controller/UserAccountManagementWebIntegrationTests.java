@@ -34,7 +34,7 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
 
     private RequestBuilder createRequestBuilder(String name, String password) {
         RequestBuilder request = post("/addNew")
-                .param("name", name)
+                .param("username", name)
                 .param("password", password);
 
         return request;
@@ -50,7 +50,7 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
         mvc.perform(request);
     }
 
-    @Test (expected = NestedServletException.class)
+    @Test(expected = NestedServletException.class)
     public void throwWhenTwoUsersWithSameName() throws Exception {
         String userName = "testAccount";
         String password = "1234";
@@ -63,15 +63,15 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
 
     @Test
     public void savedNewUser() throws Exception {
-        String userName = "testAccount";
+        String username = "testAccount";
         String password = "1234";
         UserAccount user;
 
-        RequestBuilder request = createRequestBuilder(userName, password);
+        RequestBuilder request = createRequestBuilder(username, password);
         mvc.perform(request);
 
-        user = controller.getUserAccountManager().findByUsername(userName).get();
-        assertThat(user.getUsername(), is(userName));
+        user = controller.getUserAccountManager().findByUsername(username).get();
+        assertThat(user.getUsername(), is(username));
     }
 
 }

@@ -4,17 +4,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.is;
 
 import kickstart.AbstractWebIntegrationTests;
 import org.junit.Test;
-import org.salespointframework.useraccount.Role;
-import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 /**
  * Web integration tests for the {@link WelcomeController}
@@ -30,11 +24,17 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
     public void redirectToLogin() throws Exception {
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("registercredentials"))
+                .andExpect(model().attributeDoesNotExist("accountcredentials"))
                 .andExpect(view().name("login"));
     }
 
     @Test
+    public void redirectToUsers() throws Exception {
+        mvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("accountcredentials"))
+                .andExpect(model().attributeExists("staffCollection"))
+                .andExpect(view().name("users"));
     }
 
 }
