@@ -22,7 +22,7 @@ public class PrototypeDataInitializerTests extends AbstractWebIntegrationTests{
 
     @Test
     public void adminInDB() throws Exception {
-        Role adminRole = Role.of("ADMIN");
+        Role adminRole = Role.of("ROLE_ADMIN");
         Optional<UserAccount> admin;
 
         mvc.perform(get("/"));

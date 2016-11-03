@@ -33,7 +33,7 @@ public class PrototypeDataInitializer implements DataInitializer{
         String adminName = "admin";
 
         if(!isAdminInDB(manager, adminName)) {
-                UserAccount admin = manager.create(adminName, "1234", Role.of("ADMIN"));
+                UserAccount admin = manager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
                 manager.save(admin);
             }
         }
