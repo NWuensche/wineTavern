@@ -99,6 +99,8 @@ image::src/UseCase.png[Anwendungsfalldiagramm]
 === Überblick: Dialoglandkarte
 //Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur Laufzeit darstellt. Also mit welchen Aktionen zwischen den Masken navigiert wird. Die nachfolgende Abbildung zeigt eine an die Pinnwand gezeichnete Dialoglandkarte. Ihre Karte sollte zusätzlich die Buttons/Funktionen darstellen, mit deren Hilfe Sie zwischen den Masken navigieren.
 
+image::src/Dialoglandkarte.png[Dialoglandkarte, 600, link=src/Doaloglandkarte.png]
+
 === Dialogbeschreibung
 
 ==== 1.1 Frontend:
