@@ -1,17 +1,18 @@
 package winetavern.model.stock;
 
+import org.salespointframework.quantity.Quantity;
 import winetavern.model.user.Person;
 
 /**
  * @author Louis
  */
 public class Order {
-    private int quantity;
+    private Quantity quantity;
     private Product product;
     private Person responsiblePerson;
     private OrderState state;
 
-    public Order(int quantity, Product product, Person responsiblyPerson) {
+    public Order(Quantity quantity, Product product, Person responsiblyPerson) {
         this.quantity = quantity;
         this.product = product;
         this.responsiblePerson = responsiblyPerson;
@@ -22,21 +23,41 @@ public class Order {
         return responsiblePerson;
     }
 
-    public void ordered() {
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public OrderState getState() {
+        return state;
+    }
+
+    public void order() {
         if (state != OrderState.OPEN)
             throw new IllegalStateException("Order must be in state OPEN when getting ordered");
         this.state = OrderState.ORDERED;
     }
 
-    public void received() {
+    public void receive() {
         if (state != OrderState.ORDERED)
             throw new IllegalStateException("Order must be in state ORDERED when getting received");
         this.state = OrderState.RECEIVED;
+        product.setAmount(product.getAmount().add(quantity));
     }
 
-    private enum OrderState {
+    public void cancel() {
+        if (state == OrderState.RECEIVED)
+            throw new IllegalStateException("A received order can not be cancelled");
+        this.state = OrderState.CANCELLED;
+    }
+
+    protected enum OrderState {
         OPEN,
         ORDERED,
-        RECEIVED
+        RECEIVED,
+        CANCELLED
     }
 }

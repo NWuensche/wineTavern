@@ -1,7 +1,5 @@
 package winetavern.model.stock;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,7 +25,9 @@ public class StockManager {
     }
 
     public Optional<Product> getProductByName(String name) {
-        return null;
+        for (Product product : getAllProducts())
+            if (product.getName().equals(name)) return Optional.of(product);
+        return Optional.empty();
     }
 
     public Set<Product> getAllProducts() {

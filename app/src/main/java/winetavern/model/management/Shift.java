@@ -53,7 +53,7 @@ public class Shift {
         this.worker = worker;
     }
 
-    private enum Role {
+    protected enum Role {
         SERVICE,
         COOK,
         ACCOUNTANT

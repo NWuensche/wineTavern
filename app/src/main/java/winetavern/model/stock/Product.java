@@ -1,6 +1,7 @@
 package winetavern.model.stock;
 
 import org.javamoney.moneta.Money;
+import org.salespointframework.quantity.Quantity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,9 +11,9 @@ import java.util.Set;
  */
 public class Product extends StockItem {
     private Money price;
-    private int amount;
+    private Quantity amount;
 
-    public Product(String name, Money price, int amount) {
+    public Product(String name, Money price, Quantity amount) {
         super(name);
         this.price = price;
         this.amount = amount;
@@ -34,11 +35,11 @@ public class Product extends StockItem {
         this.price = price;
     }
 
-    public int getAmount() {
+    public Quantity getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Quantity amount) {
         this.amount = amount;
     }
 

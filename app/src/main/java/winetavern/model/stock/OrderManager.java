@@ -1,7 +1,5 @@
 package winetavern.model.stock;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,8 +28,10 @@ public class OrderManager {
         return orders.remove(order);
     }
 
-    public Set<Order> getEventsByTimespan(LocalDateTime time, Duration duration) {
+    public Set<Order> getOrdersByState(Order.OrderState state) {
         Set<Order> res = new HashSet<>();
+        for (Order order : orders)
+            if (order.getState() == state) res.add(order);
         return res;
     }
 }

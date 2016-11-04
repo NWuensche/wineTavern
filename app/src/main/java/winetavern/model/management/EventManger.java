@@ -1,5 +1,7 @@
 package winetavern.model.management;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,8 +31,19 @@ public class EventManger {
         return events.remove(event);
     }
 
-    public Set<Event> getEventsByTime(LocalDateTime time) {
+    public Set<Event> getEventsByDate(LocalDateTime dateTime) {
+        LocalDate date = dateTime.toLocalDate();
         Set<Event> res = new HashSet<>();
+        for (Event event : events)
+            if (event.getDate().toLocalDate().equals(date)) res.add(event);
         return res;
+    }
+
+    public LocalDateTime addDuration(LocalDateTime time, Duration duration) {
+        return time.plusDays(duration.toDays())
+                   .plusHours(duration.toHours())
+                   .plusMinutes(duration.toMinutes())
+                   .plusSeconds(duration.toMillis() / 1000)
+                   .plusNanos(duration.toNanos());
     }
 }
