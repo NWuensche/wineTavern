@@ -1,28 +1,31 @@
 package winetavern.model.reservation;
 
+import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
- *
+ * Entity for a single reservation
  * @author Sev
  */
+@Entity
 public class Reservation {
-    private int id;
+
+    private @Id @GeneratedValue long id;
+
     private String guestName;
-    private Table table;
-    private LocalDateTime date;
+    @ManyToOne Table table;
+    private LocalDateTime time;
     private Duration duration;
 
-    public Reservation(int id, String guestName, Table table, LocalDateTime date, Duration duration) {
-        this.id = id;
+    public Reservation(int id, String guestName, Table table, LocalDateTime time, Duration duration) {
         this.guestName = guestName;
         this.table = table;
-        this.date = date;
+        this.time = time;
         this.duration = duration;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -46,12 +49,12 @@ public class Reservation {
         this.table = table;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setTime(LocalDateTime date) {
+        this.time = time;
     }
 
     public Duration getDuration() {
