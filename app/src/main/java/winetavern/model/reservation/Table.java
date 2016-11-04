@@ -1,7 +1,16 @@
-package winetavern.model.reservation;
+package kickstart.model.reservation;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
- * Created by Louis on 04.11.2016.
+ * Created by Michel on 11/3/2016.
  */
+@Entity(name = "restaurant_table")
 public class Table {
+    @Id
+    private int id;
+
+    private int capacity;
+    private int number;
 }
