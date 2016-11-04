@@ -1,7 +1,15 @@
 package winetavern.model.user;
 
+import org.salespointframework.core.SalespointRepository;
+
+import javax.persistence.Entity;
+
 /**
- * Created by nwuensche on 04.11.16.
+ * Repository interface to handle {@link Person}s
+ * @author Niklas Wünsche
  */
-public class PersonManager {
+
+@Entity
+public interface PersonManager extends SalespointRepository<Person, Long> {
+
 }
