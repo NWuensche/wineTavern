@@ -31,7 +31,7 @@
         <h3 sec:authorize="isAuthenticated()" th:text="${'als ' + #authentication.getName()}">username</h3>
         <ul>
             <li><a th:href="@{/login}">zum Login</a></li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/users}">zu den Benutzern</a></li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/admin/users}">zu den Benutzern</a></li>
         </ul>
 	</body>
 </html>

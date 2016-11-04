@@ -1,4 +1,4 @@
-package kickstart.controller;
+package winetavern.controller;
 
 import org.springframework.test.web.servlet.RequestBuilder;
 

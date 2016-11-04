@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kickstart.controller;
+package winetavern.controller;
 
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.AuthenticationManager;
-import kickstart.AccountCredentials;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 

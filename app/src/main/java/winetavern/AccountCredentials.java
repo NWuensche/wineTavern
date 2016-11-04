@@ -1,4 +1,4 @@
-package kickstart;
+package winetavern;
 
 /**
  * Class to store credentials from the login page.

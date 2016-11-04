@@ -1,4 +1,4 @@
-package kickstart;
+package winetavern;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

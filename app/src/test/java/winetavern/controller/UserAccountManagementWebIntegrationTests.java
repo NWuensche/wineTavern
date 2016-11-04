@@ -1,10 +1,10 @@
-package kickstart.controller;
+package winetavern.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
 
-import kickstart.AbstractWebIntegrationTests;
+import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;

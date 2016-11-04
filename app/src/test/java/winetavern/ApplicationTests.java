@@ -1,8 +1,8 @@
-package kickstart;
+package winetavern;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import kickstart.controller.LoginRequests;
+import winetavern.controller.LoginRequests;
 import org.junit.Test;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;

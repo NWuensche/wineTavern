@@ -1,6 +1,6 @@
-package kickstart.controller;
+package winetavern.controller;
 
-import kickstart.AccountCredentials;
+import winetavern.AccountCredentials;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,13 +25,13 @@ public class UserAccountManagementController {
         this.userAccountManager = userAccountManager;
     }
 
-    @RequestMapping(value="/addNew", method=RequestMethod.POST)
+    @RequestMapping(value="/admin/addNew", method=RequestMethod.POST)
     public String index(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount account = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword());
 
         userAccountManager.save(account);
 
-        return "redirect:users";
+        return "redirect:/admin/users";
     }
 
     public UserAccountManager getUserAccountManager(){

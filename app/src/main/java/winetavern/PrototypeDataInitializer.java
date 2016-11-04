@@ -1,4 +1,4 @@
-package kickstart;
+package winetavern;
 
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.useraccount.Role;
