@@ -5,5 +5,11 @@ package winetavern.model.user;
  */
 
 public abstract class Staff {
+
     private String birthday;
+
+    public String getBirthday() {
+        return null;
+    }
+
 }

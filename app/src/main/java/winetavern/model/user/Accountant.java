@@ -4,6 +4,7 @@ package winetavern.model.user;
  * @author Niklas Wünsche
  */
 
-public class Accountant {
+public class Accountant extends Staff {
+
 
 }

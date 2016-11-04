@@ -5,4 +5,9 @@ package winetavern.model.user;
  */
 
 public class Address {
+
+    private String street;
+    private String number;
+    private String postal;
+    //private String postal;
 }

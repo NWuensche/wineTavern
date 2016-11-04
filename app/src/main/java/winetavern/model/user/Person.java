@@ -5,6 +5,18 @@ package winetavern.model.user;
  * @author Niklas Wünsche
  */
 
-public interface Person {
+public abstract class Person {
+
+    private String firstName;
+    private String lastName;
+    private long id;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 
 }

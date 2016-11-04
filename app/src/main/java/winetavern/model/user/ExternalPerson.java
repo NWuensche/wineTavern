@@ -4,5 +4,8 @@ package winetavern.model.user;
  * @author Niklas Wünsche
  */
 
-public interface ExternalPerson {
+public abstract class ExternalPerson extends Person{
+
+    public abstract void pay();
+
 }
