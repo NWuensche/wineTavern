@@ -61,6 +61,12 @@
             <version>4.0.0.RELEASE</version>
         </dependency>
 
+		<dependency>
+			<groupId>javax.money</groupId>
+			<artifactId>money-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
