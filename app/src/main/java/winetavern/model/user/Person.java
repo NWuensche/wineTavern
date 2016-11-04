@@ -17,15 +17,13 @@ import javax.persistence.OneToOne;
 public class Person {
 
     @Id @GeneratedValue private long id;
-    @OneToOne UserAccount userAccount;
+    @OneToOne private UserAccount userAccount;
+
     private Address address;
+    private String birthday;
 
     public Person(UserAccount userAccount, Address address) {
         this.userAccount = userAccount;
-        this.address = address;
-    }
-
-    public void setAddress(Address address) {
         this.address = address;
     }
 
@@ -33,8 +31,20 @@ public class Person {
         return id;
     }
 
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public Address getAddress() {
         return address;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getBirthday() {
+        return birthday;
     }
 
     public UserAccount getUserAccount() {
