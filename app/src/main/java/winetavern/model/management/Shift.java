@@ -1,5 +1,6 @@
 package winetavern.model.management;
 
+import org.salespointframework.time.Interval;
 import winetavern.model.user.Staff;
 
 import java.time.Duration;
@@ -9,32 +10,22 @@ import java.time.LocalDateTime;
  * @author Louis
  */
 public class Shift {
-    private LocalDateTime date;
-    private Duration duration;
+    private Interval interval;
     private Role role;
     private Staff worker;
 
-    public Shift(LocalDateTime date, Duration duration, Role role, Staff worker) {
-        this.date = date;
-        this.duration = duration;
+    public Shift(Interval interval, Role role, Staff worker) {
+        this.interval = interval;
         this.role = role;
         this.worker = worker;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public Interval getInterval() {
+        return interval;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 
     public Role getRole() {

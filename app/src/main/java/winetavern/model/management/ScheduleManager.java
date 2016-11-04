@@ -1,7 +1,8 @@
 package winetavern.model.management;
 
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Louis
@@ -11,7 +12,7 @@ public class ScheduleManager {
     private Set<Schedule> schedules;
 
     public ScheduleManager() {
-        this.schedules = new HashSet<>();
+        this.schedules = new TreeSet<>();
     }
 
     public static ScheduleManager getInstance() {
@@ -28,7 +29,9 @@ public class ScheduleManager {
         return schedules.remove(schedule);
     }
 
-    public Schedule getSchedule(int week) {
-        return null;
+    public Optional<Schedule> getSchedule(int week) {
+        for (Schedule schedule : schedules)
+            if (schedule.getWeek() == week) return Optional.of(schedule);
+        return Optional.empty();
     }
 }

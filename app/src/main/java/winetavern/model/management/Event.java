@@ -1,33 +1,32 @@
 package winetavern.model.management;
 
-import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.time.Interval;
 
-import java.time.LocalDateTime;
+import javax.money.MonetaryAmount;
 
 /**
  * @author Louis
  */
-public class Event {
-    private LocalDateTime date;
-    private String name;
+public class Event extends Product {
+    private Interval interval;
     private String description;
-    private Money price;
 
-    public LocalDateTime getDate() {
-        return date;
+    public Event(String name, MonetaryAmount price, Interval interval, String description) {
+        super(name, price, Metric.UNIT);
+        this.interval = interval;
+        this.description = description;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public Interval getInterval() {
+        return interval;
     }
 
-    public String getName() {
-        return name;
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;
@@ -35,13 +34,5 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Money getPrice() {
-        return price;
-    }
-
-    public void setPrice(Money price) {
-        this.price = price;
     }
 }
