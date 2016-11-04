@@ -53,7 +53,7 @@ image::src/Sequenzdiagramme/Weinkauf.png[Sequenzdiagramm 1, 600,400 link=src/Seq
 === Überblick Anwendungsfalldiagramm
 //Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt
 
-image::src/UseCase.png[Anwendungsfalldiagramm]
+image::src/usecase.png[Anwendungsfalldiagramm]
 === Akteure und Anwendungsfallbeschreibung
 
 [options="header"]
