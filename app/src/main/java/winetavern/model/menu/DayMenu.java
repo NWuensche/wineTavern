@@ -1,12 +1,9 @@
-package kickstart.model.menu;
+package winetavern.model.menu;
 
-import org.salespointframework.catalog.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.Id;
 import org.springframework.data.repository.Repository;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToMany;
 import java.util.*;
 /**

@@ -1,4 +1,4 @@
-package kickstart.model.accountancy;
+package winetavern.model.accountancy;
 
 /**
  * Created by Michel on 11/3/2016.

@@ -1,24 +1,17 @@
-package kickstart.model.reservation;
+package winetavern.model.reservation;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
-<<<<<<< Updated upstream
- * Created by Michel on 11/3/2016.
-=======
  * @author Sev
->>>>>>> Stashed changes
  */
 @Entity(name = "restaurant_table")
 public class Table {
-<<<<<<< Updated upstream
     @Id
     private int id;
 
     private int capacity;
-    private int number;
-=======
     private int number;
     private int seats;
 
@@ -42,5 +35,4 @@ public class Table {
     public void setSeats(int seats) {
         this.seats = seats;
     }
->>>>>>> Stashed changes
 }

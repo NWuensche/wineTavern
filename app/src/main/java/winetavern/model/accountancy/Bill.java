@@ -1,6 +1,6 @@
-package kickstart.model.accountancy;
+package winetavern.model.accountancy;
 
-import kickstart.model.reservation.Table;
+import winetavern.model.reservation.Table;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.Date;

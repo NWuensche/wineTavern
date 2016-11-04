@@ -1,15 +1,12 @@
-package kickstart.model.menu;
+package winetavern.model.menu;
 
 import java.util.*;
 import javax.persistence.Entity;
-import org.hibernate.annotations.Generated;
-import org.joda.money.*;
+
+import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import javax.persistence.Id;
 import org.springframework.data.repository.Repository;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 /**
  * Created by Michel on 11/3/2016.
