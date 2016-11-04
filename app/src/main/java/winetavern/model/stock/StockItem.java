@@ -1,7 +1,24 @@
 package winetavern.model.stock;
 
+import java.util.Set;
+
 /**
- * Created by Louis on 04.11.2016.
+ * @author Louis
  */
-public class StockItem {
+public abstract class StockItem {
+    private String name;
+
+    public StockItem(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public abstract Set<Product> getAllProducts();
 }
