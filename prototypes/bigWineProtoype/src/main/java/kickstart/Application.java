@@ -42,7 +42,13 @@ public class Application {
 
             http.csrf().disable();
 
-            http.authorizeRequests().anyRequest().authenticated().and().
+            http.authorizeRequests().
+                    antMatchers("/accountancy/**").hasAnyRole("ADMIN, ACCOUNTANCY").
+                    antMatchers("/service/**").hasAnyRole("ADMIN, SERVICE").
+                    antMatchers("/kitchen/**").hasAnyRole("ADMIN, KITCHEN").
+                    antMatchers("/visitor/**").permitAll().
+                    antMatchers("/admin/**").hasRole("ADMIN").
+                    antMatchers("/**").authenticated().and().
                     formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll().and().
                     logout().logoutUrl("/logout").logoutSuccessUrl("/");
         }
