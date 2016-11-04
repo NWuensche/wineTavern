@@ -11,10 +11,12 @@ import java.time.LocalDateTime;
 @Entity
 public class Reservation {
 
-    private @Id @GeneratedValue long id;
+    @Id @GeneratedValue
+    private long id;
 
     private String guestName;
-    @ManyToOne Table table;
+    @ManyToOne(targetEntity=Table.class)
+    Table table;
     private LocalDateTime time;
     private Duration duration;
 

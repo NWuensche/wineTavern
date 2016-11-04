@@ -1,6 +1,9 @@
 package winetavern.model.accountancy;
 
+import org.salespointframework.accountancy.AccountancyEntry;
 import winetavern.model.reservation.Table;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.Date;
@@ -9,11 +12,8 @@ import java.util.List;
 /**
  * Created by Michel on 11/3/2016.
  */
-public class Bill {
-    @Id
-    private long id;
-
-    private Date closeTime;
+@Entity
+public class Bill extends AccountancyEntry {
     private Table table;
     //private Waitress waitress;
 

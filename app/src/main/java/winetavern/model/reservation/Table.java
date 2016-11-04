@@ -5,6 +5,8 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.List;
 
 /**
  * @author Sev
@@ -12,10 +14,13 @@ import javax.persistence.Id;
 @Entity(name = "restaurant_table")
 public class Table {
 
-    private @Id long id;
+    @Id
+    private long id;
 
     private int capacity;
     private int number;
+    @ManyToMany(targetEntity=Reservation.class)
+    List<Reservation> reservationList;
 
 
     public Table(int capacity,int number) throws InvalidArgumentException{
