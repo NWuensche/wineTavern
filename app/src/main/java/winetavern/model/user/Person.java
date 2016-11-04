@@ -2,10 +2,7 @@ package winetavern.model.user;
 
 import org.salespointframework.useraccount.UserAccount;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * Entity for Persons
@@ -18,8 +15,8 @@ public class Person {
 
     @Id @GeneratedValue private long id;
     @OneToOne private UserAccount userAccount;
+    @ManyToOne private Address address;
 
-    private Address address;
     private String birthday;
 
     public Person(UserAccount userAccount, Address address) {
