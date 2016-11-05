@@ -1,7 +1,5 @@
 package winetavern.model.reservation;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,23 +9,26 @@ import java.util.List;
 /**
  * @author Sev
  */
+
 @Entity(name = "restaurant_table")
 public class Table {
 
-    @Id
-    private long id;
-
+    @Id @GeneratedValue private long id;
+    @ManyToMany(targetEntity=Reservation.class) List<Reservation> reservationList;
 
     private int capacity;
     private int number;
-    @ManyToMany(targetEntity=Reservation.class)
-    List<Reservation> reservationList;
 
+    public Table(int capacity, int number) throws IllegalArgumentException {
 
-    public Table(int capacity,int number) throws InvalidArgumentException{
-        if(capacity <= 0){throw new InvalidArgumentException(new String[]{"No Table should have capacity <= 0"});}
-        if(number <= 0){throw new InvalidArgumentException(new String[]{"No Table should be identified by number <= " +
-                "0"});}
+        if(capacity <= 0) {
+            throw new IllegalArgumentException ("No Table should have capacity <= 0");
+        }
+
+        if(number <= 0) {
+            throw new IllegalArgumentException ("No Table should be identified by number <= 0");
+        }
+
         this.number = number;
         this.capacity = capacity;
     }
