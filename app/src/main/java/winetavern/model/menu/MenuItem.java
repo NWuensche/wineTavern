@@ -8,6 +8,7 @@ import org.salespointframework.catalog.Product;
 import javax.persistence.Id;
 import org.springframework.data.repository.Repository;
 
+
 /**
  * Created by Michel on 11/3/2016.
  */

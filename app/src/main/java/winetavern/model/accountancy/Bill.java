@@ -1,9 +1,12 @@
 package winetavern.model.accountancy;
 
+
 import org.salespointframework.accountancy.AccountancyEntry;
 import winetavern.model.reservation.Table;
 
 import javax.persistence.Entity;
+
+import winetavern.model.reservation.Table;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.Date;

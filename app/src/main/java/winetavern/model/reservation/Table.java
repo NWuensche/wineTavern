@@ -17,6 +17,7 @@ public class Table {
     @Id
     private long id;
 
+
     private int capacity;
     private int number;
     @ManyToMany(targetEntity=Reservation.class)

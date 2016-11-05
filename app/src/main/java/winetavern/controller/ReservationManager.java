@@ -1,6 +1,7 @@
 package winetavern.controller;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import org.springframework.stereotype.Controller;
 import winetavern.model.reservation.Reservation;
 import winetavern.model.reservation.Table;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 /**
  * @author Sev
  */
+@Controller
 public class ReservationManager {
     private Set<Reservation> reservations;
 
