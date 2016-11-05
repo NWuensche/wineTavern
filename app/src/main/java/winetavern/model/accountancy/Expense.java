@@ -4,6 +4,7 @@ import org.salespointframework.accountancy.AccountancyEntry;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 
@@ -12,10 +13,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 public class Expense extends AccountancyEntry {
-    @Id
-    private long id;
-
-    @OneToMany(targetEntity = ExpenseGroup.class)
+    @ManyToOne(targetEntity = ExpenseGroup.class)
     private ExpenseGroup expenseGroup;
 
     private LocalDateTime matureDate;

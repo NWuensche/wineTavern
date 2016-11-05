@@ -4,11 +4,10 @@ package winetavern.model.accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
 import winetavern.model.reservation.Table;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import winetavern.model.reservation.Table;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import java.util.List;
  */
 @Entity
 public class Bill extends AccountancyEntry {
+    @ManyToOne(targetEntity = Table.class)
     private Table table;
     //private Waitress waitress;
 

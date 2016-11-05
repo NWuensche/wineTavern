@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * @author Niklas Wünsche
  */
 
-@Entity
+
 public interface PersonManager extends SalespointRepository<Person, Long> {
 
 }
