@@ -153,9 +153,15 @@ nav button.logout__btn {
 
 /*SIDE-MENU*/
 
-.side__menu {
+.side {
     background-color: #243648;
-    color: #A6B2C5
+    color: #A6B2C5;
+}
+
+.side__menu {
+    background-color: #2F3F52;
+    color: #A6B2C5;
+    width: 100%;
 }
 
 .image-user {
@@ -196,4 +202,10 @@ nav button.logout__btn {
     /*color: #A6B2C5;*/
     display: inline-block;
     width: 100%;
+    padding-left: 2.5rem;
+    line-height: 4rem;
+}
+
+.side-module__container .fa {
+    padding-right: 1.5rem;
 }
