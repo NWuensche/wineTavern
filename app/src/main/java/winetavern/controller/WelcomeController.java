@@ -40,7 +40,7 @@ public class WelcomeController {
         /*if(this.authenticationManager.getCurrentUser().isPresent()) {
             return "welcome";
         }*/
-		return "welcome";
+		return "backend-temp";
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
