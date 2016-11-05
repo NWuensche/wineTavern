@@ -20,7 +20,7 @@ public class Reservation {
     private LocalDateTime time;
     private Duration duration;
 
-    public Reservation(int id, String guestName, Table table, LocalDateTime time, Duration duration) {
+    public Reservation(String guestName, Table table, LocalDateTime time, Duration duration) {
         this.guestName = guestName;
         this.table = table;
         this.time = time;
@@ -29,10 +29,6 @@ public class Reservation {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getGuestName() {
