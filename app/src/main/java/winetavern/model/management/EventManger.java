@@ -32,6 +32,7 @@ public class EventManger {
         return events.remove(event);
     }
 
+    /*
     public Set<Event> getEventsByInterval(Interval i1) {
         Set<Event> res = new HashSet<>();
         for (Event event : events) {
@@ -42,4 +43,5 @@ public class EventManger {
         }
         return res;
     }
+    */
 }
