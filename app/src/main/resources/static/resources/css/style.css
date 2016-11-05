@@ -1,16 +1,11 @@
 /* CSS RESET */
 
+
+/*BASE*/
+
 body {
 	background-color:lightgrey;
-    font: 13px/22px Helvetica, Arial, sans-serif;
-    padding:10px;
-    padding-left:430px;
-    padding-top:100px;
-    transition: padding 1s;
-}
-
-.login__bg {
-    background-color: #274b5e;
+    font-family:  Helvetica, Arial, sans-serif;
 }
 
 
@@ -23,12 +18,20 @@ h1 {
 button.btn-primary {
     background-color: #26AA8C;
     border-color: #26ae90;
-    /*width:100px;*/
 }
 
 button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
     background-color: #1D997D;
     border-color: #26ae90;
+}
+
+/*------------------------------*/
+
+
+/*LOGIN*/
+
+.login__bg {
+    background-color: #274b5e;
 }
 
 .login__container {
@@ -54,84 +57,132 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 .login__container .form-control {
 	margin-bottom: 25px;
 }
-/* left navigation --------------------------------------------------------------------------------------------------- */
-.navigation-left {
-    background-color: #243648;
-    color:white;
-    font-size:2rem;
-    left:0;
-    line-height:2rem;
-    position:fixed;
-    top:0;
-    transition:left 1s;
-    -webkit-transition:left 1s;
-    width:400px;
-}
 
-.navigation-left .hide {
-    background-color: #243648;
-    border-radius:0px 5px 5px 0px;
-    cursor:pointer;
-    left:400px;
-    padding:5px;
-    position:relative;
-    top:80px;
-    width:40px;
-}
+/*-----------------------------------*/
 
-.navigation-left img {
-    height:100px;
-}
+/*NAVIGATION*/
 
-.navigation-left .row {
-    border-left:10px solid #243648;
-    padding:10px 10px;
-}
+/*.navigation-left {*/
+    /*background-color: #243648;*/
+    /*color:white;*/
+    /*font-size:2rem;*/
+    /*left:0;*/
+    /*line-height:2rem;*/
+    /*position:fixed;*/
+    /*top:0;*/
+    /*transition:left 1s;*/
+    /*-webkit-transition:left 1s;*/
+    /*width:400px;*/
+/*}*/
 
-.navigation-left .row:hover {
-    background:#2f3f52;
-}
+/*.navigation-left .hide {*/
+    /*background-color: #243648;*/
+    /*border-radius:0px 5px 5px 0px;*/
+    /*cursor:pointer;*/
+    /*left:400px;*/
+    /*padding:5px;*/
+    /*position:relative;*/
+    /*top:80px;*/
+    /*width:40px;*/
+/*}*/
 
-.navigation-left .active {
-    border-left:10px solid #28b395;
-}
+/*.navigation-left img {*/
+    /*height:100px;*/
+/*}*/
 
-.navigation-left .col-xs-3{
-    text-align:center;
-}
+/*.navigation-left .row {*/
+    /*border-left:10px solid #243648;*/
+    /*padding:10px 10px;*/
+/*}*/
 
-.navigation-left a {
-    color:white;
-}
+/*.navigation-left .row:hover {*/
+    /*background:#2f3f52;*/
+/*}*/
+
+/*.navigation-left .active {*/
+    /*border-left:10px solid #28b395;*/
+/*}*/
+
+/*.navigation-left .col-xs-3{*/
+    /*text-align:center;*/
+/*}*/
+
+/*.navigation-left a {*/
+    /*color:white;*/
+/*}*/
+
+
 /* top navigation ---------------------------------------------------------------------------------------------------- */
-.navigation-top {
-    background:white;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    font-size:2rem;
-    left:400px;
-    line-height:2.5rem;
-    padding:12px 10px 0px 30px;
-    position:fixed;
-    right:0px;
-    top:0px;
-    transition:left 1s;
-}
-.navigation-top {
+/*.navigation-top {*/
+    /*background:white;*/
+    /*box-shadow: 0 0 20px rgba(0,0,0,0.2);*/
+    /*font-size:2rem;*/
+    /*left:400px;*/
+    /*line-height:2.5rem;*/
+    /*padding:12px 10px 0px 30px;*/
+    /*position:fixed;*/
+    /*right:0px;*/
+    /*top:0px;*/
+    /*transition:left 1s;*/
+/*}*/
 
+
+/*BACKEND*/
+
+/*BASE*/
+
+.no-gutter {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
-.card-columns {
-    margin:0px;
-    position:relative;
+/*HEADER*/
+
+.side__header {
+    background-color: #243648;
+    height: 54px;
 }
 
-.card-columns .card {
-    padding:10px;
-    text-align: center;
+nav button.logout__btn {
+    background-color: unset;
 }
-/*.card-columns .card {
-    left: 30rem;
+
+/*--------------------*/
+
+/*SIDE-MENU*/
+
+.side__menu {
+    background-color: #243648;
+    position: relative;
+}
+
+.image-user {
+    width: 100px;
+    margin: 0px 0px 54px 32px;
+}
+
+.image__container {
+    width: 100%;
+    display: inline-block;
+}
+
+.btn-toogle {
+    background-color: #243648;
     position: absolute;
-    top:6rem;
-    width: auto;
-}*/
+    top:0px;
+    left: 0px;
+    padding: 2px 6px;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.btn-toogle .fa {
+    background-color: #243648;
+    color: #A6B2C5
+}
+
+.user-title {
+    background-color: #243648;
+    color: #A6B2C5
+}
