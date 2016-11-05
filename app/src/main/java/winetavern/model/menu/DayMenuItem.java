@@ -12,13 +12,9 @@ import org.springframework.data.repository.Repository;
 /**
  * Created by Michel on 11/3/2016.
  */
-interface MenuItemRepository extends Repository<MenuItem, Long> {
-    List<MenuItem> findById(Long id);
-    List<MenuItem> findAll();
-}
 
 @Entity
-public class MenuItem {
+public class DayMenuItem {
 
     @Id
     private long id;
@@ -28,12 +24,14 @@ public class MenuItem {
     private String description;
     private boolean enabled;
 
-    public void MenuItem(String name, Money price) {
+    public DayMenuItem() {};
+
+    public DayMenuItem(String name, Money price) {
         this.name = name;
         this.price = price;
     }
 
-    public void MenuItem(String name, String description, Money price) {
+    public DayMenuItem(String name, String description, Money price) {
         this.name = name;
         this.price = price;
         this.description = description;
