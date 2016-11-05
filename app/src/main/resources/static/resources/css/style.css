@@ -155,7 +155,7 @@ nav button.logout__btn {
 
 .side__menu {
     background-color: #243648;
-    position: relative;
+    color: #A6B2C5
 }
 
 .image-user {
@@ -166,6 +166,10 @@ nav button.logout__btn {
 .image__container {
     width: 100%;
     display: inline-block;
+}
+
+.btn-toogle__position {
+    position: relative;
 }
 
 .btn-toogle {
@@ -183,6 +187,13 @@ nav button.logout__btn {
 }
 
 .user-title {
-    background-color: #243648;
-    color: #A6B2C5
+    /*background-color: #243648;*/
+    /*color: #A6B2C5*/
+}
+
+.side-module__container {
+    /*background-color: #243648;*/
+    /*color: #A6B2C5;*/
+    display: inline-block;
+    width: 100%;
 }
