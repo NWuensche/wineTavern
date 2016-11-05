@@ -11,7 +11,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |11.10.2016 | 16:50 |18:20 | Demuth: Kennenlernen
 |18.10.2016 | 16:50 |18:20 | Gierke: Spring
 |25.10.2016 | 16:50 |18:20 | Gierke: Salespoint
-|01.11.2016 | 16:50 |18:20 | Aßmann: ?!
+|01.11.2016 | 16:50 |18:20 | Aßmann: MVC-Pattern an Java AWT
 |===
 
 == Meeting
@@ -20,7 +20,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |14.10.2016 | 09:20 |11:20 | Erste Ideen und git Einführung
 |21.10.2016 | 09:20 |13:00 | Erarbeitung Fragenkatalog und Prototypenprogrammierung (Videoshop)
 |28.10.2016 | 09:20 |12:40 | Vorstellen Prototypen, Aufgabenverteilung
-|04.11.2016 | 09:20 |12:40 | 
+|04.11.2016 | 09:20 |12:40 | Abnahme Pflichtenheft, Aufteilung der Software auf Gruppenmitglieder
 |===
 
 == Severin
@@ -66,6 +66,11 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 24.10.2016    | 19:00     | 20:00     | Sequenzdiagramme beenden
 | 28.10.2016    | 15:00     | 17:00     | Akzeptanztests schreiben
 | 30.10.2016    | 08:00     | 15:00     | AKD weiter, JUnit einrichten
+| 31.10.2016    | 08:30     | 13:00     | Tests schreiben, Controller einrichten
+| 02.11.2016    | 07:30     | 09:00     | Tests schreiben
+| 02.11.2016    | 18:00     | 20:00     | Versuch, login einzurichten
+| 03.11.2016    | 15:00     | 17:00     | Tests mit Login verbinden
+| 04.11.2016    | 19:00     | 20:00     | User-Package einrichten
 |===
 
 == Katharina
