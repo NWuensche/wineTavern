@@ -215,15 +215,17 @@ nav button.logout__btn {
 
 /** -------- TABLES -----**/
 
-main .container__inner{
+main .container__wrap{
     background:#FFF;
     margin: 30px;
 }
-main .container__inner h1{
+main .container__wrap h1{
     background-color: #243648;
     color: #A6B2C5;
     line-height:2;
     text-align: left;
+    margin-bottom: 0rem;
+    font-size: 2rem;
 }
 main table thead{
 
