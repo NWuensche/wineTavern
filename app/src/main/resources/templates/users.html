@@ -34,28 +34,54 @@
             <div th:include="navigation::navigation" ></div>
 
             <div class="container">
-                <div class="card-columns">
-                    <div class="card" th:each="staff : ${staffCollection}">
-                        <img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"
-                             style="width:100px;"/>
-                        <div class="card-block">
-                            <h2 class="card-title" th:text="${staff.username}"></h2>
-                            <a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
-                            </button></a>
-                        </div>
+                <div class="container__inner">
+
+                    <div class="container__headline">
+                        <h1><span class="fa fa-users"></span> User List</h1>
                     </div>
-                    <div class="card">
-                        <img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"
-                             style="width:100px;"/>
-                        <div class="card-block">
-                            <h2 class="card-title">+ Mitarbeiter</h2>
-                            <button type="button" class="btn btn-primary btn-lg"
-                                    data-toggle="modal" data-target="#addNew">
-                                <span class="fa fa-plus fa-lg"></span>
-                            </button>
-                        </div>
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Username</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="staff : ${staffCollection}">
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td th:text="${staff.username}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
                 </div>
+
+                <!--<div class="card-columns">-->
+                    <!--<div class="card" th:each="staff : ${staffCollection}">-->
+                        <!--<img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"-->
+                             <!--style="width:100px;"/>-->
+                        <!--<div class="card-block">-->
+                            <!--<h2 class="card-title" th:text="${staff.username}"></h2>-->
+                            <!--<a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">-->
+                            <!--</button></a>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="card">-->
+                        <!--<img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"-->
+                             <!--style="width:100px;"/>-->
+                        <!--<div class="card-block">-->
+                            <!--<h2 class="card-title">+ Mitarbeiter</h2>-->
+                            <!--<button type="button" class="btn btn-primary btn-lg"-->
+                                    <!--data-toggle="modal" data-target="#addNew">-->
+                                <!--<span class="fa fa-plus fa-lg"></span>-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
 
             <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">

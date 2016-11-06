@@ -192,10 +192,9 @@ nav button.logout__btn {
     color: #A6B2C5
 }
 
-.user-title {
-    /*background-color: #243648;*/
-    /*color: #A6B2C5*/
-}
+/*.user-title {*/
+
+/*}*/
 
 .side-module__container {
     /*background-color: #243648;*/
@@ -208,4 +207,27 @@ nav button.logout__btn {
 
 .side-module__container .fa {
     padding-right: 1.5rem;
+}
+
+/* ----- MAIN --- */
+
+
+
+/** -------- TABLES -----**/
+
+main .container__inner{
+    background:#FFF;
+    margin: 30px;
+}
+main .container__inner h1{
+    background-color: #243648;
+    color: #A6B2C5;
+    line-height:2;
+    text-align: left;
+}
+main table thead{
+
+}
+main table tbody tr{
+
 }
