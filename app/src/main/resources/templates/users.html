@@ -22,68 +22,76 @@
 </head>
 <body>
 
-<div th:include="navigation::navigation-top" class="navigation-top text-xs-center"></div>
+    <main class="main container">
+        <div class="row">
 
-<div th:include="navigation::navigation-left" class="navigation-left h-100"></div>
+            <div class="col-md-3" th:include="side::side">
 
-<div class="container-fluid">
-    <!--<div class="col-xs-3" th:include="navigation :: navigation-left"></div>
-    <div class="col-xs-3">MENU HERE</div>
-    <div class="col-xs-9">-->
-    <div class="card-columns">
-        <div class="card" th:each="staff : ${staffCollection}">
-            <img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"
-                 style="width:100px;"/>
-            <div class="card-block">
-                <h2 class="card-title" th:text="${staff.username}"></h2>
-                <a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
-                </button></a>
             </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"
-                 style="width:100px;"/>
-            <div class="card-block">
-                <h2 class="card-title">+ Mitarbeiter</h2>
-                <button type="button" class="btn btn-primary btn-lg"
-                        data-toggle="modal" data-target="#addNew">
-                    <span class="fa fa-plus fa-lg"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+        <!--MAIN CONTENT-->
 
-<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3 class="modal-title">+ Mitarbeiter</h3>
+        <div class="col-md-9 no-gutter">
+            <div th:include="navigation::navigation" ></div>
+
+            <div class="container">
+                <div class="card-columns">
+                    <div class="card" th:each="staff : ${staffCollection}">
+                        <img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"
+                             style="width:100px;"/>
+                        <div class="card-block">
+                            <h2 class="card-title" th:text="${staff.username}"></h2>
+                            <a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
+                            </button></a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"
+                             style="width:100px;"/>
+                        <div class="card-block">
+                            <h2 class="card-title">+ Mitarbeiter</h2>
+                            <button type="button" class="btn btn-primary btn-lg"
+                                    data-toggle="modal" data-target="#addNew">
+                                <span class="fa fa-plus fa-lg"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form th:action="@{/addNew}" th:object="${accountcredentials}" method="post">
-                        <div class="form-group row">
-                            <label for="name" class="col-xs-6 form-control-label">Username</label>
-                            <div class="col-xs-6">
-                                <input name="name" id="name" type="text" required="true" size="15" th:field="*{username}"/>
+
+            <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 class="modal-title">+ Mitarbeiter</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <form th:action="@{/addNew}" th:object="${accountcredentials}" method="post">
+                                    <div class="form-group row">
+                                        <label for="name" class="col-xs-6 form-control-label">Username</label>
+                                        <div class="col-xs-6">
+                                            <input name="name" id="name" type="text" required="true" size="15" th:field="*{username}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="password" class="col-xs-6 form-control-label">Login-Code:</label>
+                                        <div class="col-xs-6">
+                                            <input name="password" th:field="*{password}" type="password" pattern="[0-9]{4}" required="true" size="4"/>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>
+                                </form>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-xs-6 form-control-label">Login-Code:</label>
-                            <div class="col-xs-6">
-                                <input name="password" th:field="*{password}" type="password" pattern="[0-9]{4}" required="true" size="4"/>
-                            </div>
-                        </div>
-                        <button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        </div>
+    </main>
+
 </body>
 </html>
