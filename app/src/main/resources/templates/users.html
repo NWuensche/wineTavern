@@ -74,7 +74,17 @@
                                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                             </div>
                             <div class="modal-body">
-                                ...
+                                <div class="card-columns">
+                                    <div class="card" th:each="staff : ${staffCollection}">
+                                        <img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"
+                                             style="width:100px;"/>
+                                        <div class="card-block">
+                                            <h2 class="card-title" th:text="${staff.username}"></h2>
+                                            <a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
+                                            </button></a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -86,16 +96,7 @@
             </div>
          </div>
 
-                <!--<div class="card-columns">-->
-                    <!--<div class="card" th:each="staff : ${staffCollection}">-->
-                        <!--<img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"-->
-                             <!--style="width:100px;"/>-->
-                        <!--<div class="card-block">-->
-                            <!--<h2 class="card-title" th:text="${staff.username}"></h2>-->
-                            <!--<a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">-->
-                            <!--</button></a>-->
-                        <!--</div>-->
-                    <!--</div>-->
+
                     <!--<div class="card">-->
                         <!--<img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"-->
                              <!--style="width:100px;"/>-->
