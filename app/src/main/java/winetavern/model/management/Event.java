@@ -4,15 +4,18 @@ import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Metric;
 
 import javax.money.MonetaryAmount;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * @author Louis
  */
 @Entity
+@Table(name = "EVENTS")
 public class Event extends Product {
-    @OneToOne private TimeInterval interval;
+    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
     private String description;
 
     @Deprecated

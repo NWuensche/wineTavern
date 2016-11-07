@@ -26,7 +26,7 @@ public class UserAccountManagementController {
     }
 
     @RequestMapping(value="/admin/addNew", method=RequestMethod.POST)
-    public String index(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
+    public String addUser(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount account = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword());
 
         userAccountManager.save(account);
