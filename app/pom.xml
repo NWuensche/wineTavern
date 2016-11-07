@@ -6,7 +6,7 @@
 	<artifactId>swt16w17</artifactId>
 	<version>1.2.0.BUILD-SNAPSHOT</version>
 
-	<name>Software Engineering Lab - Kickstart</name>
+	<name>Software Engineering Lab - WineTavern</name>
 
 	<parent>
 		<groupId>de.tudresden.inf.st.lab</groupId>

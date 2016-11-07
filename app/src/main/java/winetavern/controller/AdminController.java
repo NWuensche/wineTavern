@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.AccountCredentials;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
