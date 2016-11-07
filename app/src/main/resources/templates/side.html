@@ -28,96 +28,106 @@
                 </div>
             </div>
 
-            <!--1.  MODULE-->
+            <!-- DASHBOARD-->
             <div class="row">
                 <div class="col-xs-12 no-gutter">
                     <a th:href="@{/}">
                         <div class="side__menu side-module__container">
-                            <i class="fa fa-th" aria-hidden="true"></i>
+                            <i class="fa fa-th fa-lg" aria-hidden="true"></i>
                             <span>Dashboard</span>
                         </div>
                     </a>
                 </div>
             </div>
 
-            <!--2. MODULE-->
+            <!-- KARTE -->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
-                    <div class="side__menu side-module__container">
-                        <i class="fa fa-th" aria-hidden="true"></i>
-                        <span>Karte</span>
-                    </div>
+                    <a th:href="@{/admin/daymenu}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-cutlery fa-lg" aria-hidden="true"></i>
+                            <span>Karte</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <!--3. MODULE-->
+            <!-- RESERVIERUNG-->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
-                    <div class="side__menu side-module__container">
-                        <i class="fa fa-th" aria-hidden="true"></i>
-                        <span>Reservierung</span>
-                    </div>
+                    <a th:href="@{/reservation}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-clock-o fa-lg" aria-hidden="true"></i>
+                            <span>Reservierung</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <!--4. MODULE-->
+            <!-- ABRECHNUNG -->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
-                    <div class="side__menu side-module__container">
-                        <i class="fa fa-th" aria-hidden="true"></i>
-                        <span>Abrechnung</span>
-                    </div>
+                    <a th:href="@{/accountancy/accountancy}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
+                            <span>Abrechnung</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <!--5. MODULE-->
+            <!-- LAGER -->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
                     <a  th:href="@{/admin/stock}">
                         <div class="side__menu side-module__container">
-                            <i class="fa fa-th" aria-hidden="true"></i>
+                            <i class="fa fa-list fa-lg" aria-hidden="true"></i>
                             <span>Lager</span>
                         </div>
                     </a>
                 </div>
             </div>
 
-            <!--6. MODULE-->
+            <!-- EVENTS -->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
-                    <div class="side__menu side-module__container">
-                        <i class="fa fa-th" aria-hidden="true"></i>
-                        <span>Events</span>
-                    </div>
+                    <a th:href="@{/admin/events}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
+                            <span>Events</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <!--7. MODULE-->
+            <!-- MANAGEMENT-->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
                     <a th:href="@{/admin/users}">
                         <div class="side__menu side-module__container">
-                            <i class="fa fa-th" aria-hidden="true"></i>
+                            <i class="fa fa-calendar fa-lg" aria-hidden="true"></i>
                             <span>Management</span>
                         </div>
                     </a>
                 </div>
             </div>
 
-            <!--8. MODULE-->
+            <!-- SETTINGS -->
 
             <div class="row">
                 <div class="col-xs-12 no-gutter">
-                    <div class="side__menu side-module__container">
-                        <i class="fa fa-th" aria-hidden="true"></i>
-                        <span>Settings</span>
-                    </div>
+                    <a th:href="@{/admin/settings}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+                            <span>Settings</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
