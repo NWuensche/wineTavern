@@ -1,6 +1,7 @@
 package winetavern.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
 
@@ -33,7 +34,7 @@ public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegra
     }
 
     private RequestBuilder createRequestBuilder(String name, String password) {
-        RequestBuilder request = post("/addNew")
+        RequestBuilder request = post("/admin/addNew").with(user("admin").roles("ADMIN"))
                 .param("username", name)
                 .param("password", password);
 

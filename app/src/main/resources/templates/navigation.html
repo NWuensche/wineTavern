@@ -7,88 +7,88 @@
 <body>
 
 <!-- left navigation -->
-    <div th:fragment="navigation-left" class="navigation-left text-xs-center">
-        <div class="hide" onclick="change();"><span
-                class="fa fa-caret-square-o-left"></span></div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-4">
-                    <img src="../resources/img/pika.jpg" class="rounded-circle"/>
-                </div>
-                <div class="col-xs-8" sec:authorize="isAuthenticated()"><b>
-                    <p th:text="${#authentication.getName()}">USERNAME<br/></p>
-                    <div th:if="${!#authentication.getAuthorities().isEmpty()}">
-                        <p th:text="${#authentication.getAuthorities()[0]}">ROLE</p>
-                    </div>
-                </b></div>
-            </div>
-            <div class="row active">
-                <a th:href="@{/}">
-                    <div class="col-xs-3">
-                        <span class="fa fa-table"></span>
-                    </div>
-                    <div class="col-xs-9">
-                        <p>Dashboard</p>
-                    </div>
-                </a>
-            </div>
-            <div class="row">
-                <a th:href="@{/admin/users}">
-                    <div class="col-xs-3">
-                        <span class="fa fa-user"></span>
-                    </div>
-                    <div class="col-xs-9">
-                        <p>Mitarbeiter</p>
-                    </div>
-                </a>
-            </div>
-            <div class="row">
-                <div class="col-xs-3">
-                    <span class="fa fa-eur"></span>
-                </div>
-                <div class="col-xs-9">
-                    <p>Abrechnung</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-3">
-                    <span class="fa fa-cutlery"></span>
-                </div>
-                <div class="col-xs-9">
-                    <p>Tageskarte</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-3">
-                    <span class="fa fa-clock-o"></span>
-                </div>
-                <div class="col-xs-9">
-                    <p>Reservierung</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--<div th:fragment="navigation-left" class="navigation-left text-xs-center">-->
+        <!--<div class="hide" onclick="change();"><span-->
+                <!--class="fa fa-caret-square-o-left"></span></div>-->
+        <!--<div class="container-fluid">-->
+            <!--<div class="row">-->
+                <!--<div class="col-xs-4">-->
+                    <!--<img src="../resources/img/pika.jpg" class="rounded-circle"/>-->
+                <!--</div>-->
+                <!--<div class="col-xs-8" sec:authorize="isAuthenticated()"><b>-->
+                    <!--<p th:text="${#authentication.getName()}">USERNAME<br/></p>-->
+                    <!--<div th:if="${!#authentication.getAuthorities().isEmpty()}">-->
+                        <!--<p th:text="${#authentication.getAuthorities()[0]}">ROLE</p>-->
+                    <!--</div>-->
+                <!--</b></div>-->
+            <!--</div>-->
+            <!--<div class="row active">-->
+                <!--<a th:href="@{/}">-->
+                    <!--<div class="col-xs-3">-->
+                        <!--<span class="fa fa-table"></span>-->
+                    <!--</div>-->
+                    <!--<div class="col-xs-9">-->
+                        <!--<p>Dashboard</p>-->
+                    <!--</div>-->
+                <!--</a>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<a th:href="@{/users}">-->
+                    <!--<div class="col-xs-3">-->
+                        <!--<span class="fa fa-user"></span>-->
+                    <!--</div>-->
+                    <!--<div class="col-xs-9">-->
+                        <!--<p>Mitarbeiter</p>-->
+                    <!--</div>-->
+                <!--</a>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="col-xs-3">-->
+                    <!--<span class="fa fa-eur"></span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-9">-->
+                    <!--<p>Abrechnung</p>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="col-xs-3">-->
+                    <!--<span class="fa fa-cutlery"></span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-9">-->
+                    <!--<p>Tageskarte</p>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="col-xs-3">-->
+                    <!--<span class="fa fa-clock-o"></span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-9">-->
+                    <!--<p>Reservierung</p>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
-    <!-- top navigation -->
-    <div th:fragment="navigation-top">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-3">
-                    <p>Weinstube</p>
-                </div>
-                <div class="col-xs-6">
-                    <p>10:06</p>
-                </div>
-                <div class="col-xs-3">
-                    <a th:href="@{/logout}"  sec:authorize="isAuthenticated()">
-                        <button type="button" class="btn btn-primary">
-                            Abmelden&nbsp; <span class="fa fa-sign-out"></span>
-                        </button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--&lt;!&ndash; top navigation &ndash;&gt;-->
+    <!--<div th:fragment="navigation-top">-->
+        <!--<div class="container-fluid">-->
+            <!--<div class="row">-->
+                <!--<div class="col-xs-3">-->
+                    <!--<p>Weinstube</p>-->
+                <!--</div>-->
+                <!--<div class="col-xs-6">-->
+                    <!--<p>10:06</p>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3">-->
+                    <!--<a th:href="@{/logout}"  sec:authorize="isAuthenticated()">-->
+                        <!--<button type="button" class="btn btn-primary">-->
+                            <!--Abmelden&nbsp; <span class="fa fa-sign-out"></span>-->
+                        <!--</button>-->
+                    <!--</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
 
 </body>

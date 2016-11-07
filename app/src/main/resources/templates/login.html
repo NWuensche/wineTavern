@@ -13,10 +13,9 @@
     <script th:src="@{//cdn.jsdelivr.net/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js}"></script>
     <title>Login</title>
 </head>
-<body class="login__bg" style="padding:10px;">
-<!--<div th:include="navigation::navigation-left" class="navigation-left h-100"></div>-->
+<body class="login__bg">
     <div class="container">
-        <div class="row">
+        <div class="row no">
             <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3">
                 <div class="login__container">
                     <form th:action="@{/login}" method="post">
@@ -52,20 +51,5 @@
     <nav class="navbar navbar-fixed-bottom bg-danger text-xs-center" th:if="${loginError}">
         <span style="font-size:2rem; line-height:3rem;"><b>Wrong Password!</b></span>
     </nav>
-<!--<script>-->
-    <!--var hidden = false;-->
-    <!--function change(){-->
-        <!--if(hidden){-->
-            <!--document.getElementsByClassName("hide")[0].parentElement.style.left = "0px";-->
-            <!--document.getElementsByClassName("hide")[0].innerHTML =-->
-                    <!--'<span class="fa fa-caret-square-o-left"></span>';-->
-            <!--hidden = false;-->
-        <!--} else {-->
-            <!--document.getElementsByClassName("hide")[0].parentElement.style.left = "-380px";-->
-            <!--document.getElementsByClassName("hide")[0].innerHTML = '<span class="fa fa-caret-square-o-right"></span>';-->
-            <!--hidden = true;-->
-        <!--}-->
-    <!--}-->
-<!--</script>-->
 </body>
 </html>
