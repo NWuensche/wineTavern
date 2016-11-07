@@ -56,6 +56,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 02.11.2016 | 15:00 | 18:00 | fixes login / user tmpl
 | 04.11.2016 | 12:40 | 13:40 | Erstellen der Packages
 | 04.11.2016 | 14:15 | 23:30 | Erstellen von Controllern
+| 07.11.2016 | 11:10 | 13:00 | Controller..
+| 01.11.2016 | 19:30 | 21:30 | Stock- & Event-Controller
 |===
 
 == Niklas
