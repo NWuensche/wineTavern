@@ -1,6 +1,6 @@
     <!--ASIDE-->
 
-        <div class="col-md-3" th:fragment="side">
+    <div class="col-md-3" th:fragment="side">
 
             <!--HEADER-->
 
@@ -31,7 +31,7 @@
             <!-- DASHBOARD-->
             <div class="row">
                 <div class="col-xs-12 no-gutter">
-                    <a th:href="@{/}">
+                    <a th:href="@{/dashboard}">
                         <div class="side__menu side-module__container">
                             <i class="fa fa-th fa-lg" aria-hidden="true"></i>
                             <span>Dashboard</span>
@@ -68,12 +68,23 @@
 
             <!-- ABRECHNUNG -->
 
-            <div class="row">
+            <div class="row" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT','ROLE_ADMIN')">
                 <div class="col-xs-12 no-gutter">
                     <a th:href="@{/accountancy/accountancy}">
                         <div class="side__menu side-module__container">
                             <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
-                            <span>Abrechnung</span>
+                            <span>Tagesabrechnung</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row" sec:authorize="hasAnyRole('ROLE_SERVICE','ROLE_ADMIN')">
+                <div class="col-xs-12 no-gutter">
+                    <a th:href="@{/service/accountancy}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
+                            <span>Rechnungen</span>
                         </div>
                     </a>
                 </div>
@@ -81,7 +92,7 @@
 
             <!-- LAGER -->
 
-            <div class="row">
+            <div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
                 <div class="col-xs-12 no-gutter">
                     <a  th:href="@{/admin/stock}">
                         <div class="side__menu side-module__container">
@@ -94,7 +105,7 @@
 
             <!-- EVENTS -->
 
-            <div class="row">
+            <div class="row"  sec:authorize="hasRole('ROLE_ADMIN')">
                 <div class="col-xs-12 no-gutter">
                     <a th:href="@{/admin/events}">
                         <div class="side__menu side-module__container">
@@ -105,9 +116,20 @@
                 </div>
             </div>
 
+            <div class="row" sec:authorize="!hasRole('ROLE_ADMIN')">
+                <div class="col-xs-12 no-gutter">
+                    <a th:href="@{/events}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
+                            <span>Events</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             <!-- MANAGEMENT-->
 
-            <div class="row">
+            <div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
                 <div class="col-xs-12 no-gutter">
                     <a th:href="@{/admin/users}">
                         <div class="side__menu side-module__container">
@@ -118,9 +140,20 @@
                 </div>
             </div>
 
+            <div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="col-xs-12 no-gutter">
+                    <a th:href="@{/users}">
+                        <div class="side__menu side-module__container">
+                            <i class="fa fa-calendar fa-lg" aria-hidden="true"></i>
+                            <span>Management</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             <!-- SETTINGS -->
 
-            <div class="row">
+            <div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
                 <div class="col-xs-12 no-gutter">
                     <a th:href="@{/admin/settings}">
                         <div class="side__menu side-module__container">
