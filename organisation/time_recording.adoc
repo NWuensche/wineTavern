@@ -107,4 +107,5 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |02.11.2016 |15:00 |17:00 |Userlogin
 |03.11.2016 |13:00 |16:00 |Prototype / Model einlesen
 |04.11.2016 |18:30 |22:30 |Model
+|05.11.2016 |10:00 |19:00 |Controller / Menu Management
 |===
