@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -7,12 +8,15 @@ import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
 
 import java.util.Optional;
+
+import static org.salespointframework.core.Currencies.EURO;
 
 /**
  * @author Louis
@@ -29,8 +33,15 @@ public class StockController {
     }
 
     @RequestMapping("/admin/stock")
-    public String manageStock() {
-        stock.findAll();
+    public String manageStock(Model model) {
+        //FOR TESTING ONLY
+        if (stock.count() < 2) {
+            stock.save(new InventoryItem(new Product("Vodka", Money.of(12.5, EURO)), Quantity.of(15)));
+            stock.save(new InventoryItem(new Product("Berliner Brandstifter", Money.of(33.99, EURO)), Quantity.of(93)));
+        }
+        //END
+
+        model.addAttribute("stockItems", stock.findAll());
         return "stock";
     }
 
