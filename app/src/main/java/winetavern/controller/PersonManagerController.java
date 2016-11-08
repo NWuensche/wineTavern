@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.springframework.ui.Model;
 import winetavern.AccountCredentials;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.user.Person;
-
 
 /**
  * Controller, which maps {@link Person} related stuff
@@ -24,6 +24,14 @@ public class PersonManagerController {
     @Autowired
     public PersonManagerController(UserAccountManager userAccountManager) {
         this.userAccountManager = userAccountManager;
+    }
+
+    @RequestMapping("/admin/users")
+    public String addUsersMapper(Model model){
+        AccountCredentials registerCredentials = new AccountCredentials();
+        model.addAttribute("accountcredentials", registerCredentials);
+        model.addAttribute("staffCollection", userAccountManager.findEnabled());
+        return "users";
     }
 
     @RequestMapping(value="/admin/addNew", method=RequestMethod.POST)
