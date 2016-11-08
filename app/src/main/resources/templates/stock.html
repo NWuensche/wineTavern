@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:include="links::links">
 
-    <title>Stock</title>
+    <title>Lager</title>
 
 </head>
 <body>
@@ -22,7 +22,7 @@
                 <div class="container__wrap">
 
                     <div class="container__head">
-                        <h1><span class="fa fa-users"></span> User List</h1>
+                        <h1><span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)</h1>
                     </div>
                     <table class="table table-striped">
                         <thead>
@@ -39,7 +39,7 @@
                             <th scope="row">-</th>
                             <td th:text="${item.product.name}"></td>
                             <td th:text="${item.product.price}"></td>
-                            <td th:text="${item.quantity.amount}"></td>
+                            <td th:text="${item.quantity}"></td>
                             <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
                             </button></td>
                         </tr>
