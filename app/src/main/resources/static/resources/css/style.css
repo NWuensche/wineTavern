@@ -62,70 +62,6 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 
 /*NAVIGATION*/
 
-/*.navigation-left {*/
-    /*background-color: #243648;*/
-    /*color:white;*/
-    /*font-size:2rem;*/
-    /*left:0;*/
-    /*line-height:2rem;*/
-    /*position:fixed;*/
-    /*top:0;*/
-    /*transition:left 1s;*/
-    /*-webkit-transition:left 1s;*/
-    /*width:400px;*/
-/*}*/
-
-/*.navigation-left .hide {*/
-    /*background-color: #243648;*/
-    /*border-radius:0px 5px 5px 0px;*/
-    /*cursor:pointer;*/
-    /*left:400px;*/
-    /*padding:5px;*/
-    /*position:relative;*/
-    /*top:80px;*/
-    /*width:40px;*/
-/*}*/
-
-/*.navigation-left img {*/
-    /*height:100px;*/
-/*}*/
-
-/*.navigation-left .row {*/
-    /*border-left:10px solid #243648;*/
-    /*padding:10px 10px;*/
-/*}*/
-
-/*.navigation-left .row:hover {*/
-    /*background:#2f3f52;*/
-/*}*/
-
-/*.navigation-left .active {*/
-    /*border-left:10px solid #28b395;*/
-/*}*/
-
-/*.navigation-left .col-xs-3{*/
-    /*text-align:center;*/
-/*}*/
-
-/*.navigation-left a {*/
-    /*color:white;*/
-/*}*/
-
-
-/* top navigation ---------------------------------------------------------------------------------------------------- */
-/*.navigation-top {*/
-    /*background:white;*/
-    /*box-shadow: 0 0 20px rgba(0,0,0,0.2);*/
-    /*font-size:2rem;*/
-    /*left:400px;*/
-    /*line-height:2.5rem;*/
-    /*padding:12px 10px 0px 30px;*/
-    /*position:fixed;*/
-    /*right:0px;*/
-    /*top:0px;*/
-    /*transition:left 1s;*/
-/*}*/
-
 
 /*BACKEND*/
 
@@ -153,9 +89,15 @@ nav button.logout__btn {
 
 /*SIDE-MENU*/
 
-.side__menu {
+.side {
     background-color: #243648;
-    position: relative;
+    color: #A6B2C5;
+}
+
+.side__menu {
+    background-color: #2F3F52;
+    color: #A6B2C5;
+    width: 100%;
 }
 
 .image-user {
@@ -168,10 +110,14 @@ nav button.logout__btn {
     display: inline-block;
 }
 
+.btn-toogle__position {
+    position: relative;
+}
+
 .btn-toogle {
     background-color: #243648;
     position: absolute;
-    top:0px;
+    top: 54px;
     left: 0px;
     padding: 2px 6px;
     border-radius: 0px 5px 5px 0px;
@@ -182,7 +128,44 @@ nav button.logout__btn {
     color: #A6B2C5
 }
 
-.user-title {
+/*.user-title {*/
+
+/*}*/
+
+.side-module__container {
+    /*background-color: #243648;*/
+    /*color: #A6B2C5;*/
+    display: inline-block;
+    width: 100%;
+    padding-left: 2.5rem;
+    line-height: 4rem;
+}
+
+.side-module__container .fa {
+    padding-right: 1.5rem;
+}
+
+/* ----- MAIN --- */
+
+
+
+/** -------- TABLES -----**/
+
+main .container__wrap{
+    background:#FFF;
+    margin: 30px;
+}
+main .container__wrap h1{
     background-color: #243648;
-    color: #A6B2C5
+    color: #A6B2C5;
+    line-height:2;
+    text-align: left;
+    margin-bottom: 0rem;
+    font-size: 2rem;
+}
+main table thead{
+
+}
+main table tbody tr{
+
 }

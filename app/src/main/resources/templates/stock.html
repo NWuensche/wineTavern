@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="links::links">
+
+    <title>Stock</title>
+
+</head>
+<body>
+
+<main class="main container-fluid">
+    <div class="row">
+
+        <div class="col-md-3" th:include="side::side">
+
+        </div>
+        <!--MAIN CONTENT-->
+
+        <div class="col-md-9 no-gutter">
+            <div th:include="navigation::navigation" ></div>
+
+            <div class="container">
+                <div class="container__wrap">
+
+                    <div class="container__head">
+                        <h1><span class="fa fa-users"></span> User List</h1>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Produkt</th>
+                            <th>Preis</th>
+                            <th>Menge</th>
+                            <th>Bearbeiten</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${stockItems}">
+                            <th scope="row">-</th>
+                            <td th:text="${item.product.name}"></td>
+                            <td th:text="${item.product.price}"></td>
+                            <td th:text="${item.quantity.amount}"></td>
+                            <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                            </button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
