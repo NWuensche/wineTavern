@@ -21,8 +21,12 @@ public enum Roles {
         this.role = Role.of(nameOfRole);
     }
 
-    public String getNameOfRole() {
+    public String getNameOfRoleWithPrefix() {
         return nameOfRole;
+    }
+
+    public String getRealNameOfRole() {
+        return nameOfRole.substring(5);
     }
 
     public Role getRole() {
