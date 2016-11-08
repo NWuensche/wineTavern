@@ -61,6 +61,26 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 /*-----------------------------------*/
 
 /*NAVIGATION*/
+.navigation {
+    font-size:2rem;
+}
+
+.navigation a {
+    color:unset;
+    text-decoration:none;
+}
+
+.navigation button.logout__btn {
+    font-size:1.5rem;
+}
+
+.tag-notifications {
+    font-size:1rem;
+    background:#f18f01;
+    position:relative;
+    top:-20px;
+    right:20px;
+}
 
 
 /*BACKEND*/
@@ -83,6 +103,7 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 
 nav button.logout__btn {
     background-color: unset;
+    border:1px solid black;
 }
 
 /*--------------------*/
