@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:include="links::links">
 
-    <title>Lager</title>
+    <title>Events</title>
 
 </head>
 <body>
@@ -22,24 +22,27 @@
                 <div class="container__wrap">
 
                     <div class="container__head">
-                        <h1>&nbsp;<span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)</h1>
+                        <h1>&nbsp;<span class="fa fa-calendar"></span> Events (<span th:text="${eventAmount}"></span> Events)</h1>
                     </div>
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Produkt</th>
+                            <th>Name</th>
                             <th>Preis</th>
-                            <th>Menge</th>
-                            <th>Bearbeiten</th>
+                            <th>Datum</th>
+                            <th>Beginn</th>
+                            <th>Dauer</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="item : ${stockItems}">
+                        <tr th:each="event : ${events}">
                             <th scope="row">-</th>
-                            <td th:text="${item.product.name}"></td>
-                            <td th:text="${item.product.price}"></td>
-                            <td th:text="${item.quantity}"></td>
+                            <td th:text="${event.name}"></td>
+                            <td th:text="${event.price}"></td>
+                            <td th:text="${event.interval.start.toLocalDate()}"></td>
+                            <td th:text="${event.interval.start.toLocalTime()}"></td>
+                            <td><span th:text="${event.interval.duration.toHours()}"></span>h</td>
                             <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
                             </button></td>
                         </tr>
