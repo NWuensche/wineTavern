@@ -4,8 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Created by Michel on 11/4/2016.
+ * @author michel
  */
+
 @Controller
 public class MenuManager {
     @RequestMapping("/admin/menu/showMenus")

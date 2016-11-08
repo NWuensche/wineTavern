@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 
 @Component
 public class PrototypeDataInitializer implements DataInitializer{
+
     private final UserAccountManager manager;
 
     @Autowired

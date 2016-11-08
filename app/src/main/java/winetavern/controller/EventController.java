@@ -15,6 +15,7 @@ import java.util.Set;
 /**
  * @author Louis
  */
+
 @Controller
 public class EventController {
     private final EventCatalog eventCatalog;

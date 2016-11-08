@@ -1,21 +1,14 @@
 package winetavern.model.menu;
 
-import java.util.*;
 import javax.persistence.Entity;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import javax.persistence.Id;
-import org.springframework.data.repository.Repository;
-
 
 /**
  * Created by Michel on 11/3/2016.
  */
-interface MenuItemRepository extends Repository<MenuItem, Long> {
-    List<MenuItem> findById(Long id);
-    List<MenuItem> findAll();
-}
 
 @Entity
 public class MenuItem {

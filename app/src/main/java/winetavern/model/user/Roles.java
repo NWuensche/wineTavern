@@ -7,6 +7,7 @@ import org.salespointframework.useraccount.Role;
  */
 
 public enum Roles {
+
     ADMIN ("ROLE_ADMIN"),
     SERVICE ("ROLE_SERVICE"),
     ACCOUNTANT ("ROLE_ACCOUNTANT"),
@@ -27,7 +28,5 @@ public enum Roles {
     public Role getRole() {
         return role;
     }
-
-
 
 }

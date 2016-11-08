@@ -21,6 +21,7 @@ import static org.salespointframework.core.Currencies.EURO;
 /**
  * @author Louis
  */
+
 @Controller
 public class StockController {
     private final Inventory<InventoryItem> stock;
