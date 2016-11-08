@@ -45,7 +45,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
     }
 
     private RequestBuilder createRequestBuilder(String name, String password) {
-        RequestBuilder request = post("/admin/addNew").with(user("admin").roles("ADMIN"))
+        RequestBuilder request = post("/admin/users/addNew").with(user("admin").roles("ADMIN"))
                 .param("username", name)
                 .param("password", password);
 

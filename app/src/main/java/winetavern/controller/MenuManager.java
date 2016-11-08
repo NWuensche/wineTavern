@@ -8,22 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class MenuManager {
-    @RequestMapping("/admin/showMenus")
+    @RequestMapping("/admin/menu/showMenus")
     public String showMenus() {
         return "daymenulist";
     }
 
-    @RequestMapping("/admin/addMenu")
+    @RequestMapping("/admin/menu/addMenu")
     public String addMenu() {
         return "daymenulist";
     }
 
-    @RequestMapping("/admin/removeMenu")
+    @RequestMapping("/admin/menu/removeMenu")
     public String removeMenu() {
         return "daymenulist";
     }
 
-    @RequestMapping("/admin/getDayMenuByDay")
+    @RequestMapping("/admin/menu/getDayMenuByDay")
     public String getDayMenuByDay() {
         return "daymenu";
     }
