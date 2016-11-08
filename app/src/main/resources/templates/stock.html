@@ -20,55 +20,88 @@
 
             <div class="container">
                 <div class="container__wrap">
-
-                    <div class="container__head">
-                        <h1>&nbsp;<span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)</h1>
-                    </div>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Produkt</th>
-                            <th>Preis</th>
-                            <th>Menge</th>
-                            <th>Bearbeiten</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="item : ${stockItems}">
-                            <th scope="row">-</th>
-                            <td th:text="${item.product.name}"></td>
-                            <td th:text="${item.product.price}"></td>
-                            <td th:text="${item.quantity}"></td>
-                            <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                            </button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                    <div class="container-fluid heading" style="border:1px solid black;">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <h1><span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)</h1>
+                            </div>
+                            <div class="col-xs-4 text-xs-right">
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#addProduct"><i
+                                        class="fa fa-plus fa-lg"></i>
+                                    Produkt
                                 </button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                ...
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Produkt</th>
+                                <th>Preis</th>
+                                <th>Menge</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${stockItems}">
+                                <th scope="row">-</th>
+                                <td th:text="${item.product.name}"></td>
+                                <td th:text="${item.product.price}"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td>
+                                    <button type="button"  class="btn btn-primary" data-toggle="modal"
+                                            data-target="#details">
+                                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                </button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<div class="modal" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addProductLabel">Produkt hinzufügen</h4>
+            </div>
+            <div class="modal-body">
+                <form id="productData" th:action="@{/admin/stock/addProduct}" method="post">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Apfel" />
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Preis:</label>
+                        <input type="number" class="form-control" name="price" id="price" placeholder="1,23"
+                               min="0.01" step="0.01" max="10000"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Kategorie:</label>
+                        <select type="text" class="form-control" name="category" id="category">
+                            <option th:each="category : ${categories}" th:text="${category.name}"
+                                    th:value="category.name"></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button form="productData" type="reset" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fa fa-times fa-lg"></i>
+                </button>
+                <button form="productData" type="submit" class="btn btn-primary">Produkt hinzufügen</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
