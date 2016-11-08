@@ -14,12 +14,12 @@ import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 /**
- * Test class für UserAccountManagment
+ * Test class für {@link PersonManagerController}
  * @author Niklas Wünsche
  */
 
 @Transactional // Rolls the database after the tests back, to remove new Accounts
-public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegrationTests {
+public class PersonManagerControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired PersonManagerController controller;
 
