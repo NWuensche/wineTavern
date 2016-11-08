@@ -1,9 +1,12 @@
 package winetavern.controller;
 
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
@@ -31,6 +34,14 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         RequestBuilder request = createRequestBuilder(userName, password);
 
         mvc.perform(request);
+    }
+
+    @Test
+    public void redirectToUsers() throws Exception {
+        mvc.perform(get("/admin/users").with(user("admin").roles("ADMIN")))
+                .andExpect(authenticated())
+                .andExpect(status().isOk())
+                .andExpect(view().name("users"));
     }
 
     private RequestBuilder createRequestBuilder(String name, String password) {
