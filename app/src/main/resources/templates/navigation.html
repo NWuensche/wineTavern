@@ -1,22 +1,50 @@
 
-<div class="col-md-12 no-gutter" th:fragment="navigation" role="navigation">
+<div class="col-md-12 no-gutter " th:fragment="navigation" role="navigation">
     <nav class="navbar navbar-light bg-faded">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <div class="container-fluid text-xs-center navigation">
+            <div class="row">
+                <a th:href="@{/}"><div class="col-xs-4">Zur fröhlichen Reblaus</div></a>
+
+                <div class="col-xs-4">
+                    10:06
+                </div>
+                <div class="col-xs-2">
+                    <a th:href="@{/notifications}">
+                        <div>
+                            <i class="fa fa-envelope fa-lg"></i>
+                            <span class="tag tag-pill tag-notifications">4</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xs-2">
+                    <a th:href="@{/logout}"  sec:authorize="isAuthenticated()">
+                        <button type="button" class="logout__btn btn float-xs-right">
+                            <span class="fa fa-sign-out"></span> Logout
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--
+        <a class="navbar-brand" th:href="@{/}">Zur fröhlichen
+            Reblaus</a>
         <ul class="nav navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/notifications">
+                    <i class="fa fa-envelope fa-lg"></i>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                10:06
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                SEARCH
             </li>
         </ul>
         <a th:href="@{/logout}"  sec:authorize="isAuthenticated()">
             <button type="button" class="logout__btn btn float-xs-right">
-                <span class="fa fa-sign-out"></span>logout
+                <span class="fa fa-sign-out"></span> Logout
             </button>
-        </a>
+        </a>-->
     </nav>
 </div>
