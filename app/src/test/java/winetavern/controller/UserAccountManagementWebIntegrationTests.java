@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 @Transactional // Rolls the database after the tests back, to remove new Accounts
 public class UserAccountManagementWebIntegrationTests extends AbstractWebIntegrationTests {
 
-    @Autowired UserAccountManagementController controller;
+    @Autowired PersonManagerController controller;
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoPassword() throws Exception {
