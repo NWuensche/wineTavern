@@ -1,13 +1,14 @@
 package winetavern.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
+import winetavern.model.user.Roles;
 
 
 /**
@@ -19,18 +20,17 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void redirectsIfAdmin() throws Exception {
-        mvc.perform(get("/").with(user("admin").roles("ADMIN")))
+        mvc.perform(get("/").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
                 .andExpect(view().name("backend-temp"));
     }
 
     @Test
-    public void redirectToUsers() throws Exception {
-        mvc.perform(get("/admin/users").with(user("admin").roles("ADMIN")))
-                .andExpect(authenticated())
+    public void redirectToLogin() throws Exception {
+        mvc.perform(get("/login"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("users"));
+                .andExpect(view().name("login"));
     }
 
 }

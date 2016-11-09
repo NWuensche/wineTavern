@@ -14,13 +14,14 @@ import java.util.Calendar;
  * Created by Michel on 11/4/2016.
  * @author Michel Kunkler
  */
+
 @Controller
-public class MenuManager {
+public class DayMenuManager {
 
     @Autowired
     private DayMenuRepository dayMenuRepository;
 
-    @RequestMapping("/admin/menu")
+    @RequestMapping("/admin/daymenu")
     public String showMenus(Model model) {
         return showMenuList(model);
     }
@@ -59,7 +60,7 @@ public class MenuManager {
         return "editdaymenu";
     }
 
-    @RequestMapping("/admin/getDayMenuByDay")
+    @RequestMapping("/admin/menu/getDayMenuByDay")
     public String getDayMenuByDay() {
         return "daymenu";
     }

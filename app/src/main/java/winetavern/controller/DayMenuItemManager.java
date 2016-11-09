@@ -1,6 +1,7 @@
 package winetavern.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
+import winetavern.model.stock.ProductCatalog;
 
 
 /**
@@ -20,13 +22,16 @@ public class DayMenuItemManager {
 
     @Autowired
     private DayMenuItemRepository dayMenuItemRepository;
+    @Autowired
+    private ProductCatalog productCatalog;
 
 
     @RequestMapping("/admin/addMenuItem")
     public String addMenuItem(Model model, @RequestParam("from") String cameFrom) {
         DayMenuItem dayMenuItem = new DayMenuItem();
         model.addAttribute("menuitem", dayMenuItem);
-        model.addAttribute("camefrom", cameFrom);
+        model.addAttribute("products", productCatalog.findAll());
+        model.addAttribute("from", cameFrom);
         return "addmenuitem";
     }
 
@@ -38,9 +43,7 @@ public class DayMenuItemManager {
     @RequestMapping(value = "/admin/addMenuItem", method = RequestMethod.POST)
     public String addMenuItemPost(@ModelAttribute("menuitem") DayMenuItem dayMenuItem,
                                   @ModelAttribute("from") String cameFrom, Model model) {
-        if (dayMenuItem.getProduct() == null ||
-                dayMenuItem.getPrice() == null ||
-                dayMenuItem.getName() == null) {
+        if (dayMenuItem.getProduct() != null) {
             model.addAttribute("menuitem", dayMenuItem);
             model.addAttribute("camefrom", cameFrom);
             return "addmenuitem";

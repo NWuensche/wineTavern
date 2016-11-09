@@ -19,9 +19,10 @@ public class Person {
 
     private String birthday;
 
-    public Person(UserAccount userAccount, Address address) {
+    public Person(UserAccount userAccount, Address address, String birthday) {
         this.userAccount = userAccount;
         this.address = address;
+        this.birthday = birthday;
     }
 
     public long getId() {

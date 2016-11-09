@@ -9,10 +9,10 @@ import javax.persistence.OneToOne;
 /**
  * Created by Michel on 11/3/2016.
  */
+
 @Entity
 public class BillItem {
-    @Id
-    private long id;
+    @Id private long id;
 
     @OneToOne(targetEntity = DayMenuItem.class)
     DayMenuItem dayMenuItem;
