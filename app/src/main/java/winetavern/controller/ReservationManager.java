@@ -22,38 +22,6 @@ public class ReservationManager {
         reservations = new HashSet<Reservation>();
     }
 
-    public void addReservation(Reservation reservation) throws NullPointerException{
-        if(reservation == null){
-            System.out.println("ERROR");
-            throw new NullPointerException("ReservationManager can't add null to reservation set.");
-        }
-
-        reservations.add(reservation);
-    }
-
-    public void changeReservation(int id, String guestName, Table table, LocalDateTime time, Duration duration)
-            throws IllegalArgumentException {
-        Reservation reservation = getReservationById(id);
-
-        if(reservation == null) {
-            throw new IllegalArgumentException
-                    ("Unknown Reservation ID in reservation.ReservationManager.changeReservation()");
-        }
-
-        reservation.setGuestName(guestName);
-        reservation.setTable(table);
-        reservation.setTime(time);
-        reservation.setDuration(duration);
-    }
-
-    public void removeReservation(Reservation reservation) throws NullPointerException {
-        if(reservation == null){
-            throw new NullPointerException("ReservationManager can't remove null from reservation set.");
-        }
-
-        reservations.remove(reservation);
-    }
-
     public Set<Table> getFreeTablesByTime(LocalDateTime time) {
         Set<Table> freeTables = new HashSet<Table>();
         for(Reservation reservation : reservations) {
@@ -62,17 +30,6 @@ public class ReservationManager {
             }
         }
         return freeTables;
-    }
-
-    public Reservation getReservationById(long id){
-        for(Reservation reservation:reservations){
-            if(reservation.getId() == id){
-                return reservation;
-            }
-        }
-
-        System.out.println("Reservation Manager: nothing found for id" + id);
-        return null;
     }
 
 }
