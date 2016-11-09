@@ -149,14 +149,17 @@
     </div>
 </div>
 
+<!-- show product details -->
 <div class="modal" id="productDetails" tabindex="-1" role="dialog" aria-labelledby="productDetailsLabel"
      aria-hidden="false" th:if="${product}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <a th:href="@{/admin/stock}">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </a>
                 <h4 class="modal-title" id="productDetailsLabel">Produktdetails &auml;ndern</h4>
             </div>
             <div class="modal-body">

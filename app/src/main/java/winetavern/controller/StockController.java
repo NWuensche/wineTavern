@@ -56,12 +56,27 @@ public class StockController {
         model.addAttribute("quantity", stockItem.getQuantity());
         model.addAttribute("categories", stockItem.getProduct().getCategories());
 
+        model.addAttribute("productAmount", stock.count());
+        model.addAttribute("stockItems", stock.findAll());
+
         return "stock";
     }
 
     @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price) {
         stock.save(new InventoryItem(new Product(name, Money.of(Float.parseFloat(price), EURO)), Quantity.of(1)));
+        return "redirect:/admin/stock";
+    }
+
+    @RequestMapping(value = "/admin/stock/changeProduct", method = RequestMethod.POST)
+    public String addProduct(@ModelAttribute("productid") Product product,
+                             @ModelAttribute("productname") String name,
+                             @ModelAttribute("productprice") String price) {
+        product.setName(name);
+        product.setPrice(Money.of(Float.parseFloat(price), EURO));
+        products.save(product);
+        System.out.println(price);
+
         return "redirect:/admin/stock";
     }
 
