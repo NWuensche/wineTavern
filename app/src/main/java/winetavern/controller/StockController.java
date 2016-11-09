@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -57,9 +58,9 @@ public class StockController {
         return "stock";
     }
 
-    @RequestMapping(value = "/admin/stock/add", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("product") Product product, @ModelAttribute("quantity") Quantity quantity) {
-        stock.save(new InventoryItem(product, quantity));
+    @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
+    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price) {
+        stock.save(new InventoryItem(new Product(name, Money.of(Float.parseFloat(price), EURO)), Quantity.of(1)));
         return "redirect:/admin/stock";
     }
 
