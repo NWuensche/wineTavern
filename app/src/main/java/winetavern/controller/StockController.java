@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
@@ -43,6 +44,16 @@ public class StockController {
 
         model.addAttribute("productAmount", stock.count());
         model.addAttribute("stockItems", stock.findAll());
+        return "stock";
+    }
+
+    @RequestMapping("/admin/stock/details/{pid}")
+    public String detail(@PathVariable("pid") InventoryItem stockItem, Model model) {
+
+        model.addAttribute("product", stockItem.getProduct());
+        model.addAttribute("quantity", stockItem.getQuantity());
+        model.addAttribute("categories", stockItem.getProduct().getCategories());
+
         return "stock";
     }
 
