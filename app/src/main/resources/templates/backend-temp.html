@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="page">
 <head th:include="links::links">
 
     <title>Backend</title>
@@ -24,6 +25,11 @@
                     <i class="fa fa-chevron-left" aria-hidden="true"></i>
                 </div>
             </div>
+
+            <div th:include="this :: content">
+
+            </div>
+
         </div>
     </main>
 
@@ -32,6 +38,5 @@
     <footer>
 
     </footer>
-
 </body>
 </html>

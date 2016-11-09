@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
+import winetavern.model.user.Roles;
 
 
 /**
@@ -19,7 +20,7 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void redirectsIfAdmin() throws Exception {
-        mvc.perform(get("/").with(user("admin").roles("ADMIN")))
+        mvc.perform(get("/").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
                 .andExpect(view().name("backend-temp"));

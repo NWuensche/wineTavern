@@ -15,8 +15,7 @@ public class Reservation {
     private long id;
 
     private String guestName;
-    @ManyToOne(targetEntity=Table.class)
-    Table table;
+    @ManyToOne(targetEntity=Table.class, cascade = CascadeType.ALL) Table table;
     private LocalDateTime time;
     private Duration duration;
 

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
+import winetavern.model.user.Roles;
 
 /**
  * Test class für {@link PersonManagerController}
@@ -26,26 +27,16 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
 
     @Autowired PersonManagerController controller;
 
-    @Test(expected = NestedServletException.class)
-    public void throwWhenNoPassword() throws Exception {
-        String userName = "testAccount";
-        String password = null;
-
-        RequestBuilder request = createRequestBuilder(userName, password);
-
-        mvc.perform(request);
-    }
-
     @Test
     public void redirectToUsers() throws Exception {
-        mvc.perform(get("/admin/users").with(user("admin").roles("ADMIN")))
+        mvc.perform(get("/admin/users").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
                 .andExpect(view().name("users"));
     }
 
     private RequestBuilder createRequestBuilder(String name, String password) {
-        RequestBuilder request = post("/admin/addNew").with(user("admin").roles("ADMIN"))
+        RequestBuilder request = post("/admin/users/addNew").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("username", name)
                 .param("password", password);
 
@@ -56,6 +47,16 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
     public void throwWhenNoName() throws Exception {
         String userName = null;
         String password = "1234";
+
+        RequestBuilder request = createRequestBuilder(userName, password);
+
+        mvc.perform(request);
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void throwWhenNoPassword() throws Exception {
+        String userName = "testAccount";
+        String password = null;
 
         RequestBuilder request = createRequestBuilder(userName, password);
 

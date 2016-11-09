@@ -34,7 +34,7 @@ public class PersonManagerController {
         return "users";
     }
 
-    @RequestMapping(value="/admin/addNew", method=RequestMethod.POST)
+    @RequestMapping(value= "/admin/users/addNew", method=RequestMethod.POST)
     public String addUser(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount account = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword());
 

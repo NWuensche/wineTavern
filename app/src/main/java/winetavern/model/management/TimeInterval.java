@@ -22,7 +22,7 @@ public class TimeInterval {
 
     public TimeInterval(LocalDateTime start, LocalDateTime end) {
         this.start = start;
-        this.end = end;
+        setEnd(end);
     }
 
     public long getId() {
@@ -34,6 +34,9 @@ public class TimeInterval {
     }
 
     public void setStart(LocalDateTime start) {
+        if (start == null || end == null) throw new NullPointerException("the time stamp(s) must not be null");
+        if (start.compareTo(end) == 0) throw new IllegalArgumentException("the start time must not be the end time");
+        if (start.compareTo(end) == 1) throw new IllegalArgumentException("the start must be sooner than the end");
         this.start = start;
     }
 
@@ -42,6 +45,9 @@ public class TimeInterval {
     }
 
     public void setEnd(LocalDateTime end) {
+        if (start == null || end == null) throw new NullPointerException("the time stamp(s) must not be null");
+        if (start.compareTo(end) == 0) throw new IllegalArgumentException("the start time must not be the end time");
+        if (start.compareTo(end) == 1) throw new IllegalArgumentException("the start must be sooner than the end");
         this.end = end;
     }
 

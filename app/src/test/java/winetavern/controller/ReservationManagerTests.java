@@ -43,7 +43,7 @@ public class ReservationManagerTests extends AbstractWebIntegrationTests {
         assertThat(manager.findOne(reservation.getId()).get(), is(reservation));
     }
 
-    /* TODO Add @Test
+    @Test
     public void findReservationsByTimeTest() throws Exception{
         LocalDateTime time = LocalDateTime.now();
         Duration duration = Duration.ofHours(2);
@@ -53,6 +53,6 @@ public class ReservationManagerTests extends AbstractWebIntegrationTests {
         List<Reservation> it = manager.findByTime(time);
         assertThat(it.contains(reservation), is(true));
 
-    } */
+    }
 
 }

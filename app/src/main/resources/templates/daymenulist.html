@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:include="backend-temp :: page">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Title</title>
 </head>
 <body>
-
+<div th:fragment="content">
+    <h1>Liste aller vorhandenen Tageskarten:</h1>
+    <ul>
+        <li th:each="menu : ${menus}">
+            <a th:href="${'/admin/editMenu?id=' + menu.id}" th:text="${menu.getReadableDay()}"></a>
+            <a th:href="${'/admin/removeMenu?id=' + menu.id}">Löschen</a>
+        </li>
+    </ul>
+    <a th:href="@{/admin/addMenu}">Tageskarte hinzufügen</a>
+</div>
 </body>
 </html>

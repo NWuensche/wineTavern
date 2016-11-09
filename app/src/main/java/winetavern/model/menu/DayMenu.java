@@ -1,43 +1,55 @@
 package winetavern.model.menu;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import org.springframework.data.repository.Repository;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import java.text.SimpleDateFormat;
 import java.util.*;
 /**
  * Created by Michel on 11/3/2016.
  */
 
-interface DayMenuRepository extends Repository<DayMenu, Long> {
-    List<DayMenu> findById(Long id);
-    List<DayMenu> findByDay(Date day);
-}
-
 @Entity
 public class DayMenu {
 
     @Id
+    @GeneratedValue
     private long id;
 
-    private Date day;
-    @ManyToMany(targetEntity=MenuItem.class)
-    private List<MenuItem> menuItems;
+    private Calendar day;
+    @ManyToMany(targetEntity=DayMenuItem.class)
+    private List<DayMenuItem> dayMenuItems;
 
-    public void setDay(Date day) {
+    protected DayMenu() {}
+
+    public DayMenu(Calendar day) {
         this.day = day;
     }
 
-    public Date getDay() {
+    public long getId() {
+        return id;
+    }
+
+    public void setDay(Calendar day) {
+        this.day = day;
+    }
+
+    public Calendar getDay() {
         return day;
     }
 
-    public void addMenuItem(MenuItem menuItem) {
-        menuItems.add(menuItem);
+    public String getReadableDay() {
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        return format.format(day.getTime());
     }
 
-    public void removeMenuItem(MenuItem menuItem) {
-        menuItems.remove(menuItem);
+    public void addMenuItem(DayMenuItem dayMenuItem) {
+        dayMenuItems.add(dayMenuItem);
+    }
+
+    public void removeMenuItem(DayMenuItem dayMenuItem) {
+        dayMenuItems.remove(dayMenuItem);
     }
 }

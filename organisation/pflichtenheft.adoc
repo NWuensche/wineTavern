@@ -82,7 +82,6 @@ image::src/usecase.png[Anwendungsfalldiagramm]
     ** Abrechnung mit Künstlern
 * Weiterleitung der Bestellungen an die Küche
 * Zusammenstellen einer Tageskarte (durch modifizieren der Karte des vergangenen Tages)
-* Nachbestellungen bei Liferanten und Nachbestellung
 * Events verwalten
     ** Weinproben
         *** Ausschließlicher Ausschank von Weinen des Winzers, diese Weine kosten 50% des Normalpreise

@@ -24,6 +24,7 @@ import static org.salespointframework.core.Currencies.EURO;
 /**
  * @author Louis
  */
+
 @Controller
 public class EventController {
     private final EventCatalog eventCatalog;
