@@ -19,7 +19,7 @@ public class Schedule implements Comparable<Schedule> {
     @ManyToMany private Set<Shift> shifts;
 
     public Schedule(int week) {
-        if (week < 0 || week > 53) throw new IllegalArgumentException("illegal calendar week (after ISO-8601)");
+        if (week < 1 || week > 53) throw new IllegalArgumentException("illegal calendar week (after ISO-8601)");
         this.week = week;
     }
 
