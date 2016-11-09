@@ -23,8 +23,10 @@ public class Event extends Product {
 
     public Event(String name, MonetaryAmount price, TimeInterval interval, String description) {
         super(name, price, Metric.UNIT);
-        this.interval = interval;
-        this.description = description;
+        if (interval == null) throw new NullPointerException("the interval must not be null");
+        if (description == null) throw new NullPointerException("the description must not be null");
+        setInterval(interval);
+        setDescription(description);
     }
 
     public TimeInterval getInterval() {
@@ -32,6 +34,7 @@ public class Event extends Product {
     }
 
     public void setInterval(TimeInterval interval) {
+        if (interval == null) throw new NullPointerException("the interval must not be null");
         this.interval = interval;
     }
 
@@ -40,6 +43,7 @@ public class Event extends Product {
     }
 
     public void setDescription(String description) {
+        if (description == null) throw new NullPointerException("the description must not be null");
         this.description = description;
     }
 }
