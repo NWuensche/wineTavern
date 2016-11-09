@@ -15,6 +15,25 @@
 == Lösungsstrategie
 Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
 
+* Nutzung von Controllern, um Personen zu beschreiben
+** Im AKD haben wir noch für jede Mitarbeitergruppe eine eigene Klasse mit Methoden erstellt.
+** In Spring haben wir uns aber dafür entschieden, jeder Gruppe einen eigenen URL Namespace zu geben (z.B. /admin), auf den nur Personen mit dieser Rolle zugreifen können
+** Personenmethoden im AKD wurden nun zu RequestMappings.
+*** So ist aus der Boss.addEvents() Methode ein RequestMapping auf /admin/events/add geworden.
+
+* Keine Nutzung der Visitor-Rolle
+** Im AKD haben wir noch eine Visitor-Rolle gespeichert.
+** Diese haben wir aber im Programm gesprichten, da die Visitor-Rolle mit einem nicht angemeldeten Nutzer gleichzusetzen ist.
+
+* Gruppierung der Requests nach Aufgaben, nicht nach Personen
+** Zuerst wollten wir jeweils einen AdminController, CookController,..., anlegen.
+** Diese Idee haben wir aber verworfen, da wir es später übersichtlicher fanden, die Controller nach den Aufgaben zu sortieren. So sieht man nun z.B. im EventController sofort, wer welche Rechte im Bezug auf die Events hat, ohne sich durch alle PersonenController suchen zu müssen. 
+** Damit einhergehend ist auch die nächste Entscheidung gefallen
+
+* Keine Nutzung von @Preauthorize
+** Diese haben zuerst genutzt, um jeder Person ihren PersonenController zuzuweisen
+** Mit der Erstellung von Namespaces (z.B. /admin) in der Application Klasse haben wir allerdings einen gleichwertigen Weg gefunden, der uns Aufgaben Controller schreiben lässt.
+
 == Bausteinsicht
 * Package-Diagramme
 
