@@ -19,10 +19,15 @@ public class Address {
     private String city;
 
     public Address(String street, String number, String postal, String city) {
-        this.street = street;
-        this.number = number;
-        this.postal = postal;
-        this.city = city;
+        this.street = convertToNotNull(street);
+        this.number = convertToNotNull(number);
+        this.postal = convertToNotNull(postal);
+        this.city   = convertToNotNull(city);
+    }
+
+    private String convertToNotNull(String text) {
+        String convertedText = text != null ? text : "";
+        return convertedText;
     }
 
     public long getId() {
@@ -45,11 +50,9 @@ public class Address {
         return city;
     }
 
-    public void setAddress(String street, String number, String postal, String city) {
-        this.street = street;
-        this.number = number;
-        this.postal = postal;
-        this.city = city;
+    @Override
+    public String toString() {
+        return street.concat(number).concat(postal).concat(city);
     }
 
 }
