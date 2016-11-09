@@ -2,7 +2,6 @@ package winetavern.model.management;
 
 import org.salespointframework.time.Interval;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 

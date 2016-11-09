@@ -1,23 +1,19 @@
 package winetavern.model.management;
 
 import org.salespointframework.time.Interval;
-import winetavern.model.user.Staff;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
+import winetavern.model.user.Person;
 
 /**
  * @author Louis
  */
+
 public class Shift {
     private Interval interval;
-    private Role role;
-    private Staff worker;
+    private Person worker;
 
-    public Shift(Interval interval, Role role, Staff worker) {
-        this.interval = interval;
-        this.role = role;
-        this.worker = worker;
+    public Shift(Interval interval, Person worker) {
+        setInterval(interval);
+        setWorker(worker);
     }
 
     public Interval getInterval() {
@@ -25,28 +21,16 @@ public class Shift {
     }
 
     public void setInterval(Interval interval) {
+        if (interval == null) throw new NullPointerException("the interval must not be null");
         this.interval = interval;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Staff getWorker() {
+    public Person getWorker() {
         return worker;
     }
 
-    public void setWorker(Staff worker) {
+    public void setWorker(Person worker) {
+        if (worker == null) throw new NullPointerException("the worker must not be null");
         this.worker = worker;
-    }
-
-    protected enum Role {
-        SERVICE,
-        COOK,
-        ACCOUNTANT
     }
 }
