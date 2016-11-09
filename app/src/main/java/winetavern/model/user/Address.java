@@ -18,6 +18,9 @@ public class Address {
     private String postal;
     private String city;
 
+    /**
+     * @implNote If a param is null, it will be converted to an empty string
+     */
     public Address(String street, String number, String postal, String city) {
         this.street = convertToNotNull(street);
         this.number = convertToNotNull(number);
@@ -34,14 +37,23 @@ public class Address {
         return id;
     }
 
+    /**
+     * @return never null
+     */
     public String getStreet() {
         return street;
     }
 
+    /**
+     * @return never null
+     */
     public String getNumber() {
         return number;
     }
 
+    /**
+     * @return never null
+     */
     public String getPostal() {
         return postal;
     }
@@ -50,6 +62,9 @@ public class Address {
         return city;
     }
 
+    /**
+     * @return never null
+     */
     @Override
     public String toString() {
         return street.concat(number).concat(postal).concat(city);
