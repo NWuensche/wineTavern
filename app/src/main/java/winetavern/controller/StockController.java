@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
 
+import javax.money.NumberValue;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -75,7 +76,6 @@ public class StockController {
         product.setName(name);
         product.setPrice(Money.of(Float.parseFloat(price), EURO));
         products.save(product);
-        System.out.println(price);
 
         return "redirect:/admin/stock";
     }
