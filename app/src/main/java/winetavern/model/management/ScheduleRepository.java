@@ -5,5 +5,5 @@ import org.salespointframework.core.SalespointRepository;
 /**
  * Created by nwuensche on 09.11.16.
  */
-public interface ScheduleRepository extends SalespointRepository<Schedule, Long> {
-}
+/*public interface ScheduleRepository extends SalespointRepository<Schedule, Long> {
+}*/
