@@ -22,11 +22,16 @@
                 <div class="container__wrap">
                     <div class="container-fluid heading" style="border:1px solid black;">
                         <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-5">
                                 <h1><span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)</h1>
                             </div>
-                            <div class="col-xs-4 text-xs-right">
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                            <div class="col-xs-7 text-xs-right">
+                                <button type="button" class="btn btn-primary text-uppercase" data-toggle="modal"
+                                        data-target="#addCategory"><i
+                                        class="fa fa-plus fa-lg"></i>
+                                    Kategorie
+                                </button>
+                                <button type="button" class="btn btn-primary text-uppercase" data-toggle="modal"
                                         data-target="#addProduct"><i
                                         class="fa fa-plus fa-lg"></i>
                                     Produkt
@@ -64,6 +69,8 @@
     </div>
 </main>
 
+
+<!-- add Product Modal -->
 <div class="modal" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -94,10 +101,46 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button form="productData" type="reset" class="btn btn-secondary" data-dismiss="modal">
+                <button form="productData" type="reset" class="btn btn-secondary">
                     <i class="fa fa-times fa-lg"></i>
                 </button>
                 <button form="productData" type="submit" class="btn btn-primary">Produkt hinzufügen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- addCategory Modal -->
+<div class="modal" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="addCategoryLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addCategoryLabel">Kategorie hinzufügen</h4>
+            </div>
+            <div class="modal-body">
+                <form id="categoryData" th:action="@{/admin/stock/addCategory}" method="post">
+                    <div class="form-group">
+                        <label for="categoryName">Name:</label>
+                        <input type="text" class="form-control" name="categoryName" id="categoryName"
+                               placeholder="Rotwein" />
+                    </div>
+                    <div class="form-group">
+                        <label for="supercategory">Oberkategorie:</label>
+                        <select type="text" class="form-control" name="supercategory" id="supercategory">
+                            <option th:each="category : ${categories}" th:text="${category.name}"
+                                    th:value="category.name"></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button form="categoryData" type="reset" class="btn btn-secondary">
+                    <i class="fa fa-times fa-lg"></i>
+                </button>
+                <button form="categoryData" type="submit" class="btn btn-primary">Kategorie hinzufügen</button>
             </div>
         </div>
     </div>
