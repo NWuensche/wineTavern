@@ -2,6 +2,7 @@ package winetavern.model.user;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
+import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,14 +25,14 @@ public class PersonTests extends AbstractIntegrationTests{
     @Autowired private PersonManager personManager;
 
     private Person person;
-    private Address address;
+    private String address;
     private UserAccount acc;
     DateParameter birthday;
 
     @Before
     public void setUp() {
         acc = userAccountManager.create("testAccount", "1234", Role.of(Roles.SERVICE.getNameOfRoleWithPrefix()));
-        address = new Address("Straße", "3a", "02374", "Berlin");
+        address = "Neuer Weg 3, 04912 Berlin";
         birthday = new DateParameter();
         birthday.setYear(1980);
         birthday.setMonth(12);
@@ -47,8 +48,14 @@ public class PersonTests extends AbstractIntegrationTests{
 
     @Test
     public void newPersonInDBWithoutAddress() {
-        address = new Address(null, null, null, null);
-        person = new Person(acc, address, birthday);
+        person = new Person(acc, null, birthday);
+        personManager.save(person);
+        assertThat(personManager.findOne(person.getId()).get().getAddress(), is(nullValue()));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void newPersonInDBWithoutBirthday() {
+        person = new Person(acc, address, null);
         personManager.save(person);
         assertThat(personManager.findOne(person.getId()).get().getAddress().toString(), is(""));
     }
