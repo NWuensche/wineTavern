@@ -1,7 +1,7 @@
 /* CSS RESET */
 
 
-/*BASE*/
+/*--------  BASE  --------*/
 
 body {
 	background-color:lightgrey;
@@ -25,10 +25,17 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
     border-color: #26ae90;
 }
 
+.no-gutter {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 /*------------------------------*/
 
 
-/*LOGIN*/
+/*--------  LOGIN  --------*/
 
 .login__bg {
     background-color: #274b5e;
@@ -58,57 +65,65 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 	margin-bottom: 25px;
 }
 
-/*-----------------------------------*/
-
-/*NAVIGATION*/
-.navigation {
-    font-size:2rem;
-}
-
-.navigation a {
-    color:unset;
-    text-decoration:none;
-}
-
-.navigation button.logout__btn {
-    font-size:1.5rem;
-}
-
-.tag-notifications {
-    font-size:1rem;
-    background:#f18f01;
-    position:relative;
-    top:-20px;
-    right:20px;
-}
+/*---------------  BACKEND  --------------------*/
 
 
-/*BACKEND*/
 
-/*BASE*/
-
-.no-gutter {
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-/*HEADER*/
+/*--------  HEADER  ----------*/
 
 .side__header {
     background-color: #243648;
     height: 54px;
 }
 
-nav button.logout__btn {
+/*----------  NAVIGATION  -----------*/
+
+.nav__container {
+  padding: 0.2rem;
+  line-height: 3rem;
+}
+
+.nav-title {
+    padding-left: 1.5rem;
+    font-weight: 200;
+}
+
+.nav-title a, .nav-title a:hover {
+    color: #000000;
+    text-decoration: none;
+}
+
+.nav-time {
+    text-align: center;
+}
+
+.nav-mail__wrap {
+    text-align: center;
+}
+
+.nav-mail__wrap .fa-envelope {
+    color: #000000;
+}
+
+.nav-mail__wrap a {
+    position: relative;
+}
+
+.tag-notifications {
+    background:#f18f01;
+    position:absolute;
+    top: -0.5rem;
+    left: 0.8rem;
+    font-size: 0.7rem;
+}
+
+button.logout__btn {
     background-color: unset;
-    border:1px solid black;
 }
 
 /*--------------------*/
 
-/*SIDE-MENU*/
+/*---------  SIDE-MENU  -----------*/
 
 .side {
     background-color: #243648;
@@ -159,7 +174,7 @@ nav button.logout__btn {
 }
 
 .side-module__container .fa {
-    padding-right: 1.5rem;
+    padding-right: 2rem;
 }
 
 /* ----- MAIN --- */
@@ -178,10 +193,11 @@ main .container__wrap .heading {
 main .container__wrap h1{
     background-color: #243648;
     color: #A6B2C5;
-    line-height:2;
+    line-height:2.5;
     text-align: left;
     margin-bottom: 0rem;
-    font-size: 2rem;
+    font-size: 1.6rem;
+    padding-left: 1.5rem;
 }
 
 main .container__wrap .heading button {
@@ -193,4 +209,8 @@ main table thead{
 }
 main table tbody tr{
 
+}
+
+main .container__wrap .table__bottom {
+    background-color: #1D997D;
 }
