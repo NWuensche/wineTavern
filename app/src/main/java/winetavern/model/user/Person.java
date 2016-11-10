@@ -20,11 +20,11 @@ public class Person {
 
     @Id @GeneratedValue private long id;
     @OneToOne private UserAccount userAccount;
-    @ManyToOne(cascade = CascadeType.ALL) private Address address;
 
-    private Calendar birthday;
+    private Optional<String> address;
+    private Optional<Calendar> birthday;
 
-    public Person(UserAccount userAccount, Address address, DateParameter birthday) throws IllegalArgumentException {
+    public Person(UserAccount userAccount, Optional<String> address, Optional<DateParameter> birthday) throws IllegalArgumentException {
 
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
@@ -32,7 +32,8 @@ public class Person {
 
         this.userAccount = userAccount;
         this.address = address;
-        this.birthday = birthday.getCalendar();
+        this.birthday = birthday.isPresent() ? Optional.of(birthday.get().getCalendar()) : Optional.empty();
+
     }
 
     private int numberOfRoles(UserAccount userAccount) {
@@ -43,15 +44,15 @@ public class Person {
         return id;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Optional<String> address) {
         this.address = address;
     }
 
-    public Address getAddress() {
+    public Optional<String> getAddress() {
         return address;
     }
 
-    public Calendar getBirthday() {
+    public Optional<Calendar> getBirthday() {
         return birthday;
     }
 
