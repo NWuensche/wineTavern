@@ -42,21 +42,21 @@ public class PersonTests extends AbstractIntegrationTests{
 
     @Test
     public void newPersonInDB() {
-        person = new Person(acc, Optional.ofNullable(address), Optional.ofNullable(birthday));
+        person = new Person(acc, address, birthday);
         personManager.save(person);
         assertThat(personManager.findOne(person.getId()).isPresent(), is(true));
     }
 
     @Test
     public void newPersonInDBWithoutAddress() {
-        person = new Person(acc, Optional.ofNullable(null), Optional.ofNullable(birthday));
+        person = new Person(acc, null, birthday);
         personManager.save(person);
         assertThat(personManager.findOne(person.getId()).get().getAddress().toString(), is(""));
     }
 
     @Test
     public void newPersonInDBWithoutBirthday() {
-        person = new Person(acc, Optional.ofNullable(address), Optional.ofNullable(null));
+        person = new Person(acc, address, null);
         personManager.save(person);
         assertThat(personManager.findOne(person.getId()).get().getAddress().toString(), is(""));
     }
@@ -64,13 +64,13 @@ public class PersonTests extends AbstractIntegrationTests{
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenPersonHas2Roles() {
         acc = userAccountManager.create("testAccount", "1234", Roles.SERVICE.getRole(), Roles.ACCOUNTANT.getRole());
-        person = new Person(acc, Optional.ofNullable(address), Optional.ofNullable(birthday));
+        person = new Person(acc, address, birthday);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenPersonHas0Roles() {
         acc = userAccountManager.create("testAccount", "1234");
-        person = new Person(acc, Optional.ofNullable(address), Optional.ofNullable(birthday));
+        person = new Person(acc, address, birthday);
     }
 
 

@@ -21,10 +21,10 @@ public class Person {
     @Id @GeneratedValue private long id;
     @OneToOne private UserAccount userAccount;
 
-    private Optional<String> address;
-    private Optional<Calendar> birthday;
+    private String address;
+    private Calendar birthday;
 
-    public Person(UserAccount userAccount, Optional<String> address, Optional<DateParameter> birthday) throws IllegalArgumentException {
+    public Person(UserAccount userAccount, String address, DateParameter birthday) throws IllegalArgumentException {
 
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
@@ -32,7 +32,7 @@ public class Person {
 
         this.userAccount = userAccount;
         this.address = address;
-        this.birthday = birthday.isPresent() ? Optional.of(birthday.get().getCalendar()) : Optional.empty();
+        this.birthday = birthday.getCalendar();
 
     }
 
@@ -44,15 +44,15 @@ public class Person {
         return id;
     }
 
-    public void setAddress(Optional<String> address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public Optional<String> getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public Optional<Calendar> getBirthday() {
+    public Calendar getBirthday() {
         return birthday;
     }
 
