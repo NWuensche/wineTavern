@@ -26,7 +26,7 @@ public class PersonManagerController {
         this.userAccountManager = userAccountManager;
     }
 
-    @RequestMapping("/admin/users")
+    @RequestMapping("/admin/management/users")
     public String addUsersMapper(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
@@ -34,13 +34,13 @@ public class PersonManagerController {
         return "users";
     }
 
-    @RequestMapping(value= "/admin/users/addNew", method=RequestMethod.POST)
+    @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
     public String addUser(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount account = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword());
 
         userAccountManager.save(account);
 
-        return "redirect:/admin/users";
+        return "redirect:/admin/management/users";
     }
 
     public UserAccountManager getUserAccountManager(){

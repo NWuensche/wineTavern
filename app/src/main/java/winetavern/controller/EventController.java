@@ -1,9 +1,6 @@
 package winetavern.controller;
 
 import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Product;
-import org.salespointframework.inventory.InventoryItem;
-import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,8 +13,8 @@ import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -66,8 +63,8 @@ public class EventController {
         return "redirect:/admin/events";
     }
 
-    public Set<Event> getEventsByInterval(TimeInterval i1) {
-        Set<Event> res = new HashSet<>();
+    private Set<Event> getEventsByInterval(TimeInterval i1) {
+        Set<Event> res = new TreeSet<>();
         for (Event event : eventCatalog.findAll()) {
             TimeInterval i2 = event.getInterval();
             if (i2.getStart().compareTo(i1.getStart()) == 1 || //if a part of the event lies in the interval i1
