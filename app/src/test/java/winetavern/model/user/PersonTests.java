@@ -2,6 +2,7 @@ package winetavern.model.user;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
+import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
 import winetavern.model.DateParameter;
-
-import java.util.Optional;
 
 /**
  * Test class for {@link Person}
@@ -51,10 +50,10 @@ public class PersonTests extends AbstractIntegrationTests{
     public void newPersonInDBWithoutAddress() {
         person = new Person(acc, null, birthday);
         personManager.save(person);
-        assertThat(personManager.findOne(person.getId()).get().getAddress().toString(), is(""));
+        assertThat(personManager.findOne(person.getId()).get().getAddress(), is(nullValue()));
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void newPersonInDBWithoutBirthday() {
         person = new Person(acc, address, null);
         personManager.save(person);
