@@ -47,6 +47,13 @@ public class PersonTests extends AbstractIntegrationTests{
     }
 
     @Test
+    public void displayedRoleOfPersonIsRight() {
+        person = new Person(acc, address, birthday);
+        personManager.save(person);
+        assertThat(personManager.findOne(person.getId()).get().getDisplayNameOfRole(), is("Bedienung"));
+    }
+
+    @Test
     public void newPersonInDBWithoutAddress() {
         person = new Person(acc, null, birthday);
         personManager.save(person);
