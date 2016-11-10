@@ -29,14 +29,14 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
 
     @Test
     public void redirectToUsers() throws Exception {
-        mvc.perform(get("/admin/users").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
+        mvc.perform(get("/admin/management/users").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
                 .andExpect(view().name("users"));
     }
 
     private RequestBuilder createRequestBuilder(String name, String password) {
-        RequestBuilder request = post("/admin/users/addNew").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        RequestBuilder request = post("/admin/management/users/addNew").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("username", name)
                 .param("password", password);
 

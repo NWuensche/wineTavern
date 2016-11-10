@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
 
-import javax.money.NumberValue;
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.salespointframework.core.Currencies.EURO;
