@@ -24,6 +24,9 @@ public class Person {
     private String address;
     private Calendar birthday;
 
+    @Deprecated
+    protected Person() {}
+
     public Person(UserAccount userAccount, String address, DateParameter birthday) throws IllegalArgumentException {
 
         if(numberOfRoles(userAccount) != 1) {

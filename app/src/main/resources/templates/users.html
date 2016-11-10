@@ -37,8 +37,8 @@
                             <tbody>
                                     <tr th:each="staff : ${staffCollection}">
                                         <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
+                                        <td th:text="${staff.firstname}"></td>
+                                        <td th:text="${staff.lastname}"></td>
                                         <td th:text="${staff.username}"></td>
                                         <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
                                         </button></td>

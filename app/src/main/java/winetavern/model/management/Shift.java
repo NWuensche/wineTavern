@@ -12,11 +12,14 @@ import javax.persistence.*;
 
 @Entity
 public class Shift implements Comparable<Shift> {
-    @Transient @Autowired private PersonManager personManager;
+    //@Transient @Autowired private PersonManager personManager;
 
     @Id @GeneratedValue private long id;
-    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
-    @OneToOne private Person worker;
+    @ManyToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
+    @ManyToOne private Person worker;
+
+    @Deprecated
+    protected Shift() {}
 
     public Shift(TimeInterval interval, Person worker) {
         setInterval(interval);
@@ -42,8 +45,6 @@ public class Shift implements Comparable<Shift> {
 
     public void setPerson(Person worker) {
         if (worker == null) throw new NullPointerException("the worker must not be null");
-        if (!personManager.exists(worker.getId()))
-            throw new IllegalArgumentException("the person must be in the repository");
         this.worker = worker;
     }
 

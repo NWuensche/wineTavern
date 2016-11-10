@@ -38,8 +38,8 @@
                         <tbody>
                         <tr th:each="shift : ${shifts}">
                             <th scope="row">-</th>
-                            <td th:text="${shift.person.userAccount.username}"></td>
-                            <td>Koch</td>
+                            <td th:text="@{${shift.person.userAccount.firstname} + ' ' + ${shift.person.userAccount.lastname}}"></td>
+                            <td th:text="${shift.person.displayNameOfRole}"></td>
                             <td th:text="${shift.interval.start.toLocalDate()}"></td>
                             <td th:text="${shift.interval.start.toLocalTime()}"></td>
                             <td th:text="${shift.interval.end.toLocalTime()}"></td>

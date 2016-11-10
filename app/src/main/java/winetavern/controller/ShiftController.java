@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.user.Person;
+import winetavern.model.user.PersonManager;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +25,7 @@ import java.util.TreeSet;
 public class ShiftController {
     private final ShiftRepository shifts;
     private final BusinessTime time;
+    @Autowired private PersonManager personManager;
 
     @Autowired
     public ShiftController(ShiftRepository shifts, BusinessTime time) {
@@ -32,13 +35,21 @@ public class ShiftController {
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
+        //FOR TESTING ONLY
+        if (shifts.count() < 1) {
+            if (personManager.count() > 0)
+                shifts.save(new Shift(new TimeInterval(time.getTime(), time.getTime().plusHours(3)),
+                        personManager.findAll().iterator().next()));
+        }
+        //END
+
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         Set<Shift> shiftsOfWeek = getShiftsOfWeek(week);     //get all shifts in this interval
 
         model.addAttribute("weekStart", week.getStart().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
         model.addAttribute("weekEnd", week.getEnd().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
         model.addAttribute("shiftAmount", shiftsOfWeek.size());
-        model.addAttribute("shifts", shiftsOfWeek);
+        model.addAttribute("shifts", shifts.findAll());
 
         return "shifts";
     }
