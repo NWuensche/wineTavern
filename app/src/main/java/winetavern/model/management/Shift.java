@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 
 @Entity
-public class Shift {
+public class Shift implements Comparable<Shift> {
     @Transient @Autowired private PersonManager personManager;
 
     @Id @GeneratedValue private long id;
@@ -45,5 +45,10 @@ public class Shift {
         if (!personManager.exists(worker.getId()))
             throw new IllegalArgumentException("the person must be in the repository");
         this.worker = worker;
+    }
+
+    @Override
+    public int compareTo(Shift o) {
+        return interval.getStart().compareTo(o.getInterval().getStart());
     }
 }

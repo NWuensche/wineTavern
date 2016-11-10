@@ -14,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "EVENTS")
-public class Event extends Product {
+public class Event extends Product{
     @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
     private String description;
 
@@ -45,5 +45,9 @@ public class Event extends Product {
     public void setDescription(String description) {
         if (description == null) throw new NullPointerException("the description must not be null");
         this.description = description;
+    }
+
+    public int compareTo(Event o) {
+        return interval.getStart().compareTo(o.getInterval().getStart());
     }
 }

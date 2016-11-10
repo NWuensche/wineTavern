@@ -20,20 +20,22 @@
 
             <div class="container">
                 <div class="container__wrap">
-                    <div class="container-fluid heading" style="border:1px solid black;">
+                    <div class="heading">
                         <div class="row">
-                            <div class="col-xs-5">
-                                <h1><span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)</h1>
+                            <div class="col-xs-6">
+                                <h1>
+                                    <span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)
+                                </h1>
                             </div>
-                            <div class="col-xs-7 text-xs-right">
-                                <button type="button" class="btn btn-primary text-uppercase" data-toggle="modal"
-                                        data-target="#addCategory"><i
-                                        class="fa fa-plus fa-lg"></i>
+                            <div class="col-xs-6 text-xs-right">
+                                <button type="button" class="btn btn-primary " data-toggle="modal"
+                                        data-target="#addCategory">
+                                    <i class="fa fa-plus fa-fw"></i>
                                     Kategorie
                                 </button>
-                                <button type="button" class="btn btn-primary text-uppercase" data-toggle="modal"
-                                        data-target="#addProduct"><i
-                                        class="fa fa-plus fa-lg"></i>
+                                <button type="button" class="btn btn-primary " data-toggle="modal"
+                                        data-target="#addProduct">
+                                    <i class="fa fa-plus fa-fw"></i>
                                     Produkt
                                 </button>
                             </div>
@@ -42,7 +44,6 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-
                                 <th>Produkt</th>
                                 <th>Preis</th>
                                 <th>Menge</th>
@@ -57,7 +58,7 @@
                                 <td>
                                     <a th:href="@{'/admin/stock/details/' + ${item.id}}">
                                         <button type="button"  class="btn btn-primary">
-                                            <i class="fa fa-cog" aria-hidden="true"></i>
+                                            <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
                                         </button>
                                     </a>
                                 </td>
@@ -76,11 +77,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <a th:href="@{/admin/stock}">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
-                </a>
+                </button>
                 <h4 class="modal-title" id="addProductLabel">Produkt hinzufügen</h4>
             </div>
             <div class="modal-body">
@@ -155,11 +154,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <a th:href="@{/admin/stock}">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </a>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="productDetailsLabel">Produktdetails &auml;ndern</h4>
             </div>
             <div class="modal-body">

@@ -57,7 +57,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 04.11.2016 | 12:40 | 13:40 | Erstellen der Packages
 | 04.11.2016 | 14:15 | 23:30 | Erstellen von Controllern
 | 07.11.2016 | 11:10 | 13:00 | Controller..
-| 01.11.2016 | 19:30 | 21:30 | Stock- & Event-Controller
+| 08.11.2016 | 19:30 | 21:30 | Stock- & Event-Controller
+| 09.11.2016 | 09:00 | 17:00 | ...
 |===
 
 == Niklas
@@ -110,4 +111,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |03.11.2016 |13:00 |16:00 |Prototype / Model einlesen
 |04.11.2016 |18:30 |22:30 |Model
 |05.11.2016 |10:00 |19:00 |Controller / Menu Management
+|06.11.2016 |10:00 |13:00 |Menu Management View
+|07.11.2016 |11:00 |13:00 |verschiedenes
+|09.11.2016 |11:00 |12:00 |Menu Management
+|10.11.2016 |14:00 |15:00 |Menu Management
 |===
