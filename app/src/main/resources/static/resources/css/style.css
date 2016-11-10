@@ -174,7 +174,7 @@ button.logout__btn {
 }
 
 .side-module__container .fa {
-    padding-right: 1.5rem;
+    padding-right: 2rem;
 }
 
 /* ----- MAIN --- */
@@ -193,10 +193,11 @@ main .container__wrap .heading {
 main .container__wrap h1{
     background-color: #243648;
     color: #A6B2C5;
-    line-height:2;
+    line-height:2.5;
     text-align: left;
     margin-bottom: 0rem;
-    font-size: 2rem;
+    font-size: 1.6rem;
+    padding-left: 1.5rem;
 }
 
 main .container__wrap .heading button {
@@ -208,4 +209,8 @@ main table thead{
 }
 main table tbody tr{
 
+}
+
+main .container__wrap .table__bottom {
+    background-color: #1D997D;
 }
