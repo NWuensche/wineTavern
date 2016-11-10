@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="links::links">
+
+    <title>Lager</title>
+
+</head>
+<body>
+
+<main class="main container-fluid">
+    <div class="row">
+
+        <div class="col-md-3" th:include="side::side">
+
+        </div>
+        <!--MAIN CONTENT-->
+
+        <div class="col-md-9 no-gutter">
+            <div th:include="navigation::navigation" ></div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 reservation__box">
+                        <form>
+                            <div class="form-group">
+                                <label for="datetime">Datum:</label>
+                                <input type="text" name="date" id="datetime" class="form-control" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="persons">Personenzahl:</label>
+                                <input type="number" name="persons" id="persons" class="form-control" min="0"
+                                       value="4"/>
+                            </div>
+                            <button class="btn btn-primary btn-lg">Verfügbarkeit abfragen</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-xs-center">
+                        <i class="fa fa-arrow-down fa-3x"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 reservation__box">
+                        <div class="bg-success reservation__success text-xs-center">
+                            <i class="fa fa-check fa-lg"></i>
+                            Tisch 5
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" id="name" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-xs-center">
+                        <i class="fa fa-arrow-down fa-3x"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 reservation__box text-xs-center">
+                        <button class="btn btn-primary btn-lg">Bestätigen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+</body>
+<link rel="stylesheet" type="text/css" href="/resources/css/jquery.datetimepicker.css"/>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/resources/js/jquery.datetimepicker.full.js"></script>
+<script>
+    $.datetimepicker.setLocale('de');
+    $('#datetime').datetimepicker({
+        dayOfWeekStart : 1,
+        step:30,
+        minDate:'-1970/01/02',
+        startDate:'-1970/01/02'
+    });
+</script>
+</html>
