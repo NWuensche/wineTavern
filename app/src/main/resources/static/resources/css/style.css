@@ -187,6 +187,9 @@ main .container__wrap{
     background:#FFF;
     margin: 30px;
 }
+main .container__wrap .heading {
+    background: #243648;
+}
 main .container__wrap h1{
     background-color: #243648;
     color: #A6B2C5;
@@ -195,6 +198,11 @@ main .container__wrap h1{
     margin-bottom: 0rem;
     font-size: 2rem;
 }
+
+main .container__wrap .heading button {
+    margin:10px;
+}
+
 main table thead{
 
 }

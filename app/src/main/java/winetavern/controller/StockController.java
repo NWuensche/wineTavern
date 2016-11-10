@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
 
+import javax.money.NumberValue;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -47,9 +50,33 @@ public class StockController {
         return "stock";
     }
 
-    @RequestMapping(value = "/admin/stock/add", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("product") Product product, @ModelAttribute("quantity") Quantity quantity) {
-        stock.save(new InventoryItem(product, quantity));
+    @RequestMapping("/admin/stock/details/{pid}")
+    public String detail(@PathVariable("pid") InventoryItem stockItem, Model model) {
+
+        model.addAttribute("product", stockItem.getProduct());
+        model.addAttribute("quantity", stockItem.getQuantity());
+        model.addAttribute("categories", stockItem.getProduct().getCategories());
+
+        model.addAttribute("productAmount", stock.count());
+        model.addAttribute("stockItems", stock.findAll());
+
+        return "stock";
+    }
+
+    @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
+    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price) {
+        stock.save(new InventoryItem(new Product(name, Money.of(Float.parseFloat(price), EURO)), Quantity.of(1)));
+        return "redirect:/admin/stock";
+    }
+
+    @RequestMapping(value = "/admin/stock/changeProduct", method = RequestMethod.POST)
+    public String addProduct(@ModelAttribute("productid") Product product,
+                             @ModelAttribute("productname") String name,
+                             @ModelAttribute("productprice") String price) {
+        product.setName(name);
+        product.setPrice(Money.of(Float.parseFloat(price), EURO));
+        products.save(product);
+
         return "redirect:/admin/stock";
     }
 
