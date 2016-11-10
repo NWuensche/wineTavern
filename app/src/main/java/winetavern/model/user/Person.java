@@ -1,17 +1,18 @@
 package winetavern.model.user;
 
+import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import winetavern.model.DateParameter;
 
 import javax.persistence.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.SimpleTimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Entity for Persons
  * Adds information to UserAccount
  * @author Niklas Wünsche
+ * @implNote The UserAccount has exactly 1 Role
  */
 
 @Entity
@@ -23,10 +24,19 @@ public class Person {
 
     private Calendar birthday;
 
-    public Person(UserAccount userAccount, Address address, DateParameter birthday) {
+    public Person(UserAccount userAccount, Address address, DateParameter birthday) throws IllegalArgumentException {
+
+        if(numberOfRoles(userAccount) != 1) {
+            throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
+        }
+
         this.userAccount = userAccount;
         this.address = address;
         this.birthday = birthday.getCalendar();
+    }
+
+    private int numberOfRoles(UserAccount userAccount) {
+        return userAccount.getRoles().stream().collect(Collectors.toList()).size();
     }
 
     public long getId() {
@@ -47,6 +57,12 @@ public class Person {
 
     public UserAccount getUserAccount() {
         return userAccount;
+    }
+
+    public String getDisplayNameOfRole() {
+        List<Role> roles = userAccount.getRoles().stream().collect(Collectors.toList());
+        Role role = roles.get(0);
+        return Roles.getDisplayNameRole(role);
     }
 
 }
