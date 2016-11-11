@@ -53,10 +53,10 @@ public class DayMenuManager {
     }
 
     @RequestMapping("/admin/editMenu")
-    public String editMenu(@RequestParam("id") long id, Model model) {
+    public String editMenu(@RequestParam("id") Long id, Model model) {
         DayMenu dayMenu = dayMenuRepository.findById(id);
         model.addAttribute("daymenu", dayMenu);
-        model.addAttribute("from", "/admin/editMenu?id="+String.valueOf(id));
+        model.addAttribute("frommenuitemid", id);
         return "editdaymenu";
     }
 

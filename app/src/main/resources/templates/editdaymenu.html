@@ -8,6 +8,28 @@ th:include="backend-temp :: page">
 <body>
 <div th:fragment="content">
     <p>Edit von Daymenü Nr: </p><p th:text="${daymenu.id}"></p>
+    <p>Produkte:</p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Produkt</th>
+            <th>Preis</th>
+            <th>Menge</th>
+            <th>Bearbeiten</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${daymenu.dayMenuItems}">
+            <th scope="row">-</th>
+            <td th:text="${item.name}"></td>
+            <td></td>
+            <td></td>
+            <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
+            </button></td>
+        </tr>
+        </tbody>
+    </table>
         <a th:href="${'/admin/addMenuItem?from='+from}">Produkt hinzufügen</a>
 </div>
 </body>

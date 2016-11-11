@@ -6,6 +6,7 @@
 
 </head>
 <body>
+<div th:fragment="page">
     <main  class="main container-fluid">
         <div class="row">
             <div class="col-md-3" th:include="side::side"></div>
@@ -25,9 +26,9 @@
                 </div>
             </div>
 
-            <!--<div th:include="this :: content">-->
+            <div th:include="this :: content">
 
-            <!--</div>-->
+            </div>
 
         </div>
     </main>
@@ -37,5 +38,6 @@
     <footer>
 
     </footer>
+</div>
 </body>
 </html>
