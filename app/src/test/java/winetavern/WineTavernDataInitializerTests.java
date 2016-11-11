@@ -34,12 +34,12 @@ import java.util.Optional;
  */
 
 @Transactional
-public class PrototypeDataInitializerTests extends AbstractWebIntegrationTests{
+public class WineTavernDataInitializerTests extends AbstractWebIntegrationTests{
 
-    @Autowired UserAccountManager userAccountManager;
-    @Autowired EventCatalog eventCatalog;
-    @Autowired Inventory<InventoryItem> stock;
-    @Autowired ShiftRepository shifts;
+    @Autowired private UserAccountManager userAccountManager;
+    @Autowired private EventCatalog eventCatalog;
+    @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private ShiftRepository shifts;
 
     @Test
     public void adminInDB() throws Exception {

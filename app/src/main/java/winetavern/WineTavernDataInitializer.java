@@ -30,24 +30,11 @@ import static org.salespointframework.core.Currencies.EURO;
 @Component
 public class WineTavernDataInitializer implements DataInitializer{
 
-    private final UserAccountManager userAccountManager;
-    private final PersonManager personManager;
-    private final EventCatalog eventCatalog;
-    private final Inventory<InventoryItem> stock;
-    private final ShiftRepository shifts;
-
-    @Autowired
-    public WineTavernDataInitializer(UserAccountManager userAccountManager, PersonManager personManager, EventCatalog eventCatalog, Inventory<InventoryItem> stock, ShiftRepository shifts) {
-        Assert.notNull(userAccountManager, "UserAccountManager must not be null!");
-        Assert.notNull(personManager, "PersonManager must not be null!");
-        Assert.notNull(eventCatalog, "EventController must not be null!");
-
-        this.userAccountManager = userAccountManager;
-        this.personManager = personManager;
-        this.eventCatalog = eventCatalog;
-        this.stock = stock;
-        this.shifts = shifts;
-    }
+    @Autowired private UserAccountManager userAccountManager;
+    @Autowired private PersonManager personManager;
+    @Autowired private EventCatalog eventCatalog;
+    @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private ShiftRepository shifts;
 
     @Override
     public void initialize() {
