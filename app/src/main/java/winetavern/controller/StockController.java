@@ -36,13 +36,6 @@ public class StockController {
 
     @RequestMapping("/admin/stock")
     public String manageStock(Model model) {
-        //FOR TESTING ONLY
-        if (stock.count() < 2) {
-            stock.save(new InventoryItem(new Product("Vodka", Money.of(12.50, EURO)), Quantity.of(15)));
-            stock.save(new InventoryItem(new Product("Berliner Brandstifter", Money.of(33.99, EURO)), Quantity.of(93)));
-        }
-        //END
-
         model.addAttribute("productAmount", stock.count());
         model.addAttribute("stockItems", stock.findAll());
         return "stock";

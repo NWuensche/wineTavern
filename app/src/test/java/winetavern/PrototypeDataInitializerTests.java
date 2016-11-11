@@ -2,17 +2,27 @@ package winetavern;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import org.assertj.core.internal.Lists;
+import org.assertj.core.internal.cglib.core.CollectionUtils;
+import org.javamoney.moneta.Money;
 import org.junit.Test;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.user.Roles;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,10 +30,12 @@ import java.util.Optional;
  * @author Niklas Wünsche
  */
 
+@Transactional
 public class PrototypeDataInitializerTests extends AbstractWebIntegrationTests{
 
     @Autowired UserAccountManager userAccountManager;
     @Autowired EventCatalog eventCatalog;
+    @Autowired Inventory<InventoryItem> stock;
 
     @Test
     public void adminInDB() throws Exception {
@@ -46,6 +58,21 @@ public class PrototypeDataInitializerTests extends AbstractWebIntegrationTests{
 
         assertThat(event1.getDescription(), is("SW4G ist ein muss!"));
         assertThat(event2.getDescription(), is("Es wird gegrillt und überteuerter Wein verkauft."));
+    }
+
+    @Test
+    public void inventoryItemsInDB() throws Exception {
+        String item1 = "Vodka";
+        String item2 = "Berliner Brandstifter";
+        Iterable<InventoryItem> items = stock.findAll();
+        List<String> names = new LinkedList<>();
+
+        items.forEach(item -> names.add(item.getProduct().getName()));
+
+        mvc.perform(get("/"));
+
+        assertThat(names.contains(item1), is(true));
+        assertThat(names.contains(item2), is(true));
     }
 
 }

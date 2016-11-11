@@ -1,7 +1,11 @@
 package winetavern;
 
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
@@ -30,9 +34,11 @@ public class WineTavernDataInitializer implements DataInitializer{
     private final UserAccountManager userAccountManager;
     private final PersonManager personManager;
     private final EventCatalog eventCatalog;
+    private final Inventory<InventoryItem> stock;
+
 
     @Autowired
-    public WineTavernDataInitializer(UserAccountManager userAccountManager, PersonManager personManager, EventCatalog eventCatalog) {
+    public WineTavernDataInitializer(UserAccountManager userAccountManager, PersonManager personManager, EventCatalog eventCatalog, Inventory<InventoryItem> stock) {
         Assert.notNull(userAccountManager, "UserAccountManager must not be null!");
         Assert.notNull(personManager, "PersonManager must not be null!");
         Assert.notNull(eventCatalog, "EventController must not be null!");
@@ -40,12 +46,14 @@ public class WineTavernDataInitializer implements DataInitializer{
         this.userAccountManager = userAccountManager;
         this.personManager = personManager;
         this.eventCatalog = eventCatalog;
+        this.stock = stock;
     }
 
     @Override
     public void initialize() {
         initializeAdmin(userAccountManager);
         initializeEvents();
+        initializeStock();
     }
 
     private void initializeAdmin(UserAccountManager manager) {
@@ -77,6 +85,11 @@ public class WineTavernDataInitializer implements DataInitializer{
         eventCatalog.save(new Event("Grillabend mit Musik von Barny dem Barden", Money.of(7, EURO),
                 new TimeInterval(LocalDateTime.of(2016, 11, 11, 19, 30), LocalDateTime.of(2016, 11, 11, 23, 30)),
                 "Es wird gegrillt und überteuerter Wein verkauft."));
+    }
+
+    public void initializeStock() {
+        stock.save(new InventoryItem(new Product("Vodka", Money.of(12.50, EURO)), Quantity.of(15)));
+        stock.save(new InventoryItem(new Product("Berliner Brandstifter", Money.of(33.99, EURO)), Quantity.of(93)));
     }
 
 }
