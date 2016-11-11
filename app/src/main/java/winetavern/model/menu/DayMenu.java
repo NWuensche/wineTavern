@@ -45,6 +45,10 @@ public class DayMenu {
         return format.format(day.getTime());
     }
 
+    public List<DayMenuItem> getDayMenuItems() {
+        return dayMenuItems;
+    }
+
     public void addMenuItem(DayMenuItem dayMenuItem) {
         dayMenuItems.add(dayMenuItem);
     }
