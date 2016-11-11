@@ -35,7 +35,7 @@ public class Person {
 
         this.userAccount = userAccount;
         this.address = address;
-        this.birthday = birthday.getCalendar();
+        this.birthday = (birthday != null) ? birthday.getCalendar() : null;
 
     }
 
@@ -51,12 +51,12 @@ public class Person {
         this.address = address;
     }
 
-    public String getAddress() {
-        return address;
+    public Optional<String> getAddress() {
+        return Optional.ofNullable(address);
     }
 
-    public Calendar getBirthday() {
-        return birthday;
+    public Optional<Calendar> getBirthday() {
+        return Optional.ofNullable(birthday);
     }
 
     public UserAccount getUserAccount() {

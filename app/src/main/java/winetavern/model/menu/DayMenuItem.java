@@ -1,10 +1,10 @@
 package winetavern.model.menu;
 
-import javax.persistence.Entity;
+import javax.money.MonetaryAmount;
+import javax.persistence.*;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
-import javax.persistence.Id;
 
 /**
  * Created by Michel on 11/3/2016.
@@ -13,14 +13,14 @@ import javax.persistence.Id;
 @Entity
 public class DayMenuItem {
 
-    @Id
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
-    private Money price;
+    private MonetaryAmount price;
     private Product product;
     private String name;
     private String description;
     private boolean enabled;
-
+    @ManyToOne(targetEntity = DayMenu.class) private DayMenu dayMenu;
     public DayMenuItem() {};
 
     public DayMenuItem(String name, Money price) {
@@ -38,7 +38,7 @@ public class DayMenuItem {
         return id;
     }
 
-    public Money getPrice() {
+    public MonetaryAmount getPrice() {
         return price;
     }
 
@@ -80,6 +80,14 @@ public class DayMenuItem {
 
     public void disable()  {
         this.enabled = false;
+    }
+
+    public void setDayMenu(DayMenu dayMenu) {
+        this.dayMenu = dayMenu;
+    }
+
+    public DayMenu getDayMenu() {
+        return dayMenu;
     }
 
 }

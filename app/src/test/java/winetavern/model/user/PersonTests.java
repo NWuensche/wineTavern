@@ -57,14 +57,14 @@ public class PersonTests extends AbstractIntegrationTests{
     public void newPersonInDBWithoutAddress() {
         person = new Person(acc, null, birthday);
         personManager.save(person);
-        assertThat(personManager.findOne(person.getId()).get().getAddress(), is(nullValue()));
+        assertThat(personManager.findOne(person.getId()).get().getAddress().isPresent(), is((false)));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void newPersonInDBWithoutBirthday() {
         person = new Person(acc, address, null);
         personManager.save(person);
-        assertThat(personManager.findOne(person.getId()).get().getAddress().toString(), is(""));
+        assertThat(personManager.findOne(person.getId()).get().getBirthday().isPresent(), is(false));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -78,6 +78,5 @@ public class PersonTests extends AbstractIntegrationTests{
         acc = userAccountManager.create("testAccount", "1234");
         person = new Person(acc, address, birthday);
     }
-
 
 }
