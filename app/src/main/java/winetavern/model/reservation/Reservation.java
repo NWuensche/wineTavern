@@ -1,6 +1,10 @@
 package winetavern.model.reservation;
 
+import org.salespointframework.time.Interval;
+import winetavern.model.management.TimeInterval;
+
 import javax.persistence.*;
+import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -16,14 +20,16 @@ public class Reservation {
 
     private String guestName;
     @ManyToOne(targetEntity=Table.class, cascade = CascadeType.ALL) Table table;
-    private LocalDateTime time;
-    private Duration duration;
+    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
 
-    public Reservation(String guestName, Table table, LocalDateTime time, Duration duration) {
+
+    @Deprecated
+    protected Reservation(){}
+
+    public Reservation(String guestName, Table table, TimeInterval interval) {
         this.guestName = guestName;
         this.table = table;
-        this.time = time;
-        this.duration = duration;
+        this.interval = interval;
     }
 
     public long getId() {
@@ -46,19 +52,11 @@ public class Reservation {
         this.table = table;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public TimeInterval getInterval() {
+        return interval;
     }
 
-    public void setTime(LocalDateTime date) {
-        this.time = time;
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setInterval(TimeInterval interval) {
+        this.interval = interval;
     }
 }
