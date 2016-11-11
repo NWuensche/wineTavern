@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="page">
 <head th:include="links::links">
 
     <title>Backend</title>
 
 </head>
 <body>
-<div th:fragment="page">
     <main  class="main container-fluid">
         <div class="row">
             <div class="col-md-3" th:include="side::side"></div>
@@ -38,6 +37,5 @@
     <footer>
 
     </footer>
-</div>
 </body>
 </html>

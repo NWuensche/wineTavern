@@ -21,7 +21,7 @@ public class DayMenuManager {
     @Autowired
     private DayMenuRepository dayMenuRepository;
 
-    @RequestMapping("/admin/daymenu")
+    @RequestMapping("/admin/daymenulist")
     public String showMenus(Model model) {
         return showMenuList(model);
     }
