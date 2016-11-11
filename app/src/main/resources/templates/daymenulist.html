@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:include="backend-temp :: page">
 <head>
-
+    <meta charset="UTF-8" />
     <title>Title</title>
 </head>
 <body>
-<div>
+<div th:fragment="content">
     <h1>Liste aller vorhandenen Tageskarten:</h1>
     <ul>
         <li th:each="menu : ${menus}">
