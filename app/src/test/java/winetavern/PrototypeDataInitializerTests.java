@@ -19,8 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
+import winetavern.model.management.Shift;
+import winetavern.model.management.ShiftRepository;
 import winetavern.model.user.Roles;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +39,7 @@ public class PrototypeDataInitializerTests extends AbstractWebIntegrationTests{
     @Autowired UserAccountManager userAccountManager;
     @Autowired EventCatalog eventCatalog;
     @Autowired Inventory<InventoryItem> stock;
+    @Autowired ShiftRepository shifts;
 
     @Test
     public void adminInDB() throws Exception {
@@ -73,6 +77,22 @@ public class PrototypeDataInitializerTests extends AbstractWebIntegrationTests{
 
         assertThat(names.contains(item1), is(true));
         assertThat(names.contains(item2), is(true));
+    }
+
+    @Test
+    public void shiftInDB() throws Exception {
+        Iterable<Shift> shiftsIterable = shifts.findAll();
+        final boolean[] isDataInitaliyerShift = {false};
+
+        shiftsIterable.forEach(shift -> {
+            if(shift.getInterval().getStart().getDayOfMonth() == 11 && shift.getInterval().getEnd().getDayOfMonth() == 11 && shift.getInterval().getStart().getHour() == 11 && shift.getInterval().getEnd().getHour() == 14) {
+                isDataInitaliyerShift[0] = true;
+            }
+        });
+
+        mvc.perform(get("/"));
+
+        assertThat(isDataInitaliyerShift[0], is(true));
     }
 
 }

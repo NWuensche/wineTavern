@@ -6,6 +6,7 @@ import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
+import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
@@ -13,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import winetavern.model.DateParameter;
-import winetavern.model.management.Event;
-import winetavern.model.management.EventCatalog;
-import winetavern.model.management.TimeInterval;
+import winetavern.model.management.*;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
@@ -35,10 +34,10 @@ public class WineTavernDataInitializer implements DataInitializer{
     private final PersonManager personManager;
     private final EventCatalog eventCatalog;
     private final Inventory<InventoryItem> stock;
-
+    private final ShiftRepository shifts;
 
     @Autowired
-    public WineTavernDataInitializer(UserAccountManager userAccountManager, PersonManager personManager, EventCatalog eventCatalog, Inventory<InventoryItem> stock) {
+    public WineTavernDataInitializer(UserAccountManager userAccountManager, PersonManager personManager, EventCatalog eventCatalog, Inventory<InventoryItem> stock, ShiftRepository shifts) {
         Assert.notNull(userAccountManager, "UserAccountManager must not be null!");
         Assert.notNull(personManager, "PersonManager must not be null!");
         Assert.notNull(eventCatalog, "EventController must not be null!");
@@ -47,6 +46,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         this.personManager = personManager;
         this.eventCatalog = eventCatalog;
         this.stock = stock;
+        this.shifts = shifts;
     }
 
     @Override
@@ -54,6 +54,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         initializeAdmin(userAccountManager);
         initializeEvents();
         initializeStock();
+        initializeShift();
     }
 
     private void initializeAdmin(UserAccountManager manager) {
@@ -90,6 +91,14 @@ public class WineTavernDataInitializer implements DataInitializer{
     public void initializeStock() {
         stock.save(new InventoryItem(new Product("Vodka", Money.of(12.50, EURO)), Quantity.of(15)));
         stock.save(new InventoryItem(new Product("Berliner Brandstifter", Money.of(33.99, EURO)), Quantity.of(93)));
+    }
+
+    /**
+     * Should be deleted in the final programm
+     */
+    public void initializeShift() {
+        shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),
+                personManager.findAll().iterator().next()));
     }
 
 }
