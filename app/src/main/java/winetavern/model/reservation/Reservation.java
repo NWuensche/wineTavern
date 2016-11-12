@@ -1,12 +1,8 @@
 package winetavern.model.reservation;
 
-import org.salespointframework.time.Interval;
 import winetavern.model.management.TimeInterval;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 /**
  * Entity for a single reservation

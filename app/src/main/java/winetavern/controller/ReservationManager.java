@@ -34,7 +34,7 @@ public class ReservationManager {
     public String newReservation(@RequestParam("datetime") Optional<String> datetime, @RequestParam("persons")
             Optional<Integer> persons, @RequestParam("tableid") Optional<Long> table, @RequestParam("name")
                                  Optional<String> name, @RequestParam("check") Optional<String> check, @RequestParam
-            ("submitdata") Optional<String> submit, ModelMap model){
+            ("submitdata") Optional<String> submit, @RequestParam("option") Optional<String> option, ModelMap model){
 
         if(check.isPresent() && datetime.isPresent() && persons.isPresent()){
 
@@ -56,7 +56,7 @@ public class ReservationManager {
             LocalDateTime end = start.plusHours(2).plusMinutes(30);
 
             TimeInterval interval = new TimeInterval(start,end);
-            Reservation reservation = new Reservation(name.get(),tables.findOne(table.get()).get(),interval);
+            Reservation reservation = new Reservation(name.get(),tables.findOne(table.get()).get(),interval); //TODO
             reservations.save(reservation);
 
             model.addAttribute("success","Reservierung wurde gespeichert");
@@ -81,16 +81,18 @@ public class ReservationManager {
         Iterable<Reservation> allReservations = reservations.findAll();
         List<Integer> offset = new LinkedList<>();
         offset.add(0);
-        offset.add(30);
-        offset.add(-30);
-        offset.add(60);
-        offset.add(-60);
+        for(int i = 1; i < 6; i++) {
+            offset.add(i * 30);
+            offset.add(i * -30);
+        }
         for(Integer i:offset){
-            Iterable<Table> allTables = tables.findByCapacityGreaterThanEqual(capacity);
+            Iterable<Table> allTables = tables.findByCapacityGreaterThanEqualOrderByCapacity(capacity);
             List<Table> tableList = new ArrayList();
             allTables.forEach(tableList::add);
             for (Reservation reservation : allReservations) {
-                if(TimeInterval.intersects(reservation.getInterval(),interval)){
+                TimeInterval tempInterval = new TimeInterval(interval.getStart(), interval.getEnd());
+                tempInterval.moveIntervalByMinutes(i);
+                if(TimeInterval.intersects(reservation.getInterval(),tempInterval)){
                     tableList.remove(reservation.getTable());
                 }
             }

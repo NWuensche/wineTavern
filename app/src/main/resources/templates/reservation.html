@@ -52,8 +52,8 @@
 
                                 <label for="tableid">Auswahl:</label>
                                 <select name="tableid" id="tableid" class="form-control">
-                                    <option th:each="entry:${tableMap}" th:value="${entry.value.id}"
-                                            th:text="'Tisch ' + ${entry.value.number} + ' , ' + ${entry.key} + 'min'">
+                                    <option name="option" id="option" th:each="entry:${tableMap}" th:value="${entry.value.id}"
+                                            th:text="'Tisch ' + ${entry.value.number} + ' , ' + ${entry.key} + ' min'">
                                         infos</option>
                                 </select>
                             </div>

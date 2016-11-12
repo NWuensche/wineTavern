@@ -61,6 +61,16 @@ public class TimeInterval {
         return Interval.from(start).to(end);
     }
 
+    public void moveIntervalByMinutes(int minutes) {
+        if (minutes < 0) {
+            this.start = start.minusMinutes(minutes);
+            this.end = end.minusMinutes(minutes);
+        } else {
+            this.start = start.plusMinutes(minutes);
+            this.end = end.plusMinutes(minutes);
+        }
+    }
+
     public static boolean intersects(TimeInterval first, TimeInterval second){
         return (timeInInterval(first.getStart(),second) || timeInInterval(first.getEnd(),second));
     }
