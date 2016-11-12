@@ -21,6 +21,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |21.10.2016 | 09:20 |13:00 | Erarbeitung Fragenkatalog und Prototypenprogrammierung (Videoshop)
 |28.10.2016 | 09:20 |12:40 | Vorstellen Prototypen, Aufgabenverteilung
 |04.11.2016 | 09:20 |12:40 | Abnahme Pflichtenheft, Aufteilung der Software auf Gruppenmitglieder
+|11.11.2016 | 09:40 |12:40 | Coden & trefen
 |===
 
 == Severin
@@ -37,6 +38,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 03.10.2016 | 11:00 | 12:30 | Top Navbar im bigPrototyp
 | 04.11.2016 | 12:40 | 13:40 | Erstellen der Packages
 | 04.11.2016 | 15:00 | 16:00 | Coden im reservation package
+| 11.11.2016 | 13:00 | 14:50 | Reservation Controller
 |===
 
 == Louis
@@ -59,6 +61,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 07.11.2016 | 11:10 | 13:00 | Controller..
 | 08.11.2016 | 19:30 | 21:30 | Stock- & Event-Controller
 | 09.11.2016 | 09:00 | 17:00 | ...
+| 10.11.2016 | 14:00 | 18:30 | ...
+| 11.11.2016 | 13:00 | 14:50 | Reservation Controller
 |===
 
 == Niklas
