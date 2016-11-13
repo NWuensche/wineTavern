@@ -1,35 +1,38 @@
 package winetavern.model.menu;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.sun.xml.internal.ws.developer.Serialization;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 /**
  * Created by Michel on 11/3/2016.
  */
 
+
 @Entity
 public class DayMenu {
 
-    @Id
-    @GeneratedValue
-    private long id;
+    @Id @GeneratedValue Long id;
 
     private Calendar day;
-    @ManyToMany(targetEntity=DayMenuItem.class)
+    @OneToMany(targetEntity=DayMenuItem.class, mappedBy="id")
     private List<DayMenuItem> dayMenuItems;
 
-    protected DayMenu() {}
+    public DayMenu() {}
 
     public DayMenu(Calendar day) {
         this.day = day;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setDay(Calendar day) {

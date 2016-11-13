@@ -41,6 +41,7 @@ public class DayMenuManager {
 
         return showMenuList(model);
     }
+
     @RequestMapping("/admin/removeMenu")
     public String removeMenu(@RequestParam("id") long id, Model model) {
         DayMenu dayMenu = dayMenuRepository.findById(id);
