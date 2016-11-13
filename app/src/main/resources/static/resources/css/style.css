@@ -148,15 +148,18 @@ button.logout__btn {
 }
 
 .image-user {
-    width: 100px;
+    max-width: 100px;
     margin: 0px 10px 54px 32px;
     float:left;
+    transition: all 0.5s linear;
 }
 
 
 .image__container {
     width: 100%;
     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .user-title{
     display: block;
@@ -170,6 +173,7 @@ button.logout__btn {
     left: 0px;
     padding: 2px 6px;
     border-radius: 0px 5px 5px 0px;
+    z-index: 111;
 }
 
 .btn-toogle .fa {
@@ -251,4 +255,42 @@ main table tbody tr{
 
 main .container__wrap .table__bottom {
     background-color: #1D997D;
+}
+
+/* Mini Style */
+body main > div > div{
+    transition: width 0.5s linear;
+}
+body.mini main > div > .col-md-9 {
+    width: 94%;
+}
+body.mini main > div > .col-md-3{
+    width: 6%;
+}
+body.mini #sidebarToggle i {
+    transform: rotate(180deg);
+}
+body.mini .image__container .user-title, body.mini .image__container .user-role{
+    display:none;
+}
+body.mini .image__container .image-user{
+    margin:0 0 54px 10%;
+    max-width: 80%;
+    width: auto;
+    transition: all 0.5s linear;
+}
+body.mini .list-group-item-action{
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+}
+body .list-group-item-action{
+    white-space: nowrap;
+    overflow: hidden;
+}
+body.mini .list-group-item-action i{
+    padding-right: 0;
+}
+body.mini .list-group-item-action span {
+    display: none;
 }

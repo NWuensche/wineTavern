@@ -23,6 +23,7 @@
             <p>Beschreibung: </p><input type="text" th:field="*{description}" />
         </div>
         <button>Hau rein</button>
+        <input type="hidden" th:field="*{dayMenu}" th:value="${menuitem.dayMenu}"/>
     </form>
     </div>
 </body>

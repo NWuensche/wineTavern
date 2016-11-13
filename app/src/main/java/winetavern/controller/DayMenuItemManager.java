@@ -5,16 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.ProductCatalog;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.time.DayOfWeek;
 import java.util.Map;
 
@@ -34,14 +38,32 @@ public class DayMenuItemManager {
     private DayMenuRepository dayMenuRepository;
 
 
+
     @RequestMapping("/admin/addMenuItem")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         DayMenuItem dayMenuItem = new DayMenuItem();
         dayMenuItem.setDayMenu(dayMenuRepository.findById(cameFrom));
         model.addAttribute("menuitem", dayMenuItem);
         model.addAttribute("products", productCatalog.findAll());
-        model.addAttribute("frommenuitemid", cameFrom);
         return "addmenuitem";
+    }
+
+
+
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        binder.registerCustomEditor(DayMenu.class, "dayMenu", new PropertyEditorSupport() {
+            @Override
+            public String getAsText() {
+                DayMenu dayMenu = (DayMenu) getValue();
+                return String.valueOf(dayMenu.getId());
+            }
+            @Override
+            public void setAsText(String text) {
+                DayMenu dayMenu = dayMenuRepository.findById(Long.parseLong(text));
+                setValue(dayMenu);
+            }
+        });
     }
 
     /**
@@ -50,18 +72,17 @@ public class DayMenuItemManager {
      * 2) setting DayMenuItem name, price and optionally a description.
      */
     @RequestMapping(value = "/admin/addMenuItem", method = RequestMethod.POST)
-    public ModelAndView addMenuItemPost(@ModelAttribute("menuitem") DayMenuItem dayMenuItem,
-                                        @ModelAttribute("frommenuitemid") Long cameFrom,
+    public ModelAndView addMenuItemPost(@Valid @ModelAttribute("menuitem") DayMenuItem dayMenuItem,
+                                        BindingResult bindingResultDayMenuItem,
                                         ModelAndView modelAndView) {
 
         if(dayMenuItem.getProduct() != null) {
             modelAndView.addObject("menuitem", dayMenuItem);
-            modelAndView.addObject("frommenuitemid", cameFrom);
             modelAndView.setViewName("addmenuitem");
             return modelAndView;
         } else {
             dayMenuItemRepository.save(dayMenuItem);
-            modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(cameFrom));
+            modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(dayMenuItem.getDayMenu().getId()));
             return modelAndView;
         }
     }

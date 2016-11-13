@@ -14,13 +14,16 @@ import org.salespointframework.catalog.Product;
 public class DayMenuItem {
 
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private MonetaryAmount price;
     private Product product;
     private String name;
     private String description;
     private boolean enabled;
-    @ManyToOne(targetEntity = DayMenu.class) private DayMenu dayMenu;
+
+    @ManyToOne(targetEntity = DayMenu.class)
+    private DayMenu dayMenu;
+
     public DayMenuItem() {};
 
     public DayMenuItem(String name, Money price) {
@@ -33,6 +36,8 @@ public class DayMenuItem {
         this.price = price;
         this.description = description;
     }
+
+
 
     public Long getId() {
         return id;
