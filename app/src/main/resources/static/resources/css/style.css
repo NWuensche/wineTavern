@@ -32,6 +32,18 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
     padding-right: 0px;
 }
 
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+}
+
+main > .row-eq-height > .col-md-3{
+    background-color: #243648;
+    min-height: 100vh;
+}
+
 /*------------------------------*/
 
 
@@ -81,6 +93,7 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 .nav__container {
   padding: 0.2rem;
   line-height: 3rem;
+    overflow: hidden;
 }
 
 .nav-title {
@@ -124,7 +137,6 @@ button.logout__btn {
 /*--------------------*/
 
 /*---------  SIDE-MENU  -----------*/
-
 .side {
     background-color: #243648;
     color: #A6B2C5;
@@ -133,21 +145,22 @@ button.logout__btn {
 .side__menu {
     background-color: #2F3F52;
     color: #A6B2C5;
-    width: 100%;
 }
 
 .image-user {
     width: 100px;
-    margin: 0px 0px 54px 32px;
+    margin: 0px 10px 54px 32px;
+    float:left;
 }
+
 
 .image__container {
     width: 100%;
     display: inline-block;
 }
-
-.btn-toogle__position {
-    position: relative;
+.user-title{
+    display: block;
+    margin: 30px 0 0 0;
 }
 
 .btn-toogle {
@@ -167,14 +180,39 @@ button.logout__btn {
 .side-module__container {
     /*background-color: #243648;*/
     /*color: #A6B2C5;*/
-    display: inline-block;
-    width: 100%;
+    /*display: inline-block;*/
+    /*width: 100%;*/
     padding-left: 2.5rem;
-    line-height: 4rem;
+    line-height: 3rem;
 }
 
 .side-module__container .fa {
     padding-right: 2rem;
+}
+
+.list-group-item {
+    border: none;
+}
+
+.list-group-item:first-child {
+    border-radius: unset;
+}
+
+.list-group-item-action:hover, .list-group-item-action:active, .list-group-item-action:focus, .list-group-item-action[aria-expanded="true"] {
+    color: #A6B2C5;
+    background-color: #243648;
+    box-shadow: inset 5px 0 0 #26AA8C;
+}
+.list-group-item-action + div .list-group-item-action{
+    background-color: #243648;
+    padding-left: 5.3rem;
+    box-shadow: inset 5px 0 0 #1E2B3A;
+}
+.list-group-item-action + div .list-group-item-action:hover{
+    box-shadow: inset 5px 0 0 #26AA8C;
+}
+.list-group-item:last-child{
+    border-radius:0;
 }
 
 /* ----- MAIN --- */
