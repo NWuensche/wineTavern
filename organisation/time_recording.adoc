@@ -97,6 +97,12 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |31.10   |13:00   |17:00   |login-template bauen; Mysql
 |02.11   |12:15   |16:00   |Pflichtenheft, Design
 |02.11   |20:30   |23:00   |Pflichtenheft, Dialoglandkarte
+| | | |
+| | | |Sibebar
+|09.11 |11:00 |13:00 |Navbar Umbau, Template Re-design
+|13.11 |13:30 |17:45 |Sibebar, Btn-tootle, template Re-design
+
+
 
 |===
 
