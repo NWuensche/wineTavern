@@ -50,10 +50,10 @@
                         <div class="col-xs-12 reservation__box">
                             <div class="form-group" th:if="${tableMap} and not ${tableMap.isEmpty()}">
 
-                                <label for="tableid">Auswahl:</label>
-                                <select name="tableid" id="tableid" class="form-control">
-                                    <option name="option" id="option" th:each="entry:${tableMap}" th:value="${entry.value.id}"
-                                            th:text="'Tisch ' + ${entry.value.number} + ' , ' + ${entry.key} + ' min'">
+                                <label for="option">Auswahl:</label>
+                                <select name="option" id="option" class="form-control">
+                                    <option th:each="entry:${tableMap}" th:value="${entry.value.number} + ':' + ${entry.key}"
+                                            th:text="'Tisch ' + ${entry.value.number} + ' , ' + ${entry.key} + 'min'">
                                         infos</option>
                                 </select>
                             </div>

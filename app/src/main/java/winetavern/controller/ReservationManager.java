@@ -48,23 +48,24 @@ public class ReservationManager {
             model.put("tableMap",freeTables);
             freeTables.isEmpty();
 
-        } else if(submit.isPresent() && datetime.isPresent() && persons.isPresent() && table.isPresent() && name
-                .isPresent()){
+        } else if(submit.isPresent() && datetime.isPresent() && persons.isPresent() && name
+                .isPresent() && option.isPresent()){
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
             LocalDateTime start = LocalDateTime.parse(datetime.get(), formatter);
             LocalDateTime end = start.plusHours(2).plusMinutes(30);
 
+            String[] args = option.get().split(":"); //tableNumber:offset
+            System.out.println("T:O: " + Integer.parseInt(args[0]) + ':' + Integer.parseInt(args[1]));
             TimeInterval interval = new TimeInterval(start,end);
-            Reservation reservation = new Reservation(name.get(),tables.findOne(table.get()).get(),interval); //TODO
+            interval.moveIntervalByMinutes(Integer.parseInt(args[1]));
+            Reservation reservation = new Reservation(name.get(),
+                    tables.findByNumber(Integer.parseInt(args[0])).get(0), interval);
             reservations.save(reservation);
 
-            model.addAttribute("success","Reservierung wurde gespeichert");
-            model.addAttribute("userdata",persons.get().toString() + " Personen an Tisch " + table.get().toString() +
-                    " " +
-                    "auf " +
-                    "den Namen "
-                    + name.get() + " für " + datetime.get());
+            model.addAttribute("success", "Reservierung wurde gespeichert");
+            model.addAttribute("userdata", persons.get() + " Personen an Tisch " + args[0] + " " + "auf " +
+                    "den Namen " + name.get() + " für " + interval.getStart());
             return "reservation";
         }
 
