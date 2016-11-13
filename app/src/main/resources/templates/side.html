@@ -80,15 +80,15 @@
 
                 <!-- EVENTS -->
 
-                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#events">
+                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#events" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
                     <span>Events</span>
                 </a>
                 <div id="events" class="collapse">
-                    <a th:href="@{/admin/events}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/events}" class="list-group-item list-group-item-action side__menu side-module__container">
                         <span>Events</span>
                     </a>
-                    <a th:href="@{/events}" sec:authorize="!hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/events}" class="list-group-item list-group-item-action side__menu side-module__container">
                         <span>Events</span>
                     </a>
                 </div>
