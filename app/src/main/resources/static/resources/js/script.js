@@ -11,3 +11,13 @@ function clock(){
     document.getElementById("clock").innerHTML=(datetime.substr(0,datetime.indexOf(' '))
     + " " + checkTime(now.getHours()+offsetHours) + ":" + checkTime(now.getMinutes()+offsetMinutes));
 }
+
+jQuery(document).ready(function(){
+
+    // click sidebar toggle
+    $('#sidebarToggle').on('click', function(e){
+        e.preventDefault();
+        $('body').toggleClass('mini');
+    });
+
+});
