@@ -2,13 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 th:include="backend-temp :: page">
 <head>
-    <meta charset="UTF-8" />
+
     <title>Title</title>
 </head>
-<body>
-<div th:fragment="content">
-    <p>Edit von Daymenü Nr: </p><p th:text="${daymenu.id}"></p>
-    <p>Produkte:</p>
+<body th:fragment="content">
+<div class="row">
+    <div class="col-xs-12">
+        <div class="white__bg p">
+            <p>Edit von Daymenü Nr: <span th:text="${daymenu.id}"></span></p>
+        </div>
+    </div>
+</div>
+
+<div class="container__wrap">
+    <div class="heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <h1>
+                    <i class="fa fa-map" aria-hidden="true"></i>
+                    MenuItems
+                </h1>
+            </div>
+            <div class="col-xs-6 text-xs-right">
+                <a th:href="${'/admin/addMenuItem?frommenuitemid='+frommenuitemid}">
+                    <button type="button" class="btn btn-primary ">
+                        <i class="fa fa-plus fa-fw"></i>
+                        Produkt
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -25,12 +49,14 @@ th:include="backend-temp :: page">
             <td th:text="${item.name}"></td>
             <td></td>
             <td></td>
-            <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
-            </button></td>
+            <td>
+                <button type="button"  class="btn btn-primary">
+                    <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
-        <a th:href="${'/admin/addMenuItem?frommenuitemid='+frommenuitemid}">Produkt hinzufügen</a>
 </div>
 </body>
 </html>
