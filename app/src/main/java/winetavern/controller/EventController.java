@@ -35,17 +35,6 @@ public class EventController {
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
-        //FOR TESTING ONLY
-        if (eventCatalog.count() < 2) {
-            eventCatalog.save(new Event("Go hard or go home - Ü80 Party", Money.of(7, EURO),
-                    new TimeInterval(LocalDateTime.of(2016, 9, 11, 21, 30), LocalDateTime.of(2016, 9, 11, 23, 30)),
-                    "SW4G ist ein muss!"));
-            eventCatalog.save(new Event("Grillabend mit Musik von Barny dem Barden", Money.of(7, EURO),
-                    new TimeInterval(LocalDateTime.of(2016, 11, 11, 19, 30), LocalDateTime.of(2016, 11, 11, 23, 30)),
-                    "Es wird gegrillt und überteuerter Wein verkauft."));
-        }
-        //END
-
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         return "events";

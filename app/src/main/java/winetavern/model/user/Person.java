@@ -27,6 +27,12 @@ public class Person {
     @Deprecated
     protected Person() {}
 
+    /**
+     * @param userAccount needs to have exactly 1 role
+     * @param address can be null
+     * @param birthday can be null
+     * @throws IllegalArgumentException if userAccount has not exactly 1 Role
+     */
     public Person(UserAccount userAccount, String address, DateParameter birthday) throws IllegalArgumentException {
 
         if(numberOfRoles(userAccount) != 1) {

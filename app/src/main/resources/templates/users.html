@@ -1,131 +1,119 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:include="backend-temp :: page">
 <head th:include="links::links">
 
     <title>Users</title>
 
 </head>
-<body>
-
-    <main class="main container-fluid">
-        <div class="row">
-
-            <div class="col-md-3" th:include="side::side">
-
+<body th:fragment="content">
+<div class="container__wrap">
+    <div class="container__head">
+        <h1><span class="fa fa-users"></span> User List</h1>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Bearbeiten</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="staff : ${staffCollection}">
+            <th scope="row">1</th>
+            <td th:text="${staff.firstname}"></td>
+            <td th:text="${staff.lastname}"></td>
+            <td th:text="${staff.username}"></td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details"><i
+                        class="fa fa-user-circle" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
             </div>
-        <!--MAIN CONTENT-->
-
-            <div class="col-md-9 no-gutter">
-                <div th:include="navigation::navigation" ></div>
-
-                <div class="container">
-                    <div class="container__wrap">
-
-                        <div class="container__head">
-                            <h1><span class="fa fa-users"></span> User List</h1>
-                        </div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Username</th>
-                                    <th>Bearbeiten</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                    <tr th:each="staff : ${staffCollection}">
-                                        <th scope="row">1</th>
-                                        <td th:text="${staff.firstname}"></td>
-                                        <td th:text="${staff.lastname}"></td>
-                                        <td th:text="${staff.username}"></td>
-                                        <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                                        </button></td>
-                                    </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="card-columns">
-                                        <div class="card" th:each="staff : ${staffCollection}">
-                                            <img class="card-img-top rounded-circle" src="../resources/img/pika.jpg" alt="Profilbild"
-                                                 style="width:100px;"/>
-                                            <div class="card-block">
-                                                <h2 class="card-title" th:text="${staff.username}"></h2>
-                                                <a th:href="@{/login}"><button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
-                                                </button></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
+            <div class="modal-body">
+                <div class="card-columns">
+                    <div class="card" th:each="staff : ${staffCollection}">
+                        <img class="card-img-top rounded-circle" src="/resources/img/pokemon.jpg" alt="Profilbild"
+                             style="width:100px;"/>
+                        <div class="card-block">
+                            <h2 class="card-title" th:text="${staff.username}"></h2>
+                            <a th:href="@{/login}">
+                                <button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
-             </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
         </div>
-    </main>
+    </div>
+</div>
 
-                    <!--<div class="card">-->
-                        <!--<img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"-->
-                             <!--style="width:100px;"/>-->
-                        <!--<div class="card-block">-->
-                            <!--<h2 class="card-title">+ Mitarbeiter</h2>-->
-                            <!--<button type="button" class="btn btn-primary btn-lg"-->
-                                    <!--data-toggle="modal" data-target="#addNew">-->
-                                <!--<span class="fa fa-plus fa-lg"></span>-->
-                            <!--</button>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
+<!--<div class="card">-->
+<!--<img class="card-img-top rounded-circle" src="../resources/img/anonymous.png" alt="AnonymousPicture"-->
+<!--style="width:100px;"/>-->
+<!--<div class="card-block">-->
+<!--<h2 class="card-title">+ Mitarbeiter</h2>-->
+<!--<button type="button" class="btn btn-primary btn-lg"-->
+<!--data-toggle="modal" data-target="#addNew">-->
+<!--<span class="fa fa-plus fa-lg"></span>-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 
-            <!--<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">-->
-                <!--<div class="modal-dialog" role="document">-->
-                    <!--<div class="modal-content">-->
-                        <!--<div class="modal-header">-->
-                            <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-                                <!--<span aria-hidden="true">&times;</span>-->
-                            <!--</button>-->
-                            <!--<h3 class="modal-title">+ Mitarbeiter</h3>-->
-                        <!--</div>-->
-                        <!--<div class="modal-body">-->
-                            <!--<div class="container">-->
-                                <!--<form th:action="@{/addNew}" th:object="${accountcredentials}" method="post">-->
-                                    <!--<div class="form-group row">-->
-                                        <!--<label for="name" class="col-xs-6 form-control-label">Username</label>-->
-                                        <!--<div class="col-xs-6">-->
-                                            <!--<input name="name" id="name" type="text" required="true" size="15" th:field="*{username}"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="form-group row">-->
-                                        <!--<label for="password" class="col-xs-6 form-control-label">Login-Code:</label>-->
-                                        <!--<div class="col-xs-6">-->
-                                            <!--<input name="password" th:field="*{password}" type="password" pattern="[0-9]{4}" required="true" size="4"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>-->
-                                <!--</form>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+<!--<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">-->
+<!--<div class="modal-dialog" role="document">-->
+<!--<div class="modal-content">-->
+<!--<div class="modal-header">-->
+<!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--<span aria-hidden="true">&times;</span>-->
+<!--</button>-->
+<!--<h3 class="modal-title">+ Mitarbeiter</h3>-->
+<!--</div>-->
+<!--<div class="modal-body">-->
+<!--<div class="container">-->
+<!--<form th:action="@{/addNew}" th:object="${accountcredentials}" method="post">-->
+<!--<div class="form-group row">-->
+<!--<label for="name" class="col-xs-6 form-control-label">Username</label>-->
+<!--<div class="col-xs-6">-->
+<!--<input name="name" id="name" type="text" required="true" size="15" th:field="*{username}"/>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="form-group row">-->
+<!--<label for="password" class="col-xs-6 form-control-label">Login-Code:</label>-->
+<!--<div class="col-xs-6">-->
+<!--<input name="password" th:field="*{password}" type="password" pattern="[0-9]{4}" required="true" size="4"/>-->
+<!--</div>-->
+<!--</div>-->
+<!--<button class="btn btn-success btn-lg"><span class="fa fa-plus fa-lg"></span></button>-->
+<!--</form>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 
 
 </body>

@@ -35,13 +35,6 @@ public class ShiftController {
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
-        //FOR TESTING ONLY
-        if (shifts.count() < 1) {
-            if (personManager.count() > 0)
-                shifts.save(new Shift(new TimeInterval(time.getTime(), time.getTime().plusHours(3)),
-                        personManager.findAll().iterator().next()));
-        }
-        //END
 
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         Set<Shift> shiftsOfWeek = getShiftsOfWeek(week);     //get all shifts in this interval
