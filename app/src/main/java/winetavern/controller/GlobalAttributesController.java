@@ -26,5 +26,7 @@ public class GlobalAttributesController {
     public void setBusinessTime(Model model) {
         model.addAttribute("businessTime", businessTime.getTime().format(DateTimeFormatter.
                 ofLocalizedDateTime(FormatStyle.SHORT)));
+        model.addAttribute("minutes",businessTime.getTime().getMinute());
+        model.addAttribute("hours",businessTime.getTime().getHour());
     }
 }

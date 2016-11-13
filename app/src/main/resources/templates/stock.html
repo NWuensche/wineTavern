@@ -193,8 +193,17 @@
     </div>
 </div>
 
-<script>
+<script th:inline="javascript">
     $('#productDetails').modal('show');
+
+    /*<![CDATA[*/
+        var minutes = [[${minutes}]];
+        var hours = [[${hours}]];
+    /*]]>*/
+    var now = new Date();
+    var offsetMinutes = minutes - now.getMinutes();
+    var offsetHours = hours - now.getHours()%24;
+
 </script>
 
 </body>
