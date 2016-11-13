@@ -52,8 +52,8 @@
 
                                 <label for="option">Auswahl:</label>
                                 <select name="option" id="option" class="form-control">
-                                    <option th:each="entry:${tableMap}" th:value="${entry.value.number} + ':' + ${entry.key}"
-                                            th:text="'Tisch ' + ${entry.value.number} + ' , ' + ${entry.key} + 'min'">
+                                    <option th:each="entry:${tableMap}" th:value="${entry.value.id} + ',' + ${entry.key}"
+                                            th:text="'Tisch ' + ${entry.value.number} + ' , ' + ${entry.key.toLocalTime()}">
                                         infos</option>
                                 </select>
                             </div>
