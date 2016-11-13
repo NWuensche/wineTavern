@@ -173,6 +173,7 @@ button.logout__btn {
     left: 0px;
     padding: 2px 6px;
     border-radius: 0px 5px 5px 0px;
+    z-index: 111;
 }
 
 .btn-toogle .fa {
