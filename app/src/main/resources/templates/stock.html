@@ -1,24 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
 <head th:include="links::links">
 
     <title>Lager</title>
 
 </head>
-<body>
-
-<main class="main container-fluid">
-    <div class="row row-eq-height">
-
-        <div class="col-md-3" th:include="side::side">
-
-        </div>
-        <!--MAIN CONTENT-->
-
-        <div class="col-md-9 no-gutter">
-            <div th:include="navigation::navigation" ></div>
-
-            <div class="container">
+<body th:fragment="content">
                 <div class="container__wrap">
                     <div class="heading">
                         <div class="row">
@@ -66,11 +53,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
-</main>
-
 
 <!-- add Product Modal -->
 <div class="modal" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
