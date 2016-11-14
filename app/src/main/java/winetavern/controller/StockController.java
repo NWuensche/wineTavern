@@ -55,8 +55,10 @@ public class StockController {
     }
 
     @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price) {
-        stock.save(new InventoryItem(new Product(name, Money.of(Float.parseFloat(price), EURO)), Quantity.of(1)));
+    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price, @ModelAttribute("categories") String categories) {
+        Product newProduct = new Product(name, Money.of(Float.parseFloat(price), EURO));
+        newProduct.addCategory(categories);
+        stock.save(new InventoryItem(newProduct, Quantity.of(1)));
         return "redirect:/admin/stock";
     }
 
