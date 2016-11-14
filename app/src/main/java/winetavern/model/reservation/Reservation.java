@@ -15,6 +15,7 @@ public class Reservation {
     private long id;
 
     private String guestName;
+    private int persons;
     @ManyToOne(targetEntity=Table.class, cascade = CascadeType.ALL) Table table;
     @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
 
@@ -22,8 +23,9 @@ public class Reservation {
     @Deprecated
     protected Reservation(){}
 
-    public Reservation(String guestName, Table table, TimeInterval interval) {
+    public Reservation(String guestName, int persons, Table table, TimeInterval interval) {
         this.guestName = guestName;
+        this.persons = persons;
         this.table = table;
         this.interval = interval;
     }
@@ -38,6 +40,14 @@ public class Reservation {
 
     public void setGuestName(String guestName) {
         this.guestName = guestName;
+    }
+
+    public int getPersons() {
+        return persons;
+    }
+
+    public void setPersons(int persons) {
+        this.persons = persons;
     }
 
     public Table getTable() {

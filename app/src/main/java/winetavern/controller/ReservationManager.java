@@ -59,7 +59,7 @@ public class ReservationManager {
             System.out.println("T:O: " + Integer.parseInt(args[0]) + ':' + Integer.parseInt(args[1]));
             TimeInterval interval = new TimeInterval(start,end);
             interval.moveIntervalByMinutes(Integer.parseInt(args[1]));
-            Reservation reservation = new Reservation(name.get(),
+            Reservation reservation = new Reservation(name.get(),persons.get(),
                     tables.findByNumber(Integer.parseInt(args[0])).get(0), interval);
             reservations.save(reservation);
 
@@ -72,11 +72,38 @@ public class ReservationManager {
         return "reservation";
     }
 
+
     @RequestMapping("/reservation")
     public String showReservationTemplate(){return "reservation";}
 
+
+    @RequestMapping(value = "/allReservations", method = RequestMethod.GET)
+    public String showAllReservations(@RequestParam("sort") Optional<String> sort, Model model){
+        Iterable<Reservation> reservationIterator;
+
+        if(!sort.isPresent()) {
+            reservationIterator = reservations.findAll();
+        } else if(sort.get().equals("date")) {
+            reservationIterator = reservations.findAllByOrderByGuestName();
+        } else if(sort.get().equals("name")) {
+            reservationIterator = reservations.findAllByOrderByGuestName();
+        } else if(sort.get().equals("person")) {
+            reservationIterator = reservations.findAllByOrderByGuestName();
+        } else if(sort.get().equals("table")) {
+            reservationIterator = reservations.findAllByOrderByGuestName();
+        } else {
+            reservationIterator = reservations.findAll();
+        }
+
+        List<Reservation> reservationList = new ArrayList();
+        reservationIterator.forEach(reservationList::add);
+        model.addAttribute("reservationList",reservationList);
+        return "allreservations";
+    }
+
+
     private Map<Integer, Table> getFreeTables(LocalDateTime time,int capacity) {
-        Map<Integer, Table> res = new HashMap<>();
+        Map<Integer, Table> res = new TreeMap<>();
 
         TimeInterval interval = new TimeInterval(time, time.plusHours(2).plusMinutes(30));
         Iterable<Reservation> allReservations = reservations.findAll();

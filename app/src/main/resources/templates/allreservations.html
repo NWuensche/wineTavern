@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="links::links">
+
+    <title>Lager</title>
+
+</head>
+<body>
+
+<main class="main container-fluid">
+    <div class="row">
+
+        <div class="col-md-3" th:include="side::side">
+
+        </div>
+        <!--MAIN CONTENT-->
+
+        <div class="col-md-9 no-gutter">
+            <div th:include="navigation::navigation" ></div>
+
+            <div class="container">
+                <div class="container__wrap">
+                    <div class="container-fluid heading" style="border:1px solid black;">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h1><span class="fa fa-clock-o fa-lg"></span> Reservierungen</h1>
+                            </div>
+                            <div class="col-xs-6 text-xs-right">
+                                <a th:href="@{/reservation}">
+                                    <button class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> Reservierung
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped text-xs-center">
+                        <thead>
+                        <tr>
+
+                            <a th:href="@{'/allReservations?sort=date'}"><th class="text-xs-center">Datum</th></a>
+                            <a th:href="@{'/allReservations?sort=date'}"><th class="text-xs-center">Uhrzeit</th></a>
+                            <a th:href="@{'/allReservations?sort=name'}"><th class="text-xs-center">Name</th></a>
+                            <a
+                                    th:href="@{'/allReservations?sort=persons'}"><th class="text-xs-center">
+                                Personenzahl</th></a>
+                            <a th:href="@{'/allReservations?sort=table'}"><th class="text-xs-center">Tisch</th></a>
+                            <th class="text-xs-center">&Auml;ndern</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="reservation : ${reservationList}">
+                            <td th:text="${reservation.interval.start.toLocalDate()}"></td>
+                            <td
+                                    th:text="${reservation.interval.start.hour} + ':' + ${reservation.interval.start.minute}"></td>
+                            <td th:text="${reservation.guestName}"></td>
+                            <td th:text="${reservation.persons}"></td>
+                            <td
+                                    th:text="${reservation.table.number} + ' (' + ${reservation.table.capacity} + ' Pers.)'"></td>
+                            <td>
+                                <a th:href="@{'#'}">
+                                    <button type="button"  class="btn btn-primary">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<script>
+    $('#productDetails').modal('show');
+</script>
+
+</body>
+</html>

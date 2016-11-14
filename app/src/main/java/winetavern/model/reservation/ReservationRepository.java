@@ -12,4 +12,10 @@ import java.util.List;
 public interface ReservationRepository extends SalespointRepository<Reservation, Long> {
     //public List<Reservation> findByTime(LocalDateTime time);
     public List<Reservation> findByTable(Table table);
+
+
+    public List<Reservation> findAllByOrderByGuestName();
+    public List<Reservation> findAllByOrderByInterval();
+    public List<Reservation> findAllByOrderByTable();
+    public List<Reservation> findAllByOrderByPersons();
 }

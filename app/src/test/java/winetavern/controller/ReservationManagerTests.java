@@ -43,7 +43,7 @@ public class ReservationManagerTests extends AbstractWebIntegrationTests {
         TimeInterval interval = new TimeInterval(LocalDateTime.of(2016, 9, 11, 21, 30), LocalDateTime.of(2016, 9, 11,
                 23,
                 30));
-        Reservation reservation = new Reservation("myName",new Table(10,1),interval);
+        Reservation reservation = new Reservation("myName",4,new Table(10,1),interval);
         manager.save(reservation);
         assertThat(manager.findOne(reservation.getId()).get(), is(reservation));
     }
@@ -54,7 +54,7 @@ public class ReservationManagerTests extends AbstractWebIntegrationTests {
                 23,
                 30));
         Table table = new Table(10,1);
-        Reservation reservation = new Reservation("myName",table,interval);
+        Reservation reservation = new Reservation("myName",4,table,interval);
         manager.save(reservation);
         Optional<Reservation> it = manager.findOne(reservation.getId());
         assertThat(it.get(), is(reservation));
