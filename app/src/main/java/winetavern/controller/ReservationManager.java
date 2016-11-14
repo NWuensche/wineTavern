@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +21,9 @@ import java.util.*;
 @Controller
 public class ReservationManager {
 
-    @Autowired
-    TableRepository tables;
-    @Autowired
-    ReservationRepository reservations;
+    @Autowired TableRepository tables;
+    @Autowired ReservationRepository reservations;
+    @Autowired BusinessTime businessTime;
 
     @RequestMapping(value="/reservation",method = RequestMethod.POST)
     public String newReservation(@RequestParam("datetime") Optional<String> datetime, @RequestParam("persons")
@@ -54,7 +54,7 @@ public class ReservationManager {
 
             TimeInterval interval = new TimeInterval(start,end);
             Reservation reservation = new Reservation(name.get(),persons.get(),
-                    tables.findByNumber(Integer.parseInt(args[0])).get(0), interval);
+                    tables.findOne(Long.parseLong(args[0])).get(), interval);
 
             reservations.save(reservation);
 
@@ -77,26 +77,43 @@ public class ReservationManager {
     public String showAllReservations(@RequestParam("sort") Optional<String> sort, Model model){
         Iterable<Reservation> reservationIterator;
 
+        List<Reservation> reservationList = new LinkedList<>();
         if(!sort.isPresent()) {
             reservationIterator = reservations.findAll();
         } else if(sort.get().equals("date")) {
-            reservationIterator = reservations.findAllByOrderByGuestName();
+            reservationIterator = reservations.findAll();
+            reservationIterator.forEach(reservationList::add);
+            Collections.sort(reservationList, (o1, o2) -> o1.getInterval().getStart().compareTo(o2.getInterval().getStart()));
         } else if(sort.get().equals("name")) {
             reservationIterator = reservations.findAllByOrderByGuestName();
-        } else if(sort.get().equals("person")) {
-            reservationIterator = reservations.findAllByOrderByGuestName();
+            reservationIterator.forEach(reservationList::add);
+        } else if(sort.get().equals("persons")) {
+            reservationIterator = reservations.findAllByOrderByPersons();
+            reservationIterator.forEach(reservationList::add);
         } else if(sort.get().equals("table")) {
-            reservationIterator = reservations.findAllByOrderByGuestName();
+            reservationIterator = reservations.findAll();
+            reservationIterator.forEach(reservationList::add);
+            Collections.sort(reservationList, (o1, o2) -> Integer.compare(o1.getTable().getNumber(), o2.getTable().getNumber()));
         } else {
             reservationIterator = reservations.findAll();
+            reservationIterator.forEach(reservationList::add);
         }
 
-        List<Reservation> reservationList = new ArrayList();
-        reservationIterator.forEach(reservationList::add);
-        model.addAttribute("reservationList",reservationList);
+
+        reservationList = selectGreaterThanNow(reservationList);
+        model.addAttribute("reservationAmount", reservationList.size());
+        model.addAttribute("reservationList", reservationList);
         return "allreservations";
     }
 
+    private List<Reservation> selectGreaterThanNow(List<Reservation> list) {
+        List<Reservation> res = new LinkedList<>();
+        for (Reservation reservation: list)
+            if (reservation.getInterval().getEnd().isAfter(businessTime.getTime()))
+                res.add(reservation);
+
+        return res;
+    }
 
     private Map<LocalDateTime, Table> getFreeTables(LocalDateTime time, int capacity) {
         Map<LocalDateTime, Table> res = new TreeMap<>();

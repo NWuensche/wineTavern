@@ -23,7 +23,7 @@
                     <div class="container-fluid heading" style="border:1px solid black;">
                         <div class="row">
                             <div class="col-xs-6">
-                                <h1><span class="fa fa-clock-o fa-lg"></span> Reservierungen</h1>
+                                <h1><span class="fa fa-clock-o fa-lg"></span> Reservierungen (<span th:text="${reservationAmount}"></span>)</h1>
                             </div>
                             <div class="col-xs-6 text-xs-right">
                                 <a th:href="@{/reservation}">
@@ -37,25 +37,21 @@
                         <thead>
                         <tr>
 
-                            <a th:href="@{'/allReservations?sort=date'}"><th class="text-xs-center">Datum</th></a>
-                            <a th:href="@{'/allReservations?sort=date'}"><th class="text-xs-center">Uhrzeit</th></a>
-                            <a th:href="@{'/allReservations?sort=name'}"><th class="text-xs-center">Name</th></a>
-                            <a
-                                    th:href="@{'/allReservations?sort=persons'}"><th class="text-xs-center">
-                                Personenzahl</th></a>
-                            <a th:href="@{'/allReservations?sort=table'}"><th class="text-xs-center">Tisch</th></a>
+                            <th class="text-xs-center"><a th:href="@{'/allReservations?sort=date'}">Datum</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/allReservations?sort=date'}">Uhrzeit</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/allReservations?sort=name'}">Name</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/allReservations?sort=persons'}">Personenzahl</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/allReservations?sort=table'}">Tisch</a></th>
                             <th class="text-xs-center">&Auml;ndern</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="reservation : ${reservationList}">
                             <td th:text="${reservation.interval.start.toLocalDate()}"></td>
-                            <td
-                                    th:text="${reservation.interval.start.hour} + ':' + ${reservation.interval.start.minute}"></td>
+                            <td th:text="${reservation.interval.start.toLocalTime()}"></td>
                             <td th:text="${reservation.guestName}"></td>
                             <td th:text="${reservation.persons}"></td>
-                            <td
-                                    th:text="${reservation.table.number} + ' (' + ${reservation.table.capacity} + ' Pers.)'"></td>
+                            <td th:text="${reservation.table.number} + ' (' + ${reservation.table.capacity} + ' Pers.)'"></td>
                             <td>
                                 <a th:href="@{'#'}">
                                     <button type="button"  class="btn btn-primary">
