@@ -18,7 +18,8 @@ public class DayMenu {
     @Id @GeneratedValue Long id;
 
     private Calendar day;
-    @OneToMany(targetEntity=DayMenuItem.class, mappedBy="id")
+
+    @OneToMany(fetch=FetchType.EAGER, targetEntity=DayMenuItem.class, cascade=CascadeType.ALL, mappedBy="dayMenu")
     private List<DayMenuItem> dayMenuItems;
 
     public DayMenu() {}

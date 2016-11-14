@@ -93,7 +93,7 @@ public class DayMenuItemManager {
                                         BindingResult bindingResultDayMenuItem,
                                         ModelAndView modelAndView) {
 
-        if(dayMenuItem.getName() != null) {
+        if(dayMenuItem.getName() == null) {
             modelAndView.addObject("menuitem", dayMenuItem);
             modelAndView.setViewName("addmenuitem");
             return modelAndView;

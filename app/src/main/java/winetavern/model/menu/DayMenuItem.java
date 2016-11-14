@@ -13,16 +13,19 @@ import org.salespointframework.catalog.Product;
 @Entity
 public class DayMenuItem {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
     private MonetaryAmount price;
-    @ManyToOne(targetEntity = Product.class)
+
+    @OneToOne(fetch=FetchType.EAGER, targetEntity = Product.class)
+    @JoinColumn(name = "product_id")
     private Product product;
     private String name;
     private String description;
     private boolean enabled;
 
-    @ManyToOne(targetEntity = DayMenu.class)
+    @ManyToOne(fetch=FetchType.EAGER, targetEntity = DayMenu.class)
+    @JoinColumn(name = "day_menu_id")
     private DayMenu dayMenu;
 
     public DayMenuItem() {};
