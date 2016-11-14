@@ -108,13 +108,6 @@
                         <input type="text" class="form-control" name="categoryName" id="categoryName"
                                placeholder="Rotwein" />
                     </div>
-                    <div class="form-group">
-                        <label for="supercategory">Oberkategorie:</label>
-                        <select type="text" class="form-control" name="supercategory" id="supercategory">
-                            <option th:each="category : ${categories}" th:text="${category.name}"
-                                    th:value="category.name"></option>
-                        </select>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -158,8 +151,8 @@
                     <div class="form-group">
                         <label for="productcategory">Kategorie:</label>
                         <select type="text" class="form-control" name="prodcutcategory" id="productcategory">
-                            <option th:each="category : ${categories}" th:text="${category.name}"
-                                    th:value="category.name"></option>
+                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
+                                    th:value="${category.getCategoryName()}"></option>
                         </select>
                     </div>
                 </form>
