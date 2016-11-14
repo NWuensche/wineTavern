@@ -49,4 +49,23 @@ public enum Category {
         }
     }
 
+    public static String getDisplayNameCategory(String categoryName) {
+        switch(categoryName) {
+            case "RED_WINE":
+                return "Rotwein";
+            case "WHITE_WINE":
+                return "Weißwein";
+            case "SOFT_DRINK":
+                return "Alkoholfreie Getränke";
+            case "LIQUOR":
+                return "Spirituosen";
+            case "SNACK":
+                return "Snacks";
+            case "MENU":
+                return "Menüs";
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
 }
