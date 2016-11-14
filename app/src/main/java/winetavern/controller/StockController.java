@@ -55,9 +55,9 @@ public class StockController {
     }
 
     @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price, @ModelAttribute("categories") String categories) {
+    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price, @ModelAttribute("category") String category) {
         Product newProduct = new Product(name, Money.of(Float.parseFloat(price), EURO));
-        newProduct.addCategory(categories);
+        newProduct.addCategory(category);
         stock.save(new InventoryItem(newProduct, Quantity.of(1)));
         return "redirect:/admin/stock";
     }
@@ -65,12 +65,23 @@ public class StockController {
     @RequestMapping(value = "/admin/stock/changeProduct", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("productid") Product product,
                              @ModelAttribute("productname") String name,
-                             @ModelAttribute("productprice") String price) {
+                             @ModelAttribute("productprice") String price,
+                             @ModelAttribute("productcategory") String category) {
         product.setName(name);
+
         product.setPrice(Money.of(Float.parseFloat(price), EURO));
+
+        product = removeAllCategories(product);
+        product.addCategory(category);
+
         products.save(product);
 
         return "redirect:/admin/stock";
+    }
+
+    private Product removeAllCategories(Product product) {
+        product.getCategories().forEach(cat -> product.removeCategory(cat));
+        return product;
     }
 
     @RequestMapping(value = "/admin/stock/increaseQuantity", method = RequestMethod.POST)

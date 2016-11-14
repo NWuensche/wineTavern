@@ -73,8 +73,8 @@
                                min="0.01" step="0.01" max="10000"/>
                     </div>
                     <div class="form-group">
-                        <label for="categories">Kategorie:</label>
-                        <select type="text" class="form-control" name="categories" id="categories">
+                        <label for="category">Kategorie:</label>
+                        <select type="text" class="form-control" name="category" id="category">
                             <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
                                     th:value="${category.getCategoryName()}"></option>
                         </select>
@@ -133,7 +133,7 @@
             </div>
             <div class="modal-body">
                 <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post">
-                    <div class="form-group">
+                    <div class="form-group" hidden = "true">
                         <label for="productid">Produkt</label>
                         <input type="text" class="form-control" name="productid" id="productid" readonly="true"
                                th:value="${product.id}"/>
@@ -150,7 +150,7 @@
                     </div>
                     <div class="form-group">
                         <label for="productcategory">Kategorie:</label>
-                        <select type="text" class="form-control" name="prodcutcategory" id="productcategory">
+                        <select type="text" class="form-control" name="productcategory" id="productcategory">
                             <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
                                     th:value="${category.getCategoryName()}"></option>
                         </select>
