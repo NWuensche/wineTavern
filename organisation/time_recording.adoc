@@ -21,7 +21,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |21.10.2016 | 09:20 |13:00 | Erarbeitung Fragenkatalog und Prototypenprogrammierung (Videoshop)
 |28.10.2016 | 09:20 |12:40 | Vorstellen Prototypen, Aufgabenverteilung
 |04.11.2016 | 09:20 |12:40 | Abnahme Pflichtenheft, Aufteilung der Software auf Gruppenmitglieder
-|11.11.2016 | 09:40 |12:40 | Coden & trefen
+|11.11.2016 | 09:40 |12:40 | Treffen & Coden
 |===
 
 == Severin
@@ -63,6 +63,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 09.11.2016 | 09:00 | 17:00 | ...
 | 10.11.2016 | 14:00 | 18:30 | ...
 | 11.11.2016 | 13:00 | 14:50 | Reservation Controller
+| 13.11.2016 | 13:00 | 16:30 | Fixed the clock, worked on Reservation Controller
 |===
 
 == Niklas
@@ -82,6 +83,9 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 03.11.2016    | 15:00     | 17:00     | Tests mit Login verbinden
 | 04.11.2016    | 19:00     | 20:00     | User-Package einrichten
 | 05.11.2016    | 08:00     | 12:00     | Tests fixen
+| 08.11.2016    | 19:00     | 21:00     | Rollen in Personen integrieren
+| 09.11.2016    | 17:00     | 18:30     | Tests für neue Rollenmethoden schreiben
+| 10.11.2016    | 15:00     | 17:00     | Daten in Initalizer packen
 |===
 
 == Katharina
@@ -125,4 +129,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |07.11.2016 |11:00 |13:00 |verschiedenes
 |09.11.2016 |11:00 |12:00 |Menu Management
 |10.11.2016 |14:00 |15:00 |Menu Management
+|11.10.2016 |14:00 |18:00 |Menu Management
+|13.10.2016 |16:00 |18:00 |Menu Management
+|14.10.2016 |12:00 |16:00 |Menu Management
+|14.10.2016 |18:00 |20:00 |Menu Management
 |===

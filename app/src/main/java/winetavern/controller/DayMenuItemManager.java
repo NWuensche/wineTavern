@@ -1,6 +1,8 @@
 package winetavern.controller;
 
 import org.javamoney.moneta.*;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.stereotype.Controller;
@@ -64,6 +66,21 @@ public class DayMenuItemManager {
                 setValue(dayMenu);
             }
         });
+
+        binder.registerCustomEditor(Product.class, "product", new PropertyEditorSupport() {
+            @Override
+            public String getAsText() {
+                Product product = (Product) getValue();
+                if(product == null)
+                    return "";
+                return product.getId().toString();
+            }
+            @Override
+            public void setAsText(String text) {
+                Product product = productCatalog.findOne(text);
+                setValue(product);
+            }
+        });
     }
 
     /**
@@ -76,7 +93,7 @@ public class DayMenuItemManager {
                                         BindingResult bindingResultDayMenuItem,
                                         ModelAndView modelAndView) {
 
-        if(dayMenuItem.getProduct() != null) {
+        if(dayMenuItem.getName() == null) {
             modelAndView.addObject("menuitem", dayMenuItem);
             modelAndView.setViewName("addmenuitem");
             return modelAndView;

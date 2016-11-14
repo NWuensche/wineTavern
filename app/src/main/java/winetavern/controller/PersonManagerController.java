@@ -26,7 +26,7 @@ public class PersonManagerController {
         this.userAccountManager = userAccountManager;
     }
 
-    @RequestMapping("/admin/management/users")
+    @RequestMapping({"/admin/management/users", "/users"})
     public String addUsersMapper(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);

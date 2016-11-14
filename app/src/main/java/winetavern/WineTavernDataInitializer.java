@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import winetavern.model.DateParameter;
 import winetavern.model.management.*;
+import winetavern.model.stock.Category;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
@@ -35,30 +36,30 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ShiftRepository shifts;
+    private String adminName = "admin";
 
     @Override
     public void initialize() {
-        initializeAdmin(userAccountManager);
-        initializeEvents();
-        initializeStock();
-        initializeShift();
+        if(!isAdminInDB(userAccountManager, adminName)) {
+            initializeAdmin(userAccountManager);
+            initializeEvents();
+            initializeStock();
+            initializeShift();
+        }
     }
 
     private void initializeAdmin(UserAccountManager manager) {
-        String adminName = "admin";
+        UserAccount admin = manager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
+        admin.setFirstname("Hans-Peter");
+        admin.setLastname("Maffay");
+        admin.setEmail("peter.maffay@t-online.de");
+        manager.save(admin);
+        DateParameter date = new DateParameter();
+        date.setDay(15);
+        date.setMonth(7);
+        date.setYear(1979);
+        personManager.save(new Person(admin, "Wundstraße 7, 01217 Dresden", date));
 
-        if(!isAdminInDB(manager, adminName)) {
-            UserAccount admin = manager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
-            admin.setFirstname("Hans-Peter");
-            admin.setLastname("Maffay");
-            admin.setEmail("peter.maffay@t-online.de");
-            manager.save(admin);
-            DateParameter date = new DateParameter();
-            date.setDay(15);
-            date.setMonth(7);
-            date.setYear(1979);
-            personManager.save(new Person(admin, "Wundstraße 7, 01217 Dresden", date));
-        }
     }
 
     private boolean isAdminInDB(UserAccountManager manager, String adminName) {
@@ -76,8 +77,14 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     public void initializeStock() {
-        stock.save(new InventoryItem(new Product("Vodka", Money.of(12.50, EURO)), Quantity.of(15)));
-        stock.save(new InventoryItem(new Product("Berliner Brandstifter", Money.of(33.99, EURO)), Quantity.of(93)));
+        Product vodka = new Product("Vodka", Money.of(12.50, EURO));
+        vodka.addCategory(Category.LIQUOR.getCategoryName());
+
+        Product brandstifter = new Product("Berliner Brandstifter", Money.of(33.99, EURO));
+        brandstifter.addCategory(Category.LIQUOR.getCategoryName());
+
+        stock.save(new InventoryItem(vodka, Quantity.of(15)));
+        stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
     }
 
     /**

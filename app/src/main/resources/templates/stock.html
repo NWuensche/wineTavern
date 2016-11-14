@@ -16,11 +16,6 @@
                             </div>
                             <div class="col-xs-6 text-xs-right">
                                 <button type="button" class="btn btn-primary " data-toggle="modal"
-                                        data-target="#addCategory">
-                                    <i class="fa fa-plus fa-fw"></i>
-                                    Kategorie
-                                </button>
-                                <button type="button" class="btn btn-primary " data-toggle="modal"
                                         data-target="#addProduct">
                                     <i class="fa fa-plus fa-fw"></i>
                                     Produkt
@@ -31,6 +26,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>Kategorie</th>
                                 <th>Produkt</th>
                                 <th>Preis</th>
                                 <th>Menge</th>
@@ -39,6 +35,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="item : ${stockItems}">
+                                <td th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(item.product.getCategories().stream().findFirst().get())}"></td>
                                 <td th:text="${item.product.name}"></td>
                                 <td th:text="@{${item.product.price.number} + '€'}"></td>
                                 <td th:text="${item.quantity}"></td>
@@ -78,8 +75,8 @@
                     <div class="form-group">
                         <label for="category">Kategorie:</label>
                         <select type="text" class="form-control" name="category" id="category">
-                            <option th:each="category : ${categories}" th:text="${category.name}"
-                                    th:value="category.name"></option>
+                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
+                                    th:value="${category.getCategoryName()}"></option>
                         </select>
                     </div>
                 </form>
@@ -111,13 +108,6 @@
                         <input type="text" class="form-control" name="categoryName" id="categoryName"
                                placeholder="Rotwein" />
                     </div>
-                    <div class="form-group">
-                        <label for="supercategory">Oberkategorie:</label>
-                        <select type="text" class="form-control" name="supercategory" id="supercategory">
-                            <option th:each="category : ${categories}" th:text="${category.name}"
-                                    th:value="category.name"></option>
-                        </select>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -143,7 +133,7 @@
             </div>
             <div class="modal-body">
                 <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post">
-                    <div class="form-group">
+                    <div class="form-group" hidden = "true">
                         <label for="productid">Produkt</label>
                         <input type="text" class="form-control" name="productid" id="productid" readonly="true"
                                th:value="${product.id}"/>
@@ -160,9 +150,9 @@
                     </div>
                     <div class="form-group">
                         <label for="productcategory">Kategorie:</label>
-                        <select type="text" class="form-control" name="prodcutcategory" id="productcategory">
-                            <option th:each="category : ${categories}" th:text="${category.name}"
-                                    th:value="category.name"></option>
+                        <select type="text" class="form-control" name="productcategory" id="productcategory">
+                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
+                                    th:value="${category.getCategoryName()}"></option>
                         </select>
                     </div>
                 </form>
