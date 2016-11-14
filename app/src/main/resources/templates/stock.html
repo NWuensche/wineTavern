@@ -16,11 +16,6 @@
                             </div>
                             <div class="col-xs-6 text-xs-right">
                                 <button type="button" class="btn btn-primary " data-toggle="modal"
-                                        data-target="#addCategory">
-                                    <i class="fa fa-plus fa-fw"></i>
-                                    Kategorie
-                                </button>
-                                <button type="button" class="btn btn-primary " data-toggle="modal"
                                         data-target="#addProduct">
                                     <i class="fa fa-plus fa-fw"></i>
                                     Produkt
@@ -31,6 +26,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>Kategorie</th>
                                 <th>Produkt</th>
                                 <th>Preis</th>
                                 <th>Menge</th>
@@ -39,6 +35,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="item : ${stockItems}">
+                                <td th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(item.product.getCategories().stream().findFirst().get())}"></td>
                                 <td th:text="${item.product.name}"></td>
                                 <td th:text="@{${item.product.price.number} + '€'}"></td>
                                 <td th:text="${item.quantity}"></td>
