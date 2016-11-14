@@ -1,19 +1,13 @@
 package winetavern.controller;
 
-import com.sun.org.apache.regexp.internal.RE;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.reservation.Reservation;
-import winetavern.model.reservation.ReservationRepository;
-import winetavern.model.reservation.Table;
-import winetavern.model.reservation.TableRepository;
+import winetavern.model.reservation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,27 +27,28 @@ public class ReservationManager {
     @RequestMapping(value="/reservation",method = RequestMethod.POST)
     public String newReservation(@RequestParam("datetime") Optional<String> datetime, @RequestParam("persons")
             Optional<Integer> persons, @RequestParam("tableid") Optional<Long> table, @RequestParam("name")
-                                 Optional<String> name, @RequestParam("check") Optional<String> check, @RequestParam
-            ("submitdata") Optional<String> submit, @RequestParam("option") Optional<String> option, ModelMap model){
+            Optional<String> name, @RequestParam("check") Optional<String> check, @RequestParam("submitdata")
+            Optional<String> submit, @RequestParam("option") Optional<String> option, ModelMap model) {
 
         if(check.isPresent() && datetime.isPresent() && persons.isPresent()){
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
             LocalDateTime start = LocalDateTime.parse(datetime.get(), formatter);
 
-            Map<Integer,Table> freeTables = getFreeTables(start,persons.get().intValue());
+            Map<LocalDateTime,Table> freeTables = getFreeTables(start,persons.get().intValue());
 
             model.addAttribute("datetime",datetime.get());
             model.addAttribute("persons",persons.get().intValue());
             model.put("tableMap",freeTables);
-            freeTables.isEmpty();
 
         } else if(submit.isPresent() && datetime.isPresent() && persons.isPresent() && name
                 .isPresent() && option.isPresent()){
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-            LocalDateTime start = LocalDateTime.parse(datetime.get(), formatter);
+            String[] args = option.get().split(","); //tableId,localDateTime
+            LocalDateTime start = LocalDateTime.parse(args[1].replace("T", " "),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             LocalDateTime end = start.plusHours(2).plusMinutes(30);
+
 
             String[] args = option.get().split(":"); //tableNumber:offset
             System.out.println("T:O: " + Integer.parseInt(args[0]) + ':' + Integer.parseInt(args[1]));
@@ -61,11 +56,13 @@ public class ReservationManager {
             interval.moveIntervalByMinutes(Integer.parseInt(args[1]));
             Reservation reservation = new Reservation(name.get(),persons.get(),
                     tables.findByNumber(Integer.parseInt(args[0])).get(0), interval);
+
             reservations.save(reservation);
 
             model.addAttribute("success", "Reservierung wurde gespeichert");
-            model.addAttribute("userdata", persons.get() + " Personen an Tisch " + args[0] + " " + "auf " +
-                    "den Namen " + name.get() + " für " + interval.getStart());
+            model.addAttribute("userdata", persons.get() + " Personen an Tisch " +
+                    tables.findOne(Long.parseLong(args[0])).get().getNumber() + " " + "auf " +
+                    "den Namen " + name.get() + " für " + start.toLocalTime());
             return "reservation";
         }
 
@@ -102,30 +99,29 @@ public class ReservationManager {
     }
 
 
-    private Map<Integer, Table> getFreeTables(LocalDateTime time,int capacity) {
-        Map<Integer, Table> res = new TreeMap<>();
+    private Map<LocalDateTime, Table> getFreeTables(LocalDateTime time, int capacity) {
+        Map<LocalDateTime, Table> res = new TreeMap<>();
 
-        TimeInterval interval = new TimeInterval(time, time.plusHours(2).plusMinutes(30));
+
         Iterable<Reservation> allReservations = reservations.findAll();
-        List<Integer> offset = new LinkedList<>();
-        offset.add(0);
+        List<LocalDateTime> offset = new ArrayList<>();
+        offset.add(time);
         for(int i = 1; i < 6; i++) {
-            offset.add(i * 30);
-            offset.add(i * -30);
+            offset.add(time.plusMinutes(i * 30));
+            offset.add(time.minusMinutes(i * 30));
         }
-        for(Integer i:offset){
+        for(LocalDateTime i : offset){
             Iterable<Table> allTables = tables.findByCapacityGreaterThanEqualOrderByCapacity(capacity);
-            List<Table> tableList = new ArrayList();
+            List<Table> tableList = new ArrayList<>();
             allTables.forEach(tableList::add);
             for (Reservation reservation : allReservations) {
-                TimeInterval tempInterval = new TimeInterval(interval.getStart(), interval.getEnd());
-                tempInterval.moveIntervalByMinutes(i);
-                if(TimeInterval.intersects(reservation.getInterval(),tempInterval)){
+                TimeInterval interval = new TimeInterval(i, i.plusMinutes(150));
+                if(TimeInterval.intersects(reservation.getInterval(), interval)){
                     tableList.remove(reservation.getTable());
                 }
             }
-            if(i == 0 && !tableList.isEmpty()){
-                res.put(0,tableList.get(0));
+            if(i.equals(time) && !tableList.isEmpty()){
+                res.put(time, tableList.get(0));
                 return res;
             }
             if(!tableList.isEmpty()) res.put(i,tableList.get(0));

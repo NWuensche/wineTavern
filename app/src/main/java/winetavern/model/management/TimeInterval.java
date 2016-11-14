@@ -73,7 +73,8 @@ public class TimeInterval {
     }
 
     public static boolean intersects(TimeInterval first, TimeInterval second){
-        return (timeInInterval(first.getStart(),second) || timeInInterval(first.getEnd(),second));
+        return (timeInInterval(first.getStart(),second) || timeInInterval(first.getEnd(),second) ||
+                first.getStart().compareTo(second.getStart()) == 0 || first.getEnd().compareTo(second.getEnd()) == 0);
     }
 
     public static boolean timeInInterval(LocalDateTime time, TimeInterval interval){
