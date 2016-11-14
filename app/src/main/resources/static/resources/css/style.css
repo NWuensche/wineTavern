@@ -294,3 +294,22 @@ body.mini .list-group-item-action i{
 body.mini .list-group-item-action span {
     display: none;
 }
+
+/* RESERVATION */
+.reservation__box {
+    background:#fff;
+    padding:20px;
+    margin:5px;
+    border-radius:10px;
+    box-shadow:5px 5px 5px 0px grey;
+}
+
+.reservation__box label {
+    font-size:1.5rem;
+}
+
+.reservation__success {
+    font-size:2rem;
+    padding:5px;
+    border-radius:5px;
+}

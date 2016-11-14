@@ -35,30 +35,30 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ShiftRepository shifts;
+    private String adminName = "admin";
 
     @Override
     public void initialize() {
-        initializeAdmin(userAccountManager);
-        initializeEvents();
-        initializeStock();
-        initializeShift();
+        if(!isAdminInDB(userAccountManager, adminName)) {
+            initializeAdmin(userAccountManager);
+            initializeEvents();
+            initializeStock();
+            initializeShift();
+        }
     }
 
     private void initializeAdmin(UserAccountManager manager) {
-        String adminName = "admin";
+        UserAccount admin = manager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
+        admin.setFirstname("Hans-Peter");
+        admin.setLastname("Maffay");
+        admin.setEmail("peter.maffay@t-online.de");
+        manager.save(admin);
+        DateParameter date = new DateParameter();
+        date.setDay(15);
+        date.setMonth(7);
+        date.setYear(1979);
+        personManager.save(new Person(admin, "Wundstraße 7, 01217 Dresden", date));
 
-        if(!isAdminInDB(manager, adminName)) {
-            UserAccount admin = manager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
-            admin.setFirstname("Hans-Peter");
-            admin.setLastname("Maffay");
-            admin.setEmail("peter.maffay@t-online.de");
-            manager.save(admin);
-            DateParameter date = new DateParameter();
-            date.setDay(15);
-            date.setMonth(7);
-            date.setYear(1979);
-            personManager.save(new Person(admin, "Wundstraße 7, 01217 Dresden", date));
-        }
     }
 
     private boolean isAdminInDB(UserAccountManager manager, String adminName) {

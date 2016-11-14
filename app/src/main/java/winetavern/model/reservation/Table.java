@@ -19,7 +19,10 @@ public class Table {
     private int capacity;
     private int number;
 
-    public Table(int capacity, int number) throws IllegalArgumentException {
+    @Deprecated
+    protected Table(){}
+
+    public Table(int number, int capacity) throws IllegalArgumentException {
 
         if(capacity <= 0) {
             throw new IllegalArgumentException ("No Table should have capacity <= 0");
@@ -31,6 +34,10 @@ public class Table {
 
         this.number = number;
         this.capacity = capacity;
+    }
+
+    public  long getId() {
+        return id;
     }
 
     public int getNumber() {
