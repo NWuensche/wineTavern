@@ -348,3 +348,18 @@ body.mini .list-group-item-action span {
 .addMenuItem input:focus, .addMenuItem textarea:focus, .addMenuItem select:focus {
     box-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
+
+.addMenu form label {
+    background-color: #243648;
+    color: #A6B2C5;
+    border-radius: 0.2rem 0 0 0.2rem;
+}
+
+.addMenu .form-control {
+    border-radius: 0 0.2rem 0.2rem 0;
+    line-height: 1.4;
+}
+
+.addMenu input:focus {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
