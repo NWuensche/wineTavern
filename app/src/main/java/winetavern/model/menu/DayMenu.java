@@ -1,12 +1,12 @@
 package winetavern.model.menu;
 
-import com.sun.xml.internal.ws.developer.Serialization;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.persistence.*;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
 /**
  * Created by Michel on 11/3/2016.
  */
