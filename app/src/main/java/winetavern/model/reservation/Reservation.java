@@ -1,8 +1,8 @@
 package winetavern.model.reservation;
 
+import winetavern.model.management.TimeInterval;
+
 import javax.persistence.*;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 /**
  * Entity for a single reservation
@@ -15,15 +15,19 @@ public class Reservation {
     private long id;
 
     private String guestName;
+    private int persons;
     @ManyToOne(targetEntity=Table.class, cascade = CascadeType.ALL) Table table;
-    private LocalDateTime time;
-    private Duration duration;
+    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
 
-    public Reservation(String guestName, Table table, LocalDateTime time, Duration duration) {
+
+    @Deprecated
+    protected Reservation(){}
+
+    public Reservation(String guestName, int persons, Table table, TimeInterval interval) {
         this.guestName = guestName;
+        this.persons = persons;
         this.table = table;
-        this.time = time;
-        this.duration = duration;
+        this.interval = interval;
     }
 
     public long getId() {
@@ -38,6 +42,14 @@ public class Reservation {
         this.guestName = guestName;
     }
 
+    public int getPersons() {
+        return persons;
+    }
+
+    public void setPersons(int persons) {
+        this.persons = persons;
+    }
+
     public Table getTable() {
         return table;
     }
@@ -46,19 +58,11 @@ public class Reservation {
         this.table = table;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public TimeInterval getInterval() {
+        return interval;
     }
 
-    public void setTime(LocalDateTime date) {
-        this.time = time;
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setInterval(TimeInterval interval) {
+        this.interval = interval;
     }
 }
