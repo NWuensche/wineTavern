@@ -2,6 +2,7 @@ package winetavern.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,10 +51,8 @@ public class ReservationManager {
             LocalDateTime end = start.plusHours(2).plusMinutes(30);
 
 
-            String[] args = option.get().split(":"); //tableNumber:offset
-            System.out.println("T:O: " + Integer.parseInt(args[0]) + ':' + Integer.parseInt(args[1]));
+
             TimeInterval interval = new TimeInterval(start,end);
-            interval.moveIntervalByMinutes(Integer.parseInt(args[1]));
             Reservation reservation = new Reservation(name.get(),persons.get(),
                     tables.findByNumber(Integer.parseInt(args[0])).get(0), interval);
 
