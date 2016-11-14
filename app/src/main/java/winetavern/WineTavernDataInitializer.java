@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import winetavern.model.DateParameter;
 import winetavern.model.management.*;
+import winetavern.model.stock.Category;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
@@ -76,8 +77,14 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     public void initializeStock() {
-        stock.save(new InventoryItem(new Product("Vodka", Money.of(12.50, EURO)), Quantity.of(15)));
-        stock.save(new InventoryItem(new Product("Berliner Brandstifter", Money.of(33.99, EURO)), Quantity.of(93)));
+        Product vodka = new Product("Vodka", Money.of(12.50, EURO));
+        vodka.addCategory(Category.LIQUOR.getCategoryName());
+
+        Product brandstifter = new Product("Berliner Brandstifter", Money.of(33.99, EURO));
+        brandstifter.addCategory(Category.LIQUOR.getCategoryName());
+
+        stock.save(new InventoryItem(vodka, Quantity.of(15)));
+        stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
     }
 
     /**
