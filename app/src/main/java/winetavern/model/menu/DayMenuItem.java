@@ -16,6 +16,7 @@ public class DayMenuItem {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private MonetaryAmount price;
+    @ManyToOne(targetEntity = Product.class)
     private Product product;
     private String name;
     private String description;
