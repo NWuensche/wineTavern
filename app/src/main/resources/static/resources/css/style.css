@@ -225,6 +225,7 @@ button.logout__btn {
 .white__bg {
     background-color: #FFFFFF;
     margin: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 /** -------- TABLES -----**/
@@ -232,6 +233,7 @@ button.logout__btn {
 main .container__wrap{
     background:#FFF;
     margin: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 main .container__wrap .heading {
     background: #243648;
