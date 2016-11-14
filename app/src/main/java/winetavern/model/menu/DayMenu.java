@@ -1,9 +1,6 @@
 package winetavern.model.menu;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -19,7 +16,7 @@ public class DayMenu {
 
     private Calendar day;
 
-    @OneToMany(fetch=FetchType.EAGER, targetEntity=DayMenuItem.class, cascade=CascadeType.ALL, mappedBy="dayMenu")
+    @OneToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, cascade=CascadeType.ALL, mappedBy="dayMenu")
     private List<DayMenuItem> dayMenuItems;
 
     public DayMenu() {}
