@@ -293,6 +293,8 @@ body.mini .list-group-item-action i{
 }
 body.mini .list-group-item-action span {
     display: none;
+}
+
 /* RESERVATION */
 .reservation__box {
     background:#fff;

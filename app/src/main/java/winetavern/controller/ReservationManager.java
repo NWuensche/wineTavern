@@ -80,6 +80,7 @@ public class ReservationManager {
         List<Reservation> reservationList = new LinkedList<>();
         if(!sort.isPresent()) {
             reservationIterator = reservations.findAll();
+            reservationIterator.forEach(reservationList::add);
         } else if(sort.get().equals("date")) {
             reservationIterator = reservations.findAll();
             reservationIterator.forEach(reservationList::add);
