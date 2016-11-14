@@ -63,6 +63,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 09.11.2016 | 09:00 | 17:00 | ...
 | 10.11.2016 | 14:00 | 18:30 | ...
 | 11.11.2016 | 13:00 | 14:50 | Reservation Controller
+| 13.11.2016 | 13:00 | 16:30 | Fixed the clock, worked on Reservation Controller
 |===
 
 == Niklas
