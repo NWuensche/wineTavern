@@ -17,6 +17,7 @@
             </select>
         </div>
         <div th:if="${menuitem.product}">
+            <input type="hidden" th:field="*{product}" th:value="${menuitem.product}" />
             <h2>Schritt 2: Details angeben</h2>
             <p>Name: </p><input type="text" th:field="*{name}" />
             <p>Preis: </p><input type="text" th:field="*{price}"/>
