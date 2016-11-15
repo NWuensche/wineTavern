@@ -21,7 +21,7 @@
                     <img src="/resources/img/pokemon.jpg" class="image-user rounded-circle"/>
                     <span class="user-title" th:text="${#authentication.getName()}">USERNAME</span>
                     <div class="user-role" th:if="${!#authentication.getAuthorities().isEmpty()}">
-                        <p th:text="${#authentication.getAuthorities()[0]}">ROLE</p>
+                        <p th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(#authentication.getAuthorities()[0])}">ROLE</p>
                     </div>
                 </div>
             </div>
