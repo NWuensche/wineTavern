@@ -1,8 +1,6 @@
 package winetavern.model.management;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.user.Person;
-import winetavern.model.user.PersonManager;
 
 import javax.persistence.*;
 
@@ -15,7 +13,7 @@ public class Shift implements Comparable<Shift> {
     //@Transient @Autowired private PersonManager personManager;
 
     @Id @GeneratedValue private long id;
-    @ManyToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
+    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
     @ManyToOne private Person worker;
 
     @Deprecated

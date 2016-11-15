@@ -16,7 +16,7 @@ public class DayMenu {
 
     private Calendar day;
 
-    @OneToMany(fetch=FetchType.EAGER, targetEntity=DayMenuItem.class, cascade=CascadeType.ALL, mappedBy="dayMenu")
+    @OneToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, cascade=CascadeType.ALL, mappedBy="dayMenu")
     private List<DayMenuItem> dayMenuItems;
 
     public DayMenu() {}

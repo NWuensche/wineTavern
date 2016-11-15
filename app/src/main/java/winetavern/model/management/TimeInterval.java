@@ -1,10 +1,8 @@
 package winetavern.model.management;
 
 import org.salespointframework.time.Interval;
-import sun.util.resources.cldr.lag.LocaleNames_lag;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -72,14 +70,14 @@ public class TimeInterval {
         return this;
     }
 
-    public boolean intersects(TimeInterval other){
+    public boolean intersects(TimeInterval other) {
         return (timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
-                this.getStart().compareTo(other.getStart()) == 0 || this.getEnd().compareTo(other.getEnd()) == 0);
+                this.getStart().isEqual(other.getStart()) || this.getEnd().isEqual(other.getEnd()));
     }
 
-    public boolean timeInInterval(LocalDateTime time){
+    public boolean timeInInterval(LocalDateTime time) {
         Interval interval = this.toInterval();
-        return (interval.getStart().compareTo(time) == -1 &&
-                interval.getEnd().compareTo(time) == 1);
+        return (interval.getStart().isBefore(time) &&
+                interval.getEnd().isAfter(time));
     }
 }
