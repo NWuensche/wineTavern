@@ -40,7 +40,10 @@ public class DayMenuItemManager {
     private DayMenuRepository dayMenuRepository;
 
 
-
+    /**
+     * Initially called for adding a menu item.
+     * Data gets processed in  {@link #addMenuItemPost(DayMenuItem, BindingResult, ModelAndView)}
+     */
     @RequestMapping("/admin/addMenuItem")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         DayMenuItem dayMenuItem = new DayMenuItem();
@@ -51,7 +54,9 @@ public class DayMenuItemManager {
     }
 
 
-
+    /**
+     * Custom Initbinder makes DayMenu and Product usable with form
+     */
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
         binder.registerCustomEditor(DayMenu.class, "dayMenu", new PropertyEditorSupport() {

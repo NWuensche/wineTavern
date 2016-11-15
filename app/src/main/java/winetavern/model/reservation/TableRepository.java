@@ -11,5 +11,5 @@ import java.util.Optional;
 
 public interface TableRepository extends SalespointRepository<Table, Long> {
     public List<Table> findByCapacityGreaterThanEqualOrderByCapacity(Integer capacity);
-    public List<Table> findByNumber(Integer number);
+    public List<Table> findByName(String name);
 }

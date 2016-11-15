@@ -92,9 +92,9 @@ public class ReservationManager {
             reservationIterator = reservations.findAllByOrderByPersons();
             reservationIterator.forEach(reservationList::add);
         } else if(sort.get().equals("table")) {
-            reservationIterator = reservations.findAll();
+            /*reservationIterator = reservations.findAll();
             reservationIterator.forEach(reservationList::add);
-            Collections.sort(reservationList, (o1, o2) -> Integer.compare(o1.getTable().getNumber(), o2.getTable().getNumber()));
+            Collections.sort(reservationList, (o1, o2) -> Integer.compare(o1.getTable().getNumber(), o2.getTable().getNumber()));*/
         } else {
             reservationIterator = reservations.findAll();
             reservationIterator.forEach(reservationList::add);

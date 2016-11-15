@@ -15,11 +15,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import winetavern.model.DateParameter;
 import winetavern.model.management.*;
+import winetavern.model.reservation.Table;
+import winetavern.model.reservation.TableRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -36,6 +40,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ShiftRepository shifts;
+    @Autowired private TableRepository tableRepository;
     private String adminName = "admin";
 
     @Override
@@ -45,6 +50,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeEvents();
             initializeStock();
             initializeShift();
+            initializeTables();
         }
     }
 
@@ -85,6 +91,24 @@ public class WineTavernDataInitializer implements DataInitializer{
 
         stock.save(new InventoryItem(vodka, Quantity.of(15)));
         stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
+    }
+
+    public void initializeTables() {
+        //Ordinary tables
+        List<Table> tableList = new ArrayList<Table>();
+        tableList.add(new Table("1", 8));
+        tableList.add(new Table("2", 8));
+        tableList.add(new Table("3", 2));
+        tableList.add(new Table("4", 2));
+        tableList.add(new Table("5", 2));
+        tableList.add(new Table("6", 2));
+
+
+        //Bar
+        for(int i = 1; i <= 7; i++)
+            tableList.add(new Table("B" + String.valueOf(i), 1));
+
+        tableRepository.save(tableList);
     }
 
     /**
