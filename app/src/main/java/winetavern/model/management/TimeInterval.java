@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * @author Louis
+ * @author Louis, Michel
  */
 
 @Entity
@@ -23,7 +23,7 @@ public class TimeInterval {
     protected TimeInterval() {}
 
     public TimeInterval(LocalDateTime start, LocalDateTime end) {
-        this.start = start;
+        setStart(start);
         setEnd(end);
     }
 
@@ -72,12 +72,13 @@ public class TimeInterval {
         return this;
     }
 
-    public static boolean intersects(TimeInterval first, TimeInterval second){
-        return (timeInInterval(first.getStart(),second) || timeInInterval(first.getEnd(),second) ||
-                first.getStart().compareTo(second.getStart()) == 0 || first.getEnd().compareTo(second.getEnd()) == 0);
+    public boolean intersects(TimeInterval other){
+        return (timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
+                this.getStart().compareTo(other.getStart()) == 0 || this.getEnd().compareTo(other.getEnd()) == 0);
     }
 
-    public static boolean timeInInterval(LocalDateTime time, TimeInterval interval){
+    public boolean timeInInterval(LocalDateTime time){
+        Interval interval = this.toInterval();
         return (interval.getStart().compareTo(time) == -1 &&
                 interval.getEnd().compareTo(time) == 1);
     }

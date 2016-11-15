@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Sev
+ * @author Sev, Michel
  */
 
 public interface TableRepository extends SalespointRepository<Table, Long> {
     public List<Table> findByCapacityGreaterThanEqualOrderByCapacity(Integer capacity);
-    public List<Table> findByName(String name);
+    public Table findByName(String name);
 }
