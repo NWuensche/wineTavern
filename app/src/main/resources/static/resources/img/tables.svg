@@ -13,7 +13,7 @@
 </style>
 <rect x="700.2" y="663.1" class="st0" width="65.2" height="289.9"/>
 <rect x="700.2" y="602.5" class="st0" width="338.2" height="60.7"/>
-<rect x="640" y="900.2" class="st1" width="52.8" height="52.8"/>
+<rect x="640" y="900.2" class="st1" width="52.8" height="52.8" id="1"/>
 <rect x="640" y="808.1" class="st1" width="52.8" height="52.8"/>
 <rect x="640" y="715.9" class="st1" width="52.8" height="52.8"/>
 <rect x="640" y="623.8" class="st1" width="52.8" height="52.8"/>
