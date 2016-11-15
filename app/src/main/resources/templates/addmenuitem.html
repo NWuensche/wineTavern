@@ -16,36 +16,41 @@
 </div>
 
 <div class="row">
-    <div class="col-xs-6 offset-xs-3">
-        <form th:acction="@{/admin/addMenuItem}" th:object="${menuitem}" method="post"> 
+    <div class="col-xs-8 offset-xs-2">
+        <form th:action="@{/admin/addMenuItem}" th:object="${menuitem}" method="post"> 
+            <div class="form__bg">
+                <div class="dark__bg">
+                    <h2>Schritt 1: Produkt auswählen</h2>
+                </div>
 
-            <div class="dark__bg">
-                <h2>Schritt 1: Produkt auswählen</h2>
-            </div>
+                <div class="form-group"> 
+                    <label for="menuItem">Example select</label> 
+                    <select class="form-control" id="menuItem" th:field="${menuitem.product}"> 
+                        <option th:each="product : ${products}" th:value="${product.getId()}" th:text="${product.name}"> </option>
+                    </select> 
+                </div>
 
-            <div class="form-group"> 
-                <label for="menuItem">Example select</label> 
-                <select class="form-control" id="menuItem" th:field="${menuitem.product}"> 
-                    <option th:each="product : ${products}" th:value="${product.getId()}" th:text="${product.name}"> </option>
-                </select> 
-            </div>
+                 <div class="dark__bg">
+                    <h2>Schritt 2: Details angeben</h2>
+                </div>
+                <div class="form-group"> 
+                    <label for="formGroupExampleInput">Name</label> 
+                    <input type="text" class="form-control" id="formGroupExampleInput" th:field="*{name}"/> 
+                </div>
+                <div class="form-group">  <label for="formGroupExampleInput">Preis</label> 
+                    <input type="text" class="form-control" id="formGroupExampleInput" th:field="*{price}"/> 
+                </div>
+                <div class="form-group">  <label for="exampleTextarea">Beschreibung</label> 
+                    <textarea class="form-control" id="exampleTextarea" rows="3" th:field="*{description}"></textarea> 
+                </div>
 
-             <div class="dark__bg">
-                <h2>Schritt 2: Details angeben</h2>
+                <div class="row">
+                    <div class=" col-xs-6 offset-xs-3">
+                        <button type="submit" class="button btn btn-primary">Hau rein</button>
+                         <input type="hidden" th:field="*{dayMenu}" th:value="${menuitem.dayMenu}"/> 
+                    </div>
+                </div>
             </div>
-            <div class="form-group"> 
-                <label for="formGroupExampleInput">Name</label> 
-                <input type="text" class="form-control" id="formGroupExampleInput" th:field="*{name}"/> 
-            </div>
-            <div class="form-group">  <label for="formGroupExampleInput">Preis</label> 
-                <input type="text" class="form-control" id="formGroupExampleInput" th:field="*{price}"/> 
-            </div>
-            <div class="form-group">  <label for="exampleTextarea">Beschreibung</label> 
-                <textarea class="form-control" id="exampleTextarea" rows="3" th:field="*{description}"></textarea> 
-            </div>
-
-            <button>Hau rein</button>
-             <input type="hidden" th:field="*{dayMenu}" th:value="${menuitem.dayMenu}"/> 
         </form>
     </div>
 </div>
