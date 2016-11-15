@@ -5,15 +5,62 @@
     <title>Title</title>
 </head>
 <body th:fragment="content">
-
-    <h1>Liste aller vorhandenen Tageskarten:</h1>
-    <ul>
-        <li th:each="menu : ${menus}">
-            <a th:href="${'/admin/editMenu?id=' + menu.id}" th:text="${menu.getReadableDay()}"></a>
-            <a th:href="${'/admin/removeMenu?id=' + menu.id}">Löschen</a>
-        </li>
-    </ul>
-    <a th:href="@{/admin/addMenu}">Tageskarte hinzufügen</a>
-
+<div class="row">
+    <div class="col-xs-12">
+        <div class="white__bg">
+            <h1>Liste aller vorhandenen Tageskarten</h1>
+        </div>
+    </div>
+</div>
+    <div class="container__wrap">
+        <div class="heading">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1>
+                        <i class="fa fa-map" aria-hidden="true"></i>
+                        Tageskarte
+                    </h1>
+                </div>
+                <div class="col-xs-6 text-xs-right">
+                    <a th:href="@{/admin/addMenu}">
+                        <button type="button" class="btn btn-primary ">
+                            <i class="fa fa-plus fa-fw"></i>
+                            Menu
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Datum</th>
+                <th>Bearbeiten</th>
+                <th>Löschen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="menu : ${menus}">
+                <th scope="row">1</th>
+                <td th:text="${menu.getReadableDay()}"></td>
+                <td>
+                    <a th:href="${'/admin/editMenu?id=' + menu.id}">
+                        <button type="button"  class="btn btn-primary">
+                            <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="${'/admin/removeMenu?id=' + menu.id}">
+                        <button type="button"  class="btn btn-primary">
+                            <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

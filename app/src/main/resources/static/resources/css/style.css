@@ -10,9 +10,15 @@ body {
 
 
 h1 {
-	font-size: 3em;
-	line-height: 3.2em;
+	font-size: 2em;
+	line-height: 3em;
 	text-align:center;
+}
+
+h2 {
+    font-size: 1.3em;
+    font-weight: 200;
+    margin-bottom: 0;
 }
 
 button.btn-primary {
@@ -42,6 +48,10 @@ button.btn-primary:hover, button.btn-primary:active, button.btn-primary:focus {
 main > .row-eq-height > .col-md-3{
     background-color: #243648;
     min-height: 100vh;
+}
+
+.form-control:focus, a:focus,button:focus {
+    border-color: #1D997D;
 }
 
 /*------------------------------*/
@@ -91,9 +101,10 @@ main > .row-eq-height > .col-md-3{
 /*----------  NAVIGATION  -----------*/
 
 .nav__container {
-  padding: 0.2rem;
-  line-height: 3rem;
+    padding: 0.2rem;
+    line-height: 3rem;
     overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .nav-title {
@@ -221,13 +232,27 @@ button.logout__btn {
 
 /* ----- MAIN --- */
 
+.white__bg {
+    background-color: #FFFFFF;
+    margin: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
 
+.dark__bg {
+    background-color: #243648;
+    color: #A6B2C5;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    padding: 0.6rem;
+    border-radius: 0.3rem 0.3rem 0 0;
+    margin-bottom: 0.5rem;
+}
 
 /** -------- TABLES -----**/
 
 main .container__wrap{
     background:#FFF;
-    margin: 30px;
+    margin: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 main .container__wrap .heading {
     background: #243648;
@@ -312,4 +337,29 @@ body.mini .list-group-item-action span {
     font-size:2rem;
     padding:5px;
     border-radius:5px;
+}
+
+/* Form Style */
+
+.addMenuItem .form-group {
+    margin-bottom: -0.5rem;
+}
+
+.addMenuItem input:focus, .addMenuItem textarea:focus, .addMenuItem select:focus {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+
+.addMenu form label {
+    background-color: #243648;
+    color: #A6B2C5;
+    border-radius: 0.2rem 0 0 0.2rem;
+}
+
+.addMenu .form-control {
+    border-radius: 0 0.2rem 0.2rem 0;
+    line-height: 1.4;
+}
+
+.addMenu input:focus {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
