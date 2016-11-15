@@ -2,29 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:include="backend-temp :: page">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>Title</title>
 </head>
-<body>
-<div th:fragment="content">
-    <h1>Speise zur Karte hinzufügen: </h1>
-    <form th:acction="@{/admin/addMenuItem}" th:object="${menuitem}" method="post">
-        <div th:if="${menuitem.getProduct() == null}">
-            <h2>Schritt 1: Produkt auswählen</h2>
-            <select th:field="${menuitem.product}" >
-                <option th:each="product : ${products}" th:value="${product.getId()}" th:text="${product.name}">
-                </option>
-            </select>
+<body th:fragment="content">
+<div class="addMenuItem">
+<div class="row">
+    <div class="col-xs-12">
+        <div class="white__bg">
+            <h1>Speise zur Karte hinzufügen: </h1>
         </div>
-        <div th:if="${menuitem.product}">
-            <h2>Schritt 2: Details angeben</h2>
-            <p>Name: </p><input type="text" th:field="*{name}" />
-            <p>Preis: </p><input type="text" th:field="*{price}"/>
-            <p>Beschreibung: </p><input type="text" th:field="*{description}" />
-        </div>
-        <button>Hau rein</button>
-        <input type="hidden" th:field="*{dayMenu}" th:value="${menuitem.dayMenu}"/>
-    </form>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6 offset-xs-3">
+        <form th:acction="@{/admin/addMenuItem}" th:object="${menuitem}" method="post"> 
+
+            <div class="dark__bg">
+                <h2>Schritt 1: Produkt auswählen</h2>
+            </div>
+
+            <div class="form-group"> 
+                <label for="menuItem">Example select</label> 
+                <select class="form-control" id="menuItem" th:field="${menuitem.product}"> 
+                    <option th:each="product : ${products}" th:value="${product.getId()}" th:text="${product.name}"> </option>
+                </select> 
+            </div>
+
+             <div class="dark__bg">
+                <h2>Schritt 2: Details angeben</h2>
+            </div>
+            <div class="form-group"> 
+                <label for="formGroupExampleInput">Name</label> 
+                <input type="text" class="form-control" id="formGroupExampleInput" th:field="*{name}"/> 
+            </div>
+            <div class="form-group">  <label for="formGroupExampleInput">Preis</label> 
+                <input type="text" class="form-control" id="formGroupExampleInput" th:field="*{price}"/> 
+            </div>
+            <div class="form-group">  <label for="exampleTextarea">Beschreibung</label> 
+                <textarea class="form-control" id="exampleTextarea" rows="3" th:field="*{description}"></textarea> 
+            </div>
+
+            <button>Hau rein</button>
+             <input type="hidden" th:field="*{dayMenu}" th:value="${menuitem.dayMenu}"/> 
+        </form>
+    </div>
+</div>
+</div>
 </body>
 </html>

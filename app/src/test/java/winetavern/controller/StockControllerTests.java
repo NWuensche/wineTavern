@@ -1,6 +1,11 @@
 package winetavern.controller;
 
+import static org.salespointframework.core.Currencies.EURO;
+import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.*;
+
 import org.javamoney.moneta.Money;
+import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
@@ -9,10 +14,8 @@ import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
+import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-
-import static org.salespointframework.core.Currencies.EURO;
-import static org.junit.Assert.*;
 
 /**
  * @author Louis
@@ -22,13 +25,22 @@ import static org.junit.Assert.*;
 public class StockControllerTests extends AbstractWebIntegrationTests {
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ProductCatalog products;
+    private Product product;
 
-    private Product product = new Product("Äpfel", Money.of(1.99, EURO));
+    @Before
+    public void setUp() {
+        product = new Product("Äpfel", Money.of(1.99, EURO));
+        product.addCategory(Category.SNACK.getCategoryName());
+    }
 
     @Test
     public void addProductTest() {
         products.save(product);
+
         assertTrue(products.exists(product.getId()));
+
+        String savedProductCategory = products.findOne(product.getId()).get().getCategories().stream().findFirst().get();
+        assertThat(savedProductCategory, is(Category.SNACK.getCategoryName()));
     }
 
     @Test
@@ -36,4 +48,5 @@ public class StockControllerTests extends AbstractWebIntegrationTests {
         stock.save(new InventoryItem(product, Quantity.of(5)));
         assertTrue(stock.findByProduct(product).isPresent());
     }
+
 }
