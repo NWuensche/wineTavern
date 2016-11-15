@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class BillController {
 
-    @RequestMapping("/bill")
+    @RequestMapping("/bills")
     public String showBills(){
-        return "bill";
+        return "bills";
     }
 }
