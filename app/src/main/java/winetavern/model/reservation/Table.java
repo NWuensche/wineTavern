@@ -14,25 +14,21 @@ import java.util.List;
 public class Table {
 
     @Id @GeneratedValue private long id;
-    @ManyToMany(targetEntity=Reservation.class) List<Reservation> reservationList;
+    @ManyToMany(targetEntity=Reservation.class, mappedBy="table") List<Reservation> reservationList;
 
     private int capacity;
-    private int number;
+    private String name;
 
     @Deprecated
     protected Table(){}
 
-    public Table(int number, int capacity) throws IllegalArgumentException {
+    public Table(String name, int capacity) throws IllegalArgumentException {
 
         if(capacity <= 0) {
             throw new IllegalArgumentException ("No Table should have capacity <= 0");
         }
 
-        if(number <= 0) {
-            throw new IllegalArgumentException ("No Table should be identified by number <= 0");
-        }
-
-        this.number = number;
+        this.name = name;
         this.capacity = capacity;
     }
 
@@ -40,12 +36,12 @@ public class Table {
         return id;
     }
 
-    public int getNumber() {
-        return number;
+    public String getNumber() {
+        return name;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCapacity() {
@@ -54,5 +50,9 @@ public class Table {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public List<Reservation> getReservationList() {
+        return reservationList;
     }
 }

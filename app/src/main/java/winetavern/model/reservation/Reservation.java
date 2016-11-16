@@ -1,8 +1,12 @@
 package winetavern.model.reservation;
 
+import org.salespointframework.time.BusinessTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import winetavern.model.management.TimeInterval;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Entity for a single reservation
@@ -64,5 +68,9 @@ public class Reservation {
 
     public void setInterval(TimeInterval interval) {
         this.interval = interval;
+    }
+
+    public LocalDateTime getReservationStart() {
+        return interval.getStart();
     }
 }

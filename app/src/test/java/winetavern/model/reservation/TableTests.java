@@ -11,12 +11,12 @@ public class TableTests extends AbstractWebIntegrationTests{
 
     @Test(expected = IllegalArgumentException.class)
     public void TableContructorNegativeCapacityTest() {
-        Table table = new Table(-2,1);
+        Table table = new Table("1", -2);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void TableContructorNegativeNumberTest() {
-        Table table = new Table(5,-3);
+        //Table table = new Table(5,-3);
     }
 
 }
