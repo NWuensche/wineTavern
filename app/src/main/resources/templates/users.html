@@ -8,8 +8,22 @@
 </head>
 <body th:fragment="content">
 <div class="container__wrap">
-    <div class="container__head">
-        <h1><span class="fa fa-users"></span> User List</h1>
+    <div class="heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <h1>
+                    <span class="fa fa-users"></span> User List
+                </h1>
+            </div>
+            <div class="col-xs-6 text-xs-right">
+                <a th:href="@{'/adduser/'}">
+                    <button type="button" class="btn btn-primary ">
+                        <i class="fa fa-plus fa-fw"></i>
+                        User
+                    </button>
+                </a>
+            </div>
+        </div>
     </div>
     <table class="table table-striped">
         <thead>

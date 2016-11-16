@@ -31,7 +31,7 @@ public class PersonManagerController {
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
         model.addAttribute("staffCollection", userAccountManager.findEnabled());
-        return "adduser";
+        return "users";
     }
 
     @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
