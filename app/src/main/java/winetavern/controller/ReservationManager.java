@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.reservation.*;
 
@@ -109,17 +110,20 @@ public class ReservationManager {
     }
 
     @RequestMapping("/reservation/add")
-    public String reservationAdd(@RequestParam("reservationtime") String reservationTime,
-                                 @RequestParam("table") String tableName,
-                                 @RequestParam("duration") Integer duration,
-                                 @RequestParam("name") String name) {
+    public ModelAndView reservationAdd(@RequestParam("reservationtime") String reservationTime,
+                                       @RequestParam("table") String tableName,
+                                       @RequestParam("duration") Integer duration,
+                                       @RequestParam("name") String name,
+                                       ModelAndView mvc) {
         Table table = tables.findByName(tableName);
         LocalDateTime startTime = parseTime(reservationTime);
         LocalDateTime endTime = startTime.plusMinutes(duration);
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
         Reservation reservation = new Reservation(name, 0, table, timeInterval);
         reservations.save(reservation);
-        return "reservation";
+
+        mvc.setViewName("redirect:/reservation");
+        return mvc;
     }
 
 
