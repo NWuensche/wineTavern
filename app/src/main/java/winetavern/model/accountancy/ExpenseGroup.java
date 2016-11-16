@@ -1,15 +1,27 @@
 package winetavern.model.accountancy;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Created by Michel on 11/4/2016.
+ * @author Louis
  */
+
 @Entity
 public class ExpenseGroup {
-    @Id
-    private long id;
-
+    @GeneratedValue @Id private long id;
     private String description;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
