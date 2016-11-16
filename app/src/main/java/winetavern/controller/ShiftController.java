@@ -46,7 +46,7 @@ public class ShiftController {
     private List<Shift> getShiftsOfWeek(TimeInterval week) {
         List<Shift> res = new LinkedList<>();
         for (Shift shift : shifts.findAll())
-            if (TimeInterval.intersects(shift.getInterval(), week)) res.add(shift);
+            if (shift.getInterval().intersects(week)) res.add(shift);
 
         Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
         return res;

@@ -15,9 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 public class Reservation {
 
-    @Autowired
-    BusinessTime businessTime;
-
     @Id @GeneratedValue
     private long id;
 
@@ -75,9 +72,5 @@ public class Reservation {
 
     public LocalDateTime getReservationStart() {
         return interval.getStart();
-    }
-
-    public boolean isActive() {
-        return interval.timeInInterval(businessTime.getTime());
     }
 }

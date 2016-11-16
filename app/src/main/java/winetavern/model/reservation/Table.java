@@ -14,7 +14,7 @@ import java.util.List;
 public class Table {
 
     @Id @GeneratedValue private long id;
-    @ManyToMany(targetEntity=Reservation.class) List<Reservation> reservationList;
+    @ManyToMany(targetEntity=Reservation.class, mappedBy="table") List<Reservation> reservationList;
 
     private int capacity;
     private String name;
@@ -50,5 +50,9 @@ public class Table {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public List<Reservation> getReservationList() {
+        return reservationList;
     }
 }

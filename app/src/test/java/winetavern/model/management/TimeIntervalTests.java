@@ -40,9 +40,9 @@ public class TimeIntervalTests extends AbstractWebIntegrationTests {
         TimeInterval second = new TimeInterval(start.plusHours(1),start.plusHours(4));
         TimeInterval third = new TimeInterval(end.plusHours(2),end.plusHours(5));
 
-        assertTrue(TimeInterval.intersects(first,second));
-        assertTrue(TimeInterval.intersects(second,first));
-        assertFalse(TimeInterval.intersects(first,third));
-        assertFalse(TimeInterval.intersects(third,first));
+        assertTrue(first.intersects(second));
+        assertTrue(second.intersects(first));
+        assertFalse(first.intersects(third));
+        assertFalse(third.intersects(first));
     }
 }
