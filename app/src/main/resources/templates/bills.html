@@ -35,8 +35,8 @@
                     <tr th:each="bill: ${active}">
                         <a th:href="@{'/service/bills/details/' + ${bill.id}}">
                             <td th:text="bill.id"></td>
-                            <td th:text="bill.start"></td>
-                            <td th:text="bill.table.number"></td>
+                            <td th:text="bill.dateCreated"></td>
+                            <td th:text="bill.table"></td>
                         </a>
                     </tr>
                     </tbody>
@@ -57,8 +57,8 @@
                     <tbody>
                     <tr th:each="bill: ${old}">
                         <td th:text="bill.id"></td>
-                        <td th:text="bill.start"></td>
-                        <td th:text="bill.table.number"></td>
+                        <td th:text="bill.dateCreated"></td>
+                        <td th:text="bill.table"></td>
                     </tr>
                     </tbody>
                 </table>

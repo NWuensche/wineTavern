@@ -27,4 +27,20 @@ public class Expense extends AccountancyEntry {
         this.expenseGroup = expenseGroup;
         this.matureDate = matureDate;
     }
+
+    public void setExpenseGroup(ExpenseGroup expenseGroup) {
+        this.expenseGroup = expenseGroup;
+    }
+
+    public void setMatureDate(LocalDateTime matureDate) {
+        this.matureDate = matureDate;
+    }
+
+    public ExpenseGroup getExpenseGroup() {
+        return expenseGroup;
+    }
+
+    public LocalDateTime getMatureDate() {
+        return matureDate;
+    }
 }

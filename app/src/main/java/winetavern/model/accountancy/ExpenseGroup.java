@@ -11,17 +11,23 @@ import javax.persistence.Id;
 @Entity
 public class ExpenseGroup {
     @GeneratedValue @Id private long id;
-    private String description;
+    private String name;
+
+    public ExpenseGroup(String name) {
+        setName(name);
+    }
 
     public long getId() {
         return id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String description) {
+        if (name == null) throw new NullPointerException();
+        if (name.equals("")) throw new IllegalArgumentException("The name must not be empty");
+        this.name = description;
     }
 }
