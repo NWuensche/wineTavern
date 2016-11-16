@@ -339,13 +339,13 @@ body.mini .list-group-item-action span {
 
 /* Form Style */
 
-.addMenuItem .form__bg {
+.addMenuItem .form__bg, .addPerson .form__bg {
     background-color: #fff;
     border-radius: 0.2rem;
     overflow: hidden;
 }
 
-.addMenuItem .form-group {
+.addMenuItem .form-group, .addPerson .form-group {
     /*margin-bottom: -0.5rem;*/
     margin:0 3.5rem -0.3rem 3.5rem;
 }
@@ -354,10 +354,18 @@ body.mini .list-group-item-action span {
     width: 100%;
 }
 
-.addMenuItem input:focus, .addMenuItem textarea:focus, .addMenuItem select:focus {
+.addPerson button.btn-primary {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.addPerson input:focus, .addPerson textarea:focus, .addPerson select:focus {
     box-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
 
+.addMenuItem input:focus, .addMenuItem textarea:focus, .addMenuItem select:focus {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
 
 .addMenu form label {
     background-color: #243648;
