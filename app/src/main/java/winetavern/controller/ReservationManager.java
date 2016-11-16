@@ -31,6 +31,7 @@ public class ReservationManager {
 
     /**
      * Creates a List containing all reserved Tables at the givven time. Other tables can be assumed free.
+     * ToDo: Currently iterating through nearly all reservations. Make MySQL do the job.
      */
     public List<Table> getReservatedTablesByTime(LocalDateTime localDateTime) {
         Iterable<Table> allTables = tables.findAll();
@@ -64,8 +65,12 @@ public class ReservationManager {
         return nameList;
     }
 
+    /**
+     * returns true if the reservation is active in the next 2 hours.
+     */
     public boolean isActive(Reservation reservation, LocalDateTime localDateTime) {
-        return reservation.getInterval().timeInInterval(localDateTime);
+        TimeInterval timeInterval = new TimeInterval(localDateTime, localDateTime.plusHours(2));
+        return timeInterval.intersects(reservation.getInterval());
     }
 
     public LocalDateTime parseTime(String time) {
