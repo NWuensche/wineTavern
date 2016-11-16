@@ -4,10 +4,13 @@ import org.salespointframework.order.Order;
 import org.salespointframework.payment.PaymentMethod;
 import org.salespointframework.useraccount.UserAccount;
 
+import javax.persistence.*;
+
 /**
  * @author Louis
  */
 
+@Entity
 public class Bill extends Order {
     int table;
 
@@ -19,9 +22,5 @@ public class Bill extends Order {
     public Bill(UserAccount userAccount, PaymentMethod paymentMethod, int table) {
         super(userAccount, paymentMethod);
         this.table = table;
-    }
-
-    public int getTable() {
-        return table;
     }
 }

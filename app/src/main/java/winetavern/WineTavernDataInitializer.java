@@ -5,6 +5,9 @@ import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.order.Cart;
+import org.salespointframework.order.Order;
+import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
 import winetavern.model.management.*;
 import winetavern.model.stock.Category;
+import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
@@ -33,7 +37,9 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private PersonManager personManager;
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private ProductCatalog products;
     @Autowired private ShiftRepository shifts;
+    @Autowired private OrderManager<Order> bills;
     private String adminName = "admin";
 
     @Override
@@ -43,6 +49,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeEvents();
             initializeStock();
             initializeShift();
+            initializeBills();
         }
     }
 
@@ -83,6 +90,14 @@ public class WineTavernDataInitializer implements DataInitializer{
 
         stock.save(new InventoryItem(vodka, Quantity.of(15)));
         stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
+    }
+
+    private void initializeBills() {
+        Cart cart = new Cart();
+        cart.addOrUpdateItem(products.findAll().iterator().next(), Quantity.of(5));
+        Order order = new Order(userAccountManager.findAll().iterator().next());
+        cart.addItemsTo(order);
+        bills.save(order);
     }
 
     /**

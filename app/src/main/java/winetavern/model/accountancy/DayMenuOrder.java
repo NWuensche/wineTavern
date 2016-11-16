@@ -6,12 +6,16 @@ import org.salespointframework.quantity.Quantity;
 import winetavern.model.menu.DayMenuItem;
 
 import javax.money.MonetaryAmount;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * @author Louis
  */
+
+@Entity
 public class DayMenuOrder extends OrderLine {
-    private DayMenuItem item;
+    @OneToOne private DayMenuItem item;
 
     public DayMenuOrder(Product product, Quantity quantity) {
         super(product, quantity);

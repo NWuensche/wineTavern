@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
 import org.salespointframework.payment.Cash;
@@ -20,21 +21,22 @@ import winetavern.model.menu.DayMenuItem;
  */
 
 @Controller
-public class BillController {
-    @Autowired private OrderManager<Bill> bills;
+public class BillController {/*
+    @Autowired private OrderManager<Order> orders;
+    @Autowired private BillRepository bills;
     @Autowired private AuthenticationManager authenticationManager;
 
     @RequestMapping("/service/bills")
     public String showBills(Model model){
-        model.addAttribute("active", bills.findBy(OrderStatus.OPEN));
-        model.addAttribute("old", bills.findBy(OrderStatus.COMPLETED));
+        model.addAttribute("active", orders.findBy(OrderStatus.OPEN));
+        model.addAttribute("old", orders.findBy(OrderStatus.COMPLETED));
         return "bills";
     }
 
     @RequestMapping("/service/bills/add")
     public String addBill(@ModelAttribute String table) {
-        Bill bill = new Bill(authenticationManager.getCurrentUser().get(), Cash.CASH, Integer.parseInt(table));
-        bill.getDateCreated();
+        Order order = new Order(authenticationManager.getCurrentUser().get(), Cash.CASH);
+        Bill bill = new Bill(Integer.parseInt(table), order);
         bills.save(bill);
         return "bills";
     }
@@ -42,7 +44,7 @@ public class BillController {
     @RequestMapping("/service/bills/details/{billid}/add/{productid}")
     public String addProductToBill(@PathVariable("billid") Bill bill, @PathVariable("pid") DayMenuItem item,
                                    @ModelAttribute("qantity") String quantity) {
-        bill.add(new DayMenuOrder(item, Quantity.of(Float.parseFloat(quantity))));
+        bill.getOrder().add(new DayMenuOrder(item, Quantity.of(Float.parseFloat(quantity))));
         return "bills";
     }
 
@@ -50,5 +52,5 @@ public class BillController {
     public String showBillDetails(@PathVariable("billid") Bill bill) {
 
         return "bills";
-    }
+    }*/
 }
