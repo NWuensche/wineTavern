@@ -143,4 +143,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |13.10.2016 |16:00 |18:00 |Menu Management
 |14.10.2016 |12:00 |16:00 |Menu Management
 |14.10.2016 |18:00 |20:00 |Menu Management
+|15.10.2016 |09:45 |10:45 |Reservation Management
+|15.10.2016 |15:00 |20:00 |Reservation Management
+|16.10.2016 |13:00 |14:30 |Reservation Management
 |===
