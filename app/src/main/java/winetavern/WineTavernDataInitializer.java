@@ -6,8 +6,10 @@ import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.order.Cart;
+import org.salespointframework.order.ChargeLine;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
+import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
@@ -15,6 +17,8 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
+import winetavern.model.accountancy.Bill;
+import winetavern.model.accountancy.BillRepository;
 import winetavern.model.management.*;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
@@ -39,7 +43,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ProductCatalog products;
     @Autowired private ShiftRepository shifts;
-    @Autowired private OrderManager<Order> bills;
+    @Autowired private BillRepository bills;
     private String adminName = "admin";
 
     @Override
@@ -93,8 +97,10 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeBills() {
-        Order order = new Order(userAccountManager.findAll().iterator().next());
-        bills.save(order);
+        Order order = new Order(userAccountManager.findAll().iterator().next(), Cash.CASH);
+        order.add(new ChargeLine(Money.of(9.33, EURO), "charge"));
+        Bill bill = new Bill(1, order);
+        bills.save(bill);
     }
 
     /**

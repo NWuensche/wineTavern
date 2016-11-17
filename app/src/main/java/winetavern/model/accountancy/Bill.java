@@ -1,8 +1,6 @@
 package winetavern.model.accountancy;
 
 import org.salespointframework.order.Order;
-import org.salespointframework.payment.PaymentMethod;
-import org.salespointframework.useraccount.UserAccount;
 
 import javax.persistence.*;
 
@@ -11,16 +9,28 @@ import javax.persistence.*;
  */
 
 @Entity
-public class Bill extends Order {
+public class Bill {
+    @GeneratedValue @Id private long id;
     private int restaurant_table;
+    @OneToOne(cascade = CascadeType.ALL) private Order order;
 
-    public Bill(UserAccount userAccount, int table) {
-        super(userAccount);
-        this.restaurant_table = table;
+    @Deprecated
+    protected Bill() {}
+
+    public Bill(int restaurant_table, Order order) {
+        this.restaurant_table = restaurant_table;
+        this.order = order;
     }
 
-    public Bill(UserAccount userAccount, PaymentMethod paymentMethod, int table) {
-        super(userAccount, paymentMethod);
-        this.restaurant_table = table;
+    public long getId() {
+        return id;
+    }
+
+    public int getRestaurant_table() {
+        return restaurant_table;
+    }
+
+    public Order getOrder() {
+        return order;
     }
 }
