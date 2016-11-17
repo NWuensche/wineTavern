@@ -5,11 +5,6 @@ import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
-import org.salespointframework.order.Cart;
-import org.salespointframework.order.ChargeLine;
-import org.salespointframework.order.Order;
-import org.salespointframework.order.OrderManager;
-import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
@@ -18,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
 import winetavern.model.accountancy.Bill;
+import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillRepository;
 import winetavern.model.management.*;
+import winetavern.model.menu.DayMenuItem;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Person;
@@ -97,9 +94,8 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeBills() {
-        Order order = new Order(userAccountManager.findAll().iterator().next(), Cash.CASH);
-        order.add(new ChargeLine(Money.of(9.33, EURO), "charge"));
-        Bill bill = new Bill(1, order);
+        Bill bill = new Bill(1, personManager.findAll().iterator().next());
+        //bill.addItem(new BillItem(new DayMenuItem("Linsen mit Spätzle", "schmceckt nice", Money.of(4.33, EURO)), 5));
         bills.save(bill);
     }
 

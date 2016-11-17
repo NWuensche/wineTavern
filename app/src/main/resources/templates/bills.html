@@ -28,6 +28,7 @@
                     <tr>
                         <th><b>#</b></th>
                         <th>Tisch</th>
+                        <th>Betrag</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -35,6 +36,7 @@
                         <a th:href="@{'/service/bills/details/' + ${bill.id}}">
                             <td th:text="${bill.id}"></td>
                             <td th:text="${bill.restaurant_table}"></td>
+                            <td th:text="${bill.price}"></td>
                         </a>
                     </tr>
                     </tbody>
@@ -55,7 +57,6 @@
                     <tbody>
                     <tr th:each="bill: ${old}">
                         <td th:text="${bill.id}"></td>
-                        <td th:text="${bill.order.dateCreated}"></td>
                         <td th:text="${bill.restaurant_table}"></td>
                     </tr>
                     </tbody>

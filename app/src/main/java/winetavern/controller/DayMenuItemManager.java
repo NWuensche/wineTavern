@@ -1,15 +1,11 @@
 package winetavern.controller;
 
-import org.javamoney.moneta.*;
 import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.menu.DayMenu;
@@ -21,8 +17,6 @@ import winetavern.model.stock.ProductCatalog;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
-import java.time.DayOfWeek;
-import java.util.Map;
 
 
 /**
