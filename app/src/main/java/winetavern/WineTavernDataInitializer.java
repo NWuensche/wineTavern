@@ -93,10 +93,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeBills() {
-        Cart cart = new Cart();
-        cart.addOrUpdateItem(products.findAll().iterator().next(), Quantity.of(5));
         Order order = new Order(userAccountManager.findAll().iterator().next());
-        cart.addItemsTo(order);
         bills.save(order);
     }
 

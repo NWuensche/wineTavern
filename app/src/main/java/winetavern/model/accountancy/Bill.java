@@ -12,15 +12,15 @@ import javax.persistence.*;
 
 @Entity
 public class Bill extends Order {
-    int table;
+    private int restaurant_table;
 
     public Bill(UserAccount userAccount, int table) {
         super(userAccount);
-        this.table = table;
+        this.restaurant_table = table;
     }
 
     public Bill(UserAccount userAccount, PaymentMethod paymentMethod, int table) {
         super(userAccount, paymentMethod);
-        this.table = table;
+        this.restaurant_table = table;
     }
 }
