@@ -19,7 +19,7 @@
         <div class="col-md-9 no-gutter">
             <div th:include="navigation::navigation" ></div>
 
-            <div class="container" th:if="${success == null and table == null}">
+            <div class="container" th:if="${success == null and desk == null}">
                 <form method="get">
                     <div class="row">
                         <div class="col-xs-12 ">
@@ -35,14 +35,14 @@
                     </div>
                 </form>
 
-                    <div th:include="svgtables::svgtables">
+                    <div th:include="svgdesks::svgdesks">
 
                     </div>
             </div>
 
-            <div class="container" th:if="${table != null and reservationtime != null}">
+            <div class="container" th:if="${desk != null and reservationtime != null}">
                 <form method="post" action="/reservation/add">
-                    <p>Tisch: </p><input type="text" th:name="table" th:value="${table}" readonly="readonly" />
+                    <p>Tisch: </p><input type="text" th:name="desk" th:value="${desk}" readonly="readonly" />
                     <p>Datum und Uhrzeit:</p><input type="text" th:name="reservationtime" th:value="${reservationtime}" readonly="readonly" />
                     <p>Dauer in Minuten:</p><input type="text" th:name="duration" value="60" />
                     <p>Name des Reservators:</p><input type="text" th:name="name" />

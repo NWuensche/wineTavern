@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
 import winetavern.model.management.*;
-import winetavern.model.reservation.Table;
-import winetavern.model.reservation.TableRepository;
+import winetavern.model.reservation.Desk;
+import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
@@ -38,7 +38,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ShiftRepository shifts;
-    @Autowired private TableRepository tableRepository;
+    @Autowired private DeskRepository deskRepository;
     private String adminName = "admin";
 
     @Override
@@ -92,21 +92,21 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     public void initializeTables() {
-        //Ordinary tables
-        List<Table> tableList = new ArrayList<Table>();
-        tableList.add(new Table("1", 8));
-        tableList.add(new Table("2", 8));
-        tableList.add(new Table("3", 2));
-        tableList.add(new Table("4", 2));
-        tableList.add(new Table("5", 2));
-        tableList.add(new Table("6", 2));
+        //Ordinary desks
+        List<Desk> deskList = new ArrayList<Desk>();
+        deskList.add(new Desk("1", 8));
+        deskList.add(new Desk("2", 8));
+        deskList.add(new Desk("3", 2));
+        deskList.add(new Desk("4", 2));
+        deskList.add(new Desk("5", 2));
+        deskList.add(new Desk("6", 2));
 
 
         //Bar
         for(int i = 1; i <= 7; i++)
-            tableList.add(new Table("B" + String.valueOf(i), 1));
+            deskList.add(new Desk("B" + String.valueOf(i), 1));
 
-        tableRepository.save(tableList);
+        deskRepository.save(deskList);
     }
 
     /**

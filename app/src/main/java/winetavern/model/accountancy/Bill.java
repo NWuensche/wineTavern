@@ -2,13 +2,10 @@ package winetavern.model.accountancy;
 
 
 import org.salespointframework.accountancy.AccountancyEntry;
-import winetavern.model.reservation.Table;
+import winetavern.model.reservation.Desk;
 
 import javax.persistence.*;
 
-import winetavern.model.reservation.Table;
-
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,8 +14,8 @@ import java.util.List;
 
 @Entity
 public class Bill extends AccountancyEntry {
-    @ManyToOne(targetEntity = Table.class)
-    private Table table;
+    @ManyToOne(targetEntity = Desk.class)
+    private Desk desk;
 
     @OneToMany(targetEntity=BillItem.class)
     private List<BillItem> billItemList;

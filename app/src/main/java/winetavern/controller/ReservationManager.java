@@ -2,18 +2,14 @@ package winetavern.controller;
 
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.reservation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -24,43 +20,44 @@ import java.util.*;
 @Controller
 public class ReservationManager {
 
-    @Autowired TableRepository tables;
+    @Autowired
+    DeskRepository desks;
     @Autowired ReservationRepository reservations;
     @Autowired BusinessTime businessTime;
 
 
     /**
-     * Creates a List containing all reserved Tables at the givven time. Other tables can be assumed free.
+     * Creates a List containing all reserved Tables at the given time. Other desks can be assumed free.
      * ToDo: Currently iterating through nearly all reservations. Make MySQL do the job.
      */
-    public List<Table> getReservatedTablesByTime(LocalDateTime localDateTime) {
-        Iterable<Table> allTables = tables.findAll();
-        List<Table> reservedTables = new ArrayList<Table>();
-        for( Iterator<Table> tableIterator = allTables.iterator(); tableIterator.hasNext(); ) {
-            Table currentTable = tableIterator.next();
-            List<Reservation> reservationsOnCurrentTable = currentTable.getReservationList();
+    public List<Desk> getReservatedTablesByTime(LocalDateTime localDateTime) {
+        Iterable<Desk> allDesks = desks.findAll();
+        List<Desk> reservedDesks = new ArrayList<Desk>();
+        for(Iterator<Desk> deskIterator = allDesks.iterator(); deskIterator.hasNext(); ) {
+            Desk currentDesk = deskIterator.next();
+            List<Reservation> reservationsOnCurrentDesk = currentDesk.getReservationList();
 
 
-            for( Iterator<Reservation> reservationsIterator = reservationsOnCurrentTable.iterator();
+            for( Iterator<Reservation> reservationsIterator = reservationsOnCurrentDesk.iterator();
                     reservationsIterator.hasNext(); ) {
                 Reservation currentReservation = reservationsIterator.next();
                 if( isActive(currentReservation, localDateTime) ) {
-                    reservedTables.add(currentTable);
+                    reservedDesks.add(currentDesk);
                     break;
                 }
             }
         }
-        return reservedTables;
+        return reservedDesks;
     }
 
     /**
-     * makes thymeleaf working with the table object by removing everyhting but the name :)
+     * makes thymeleaf working with the desk object by removing everything but the name :)
      */
-    public List<String> tableToName(List<Table> tableList) {
+    public List<String> deskToName(List<Desk> deskList) {
         List<String> nameList = new ArrayList<String>();
-        for( Iterator<Table> tableIterator = tableList.iterator(); tableIterator.hasNext(); ) {
-            Table currentTable = tableIterator.next();
-            nameList.add(currentTable.getNumber());
+        for(Iterator<Desk> deskIterator = deskList.iterator(); deskIterator.hasNext(); ) {
+            Desk currentDesk = deskIterator.next();
+            nameList.add(currentDesk.getNumber());
         }
         return nameList;
     }
@@ -90,10 +87,10 @@ public class ReservationManager {
 
     @RequestMapping("/reservation")
     public String reservationTimeValidator(@RequestParam("reservationtime") Optional<String> reservationTime,
-                                           @RequestParam("table") Optional<String> table,
+                                           @RequestParam("desk") Optional<String> desk,
                                            Model model) {
-        if(table.isPresent()) {
-            model.addAttribute("table", table.get());
+        if(desk.isPresent()) {
+            model.addAttribute("desk", desk.get());
         }
 
         if(reservationTime.isPresent() == false || reservationTime.get() == "") {
@@ -110,21 +107,21 @@ public class ReservationManager {
 
     public String reservationTime(LocalDateTime localDateTime, Model model) {
         model.addAttribute("reservationtime", localDateTime);
-        model.addAttribute("reservations", tableToName(getReservatedTablesByTime(localDateTime)));
+        model.addAttribute("reservations", deskToName(getReservatedTablesByTime(localDateTime)));
         return "reservation";
     }
 
     @RequestMapping("/reservation/add")
     public ModelAndView reservationAdd(@RequestParam("reservationtime") String reservationTime,
-                                       @RequestParam("table") String tableName,
+                                       @RequestParam("desk") String deskName,
                                        @RequestParam("duration") Integer duration,
                                        @RequestParam("name") String name,
                                        ModelAndView mvc) {
-        Table table = tables.findByName(tableName);
+        Desk desk = desks.findByName(deskName);
         LocalDateTime startTime = parseTime(reservationTime);
         LocalDateTime endTime = startTime.plusMinutes(duration);
         TimeInterval timeInterval = new TimeInterval(startTime, endTime);
-        Reservation reservation = new Reservation(name, 0, table, timeInterval);
+        Reservation reservation = new Reservation(name, 0, desk, timeInterval);
         reservations.save(reservation);
 
         mvc.setViewName("redirect:/reservation");

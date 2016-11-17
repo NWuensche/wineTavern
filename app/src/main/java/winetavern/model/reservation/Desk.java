@@ -10,22 +10,22 @@ import java.util.List;
  * @author Sev
  */
 
-@Entity(name = "restaurant_table")
-public class Table {
+@Entity
+public class Desk {
 
     @Id @GeneratedValue private long id;
-    @ManyToMany(targetEntity=Reservation.class, mappedBy="table") List<Reservation> reservationList;
+    @ManyToMany(targetEntity=Reservation.class, mappedBy="desk") List<Reservation> reservationList;
 
     private int capacity;
     private String name;
 
     @Deprecated
-    protected Table(){}
+    protected Desk(){}
 
-    public Table(String name, int capacity) throws IllegalArgumentException {
+    public Desk(String name, int capacity) throws IllegalArgumentException {
 
         if(capacity <= 0) {
-            throw new IllegalArgumentException ("No Table should have capacity <= 0");
+            throw new IllegalArgumentException ("No Desk should have capacity <= 0");
         }
 
         this.name = name;

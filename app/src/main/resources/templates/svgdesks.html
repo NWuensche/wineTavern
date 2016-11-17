@@ -3,8 +3,8 @@
 <head th:include="links::links"></head>
 <body>
 
-    <div th:fragment="svgtables">
-        <svg version="1.1" id="svgtables" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    <div th:fragment="svgdesks">
+        <svg version="1.1" id="svgdesks" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 1280 1024" style="enable-background:new 0 0 1280 1024;" xml:space="preserve">
         <style type="text/css">
             .st0{stroke:#000000;stroke-miterlimit:10;}
@@ -74,23 +74,23 @@
         <text transform="matrix(1 0 0 1 831.6184 579.6964)" class="st4 st6">B6</text>
         <text transform="matrix(1 0 0 1 915.9438 579.6964)" class="st4 st6">B7</text>
         </svg>
-        <form id="tableSelector" method="get" action="/reservation">
+        <form id="deskSelector" method="get" action="/reservation">
             <input type="hidden" th:name="reservationtime" th:value="${reservationtime}"/>
-            <input type="hidden" th:name="table" name="table"/>
+            <input type="hidden" th:name="desk" name="desk"/>
         </form>
 
         <script th:inline="javascript" type="application/javascript">
         /*<![CDATA[*/
-            var reservedTables = [[${reservations}]];
-            $(reservedTables).each(function(index, value) {
+            var reservedDesks = [[${reservations}]];
+            $(reservedDesks).each(function(index, value) {
                 console.log(value);
                 $("#"+value).css({fill : '#f00'});
             });
             $(".st4").click(function() {
-                var tableName = $(this).text();
-                console.log(tableName);
-                $('input[name="table"]').val(tableName);
-                $('#tableSelector').submit();
+                var deskName = $(this).text();
+                console.log(deskName);
+                $('input[name="desk"]').val(deskName);
+                $('#deskSelector').submit();
             });
 
         /*]]>*/
