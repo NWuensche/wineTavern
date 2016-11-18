@@ -77,7 +77,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         date.setDay(15);
         date.setMonth(7);
         date.setYear(1979);
-        personManager.save(new Person(admin, "Wundstraße 7, 01217 Dresden", date));
+        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", date));
 
     }
 
