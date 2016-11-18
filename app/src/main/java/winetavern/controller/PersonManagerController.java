@@ -21,13 +21,8 @@ import winetavern.model.user.PersonManager;
 @Controller
 public class PersonManagerController {
 
-    UserAccountManager userAccountManager;
-    PersonManager personManager;
-
-    @Autowired
-    public PersonManagerController(UserAccountManager userAccountManager) {
-        this.userAccountManager = userAccountManager;
-    }
+    @Autowired private  UserAccountManager userAccountManager;
+    @Autowired private  PersonManager personManager;
 
     @RequestMapping({"/admin/management/users", "/users"})
     public String addUsersMapper(Model model){
@@ -40,12 +35,15 @@ public class PersonManagerController {
     @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
     public String addUser(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
+        newAccount.setFirstname(registerCredentials.getFirstName());
+        newAccount.setLastname(registerCredentials.getLastName());
+
         userAccountManager.save(newAccount);
 
         Person newPerson = new Person(newAccount, registerCredentials.getAddress(), registerCredentials.getBirthday());
         personManager.save(newPerson);
 
-        return "redirect:/admin/management/users";
+        return "redirect:/users";
     }
 
     public UserAccountManager getUserAccountManager(){
