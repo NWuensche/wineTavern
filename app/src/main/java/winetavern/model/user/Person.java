@@ -45,6 +45,25 @@ public class Person {
 
     }
 
+    /**
+     * @param userAccount needs to have exactly 1 role
+     * @param address can be null
+     * @param birthday can be null
+     * @throws IllegalArgumentException if userAccount has not exactly 1 Role
+     * @implNote TODO should be replaced by other constructor
+     */
+    public Person(UserAccount userAccount, String address, String birthday) throws IllegalArgumentException {
+
+        if(numberOfRoles(userAccount) != 1) {
+            throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
+        }
+
+        this.userAccount = userAccount;
+        this.address = address;
+        this.birthday = null;
+
+    }
+
     private int numberOfRoles(UserAccount userAccount) {
         return userAccount.getRoles().stream().collect(Collectors.toList()).size();
     }

@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.salespointframework.useraccount.Role;
 import org.springframework.ui.Model;
 import winetavern.AccountCredentials;
 import org.salespointframework.useraccount.UserAccount;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.user.Person;
+import winetavern.model.user.PersonManager;
 
 /**
  * Controller, which maps {@link Person} related stuff
@@ -20,6 +22,7 @@ import winetavern.model.user.Person;
 public class PersonManagerController {
 
     UserAccountManager userAccountManager;
+    PersonManager personManager;
 
     @Autowired
     public PersonManagerController(UserAccountManager userAccountManager) {
@@ -36,9 +39,11 @@ public class PersonManagerController {
 
     @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
     public String addUser(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
-        UserAccount account = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword());
+        UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
+        userAccountManager.save(newAccount);
 
-        userAccountManager.save(account);
+        Person newPerson = new Person(newAccount, registerCredentials.getAddress(), registerCredentials.getBirthday());
+        personManager.save(newPerson);
 
         return "redirect:/admin/management/users";
     }
