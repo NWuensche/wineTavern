@@ -24,6 +24,7 @@ import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
+import winetavern.model.user.PersonTitle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,8 +72,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         admin.setEmail("peter.maffay@t-online.de");
         manager.save(admin);
         String birthday = "1979/07/15";
-        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", birthday));
-
+        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
     }
 
     private boolean isAdminInDB(UserAccountManager manager, String adminName) {

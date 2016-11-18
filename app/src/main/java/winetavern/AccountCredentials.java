@@ -8,7 +8,7 @@ package winetavern;
 // TODO Make this an inner class of PersonManagerController
 public class AccountCredentials {
 
-    private String sex;
+    private String personTitle;
     private String firstName;
     private String lastName;
     private String birthday;
@@ -17,8 +17,8 @@ public class AccountCredentials {
     private String role;
     private String address;
 
-    public String getSex() {
-        return sex;
+    public String getPersonTitle() {
+        return personTitle;
     }
 
     public String getFirstName() {
@@ -49,8 +49,8 @@ public class AccountCredentials {
         return address;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setPersonTitle(String per) {
+        this.personTitle = per;
     }
 
     public void setFirstName(String firstName) {
