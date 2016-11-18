@@ -39,7 +39,7 @@ public class ReservationManager {
      */
     @InitBinder
     public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
-        binder.registerCustomEditor(LocalDateTime.class, "reservationtime", new LocalDateTimeEditor());
+        binder.registerCustomEditor(LocalDateTime.class, new LocalDateTimeEditor());
     }
 
     public class LocalDateTimeEditor extends PropertyEditorSupport {
