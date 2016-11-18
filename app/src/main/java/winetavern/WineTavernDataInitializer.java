@@ -11,7 +11,7 @@ import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import winetavern.model.DateParameter;
+
 import winetavern.model.management.*;
 import winetavern.model.management.Event;
 import winetavern.model.menu.DayMenu;
@@ -22,12 +22,9 @@ import winetavern.model.reservation.Desk;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.stock.ProductCategoryRepository;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
-import javax.money.MonetaryAmount;
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,11 +70,8 @@ public class WineTavernDataInitializer implements DataInitializer{
         admin.setLastname("Maffay");
         admin.setEmail("peter.maffay@t-online.de");
         manager.save(admin);
-        DateParameter date = new DateParameter();
-        date.setDay(15);
-        date.setMonth(7);
-        date.setYear(1979);
-        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", date));
+        String birthday = "1979/07/15";
+        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", birthday));
 
     }
 
