@@ -69,4 +69,8 @@ public class Bill {
     public Set<BillItem> getItems() {
         return items;
     }
+
+    public Person getStaff() {
+        return staff;
+    }
 }

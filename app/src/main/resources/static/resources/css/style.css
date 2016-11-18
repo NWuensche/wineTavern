@@ -256,6 +256,7 @@ main .container__wrap{
 }
 main .container__wrap .heading {
     background: #243648;
+    color: #A6B2C5;
 }
 main .container__wrap h1{
     background-color: #243648;
@@ -360,6 +361,24 @@ body.mini .list-group-item-action span {
     background:#2F3F52;
     border:1px solid #2f3f52;
     color:white;
+}
+
+.hidespinner input[type="number"]::-webkit-outer-spin-button,
+.hidespinner input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.hidespinner input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.card__daymenuitems a {
+    color:black;
+    text-decoration: none;
+}
+
+.card__daymenuitems .card:hover {
+    background:#eee;
 }
 
 /* Form Style */

@@ -15,24 +15,91 @@
     </ul>
 </div>
 <div class="container__wrap">
-    <h1>Rechnung</h1>
-    <p th:each="product : ${bill.items}">
-        <span th:text="${product.item.name}"></span>
-    </p>
+    <div class="heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <h1>Rechnung (<span th:text="${bill.price}"></span>)</h1>
+            </div>
+            <div class="col-xs-6">
+                Tisch <span th:text="${bill.restaurant_table}"></span><br/>
+                <span th:text="${bill.staff.userAccount.firstname}"></span>
+                <span th:text="${bill.staff.userAccount.lastname}"></span>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped text-xs-center hidespinner">
+        <thead>
+            <tr>
+                <th class="text-xs-center">Produkt</th>
+                <th class="text-xs-center">Anzahl</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${bill.items}">
+                <td><span th:utext="${product.item.name} + ' (' + ${product.item.price} + ')'"></span></td>
+                <td>
+                    <a class="btn" onclick="down(this)"><i class="fa fa-minus fa-lg"></i></a>
+                    <input type="number" th:id="${product.id}" th:value="${product.quantity}" size="2"
+                           th:min="${product.quantity}"
+                           max="99"></input>
+                    <a class="btn" onclick="up(this)"><i class="fa fa-plus fa-lg"></i></a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a onclick="save()">
+                        <button type="button" class="btn btn-primary" style="visibility:hidden;"
+                                                     id="submitbutton">
+                            Speichern
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 <br/>
 <div class="container__wrap">
-    <h1>Produkte</h1>
-    <div class="card-columns">
+    <h1>+ Produkte</h1>
+    <div class="card-columns card__daymenuitems">
 
         <div class="card" th:each="product:${menuitems}">
-            <a th:href="@{'/service/bills/details/' + ${bill.id} + '/add/' + ${product.id}}" style="border:1px solid
-            red;">
-                <h3 class="card-title" th:text="${product.name}">Name</h3>
-                <p class="card-text" th:text="${product.description}">Beschreibung</p>
+            <a th:href="@{'/service/bills/details/' + ${bill.id} + '/add/' + ${product.id}}">
+                <div class="card-block">
+                    <h3 class="card-title" th:text="${product.name}">Name</h3>
+                    <p class="card-text" th:text="${product.price}">Preis</p>
+                </div>
             </a>
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function down(node){
+        var input = node.parentNode.getElementsByTagName('input')[0];
+        if(parseInt(input.value) > parseInt(input.min)) {
+            input.value = parseInt(input.value) - 1;
+            document.getElementById("submitbutton").style.visibility = "visible";
+        }
+    }
+
+    function up(node){
+        var input = node.parentNode.getElementsByTagName('input')[0];
+        input.value = parseInt(input.value) + 1;
+        document.getElementById("submitbutton").style.visibility = "visible";
+    }
+
+    function save(){
+        var inputs = document.getElementsByTagName("input");
+        var query = "?save=";
+        for(i=0;i<inputs.length;i++){
+            query += inputs[i].id + "," + inputs[i].value + "|";
+        }
+        window.location = location.pathname + query;
+    }
+
+    /*]]>*/
+</script>
 </body>
 </html>
