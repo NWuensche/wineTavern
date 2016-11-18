@@ -36,8 +36,8 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 
 * Verwenden eigener `Bill` Klasse, statt `Bill extends Salespoint.Order` oder `Order order` als Attribut von `Bill`
 ** Obwohl die Klasse `Order` alle Funktionalitäten enthält, die man für eine Rechnung braucht, gab es einige Umsetzungsschwierigkeiten:
-*** Das erweitern der Klasse `Order`ist nicht möglich, da der *default constructor* private und somit in der Kindklasse nicht erreichbar ist
-*** Durch das Erstellen einer `Bill` Klasse mit einem Attribut `Order order` stellte sich einige Umwege beim Suchen der Aktiven und Archivierten Rechnungen ein. Desweiteren gab es einen Konflikt mit dem Schlagwort *Order* (=sortieren) und dem Suchen nach dem Attribut `Order order` in SQL.
+*** Das erweitern der Klasse `Order` ist nicht möglich, da der *default constructor* private und somit in der Kindklasse nicht erreichbar ist. Dies führt wiederrum zu einer Exception von Spring `No default constructor found; nested exception is java.lang.NoSuchMethodException`
+*** Durch das Erstellen einer `Bill` Klasse mit einem Attribut `Order order` stellten sich einige Umwege beim Suchen der Aktiven und Archivierten Rechnungen ein. Desweiteren gab es einen Konflikt mit dem Schlagwort *Order* (=sortieren) und dem Suchen nach dem Attribut `Order order` in SQL.
 ** Statt den obigen Designs haben wir uns deshalb zu einer unabhängigen Rechnungsklasse `Bill` entschieden, welche ein `Set<BillItem> items` enthält und diese wiederrum eine `@OneToOne` Verbindung zu Produkten die auf der aktuellen Tageskarte stehen. Somit ist auch sichergestellt, dass ausschließlich Produkte der Tageskarte verkauft werden.
 
 == Bausteinsicht
