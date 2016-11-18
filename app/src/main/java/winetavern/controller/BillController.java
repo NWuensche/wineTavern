@@ -14,7 +14,7 @@ import winetavern.model.accountancy.BillRepository;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
-import winetavern.model.reservation.TableRepository;
+import winetavern.model.reservation.DeskRepository;
 import winetavern.model.user.PersonManager;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class BillController {
     @Autowired private AuthenticationManager authenticationManager;
     @Autowired private PersonManager persons;
     @Autowired private DayMenuItemRepository dayMenuItems;
-    @Autowired private TableRepository tables;
+    @Autowired private DeskRepository tables;
 
     @RequestMapping("/service/bills")
     public String showBills(Model model){
