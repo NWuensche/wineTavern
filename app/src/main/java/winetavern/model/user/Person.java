@@ -24,6 +24,7 @@ public class Person {
 
     private String address;
     private LocalDate birthday;
+    private String personTitle;
 
     @Deprecated
     protected Person() {}
@@ -34,7 +35,7 @@ public class Person {
      * @param birthday can be null
      * @throws IllegalArgumentException if userAccount has not exactly 1 Role
      */
-    public Person(UserAccount userAccount, String address, String birthday) throws IllegalArgumentException {
+    public Person(UserAccount userAccount, String address, String birthday, String personTitle) throws IllegalArgumentException {
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
         }
@@ -42,6 +43,7 @@ public class Person {
         this.userAccount = userAccount;
         this.address = address;
         this.birthday = parseBirthday(birthday);
+        this.personTitle = personTitle;
     }
 
     private LocalDate parseBirthday(String birthday) {
@@ -83,6 +85,14 @@ public class Person {
         List<Role> roles = userAccount.getRoles().stream().collect(Collectors.toList());
         Role role = roles.get(0);
         return Roles.getDisplayNameRole(role);
+    }
+
+    public boolean isEnabled() {
+        return userAccount.isEnabled();
+    }
+
+    public String getPersonTitle() {
+        return personTitle;
     }
 
 }

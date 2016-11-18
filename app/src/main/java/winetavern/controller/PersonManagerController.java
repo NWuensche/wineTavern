@@ -21,14 +21,14 @@ import winetavern.model.user.PersonManager;
 @Controller
 public class PersonManagerController {
 
-    @Autowired private  UserAccountManager userAccountManager;
-    @Autowired private  PersonManager personManager;
+    @Autowired private UserAccountManager userAccountManager;
+    @Autowired private PersonManager personManager;
 
     @RequestMapping({"/admin/management/users", "/users"})
     public String addUsersMapper(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
-        model.addAttribute("staffCollection", userAccountManager.findEnabled());
+        model.addAttribute("personManager", personManager);
         return "users";
     }
 
@@ -40,7 +40,7 @@ public class PersonManagerController {
 
         userAccountManager.save(newAccount);
 
-        Person newPerson = new Person(newAccount, registerCredentials.getAddress(), registerCredentials.getBirthday());
+        Person newPerson = new Person(newAccount, registerCredentials.getAddress(), registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
         personManager.save(newPerson);
 
         return "redirect:/users";
