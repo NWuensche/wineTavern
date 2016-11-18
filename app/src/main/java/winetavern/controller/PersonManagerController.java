@@ -45,9 +45,4 @@ public class PersonManagerController {
 
         return "redirect:/users";
     }
-
-    public UserAccountManager getUserAccountManager(){
-        return userAccountManager;
-    }
-
 }
