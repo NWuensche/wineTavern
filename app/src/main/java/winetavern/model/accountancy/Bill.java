@@ -22,7 +22,7 @@ public class Bill {
     private int restaurant_table;
     private boolean isClosed = false;
     @ManyToOne private Person staff;
-    @OneToMany(fetch= FetchType.EAGER, targetEntity=BillItem.class, cascade=CascadeType.ALL) private Set<BillItem> items;
+    @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items;
 
     @Deprecated
     protected Bill() {}

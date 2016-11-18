@@ -42,8 +42,8 @@ public class BillController {
     }
 
     @RequestMapping("/service/bills/add")
-    public String addBill(@ModelAttribute String table) {
-        Bill bill = new Bill(1, persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
+    public String addBill(@ModelAttribute String desk) {
+        Bill bill = new Bill(Integer.parseInt(desk), persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
         bills.save(bill);
         return "bills";
     }

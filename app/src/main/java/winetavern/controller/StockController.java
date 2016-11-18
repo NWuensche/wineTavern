@@ -48,8 +48,7 @@ public class StockController {
         model.addAttribute("quantity", stockItem.getQuantity());
         model.addAttribute("categories", stockItem.getProduct().getCategories());
 
-        model.addAttribute("productAmount", stock.count());
-        model.addAttribute("stockItems", stock.findAll());
+        manageStock(model);
 
         return "stock";
     }
