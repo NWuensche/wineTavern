@@ -2,9 +2,10 @@ package winetavern.model.user;
 
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
-import winetavern.model.DateParameter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class Person {
     @OneToOne private UserAccount userAccount;
 
     private String address;
-    private Calendar birthday;
+    private LocalDate birthday;
 
     @Deprecated
     protected Person() {}
@@ -33,35 +34,25 @@ public class Person {
      * @param birthday can be null
      * @throws IllegalArgumentException if userAccount has not exactly 1 Role
      */
-    public Person(UserAccount userAccount, String address, DateParameter birthday) throws IllegalArgumentException {
-
+    public Person(UserAccount userAccount, String address, String birthday) throws IllegalArgumentException {
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
         }
 
         this.userAccount = userAccount;
         this.address = address;
-        this.birthday = (birthday != null) ? birthday.getCalendar() : null;
-
+        this.birthday = parseBirthday(birthday);
     }
 
-    /**
-     * @param userAccount needs to have exactly 1 role
-     * @param address can be null
-     * @param birthday can be null
-     * @throws IllegalArgumentException if userAccount has not exactly 1 Role
-     * @implNote TODO should be replaced by other constructor
-     */
-    public Person(UserAccount userAccount, String address, String birthday) throws IllegalArgumentException {
-
-        if(numberOfRoles(userAccount) != 1) {
-            throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
+    private LocalDate parseBirthday(String birthday) {
+        if(birthday == null) {
+            return null;
         }
 
-        this.userAccount = userAccount;
-        this.address = address;
-        this.birthday = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDate localDate = LocalDate.parse(birthday, formatter);
 
+        return localDate;
     }
 
     private int numberOfRoles(UserAccount userAccount) {
@@ -80,7 +71,7 @@ public class Person {
         return Optional.ofNullable(address);
     }
 
-    public Optional<Calendar> getBirthday() {
+    public Optional<LocalDate> getBirthday() {
         return Optional.ofNullable(birthday);
     }
 
