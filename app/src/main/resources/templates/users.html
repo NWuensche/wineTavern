@@ -7,6 +7,19 @@
 
 </head>
 <body th:fragment="content">
+
+<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+<script>
+    $(function() {
+        $( "#birthday" ).datepicker({
+            dateFormat: "yy/mm/dd",
+            minDate:'1920/01/02',
+            maxDate:'0',
+        });
+    });
+</script>
+
 <div class="users">
 <div class="row">
     <div class="col-xs-12 text-xs-right">
@@ -40,7 +53,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>#</th>
+            <th>Rolle</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Username</th>
@@ -49,7 +62,7 @@
         </thead>
         <tbody>
         <tr th:each="staff : ${staffCollection}">
-            <th scope="row">1</th>
+            <th th:text="staff.role"></th>
             <td th:text="${staff.firstname}"></td>
             <td th:text="${staff.lastname}"></td>
             <td th:text="${staff.username}"></td>
@@ -133,7 +146,7 @@
 
                             <div class="form-group"> 
                                 <label>Geburtstag</label> 
-                                <input name="birthday" type="date" class="form-control" /> 
+                                <input name="birthday" id="birthday" type="text" class="form-control" th:value="${birthday}"/> 
                             </div>
 
                             <div class="form-group"> 
@@ -175,11 +188,6 @@
     </div>
 </div>
 
-
-
-
-
-
-
 </body>
+
 </html>
