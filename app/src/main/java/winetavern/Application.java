@@ -45,7 +45,7 @@ public class Application {
             http.authorizeRequests().
                     antMatchers("/accountancy/**").hasAnyRole("ADMIN, ACCOUNTANCY").
                     antMatchers("/service/**").hasAnyRole("ADMIN, SERVICE").
-                    antMatchers("/kitchen/**").hasAnyRole("ADMIN, KITCHEN").
+                    antMatchers("/kitchen/**").hasAnyRole("ADMIN, COOK").
                     antMatchers("/visitor/**").permitAll().
                     antMatchers("/admin/**").hasRole("ADMIN").
                     antMatchers("/**").authenticated().and().

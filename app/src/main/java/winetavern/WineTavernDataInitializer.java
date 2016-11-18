@@ -13,17 +13,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
 import winetavern.model.accountancy.Bill;
-import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillRepository;
 import winetavern.model.management.*;
+import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
+import winetavern.model.menu.DayMenuRepository;
+import winetavern.model.reservation.Desk;
+import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -42,7 +48,11 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private ProductCatalog products;
     @Autowired private ShiftRepository shifts;
     @Autowired private BillRepository bills;
+    @Autowired private DeskRepository deskRepository;
+    @Autowired private DayMenuRepository dayMenuRepository;
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
+    @Autowired private ProductCatalog productCatalog;
+
     private String adminName = "admin";
 
     @Override
@@ -53,6 +63,8 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeStock();
             initializeShift();
             initializeBills();
+            initializeTables();
+            initializeDayMenuWithItems();
         }
     }
 
@@ -66,7 +78,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         date.setDay(15);
         date.setMonth(7);
         date.setYear(1979);
-        personManager.save(new Person(admin, "Wundstraße 7, 01217 Dresden", date));
+        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", date));
 
     }
 
@@ -99,6 +111,41 @@ public class WineTavernDataInitializer implements DataInitializer{
         Bill bill = new Bill(1, personManager.findAll().iterator().next());
         //bill.addItem(new BillItem(dayMenuItemRepository.findAll().iterator().next(), 5));
         bills.save(bill);
+    }
+
+    public void initializeTables() {
+        //Ordinary desks
+        List<Desk> deskList = new ArrayList<Desk>();
+        deskList.add(new Desk("1", 8));
+        deskList.add(new Desk("2", 8));
+        deskList.add(new Desk("3", 2));
+        deskList.add(new Desk("4", 2));
+        deskList.add(new Desk("5", 2));
+        deskList.add(new Desk("6", 2));
+
+
+        //Bar
+        for(int i = 1; i <= 7; i++)
+            deskList.add(new Desk("B" + String.valueOf(i), 1));
+
+        deskRepository.save(deskList);
+    }
+
+    public void initializeDayMenuWithItems() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2013, 10, 30);
+        DayMenu dayMenu = new DayMenu(calendar);
+        dayMenuRepository.save(dayMenu);
+
+        DayMenuItem vodka = new DayMenuItem("Vodka vom Fass", "really good", Money.of(2, "EUR"));
+        vodka.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        dayMenuItemRepository.save(vodka);
+
+        DayMenuItem berlinerBrandstifter = new DayMenuItem("Berliner Brandstifter", "der beste", Money.of(1.99, "EUR"));
+        berlinerBrandstifter.setProduct(productCatalog.findByName("Berliner Brandstifter").iterator().next());
+        dayMenuItemRepository.save(berlinerBrandstifter);
+
+
     }
 
     /**

@@ -10,5 +10,9 @@ import java.util.Calendar;
  */
 public interface DayMenuRepository extends CrudRepository<DayMenu, Long> {
     DayMenu findById(Long id);
+
+    /**
+     * @implNote can cause problems, be careful
+     */
     DayMenu findByDay(Calendar day);
 }
