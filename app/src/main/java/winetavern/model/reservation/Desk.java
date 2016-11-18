@@ -1,9 +1,6 @@
 package winetavern.model.reservation;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -14,7 +11,7 @@ import java.util.List;
 public class Desk {
 
     @Id @GeneratedValue private long id;
-    @ManyToMany(targetEntity=Reservation.class, mappedBy="desk") List<Reservation> reservationList;
+    @OneToMany(targetEntity=Reservation.class, mappedBy="desk") List<Reservation> reservationList;
 
     private int capacity;
     private String name;
