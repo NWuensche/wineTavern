@@ -381,3 +381,16 @@ body.mini .list-group-item-action span {
 .addMenu input:focus {
     box-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
+
+/* Users */
+
+.users .icon__button.btn-primary {
+    background-color: #fff;
+    border: none;
+    margin: 0.5rem 0;
+    border-radius: 0.3rem 0 0 0.2rem;
+}
+
+.users .icon__button .fa {
+    color: #243648;
+}
