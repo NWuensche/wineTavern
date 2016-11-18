@@ -1,18 +1,24 @@
 package winetavern.controller;
 
+import org.salespointframework.catalog.Product;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.menu.DayMenu;
 import winetavern.model.reservation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +34,33 @@ public class ReservationManager {
     @Autowired ReservationRepository reservations;
     @Autowired BusinessTime businessTime;
 
+    /**
+     * Custom Initbinder makes LocalDateTime working with javascript
+     */
+    @InitBinder
+    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+        binder.registerCustomEditor(LocalDateTime.class, "reservationtime", new LocalDateTimeEditor());
+    }
+
+    public class LocalDateTimeEditor extends PropertyEditorSupport {
+
+        // Converts a String to a LocalDateTime (when submitting form)
+        @Override
+        public void setAsText(String text) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+            LocalDateTime localDateTime = LocalDateTime.parse(text, formatter);
+            this.setValue(localDateTime);
+        }
+
+        // Converts a LocalDateTime to a String (when displaying form)
+        @Override
+        public String getAsText() {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+            String time = ((LocalDateTime)getValue()).format(formatter);
+            return time;
+        }
+
+    }
 
     /**
      * Creates a List containing all reserved Tables at the givven time. Other tables can be assumed free.
@@ -89,18 +122,18 @@ public class ReservationManager {
 
 
     @RequestMapping("/reservation")
-    public String reservationTimeValidator(@RequestParam("reservationtime") Optional<String> reservationTime,
+    public String reservationTimeValidator(@RequestParam(name = "reservationtime", required = false)
+                                                       LocalDateTime reservationTime,
                                            @RequestParam("table") Optional<String> table,
                                            Model model) {
         if(table.isPresent()) {
             model.addAttribute("table", table.get());
         }
 
-        if(reservationTime.isPresent() == false || reservationTime.get() == "") {
+        if(reservationTime == null) {
             return reservationCurrentTime(model);
         } else {
-            LocalDateTime localDateTime = parseTime(reservationTime.get());
-            return reservationTime(localDateTime, model);
+            return reservationTime(reservationTime, model);
         }
     }
 
@@ -109,6 +142,7 @@ public class ReservationManager {
     }
 
     public String reservationTime(LocalDateTime localDateTime, Model model) {
+        String test = localDateTime.toString();
         model.addAttribute("reservationtime", localDateTime);
         model.addAttribute("reservations", tableToName(getReservatedTablesByTime(localDateTime)));
         return "reservation";
