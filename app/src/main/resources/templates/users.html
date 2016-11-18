@@ -3,11 +3,12 @@
       th:include="backend-temp :: page">
 <head th:include="links::links">
 
-    <title>Users</title>
+    <title>Konten</title>
 
 </head>
 <body th:fragment="content">
 
+<!-- Calendar for birthday -->
 <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
 <script>
@@ -38,14 +39,14 @@
         <div class="row">
             <div class="col-xs-6">
                 <h1>
-                    <span class="fa fa-users"></span> User List
+                    <span class="fa fa-users"></span> Liste der Konten
                 </h1>
             </div>
             <div class="col-xs-6 text-xs-right">
                     <button type="button" class="btn btn-primary " data-toggle="modal"
                             data-target="#addNew">
                         <i class="fa fa-plus fa-fw"></i>
-                        User
+                        Konto
                     </button>
             </div>
         </div>
@@ -54,18 +55,20 @@
         <thead>
         <tr>
             <th>Rolle</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th>Anrede</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Nutzername</th>
             <th>Bearbeiten</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="staff : ${staffCollection}">
-            <th th:text="staff.role"></th>
-            <td th:text="${staff.firstname}"></td>
-            <td th:text="${staff.lastname}"></td>
-            <td th:text="${staff.username}"></td>
+        <tr th:each="person : ${personManager.findAll()}">
+            <th th:text="${person.displayNameOfRole}"></th>
+            <th th:text="${person.personTitle}"></th>
+            <td th:text="${person.userAccount.firstname}"></td>
+            <td th:text="${person.userAccount.lastname}"></td>
+            <td th:text="${person.userAccount.username}"></td>
             <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details"><i
                         class="fa fa-user-circle" aria-hidden="true"></i>
@@ -128,9 +131,9 @@
 
                             <div class="form-group"> 
                                 <label>Anrede</label> 
-                                <select class="form-control" name="sex"> 
-                                    <option th:value="female">Frau </option>
-                                    <option th:value="male">Herr </option>
+                                <select class="form-control" name="personTitle"> 
+                                    <option th:each="personTitle : ${T(winetavern.model.user.PersonTitle).values()}" th:text="${personTitle.getGerman()}"
+                                            th:value="${personTitle.getGerman()}"></option>
                                 </select> 
                             </div>
 
@@ -151,12 +154,12 @@
 
                             <div class="form-group"> 
                                 <label>Username</label> 
-                                <input name="username" type="text" class="form-control" placeholder="mueller" required="true"/> 
+                                <input name="username" type="text" class="form-control" placeholder="hMueller" required="true"/> 
                             </div>
 
                             <div class="form-group"> 
                                 <label>Password</label> 
-                                <input name="password" type="password" class="form-control" placeholder="automatisch erstellt? hmueller" required="true" pattern="[0-9]{4}"/> 
+                                <input name="password" type="password" class="form-control" required="true" pattern="[0-9]{4}"/> 
                             </div>
 
                             <div class="form-group"> 
