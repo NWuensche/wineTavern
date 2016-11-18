@@ -1,4 +1,4 @@
-jQuery(document).ready(function(){
+$(document).ready(function(){
 
     // click sidebar toggle
     $('#sidebarToggle').on('click', function(e){
