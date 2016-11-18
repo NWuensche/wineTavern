@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head>
+
+</head>
+<body th:fragment="content" class="bills">
+<div class="bill__tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/service/bills}"><i class="fa fa-arrow-left"></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active">Rechnung #<span th:text="${bill.id}"></span></a>
+        </li>
+    </ul>
+</div>
+<div class="container__wrap">
+    <h1>Rechnung</h1>
+    <p th:each="product : ${bill.items}">
+        <span th:text="${product.item.name}"></span>
+    </p>
+</div>
+<br/>
+<div class="container__wrap">
+    <h1>Produkte</h1>
+    <div class="card-columns">
+
+        <div class="card" th:each="product:${menuitems}">
+            <a th:href="@{'/service/bills/details/' + ${bill.id} + '/add/' + ${product.id}}" style="border:1px solid
+            red;">
+                <h3 class="card-title" th:text="${product.name}">Name</h3>
+                <p class="card-text" th:text="${product.description}">Beschreibung</p>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -34,4 +34,12 @@ public class BillItem {
     public long getId() {
         return id;
     }
+
+    public DayMenuItem getItem() {
+        return item;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }
