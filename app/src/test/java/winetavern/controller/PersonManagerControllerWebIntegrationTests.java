@@ -45,7 +45,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
 
     private RequestBuilder createRequestBuilder(String userName, String password) {
         RequestBuilder request = post("/admin/management/users/addNew").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("sex", "female")
+                .param("personTitle", "Herr")
                 .param("firstName", "Hans")
                 .param("lastName", "Müller")
                 .param("birthday", "1990/12/12")
@@ -107,6 +107,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         assertThat(person.get().getBirthday().get(), is(LocalDate.of(1990,12,12)));
         assertThat(person.get().getAddress().get(), is("Mein Haus"));
         assertThat(person.get().getDisplayNameOfRole(), is("Koch"));
+        assertThat(person.get().getPersonTitle(), is("Herr"));
     }
 
 }
