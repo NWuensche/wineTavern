@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
 import winetavern.model.DateParameter;
 
+import java.time.LocalDate;
+
 /**
  * Test class for {@link Person}
  */
@@ -27,16 +29,13 @@ public class PersonTests extends AbstractIntegrationTests{
     private Person person;
     private String address;
     private UserAccount acc;
-    DateParameter birthday;
+    private String birthday;
 
     @Before
     public void setUp() {
         acc = userAccountManager.create("testAccount", "1234", Role.of(Roles.SERVICE.getNameOfRoleWithPrefix()));
         address = "Neuer Weg 3, 04912 Berlin";
-        birthday = new DateParameter();
-        birthday.setYear(1980);
-        birthday.setMonth(12);
-        birthday.setDay(30);
+        birthday = "1980/12/30";
     }
 
     @Test
@@ -44,6 +43,8 @@ public class PersonTests extends AbstractIntegrationTests{
         person = new Person(acc, address, birthday);
         personManager.save(person);
         assertThat(personManager.findOne(person.getId()).isPresent(), is(true));
+        assertThat(personManager.findOne(person.getId()).get().getAddress().get(), is("Neuer Weg 3, 04912 Berlin"));
+        assertThat(personManager.findOne(person.getId()).get().getBirthday().get(), is(LocalDate.of(1980,12,30)));
     }
 
     @Test
