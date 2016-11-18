@@ -6,6 +6,7 @@ import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -22,7 +23,7 @@ public class Bill {
     private int desk;
     private boolean isClosed = false;
     @ManyToOne private Person staff;
-    @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items;
+    @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new HashSet<>();
 
     @Deprecated
     protected Bill() {}
@@ -38,16 +39,13 @@ public class Bill {
 
     public boolean addItem(BillItem item) {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
+        if (item == null) throw new NullPointerException("the item must not be null");
         return items.add(item);
-    }
-
-    public void changeQuantity(BillItem item, int quantity) {
-        if (isClosed) throw new IllegalStateException("Bill is already closed");
-        item.changeQuantity(quantity);
     }
 
     public boolean removeItem(BillItem item) {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
+        if (item == null) throw new NullPointerException("the item must not be null");
         return items.remove(item);
     }
 
@@ -68,6 +66,11 @@ public class Bill {
 
     public Set<BillItem> getItems() {
         return items;
+    }
+
+    public void clear() {
+        if (isClosed) throw new IllegalStateException("Bill is already closed");
+        items.clear();
     }
 
     public Person getStaff() {

@@ -51,23 +51,31 @@ public class BillController {
 
     @RequestMapping("/service/bills/details/{billid}/add/{productid}")
     public String addProductToBill(@PathVariable("billid") Long billid, @PathVariable("productid") Long productid) {
-        System.out.println(billid + " : " + productid);
         Bill bill = bills.findOne(billid).get();
         DayMenuItem item = dayMenuItems.findOne(productid).get();
         BillItem billItem = new BillItem(item, 1);
         bill.addItem(billItem);
-        //billItems.save(billItem);
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
-        if(query.isPresent()){
-            //TODO do some magic with string, its formatted like: daymenuitemid,newquantity|daymenuitem,newquantity| ...
+        System.out.println("id: " + billid);
+        Bill bill = bills.findOne(billid).get();
+        if (query.isPresent() && query.isPresent() && !query.equals("")) {
+            System.out.println(query.get().substring(0, query.get().length() - 1));
+            bill.clear();
+            String[] args = query.get().substring(0, query.get().length() - 1).split("\\|"); //split bill in arguments
+            for (String arg : args) { //split bill in id,qunatity
+                System.out.println("arg: " + arg);
+                String[] itemString = arg.split(","); //TODO the bug is here! Gets wrong id (too high!)
+                System.out.println("add: " + itemString[0] + "," + itemString[1]);
+                bill.addItem(new BillItem(dayMenuItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1])));
+            }
+            bills.save(bill);
             return "redirect:/service/bills/details/" + billid;
         } else {
-            Bill bill = bills.findOne(billid).get();
             model.addAttribute("bill", bill);
             List<DayMenuItem> menuItems = dayMenuItems.findAll();
             bill.getItems().forEach(it -> menuItems.remove(it.getItem()));
