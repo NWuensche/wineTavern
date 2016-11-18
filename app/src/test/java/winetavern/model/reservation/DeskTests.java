@@ -10,13 +10,8 @@ import winetavern.AbstractWebIntegrationTests;
 public class DeskTests extends AbstractWebIntegrationTests{
 
     @Test(expected = IllegalArgumentException.class)
-    public void DeskContructorNegativeCapacityTest() {
+    public void DeskConstructorNegativeCapacityTest() {
         Desk desk = new Desk("1", -2);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void DeskContructorNegativeNumberTest() {
-        //Desk desk = new Desk(5,-3);
     }
 
 }

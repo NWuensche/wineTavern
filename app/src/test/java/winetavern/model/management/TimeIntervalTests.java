@@ -25,11 +25,6 @@ public class TimeIntervalTests extends AbstractWebIntegrationTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwWhenNoDuration() {
-        new TimeInterval(start, start);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void throwWhenNegativeDuration() {
         new TimeInterval(end, start);
     }
