@@ -20,9 +20,13 @@ public class TimeInterval {
     @Deprecated
     protected TimeInterval() {}
 
-    public TimeInterval(LocalDateTime start, LocalDateTime end) {
-        setStart(start);
-        setEnd(end);
+    public TimeInterval(LocalDateTime start, LocalDateTime end) throws IllegalArgumentException {
+        if(start.compareTo(end) == 1) {
+            throw new IllegalArgumentException("End should not be before start");
+        }
+
+        this.start = start;
+        this.end = end;
     }
 
     public long getId() {
