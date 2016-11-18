@@ -149,7 +149,8 @@
                             <div class="form-group"> 
                                 <label>Rolle</label> 
                                 <select class="form-control"> 
-                                    <option> </option>
+                                    <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(role)}"
+                                            th:value="${role.getRealNameOfRole()}"></option>
                                 </select> 
                             </div>
 

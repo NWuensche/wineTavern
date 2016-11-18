@@ -41,7 +41,7 @@ public enum Roles {
      */
     public static String getDisplayNameRole(String roleName) throws IllegalArgumentException {
         if(!roleName.startsWith("ROLE_")) {
-            throw new IllegalArgumentException("Role name has to start with ROLE_ !");
+            roleName = "ROLE_" + roleName;
         }
 
         switch(roleName) {
