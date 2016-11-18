@@ -22,6 +22,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |28.10.2016 | 09:20 |12:40 | Vorstellen Prototypen, Aufgabenverteilung
 |04.11.2016 | 09:20 |12:40 | Abnahme Pflichtenheft, Aufteilung der Software auf Gruppenmitglieder
 |11.11.2016 | 09:40 |12:40 | Treffen & Coden
+|18.11.2016 | 09:00 |12:50 | Treffen & Coden
 |===
 
 == Severin
@@ -74,6 +75,9 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 14.11.2016 | 11:10 | 14:30 | Shift Controller & TimeInterval
 | 14.11.2016 | 18:00 | 19:30 | Shift Controller & TimeInterval
 | 15.11.2016 | 14:00 | 15:30 | Accountancy
+| 16.11.2016 | 18:00 | 23:00 | Bill Class
+| 17.11.2016 | 11:00 | 12:50 | Bill Controller
+| 18.11.2016 | 15:00 | 16:00 | Entwicklerdoku und Bill
 |===
 
 == Niklas
@@ -111,13 +115,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |31.10   |13:00   |17:00   |login-template bauen; Mysql
 |02.11   |12:15   |16:00   |Pflichtenheft, Design
 |02.11   |20:30   |23:00   |Pflichtenheft, Dialoglandkarte
-| | | |
-| | | |Sibebar
 |09.11 |11:00 |13:00 |Navbar Umbau, Template Re-design
 |13.11 |13:30 |17:45 |Sibebar, Btn-tootle, template Re-design
-
-
-
 |===
 
 == Michel
@@ -146,4 +145,5 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |15.10.2016 |09:45 |10:45 |Reservation Management
 |15.10.2016 |15:00 |20:00 |Reservation Management
 |16.10.2016 |13:00 |14:30 |Reservation Management
+|18.10.2016 |09:00 |12:00 |Gruppenbesprechung
 |===
