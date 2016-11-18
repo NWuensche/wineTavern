@@ -17,6 +17,7 @@ import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillRepository;
 import winetavern.model.management.*;
 import winetavern.model.menu.DayMenuItem;
+import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Person;
@@ -41,6 +42,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private ProductCatalog products;
     @Autowired private ShiftRepository shifts;
     @Autowired private BillRepository bills;
+    @Autowired private DayMenuItemRepository dayMenuItemRepository;
     private String adminName = "admin";
 
     @Override
@@ -95,7 +97,7 @@ public class WineTavernDataInitializer implements DataInitializer{
 
     private void initializeBills() {
         Bill bill = new Bill(1, personManager.findAll().iterator().next());
-        //bill.addItem(new BillItem(new DayMenuItem("Linsen mit Spätzle", "schmceckt nice", Money.of(4.33, EURO)), 5));
+        //bill.addItem(new BillItem(dayMenuItemRepository.findAll().iterator().next(), 5));
         bills.save(bill);
     }
 

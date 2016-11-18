@@ -13,6 +13,7 @@ import winetavern.model.accountancy.Bill;
 import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillRepository;
 import winetavern.model.menu.DayMenuItem;
+import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.user.PersonManager;
 
 /**
@@ -25,6 +26,7 @@ public class BillController {
     @Autowired private BillRepository bills;
     @Autowired private AuthenticationManager authenticationManager;
     @Autowired private PersonManager persons;
+    @Autowired private DayMenuItemRepository dayMenuItems;
 
     @RequestMapping("/service/bills")
     public String showBills(Model model){
@@ -49,8 +51,9 @@ public class BillController {
     }
 
     @RequestMapping("/service/bills/details/{billid}")
-    public String showBillDetails(@PathVariable("billid") Bill bill) {
-
-        return "bills";
+    public String showBillDetails(@PathVariable("billid") Bill bill, Model model) {
+        model.addAttribute("bill", bill);
+        model.addAttribute("menuitems", dayMenuItems.findAll()); //TODO show only items of the day
+        return "billdetails";
     }
 }

@@ -65,4 +65,8 @@ public class Bill {
         items.forEach(it -> res.add(it.getPrice()));
         return res;
     }
+
+    public Set<BillItem> getItems() {
+        return items;
+    }
 }
