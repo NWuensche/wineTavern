@@ -13,14 +13,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
 import winetavern.model.management.*;
+import winetavern.model.management.Event;
+import winetavern.model.menu.DayMenu;
+import winetavern.model.menu.DayMenuItem;
+import winetavern.model.menu.DayMenuItemRepository;
+import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.reservation.Desk;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
+import winetavern.model.stock.ProductCatalog;
+import winetavern.model.stock.ProductCategoryRepository;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
+import javax.money.MonetaryAmount;
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -39,6 +49,10 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ShiftRepository shifts;
     @Autowired private DeskRepository deskRepository;
+    @Autowired private DayMenuRepository dayMenuRepository;
+    @Autowired private DayMenuItemRepository dayMenuItemRepository;
+    @Autowired private ProductCatalog productCatalog;
+
     private String adminName = "admin";
 
     @Override
@@ -49,6 +63,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeStock();
             initializeShift();
             initializeTables();
+            initializeDayMenuWithItems();
         }
     }
 
@@ -107,6 +122,23 @@ public class WineTavernDataInitializer implements DataInitializer{
             deskList.add(new Desk("B" + String.valueOf(i), 1));
 
         deskRepository.save(deskList);
+    }
+
+    public void initializeDayMenuWithItems() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2013, 10, 30);
+        DayMenu dayMenu = new DayMenu(calendar);
+        dayMenuRepository.save(dayMenu);
+
+        DayMenuItem vodka = new DayMenuItem("Vodka vom Fass", "really good", Money.of(2, "EUR"));
+        vodka.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        dayMenuItemRepository.save(vodka);
+
+        DayMenuItem berlinerBrandstifter = new DayMenuItem("Berliner Brandstifter", "der beste", Money.of(1.99, "EUR"));
+        berlinerBrandstifter.setProduct(productCatalog.findByName("Berliner Brandstifter").iterator().next());
+        dayMenuItemRepository.save(berlinerBrandstifter);
+
+
     }
 
     /**
