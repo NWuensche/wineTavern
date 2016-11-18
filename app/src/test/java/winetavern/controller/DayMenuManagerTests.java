@@ -21,6 +21,7 @@ import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.user.Roles;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by michel on 13.11.16.
@@ -42,7 +43,7 @@ public class DayMenuManagerTests extends AbstractWebIntegrationTests {
     @Test
     public void createDayMenuWithRealDate() throws Exception {
         RequestBuilder request = post("/admin/addMenu").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("day", "09")
+                .param("day", "9")
                 .param("month", "11")
                 .param("year", "1918");
         mvc.perform(request);
@@ -52,8 +53,16 @@ public class DayMenuManagerTests extends AbstractWebIntegrationTests {
         calendar.set(Calendar.MONTH, 11);
         calendar.set(Calendar.YEAR, 1918);
 
-        DayMenu dayMenu = dayMenuRepository.findByDay(calendar);
-        assertNull(dayMenu);
+        boolean[] isDateInRepo = {false};
+        Iterable<DayMenu> allDayMenus = dayMenuRepository.findAll();
+
+        allDayMenus.forEach(dayMenu -> {
+            Calendar cal = dayMenu.getDay();
+            if(cal.equals(cal)) {
+                isDateInRepo[0] = true;
+            }
+        });
+        assertThat(isDateInRepo[0], is(true));
     }
 
 }

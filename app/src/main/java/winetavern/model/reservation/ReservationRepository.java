@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public interface ReservationRepository extends SalespointRepository<Reservation, Long> {
-    public List<Reservation> findByTable(Table table);
+    public List<Reservation> findByDesk(Desk desk);
     public List<Reservation> findAllByOrderByGuestName();
     public List<Reservation> findAllByOrderByPersons();
 }

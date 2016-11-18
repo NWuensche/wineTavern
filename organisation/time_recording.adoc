@@ -34,11 +34,18 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 26.10.2016 | 11:00 | 12:10 | Überarbeiten des Pflichtenhefts
 | 28.10.2016 | 13:00 | 16:00 | Üerarbeitung Klassendiagramm, Einarbeitung Salespoint
 | 29.10.2016 | 10:00 | 13:00 | Erstellung login-template für bigPrototyp
-| 01.10.2016 | 15:00 | 18:00 | Left Navbar im bitPrototyp
+| 01.10.2016 | 15:00 | 18:00 | Left Navbar im bigPrototyp
 | 03.10.2016 | 11:00 | 12:30 | Top Navbar im bigPrototyp
 | 04.11.2016 | 12:40 | 13:40 | Erstellen der Packages
-| 04.11.2016 | 15:00 | 16:00 | Coden im reservation package
+| 04.11.2016 | 15:00 | 18:00 | Coden im reservation package
+| 05.11.2016 | 10:00 | 12:00 | templates
+| 09.11.2016 | 14:00 | 16:00 | product template
+| 10.11.2016 | 13:00 | 15:00 | finalize product template
 | 11.11.2016 | 13:00 | 14:50 | Reservation Controller
+| 12.11.2016 | 14:00 | 18:00 | Reservation
+| 13.11.2016 | 15:00 | 17:00 | Reservation
+| 14:11.2016 | 17:00 | 18:30 | Bill, tests
+| 15.11.2016 | 16:00 | 18:00 | Bill, initial template
 |===
 
 == Louis
@@ -64,6 +71,9 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 10.11.2016 | 14:00 | 18:30 | ...
 | 11.11.2016 | 13:00 | 14:50 | Reservation Controller
 | 13.11.2016 | 13:00 | 16:30 | Fixed the clock, worked on Reservation Controller
+| 14.11.2016 | 11:10 | 14:30 | Shift Controller & TimeInterval
+| 14.11.2016 | 18:00 | 19:30 | Shift Controller & TimeInterval
+| 15.11.2016 | 14:00 | 15:30 | Accountancy
 |===
 
 == Niklas
@@ -133,4 +143,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |13.10.2016 |16:00 |18:00 |Menu Management
 |14.10.2016 |12:00 |16:00 |Menu Management
 |14.10.2016 |18:00 |20:00 |Menu Management
+|15.10.2016 |09:45 |10:45 |Reservation Management
+|15.10.2016 |15:00 |20:00 |Reservation Management
+|16.10.2016 |13:00 |14:30 |Reservation Management
 |===

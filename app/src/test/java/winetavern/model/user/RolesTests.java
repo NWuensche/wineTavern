@@ -19,6 +19,7 @@ public class RolesTests {
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_ADMIN"));
         assertThat(admin.getRealNameOfRole(), is("ADMIN"));
         assertThat(Roles.getDisplayNameRole(Role.of("ROLE_ADMIN")), is("Administrator"));
+        assertThat(Roles.getDisplayNameRole("ROLE_ADMIN"), is("Administrator"));
     }
 
     @Test
@@ -28,6 +29,7 @@ public class RolesTests {
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_SERVICE"));
         assertThat(admin.getRealNameOfRole(), is("SERVICE"));
         assertThat(Roles.getDisplayNameRole(Role.of("ROLE_SERVICE")), is("Bedienung"));
+        assertThat(Roles.getDisplayNameRole("ROLE_SERVICE"), is("Bedienung"));
     }
 
     @Test
@@ -37,6 +39,8 @@ public class RolesTests {
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_ACCOUNTANT"));
         assertThat(admin.getRealNameOfRole(), is("ACCOUNTANT"));
         assertThat(Roles.getDisplayNameRole(Role.of("ROLE_ACCOUNTANT")), is("Buchhalter"));
+        assertThat(Roles.getDisplayNameRole("ROLE_ACCOUNTANT"), is("Buchhalter"));
+
     }
 
     @Test
@@ -46,6 +50,7 @@ public class RolesTests {
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_COOK"));
         assertThat(admin.getRealNameOfRole(), is("COOK"));
         assertThat(Roles.getDisplayNameRole(Role.of("ROLE_COOK")), is("Koch"));
+        assertThat(Roles.getDisplayNameRole("ROLE_COOK"), is("Koch"));
     }
 
 }

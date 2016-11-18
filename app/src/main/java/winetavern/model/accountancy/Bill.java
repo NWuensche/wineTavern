@@ -19,7 +19,7 @@ public class Bill {
     @Transient @Autowired private BillItemRepository itemRepository;
 
     @GeneratedValue @Id private long id;
-    private int restaurant_table;
+    private int desk;
     private boolean isClosed = false;
     @ManyToOne private Person staff;
     @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items;
@@ -27,8 +27,8 @@ public class Bill {
     @Deprecated
     protected Bill() {}
 
-    public Bill(int restaurant_table, Person staff) {
-        this.restaurant_table = restaurant_table;
+    public Bill(int desk, Person staff) {
+        this.desk = desk;
         this.staff = staff;
     }
 
@@ -51,8 +51,8 @@ public class Bill {
         return items.remove(item);
     }
 
-    public int getRestaurant_table() {
-        return restaurant_table;
+    public int getDesk() {
+        return desk;
     }
 
     public void close() {

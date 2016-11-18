@@ -3,6 +3,7 @@ package winetavern.model.reservation;
 import winetavern.model.management.TimeInterval;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Entity for a single reservation
@@ -16,17 +17,17 @@ public class Reservation {
 
     private String guestName;
     private int persons;
-    @ManyToOne(targetEntity=Table.class, cascade = CascadeType.ALL) Table table;
+    @ManyToOne(targetEntity=Desk.class, cascade = CascadeType.ALL) Desk desk;
     @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
 
 
     @Deprecated
     protected Reservation(){}
 
-    public Reservation(String guestName, int persons, Table table, TimeInterval interval) {
+    public Reservation(String guestName, int persons, Desk desk, TimeInterval interval) {
         this.guestName = guestName;
         this.persons = persons;
-        this.table = table;
+        this.desk = desk;
         this.interval = interval;
     }
 
@@ -50,12 +51,12 @@ public class Reservation {
         this.persons = persons;
     }
 
-    public Table getTable() {
-        return table;
+    public Desk getDesk() {
+        return desk;
     }
 
-    public void setTable(Table table) {
-        this.table = table;
+    public void setDesk(Desk desk) {
+        this.desk = desk;
     }
 
     public TimeInterval getInterval() {
@@ -64,5 +65,9 @@ public class Reservation {
 
     public void setInterval(TimeInterval interval) {
         this.interval = interval;
+    }
+
+    public LocalDateTime getReservationStart() {
+        return interval.getStart();
     }
 }

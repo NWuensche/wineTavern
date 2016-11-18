@@ -30,15 +30,21 @@ public enum Roles {
     }
 
     /**
-     * @throws  IllegalArgumentException
      * @return not null
      */
-    public static String getDisplayNameRole(Role role) throws IllegalArgumentException{
-        if(!role.getName().startsWith("ROLE_")) {
+    public static String getDisplayNameRole(Role role) {
+        return getDisplayNameRole(role.getName());
+    }
+
+    /**
+     * @return not null
+     */
+    public static String getDisplayNameRole(String roleName) throws IllegalArgumentException {
+        if(!roleName.startsWith("ROLE_")) {
             throw new IllegalArgumentException("Role name has to start with ROLE_ !");
         }
 
-        switch(role.getName()) {
+        switch(roleName) {
             case "ROLE_ADMIN":
                 return "Administrator";
             case "ROLE_SERVICE":
