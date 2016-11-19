@@ -20,11 +20,17 @@
 
         <div class="tab-content">
             <div class="tab-pane active" id="current" role="tabpanel">
-                <div class="container__head">
-                    <h1>Aktive Rechnungen</h1>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#addBill">
-                            <i class="fa fa-plus fa-lg"></i>
-                        </button>
+                <div class="heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h1>Aktive Rechnungen</h1>
+                        </div>
+                        <div class="col-xs-6 text-xs-center">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#addBill">
+                                <i class="fa fa-plus fa-lg"></i> Rechnung
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <table class="table table-striped">
                     <thead>
@@ -76,25 +82,25 @@
     <div class="modal" id="addBill" tabindex="-1" role="dialog" aria-labelledby="addBillLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-            </div>
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="addBillLabel">Rechnung hinzuf&uuml;gen</h4>
-            </div>
-            <div class="modal-body">
-                <form id="tableform" th:action="@{/service/bills/add}" th:method="post">
-                    <div class="form-group">
-                        <label for="table">Tisch-Nummer:</label>
-                        <select id="table" name="table" class="form-control">
-                            <option th:each="table:${tables}" th:text="${table.number}">1</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" form="tableform">Anlegen</button>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="addBillLabel">Rechnung hinzuf&uuml;gen</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="tableform" th:action="@{/service/bills/add}" th:method="post">
+                        <div class="form-group">
+                            <label for="table">Tisch-Nummer:</label>
+                            <select id="table" name="table" class="form-control">
+                                <option th:each="table:${tables}" th:text="${table.number}">1</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" form="tableform">Anlegen</button>
+                </div>
             </div>
         </div>
     </div>

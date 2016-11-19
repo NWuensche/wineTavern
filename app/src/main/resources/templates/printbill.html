@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="page">
+<head>
+    <meta charset="UTF-8" />
+    <title>Rechnung</title>
+</head>
+<body>
+<div style="border:1px solid black;width:400px;text-align:center;padding:10px;">
+    <p>Zur fröhlichen Reblaus</p>
+    <h1>Ihre Rechnung</h1>
+    <table style="text-align:left;">
+        <tr>
+            <td>Uhrzeit:</td>
+            <td th:text="${businessTime}"></td>
+        </tr>
+        <tr>
+            <td>Tisch:</td>
+            <td th:text="${bill.desk}"></td>
+        </tr>
+        <tr>
+            <td>Mitarbeiter:</td>
+            <td th:text="${bill.staff.userAccount.lastname}"></td>
+        </tr>
+        <tr>
+            <td>Nummer:</td>
+            <td th:text="${bill.id}"></td>
+        </tr>
+    </table>
+    <br/>
+    <table style="width:100%;text-align:center;">
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>Produkt</td>
+                <td>Einzelpreis</td>
+                <td>Gesamtpreis</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product:${bill.items}">
+                <td th:text="${product.quantity}"></td>
+                <td th:text="${product.item.name}"></td>
+                <td th:text="${product.item.price.number} + '€'"></td>
+                <td th:text="${product.price.number} + '€'"></td>
+            </tr>
+        </tbody>
+    </table>
+    <br/>
+    <h2>Gesamtpreis: <span th:text="${bill.price.number}"></span> €</h2>
+</div>
+
+</body>
+</html>

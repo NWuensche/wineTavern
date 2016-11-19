@@ -43,6 +43,8 @@ public class BillController {
 
     @RequestMapping("/service/bills/add")
     public String addBill(@ModelAttribute("table") String desk) {
+        if(desk.equals("")){return "redirect:/service/bills";}
+
         Bill bill = new Bill(desk, persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
@@ -58,17 +60,27 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
+    @RequestMapping("/service/bills/details/{billid}/remove/{productid}")
+    public String removeProductFromBill(@PathVariable("billid") Long billid, @PathVariable("productid") Long
+            productid) {
+
+        //TODO needs to be removed from bill, if quantity is just 1
+        System.out.println("remove item " + productid);
+
+        return "redirect:/service/bills/details/" + billid;
+    }
+
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         System.out.println("id: " + billid);
         Bill bill = bills.findOne(billid).get();
-        if (query.isPresent() && query.isPresent() && !query.equals("")) {
-            System.out.println(query.get().substring(0, query.get().length() - 1));
+        if (query.isPresent() && !query.equals("")) {
+            //System.out.println(query.get().substring(0, query.get().length() - 1));
             String[] args = query.get().substring(0, query.get().length() - 1).split("\\|"); //split bill in arguments
             for (String arg : args) { //split bill in billItemId,quantity
-                System.out.println("arg: " + arg);
+                //System.out.println("arg: " + arg);
                 String[] itemString = arg.split(",");
-                System.out.println("add: " + itemString[0] + "," + itemString[1]);
+                //System.out.println("add: " + itemString[0] + "," + itemString[1]);
                 bill.changeItem(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
             }
             bills.save(bill);
@@ -80,5 +92,12 @@ public class BillController {
             model.addAttribute("menuitems", menuItems); //TODO show only items of the day
             return "billdetails";
         }
+    }
+
+    @RequestMapping("/service/bills/details/{billid}/print")
+    public String printBill(@PathVariable("billid") Long billid,Model model){
+        //TODO close Bill + we need to talk how to print bill? via HTML or Java?
+        model.addAttribute("bill",bills.findOne(billid).get());
+        return "printbill";
     }
 }
