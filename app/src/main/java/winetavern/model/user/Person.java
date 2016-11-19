@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Person {
 
-    @Id @GeneratedValue private long id;
+    @Id @GeneratedValue private Long id;
     @OneToOne private UserAccount userAccount;
 
     private String address;
@@ -61,7 +61,7 @@ public class Person {
         return userAccount.getRoles().stream().collect(Collectors.toList()).size();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
