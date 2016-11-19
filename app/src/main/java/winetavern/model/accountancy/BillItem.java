@@ -18,9 +18,9 @@ public class BillItem {
     @Deprecated
     protected BillItem() {}
 
-    public BillItem(DayMenuItem item, int quantity) {
+    public BillItem(DayMenuItem item) {
         this.item = item;
-        this.quantity = quantity;
+        this.quantity = 1;
     }
 
     public MonetaryAmount getPrice() {

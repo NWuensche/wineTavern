@@ -22,6 +22,7 @@ public class Bill {
     @GeneratedValue @Id private long id;
     private String desk;
     private boolean isClosed = false;
+    private MonetaryAmount totalPrice = Money.of(0, EURO);
     @ManyToOne private Person staff;
     @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new HashSet<>();
 
@@ -37,26 +38,30 @@ public class Bill {
         return id;
     }
 
-    public boolean addItem(BillItem item) {
-        if (isClosed) throw new IllegalStateException("Bill is already closed");
-        if (item == null) throw new NullPointerException("the item must not be null");
-        return items.add(item);
-    }
-
     public void changeItem(BillItem item, int quantity) {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
         if (item == null) throw new NullPointerException("the item must not be null");
-        item.changeQuantity(quantity);
+        if (quantity == 0) {
+            items.remove(item);
+        } else {
+            item.changeQuantity(quantity);
+            if (!items.contains(item)) items.add(item);
+        }
+        reloadTotalPrice();
     }
 
-    public boolean removeItem(BillItem item) {
-        if (isClosed) throw new IllegalStateException("Bill is already closed");
-        if (item == null) throw new NullPointerException("the item must not be null");
-        return items.remove(item);
+    private void reloadTotalPrice() {
+        MonetaryAmount sum = Money.of(0, EURO);
+        for (BillItem item : items) sum = sum.add(item.getPrice());
+        totalPrice = sum;
     }
 
     public String getDesk() {
         return desk;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
     }
 
     public void close() {
@@ -65,18 +70,11 @@ public class Bill {
     }
 
     public MonetaryAmount getPrice() {
-        MonetaryAmount sum = Money.of(0, EURO);
-        for (BillItem item : items) sum = sum.add(item.getPrice());
-        return sum;
+        return totalPrice;
     }
 
     public Set<BillItem> getItems() {
         return items;
-    }
-
-    public void clear() {
-        if (isClosed) throw new IllegalStateException("Bill is already closed");
-        items.clear();
     }
 
     public Person getStaff() {
