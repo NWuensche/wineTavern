@@ -1,14 +1,11 @@
 package winetavern.model.accountancy;
 
 import org.salespointframework.accountancy.AccountancyEntry;
-import org.salespointframework.time.BusinessTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
 /**
  * @author Louis
@@ -16,8 +13,7 @@ import javax.persistence.Transient;
 
 @Entity
 public class Expense extends AccountancyEntry {
-    @Transient @Autowired private BusinessTime businessTime;
-
+    private boolean isCovered = false;
     @ManyToOne private Person person;
     @ManyToOne private ExpenseGroup expenseGroup;
 
@@ -44,5 +40,14 @@ public class Expense extends AccountancyEntry {
 
     public Person getPerson() {
         return person;
+    }
+
+    public boolean isCovered() {
+        return isCovered;
+    }
+
+    public void cover() {
+        if (isCovered) throw new IllegalStateException("Expense is already covered");
+        this.isCovered = true;
     }
 }

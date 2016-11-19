@@ -12,4 +12,8 @@ import java.util.List;
 public interface ExpenseRepository extends Accountancy {
     List<Expense> findByExpenseGroup(ExpenseGroup expenseGroup);
     List<Expense> findByPerson(Person person);
+    List<Expense> findByIsCoverdFalse();
+    List<Expense> findByIsCoverdTrue();
+    List<Expense> findByPersonAndIsCoveredFalse(Person person);
+    List<Expense> findByPersonAndIsCoveredTrue(Person person);
 }

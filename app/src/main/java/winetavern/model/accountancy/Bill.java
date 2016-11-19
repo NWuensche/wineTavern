@@ -2,7 +2,6 @@ package winetavern.model.accountancy;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.time.BusinessTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
@@ -19,8 +18,6 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Entity
 public class Bill {
-    @Transient @Autowired private BusinessTime businessTime;
-
     @GeneratedValue @Id private long id;
     private String desk;
     private boolean isClosed = false;
@@ -67,9 +64,10 @@ public class Bill {
         return isClosed;
     }
 
-    public void close() {
+    public void close(BusinessTime businessTime) {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
-        payTime = businessTime.getTime();
+        if (businessTime == null) System.out.println("businessTime is null!");
+        this.payTime = businessTime.getTime();
         isClosed = true;
     }
 

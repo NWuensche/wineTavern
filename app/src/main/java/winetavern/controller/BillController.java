@@ -1,6 +1,7 @@
 package winetavern.controller;
 
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ public class BillController {
     @Autowired private DeskRepository tables;
     @Autowired private Accountancy accountancy;
     @Autowired private ExpenseGroupRepository expenseGroups;
+    @Autowired private BusinessTime businessTime;
 
     @RequestMapping("/service/bills")
     public String showBills(Model model){
@@ -78,7 +80,7 @@ public class BillController {
                 String[] itemString = arg.split(",");
                 BillItem billItem = billItems.findOne(Long.parseLong(itemString[0])).get();
                 int quantity = Integer.parseInt(itemString[1]);
-                if (quantity > billItem.getQuantity()) {
+                if (quantity > billItem.getQuantity()) { //TODO: newly added BillItem won't be counted!
                     accountancy.add(new Expense(billItem.getItem().getPrice().multiply(quantity).subtract(billItem.getPrice()).multiply(0.9),
                             "Rechnung Nr. " + bill.getId(),
                             persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
@@ -101,7 +103,7 @@ public class BillController {
     public String printBill(@PathVariable("billid") Long billid, Model model){
         Bill bill = bills.findOne(billid).get();
         if (!bill.isClosed()) {
-            bill.close();
+            bill.close(businessTime);
             bills.save(bill);
         }
         model.addAttribute("bill", bill);
