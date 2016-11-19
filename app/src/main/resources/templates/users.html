@@ -34,6 +34,7 @@
         </div>
     </div>
 </div>
+
 <div class="container__wrap">
     <div class="heading">
         <div class="row">
@@ -70,37 +71,40 @@
             <td th:text="${person.userAccount.lastname}"></td>
             <td th:text="${person.userAccount.username}"></td>
             <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details"><i
-                        class="fa fa-user-circle" aria-hidden="true"></i>
-                </button>
+                <a th:href="@{'/admin/management/users/details/' + ${person.id}}">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                    </button>
+                </a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+<!-- show person details -->
+<div class="modal" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" th:if="${currPerson}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
             </div>
             <div class="modal-body">
-                <div class="card-columns">
-                    <div class="card" th:each="staff : ${staffCollection}">
-                        <img class="card-img-top rounded-circle" src="/resources/img/pokemon.jpg" alt="Profilbild"
-                             style="width:100px;"/>
-                        <div class="card-block">
-                            <h2 class="card-title" th:text="${staff.username}"></h2>
-                            <a th:href="@{/login}">
-                                <button type="button" class="btn btn-primary btn-lg" th:text="LOGIN">
-                                </button>
-                            </a>
-                        </div>
+                <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post" th:object="${accountcredentials}">
+                    <div class="form-group" hidden = "true">
+                        <label for="id">Konto</label>
+                        <input type="text" class="form-control" name="id" id="id" readonly="true"
+                               th:value="${currPerson.id}"/>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="firstName">Vorname</label>
+                        <input type="text" class="form-control" name="firstName" id="firstName"
+                               th:value="${currPerson.userAccount.firstname}"/>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -111,7 +115,7 @@
 </div>
 </div>
 
-
+<!-- addPerson Modal -->
 <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
