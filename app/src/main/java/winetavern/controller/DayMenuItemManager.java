@@ -3,6 +3,8 @@ package winetavern.controller;
 import org.javamoney.moneta.*;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.stereotype.Controller;
@@ -37,6 +39,8 @@ public class DayMenuItemManager {
     @Autowired
     private ProductCatalog productCatalog;
     @Autowired
+    private Inventory<InventoryItem> stock;
+    @Autowired
     private DayMenuRepository dayMenuRepository;
 
 
@@ -49,7 +53,7 @@ public class DayMenuItemManager {
         DayMenuItem dayMenuItem = new DayMenuItem();
         dayMenuItem.setDayMenu(dayMenuRepository.findById(cameFrom));
         model.addAttribute("menuitem", dayMenuItem);
-        model.addAttribute("products", productCatalog.findAll());
+        model.addAttribute("products", stock.findAll());
         return "addmenuitem";
     }
 
