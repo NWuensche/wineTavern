@@ -1,11 +1,14 @@
 package winetavern.model.accountancy;
 
 import org.salespointframework.accountancy.AccountancyEntry;
+import org.salespointframework.time.BusinessTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import javax.persistence.Transient;
 
 /**
  * @author Louis
@@ -13,34 +16,33 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Expense extends AccountancyEntry {
+    @Transient @Autowired private BusinessTime businessTime;
+
+    @ManyToOne private Person person;
     @ManyToOne private ExpenseGroup expenseGroup;
-    private LocalDateTime matureDate;
 
-    public Expense(MonetaryAmount value, ExpenseGroup expenseGroup, LocalDateTime matureDate) {
+    @Deprecated
+    protected Expense() {}
+
+    public Expense(MonetaryAmount value, Person person, ExpenseGroup expenseGroup) {
         super(value);
+        if (person == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
-        this.matureDate = matureDate;
+        this.person = person;
     }
 
-    public Expense(MonetaryAmount value, String description, ExpenseGroup expenseGroup, LocalDateTime matureDate) {
+    public Expense(MonetaryAmount value, String description, Person person, ExpenseGroup expenseGroup) {
         super(value, description);
+        if (person == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
-        this.matureDate = matureDate;
-    }
-
-    public void setExpenseGroup(ExpenseGroup expenseGroup) {
-        this.expenseGroup = expenseGroup;
-    }
-
-    public void setMatureDate(LocalDateTime matureDate) {
-        this.matureDate = matureDate;
+        this.person = person;
     }
 
     public ExpenseGroup getExpenseGroup() {
         return expenseGroup;
     }
 
-    public LocalDateTime getMatureDate() {
-        return matureDate;
+    public Person getPerson() {
+        return person;
     }
 }

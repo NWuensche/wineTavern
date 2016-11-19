@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,10 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import winetavern.model.accountancy.Bill;
-import winetavern.model.accountancy.BillItem;
-import winetavern.model.accountancy.BillItemRepository;
-import winetavern.model.accountancy.BillRepository;
+import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
@@ -32,6 +30,8 @@ public class BillController {
     @Autowired private PersonManager persons;
     @Autowired private DayMenuItemRepository dayMenuItems;
     @Autowired private DeskRepository tables;
+    @Autowired private Accountancy accountancy;
+    @Autowired private ExpenseGroupRepository expenseGroups;
 
     @RequestMapping("/service/bills")
     public String showBills(Model model){
@@ -44,7 +44,6 @@ public class BillController {
     @RequestMapping("/service/bills/add")
     public String addBill(@ModelAttribute("table") String desk) {
         if(desk.equals("")){return "redirect:/service/bills";}
-
         Bill bill = new Bill(desk, persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
@@ -77,7 +76,15 @@ public class BillController {
             String[] args = query.get().substring(0, query.get().length() - 1).split("\\|"); //split bill in arguments
             for (String arg : args) { //split bill in billItemId,quantity
                 String[] itemString = arg.split(",");
-                bill.changeItem(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
+                BillItem billItem = billItems.findOne(Long.parseLong(itemString[0])).get();
+                int quantity = Integer.parseInt(itemString[1]);
+                if (quantity > billItem.getQuantity()) {
+                    accountancy.add(new Expense(billItem.getItem().getPrice().multiply(quantity).subtract(billItem.getPrice()).multiply(0.9),
+                            "Rechnung Nr. " + bill.getId(),
+                            persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
+                            expenseGroups.findByName("Bestellung").get()));
+                }
+                bill.changeItem(billItem, quantity);
             }
             bills.save(bill);
             return "redirect:/service/bills/details/" + billid;

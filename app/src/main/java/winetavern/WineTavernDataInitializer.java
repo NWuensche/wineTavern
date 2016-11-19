@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import winetavern.model.DateParameter;
 import winetavern.model.accountancy.Bill;
 import winetavern.model.accountancy.BillRepository;
+import winetavern.model.accountancy.ExpenseGroup;
+import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.management.*;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
@@ -45,9 +47,8 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private PersonManager personManager;
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
-    @Autowired private ProductCatalog products;
+    @Autowired private ExpenseGroupRepository expenseGroups;
     @Autowired private ShiftRepository shifts;
-    @Autowired private BillRepository bills;
     @Autowired private DeskRepository deskRepository;
     @Autowired private DayMenuRepository dayMenuRepository;
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
@@ -62,7 +63,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeEvents();
             initializeStock();
             initializeShift();
-            initializeBills();
+            initializeExpenseGroups();
             initializeTables();
             initializeDayMenuWithItems();
         }
@@ -107,10 +108,9 @@ public class WineTavernDataInitializer implements DataInitializer{
         stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
     }
 
-    private void initializeBills() {
-        Bill bill = new Bill("1", personManager.findAll().iterator().next());
-        //bill.addItem(new BillItem(dayMenuItemRepository.findAll().iterator().next(), 5));
-        bills.save(bill);
+    private void initializeExpenseGroups() {
+        expenseGroups.save(new ExpenseGroup("Bestellung"));
+        expenseGroups.save(new ExpenseGroup("Künstlergage"));
     }
 
     public void initializeTables() {

@@ -1,11 +1,13 @@
 package winetavern.model.accountancy;
 
 import org.javamoney.moneta.Money;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,12 +19,13 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Entity
 public class Bill {
-    @Transient @Autowired private BillItemRepository itemRepository;
+    @Transient @Autowired private BusinessTime businessTime;
 
     @GeneratedValue @Id private long id;
     private String desk;
     private boolean isClosed = false;
     private MonetaryAmount totalPrice = Money.of(0, EURO);
+    private LocalDateTime payTime;
     @ManyToOne private Person staff;
     @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new HashSet<>();
 
@@ -66,7 +69,13 @@ public class Bill {
 
     public void close() {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
+        payTime = businessTime.getTime();
         isClosed = true;
+    }
+
+    public LocalDateTime getCloseTime() {
+        if (!isClosed()) throw new IllegalStateException("the bill must be closed to consist a time");
+        return payTime;
     }
 
     public MonetaryAmount getPrice() {

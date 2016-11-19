@@ -13,6 +13,9 @@ public class ExpenseGroup {
     @GeneratedValue @Id private long id;
     private String name;
 
+    @Deprecated
+    protected ExpenseGroup() {}
+
     public ExpenseGroup(String name) {
         setName(name);
     }
@@ -25,9 +28,9 @@ public class ExpenseGroup {
         return name;
     }
 
-    public void setName(String description) {
+    public void setName(String name) {
         if (name == null) throw new NullPointerException();
         if (name.equals("")) throw new IllegalArgumentException("The name must not be empty");
-        this.name = description;
+        this.name = name;
     }
 }
