@@ -78,6 +78,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 16.11.2016 | 18:00 | 23:00 | Bill Class
 | 17.11.2016 | 11:00 | 12:50 | Bill Controller
 | 18.11.2016 | 15:00 | 16:00 | Entwicklerdoku und Bill
+| 18.11.2016 | 22:00 | 23:59 | Package: Accountancy
+| 19.11.2016 | 14:00 | 18:00 | BillItems, Bill, Expense & ExpenseGroup
 |===
 
 == Niklas
