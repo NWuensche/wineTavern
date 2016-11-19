@@ -100,6 +100,10 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 08.11.2016    | 19:00     | 21:00     | Rollen in Personen integrieren
 | 09.11.2016    | 17:00     | 18:30     | Tests für neue Rollenmethoden schreiben
 | 10.11.2016    | 15:00     | 17:00     | Daten in Initalizer packen
+| 14.11.2016    | 14:00     | 17:00     | Kategorien in Lager integrieren
+| 15.11.2016    | 16:00     | 18:00     | Kategorien in Lager integrieren fertig machen + Tests
+| 17.11.2016    | 09:00     | 14:00     | Fix Datenbank + Umbennenung der Tables in Desks
+| 18.11.2016    | 19:00     | 21:30     | Neue Benutzerkonten anlegen + Tests
 |===
 
 == Katharina
