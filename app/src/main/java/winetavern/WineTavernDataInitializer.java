@@ -108,7 +108,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeBills() {
-        Bill bill = new Bill(1, personManager.findAll().iterator().next());
+        Bill bill = new Bill("1", personManager.findAll().iterator().next());
         //bill.addItem(new BillItem(dayMenuItemRepository.findAll().iterator().next(), 5));
         bills.save(bill);
     }

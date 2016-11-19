@@ -11,7 +11,6 @@ import winetavern.model.accountancy.Bill;
 import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillItemRepository;
 import winetavern.model.accountancy.BillRepository;
-import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
@@ -44,7 +43,7 @@ public class BillController {
 
     @RequestMapping("/service/bills/add")
     public String addBill(@ModelAttribute("table") String desk) {
-        Bill bill = new Bill(Integer.parseInt(desk), persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
+        Bill bill = new Bill(desk, persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
     }
@@ -65,13 +64,12 @@ public class BillController {
         Bill bill = bills.findOne(billid).get();
         if (query.isPresent() && query.isPresent() && !query.equals("")) {
             System.out.println(query.get().substring(0, query.get().length() - 1));
-            bill.clear();
             String[] args = query.get().substring(0, query.get().length() - 1).split("\\|"); //split bill in arguments
-            for (String arg : args) { //split bill in id,qunatity
+            for (String arg : args) { //split bill in billItemId,quantity
                 System.out.println("arg: " + arg);
-                String[] itemString = arg.split(","); //TODO the bug is here! Gets wrong id (too high!)
+                String[] itemString = arg.split(",");
                 System.out.println("add: " + itemString[0] + "," + itemString[1]);
-                bill.addItem(new BillItem(dayMenuItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1])));
+                bill.changeItem(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
             }
             bills.save(bill);
             return "redirect:/service/bills/details/" + billid;

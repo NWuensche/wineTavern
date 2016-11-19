@@ -20,7 +20,7 @@ public class Bill {
     @Transient @Autowired private BillItemRepository itemRepository;
 
     @GeneratedValue @Id private long id;
-    private int desk;
+    private String desk;
     private boolean isClosed = false;
     @ManyToOne private Person staff;
     @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new HashSet<>();
@@ -28,7 +28,7 @@ public class Bill {
     @Deprecated
     protected Bill() {}
 
-    public Bill(int desk, Person staff) {
+    public Bill(String desk, Person staff) {
         this.desk = desk;
         this.staff = staff;
     }
@@ -43,13 +43,19 @@ public class Bill {
         return items.add(item);
     }
 
+    public void changeItem(BillItem item, int quantity) {
+        if (isClosed) throw new IllegalStateException("Bill is already closed");
+        if (item == null) throw new NullPointerException("the item must not be null");
+        item.changeQuantity(quantity);
+    }
+
     public boolean removeItem(BillItem item) {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
         if (item == null) throw new NullPointerException("the item must not be null");
         return items.remove(item);
     }
 
-    public int getDesk() {
+    public String getDesk() {
         return desk;
     }
 
@@ -59,9 +65,9 @@ public class Bill {
     }
 
     public MonetaryAmount getPrice() {
-        MonetaryAmount res = Money.of(0, EURO);
-        items.forEach(it -> res.add(it.getPrice()));
-        return res;
+        MonetaryAmount sum = Money.of(0, EURO);
+        for (BillItem item : items) sum = sum.add(item.getPrice());
+        return sum;
     }
 
     public Set<BillItem> getItems() {
