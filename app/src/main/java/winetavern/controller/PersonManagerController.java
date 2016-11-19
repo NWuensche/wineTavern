@@ -1,7 +1,9 @@
 package winetavern.controller;
 
+import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.useraccount.Role;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import winetavern.AccountCredentials;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +46,15 @@ public class PersonManagerController {
         personManager.save(newPerson);
 
         return "redirect:/users";
+    }
+
+    @RequestMapping("/admin/management/users/details/{pid}")
+    public String detail(@PathVariable("pid") String id, Model model) {
+        Long idLong = Long.parseLong(id);
+        model.addAttribute("currPerson", personManager.findOne(idLong).get());
+        AccountCredentials registerCredentials = new AccountCredentials();
+        model.addAttribute("accountcredentials", registerCredentials);
+        model.addAttribute("personManager", personManager);
+        return "users";
     }
 }
