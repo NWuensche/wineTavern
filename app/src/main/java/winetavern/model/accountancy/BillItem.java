@@ -20,7 +20,7 @@ public class BillItem {
 
     public BillItem(DayMenuItem item) {
         this.item = item;
-        this.quantity = 1;
+        this.quantity = 0;
     }
 
     public MonetaryAmount getPrice() {
@@ -29,6 +29,11 @@ public class BillItem {
 
     protected void changeQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return quantity + " x " + item.getName();
     }
 
     public long getId() {

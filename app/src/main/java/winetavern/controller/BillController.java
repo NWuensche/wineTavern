@@ -56,7 +56,7 @@ public class BillController {
         Bill bill = bills.findOne(billid).get();
         DayMenuItem item = dayMenuItems.findOne(productid).get();
         BillItem billItem = new BillItem(item);
-        bill.changeItem(billItem, 1);
+        changeBillItem(bill, billItem, 1);
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
     }
@@ -79,14 +79,7 @@ public class BillController {
             for (String arg : args) { //split bill in billItemId,quantity
                 String[] itemString = arg.split(",");
                 BillItem billItem = billItems.findOne(Long.parseLong(itemString[0])).get();
-                int quantity = Integer.parseInt(itemString[1]);
-                if (quantity > billItem.getQuantity()) { //TODO: newly added BillItem won't be counted!
-                    accountancy.add(new Expense(billItem.getItem().getPrice().multiply(quantity).subtract(billItem.getPrice()).multiply(0.9),
-                            "Rechnung Nr. " + bill.getId(),
-                            persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
-                            expenseGroups.findByName("Bestellung").get()));
-                }
-                bill.changeItem(billItem, quantity);
+                changeBillItem(bill, billItem, Integer.parseInt(itemString[1]));
             }
             bills.save(bill);
             return "redirect:/service/bills/details/" + billid;
@@ -108,5 +101,17 @@ public class BillController {
         }
         model.addAttribute("bill", bill);
         return "printbill";
+    }
+
+    private void changeBillItem(Bill bill, BillItem billItem, int quantity) { //adds orders to expenses of staff
+        if (quantity > billItem.getQuantity()) {
+            accountancy.add(
+                    new Expense(billItem.getItem().getPrice().multiply(quantity).subtract(billItem.getPrice()).multiply(0.9),
+                    "Rechnung Nr. " + bill.getId() + ": " + billItem,
+                    persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
+                    expenseGroups.findByName("Bestellung").get())
+            );
+        }
+        bill.changeItem(billItem, quantity);
     }
 }
