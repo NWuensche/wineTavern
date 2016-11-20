@@ -103,6 +103,27 @@ public class BillController {
         return "printbill";
     }
 
+    @RequestMapping("/service/bills/details/{billid}/split")
+    public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("first") Optional<String> first,
+                            @ModelAttribute("second") Optional<String> second,
+                            Model model){
+        if(first.isPresent() && second.isPresent()) {
+            if (first.get().equals("") || second.get().equals("")) {
+                //TODO give me back two bills and an error
+                return "splitbill";
+            } else {
+                //TODO split bill, both strings formatted like: id,quantity|id,quantity|... for first and second,
+                // look for firstquantity + secondquantity = oldquantity, otherwise error: give me back two temporary
+                // bills splitted like it was
+                return "redirect:/service/bills";
+            }
+        } else {
+            Bill bill = bills.findOne(billid).get();
+            model.addAttribute("bill", bill);
+            return "splitbill";
+        }
+    }
+
     private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
         int diff = quantity - billItem.getQuantity();
         if (diff > 0) { //adds orders to expenses of staff
@@ -115,4 +136,6 @@ public class BillController {
         }
         bill.changeItem(billItem, quantity);
     }
+
+
 }

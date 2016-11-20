@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head>
+
+</head>
+<body th:fragment="content" class="bills">
+<div class="bill__tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/service/bills}"><i class="fa fa-arrow-left"></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active">Rechnung #<span th:text="${bill.id}"></span></a>
+        </li>
+    </ul>
+</div>
+<div class="container__wrap">
+    <div class="heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <h1>Rechnung teilen</h1>
+            </div>
+            <div class="col-xs-6">
+                Tisch <span th:text="${bill.desk}"></span><br/>
+                <span th:text="${bill.staff.userAccount.firstname}"></span>
+                <span th:text="${bill.staff.userAccount.lastname}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <table class="table table-striped text-xs-center hidespinner" style="table-layout:fixed;">
+                <thead>
+                <tr>
+                    <th class="text-xs-center">Produkt</th>
+                    <th class="text-xs-center">Optionen</th>
+                </tr>
+                </thead>
+                <tbody id="leftbill">
+                <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
+                    <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number} + '€)'"
+                              class="product-description"></span></td>
+                    <td>
+                        <div class="input-group">
+                            <input type="number" th:value="${product.quantity}"
+                                   class="form-control text-xs-center" readonly="true" th:id="${product.id}"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" onclick="split(this)">
+                                    <i class="fa fa-hand-o-right"></i>
+                                </button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary moveright">
+                                    <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <table class="table table-striped text-xs-center hidespinner" style="table-layout:fixed;">
+                <thead>
+                <tr>
+                    <th class="text-xs-center">Optionen</th>
+                    <th class="text-xs-center">Produkt</th>
+                </tr>
+                </thead>
+                <tbody id="rightbill">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <a onclick="splitbill()">
+                <button type="button" class="btn btn-primary">
+                    Teilen
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        setup();
+
+        function setup(){
+            var rightbuttons = document.getElementsByClassName("moveright");
+            //alert(rightbuttons.length + " Buttons");
+            for(i=0;i<rightbuttons.length;i++){
+                rightbuttons[i].setAttribute('onclick','right(this)');
+
+            }
+        }
+
+        function splitbill(){
+            var left = "";
+            var right = "";
+            var left_inputs = document.getElementById("leftbill").getElementsByTagName("input");
+            var right_inputs = document.getElementById("rightbill").getElementsByTagName("input");
+            for(i=0;i<left_inputs.length;i++){
+                left += left_inputs[i].id + "," + left_inputs[i].value + "|";
+            }
+
+            for(i=0;i<right_inputs.length;i++){
+                right += right_inputs[i].id + "," + right_inputs[i].value + "|";
+            }
+
+            var query = "?first=" + left + "&second=" + right;
+            window.location = location.pathname + query;
+        }
+
+        function right(node){
+            //alert("right");
+            var line = node.parentNode.parentNode.parentNode.parentNode;
+            document.getElementById("leftbill").removeChild(line);
+            document.getElementById("rightbill").appendChild(line);
+            line.outerHTML =
+                    rightline(line.getElementsByTagName("input")[0].id,line.getElementsByTagName("input")[0].value,line.getElementsByClassName("product-description")[0].innerHTML);
+        }
+
+        function left(node){
+            var line = node.parentNode.parentNode.parentNode.parentNode;
+            document.getElementById("rightbill").removeChild(line);
+            document.getElementById("leftbill").appendChild(line);
+            line.outerHTML =
+                    leftline(line.getElementsByTagName("input")[0].id,line.getElementsByTagName("input")[0].value,line.getElementsByClassName("product-description")[0].innerHTML);
+        }
+
+        function leftline(id,value,title){
+            var string =
+                    "<tr style=\'vertical-align:middle;\'><td><span class=\'product-description\'>" + title +
+                    "</span></td><td><div class=\'input-group\'><input type=\'number\' class=\'form-control text-xs-center\' readonly=\'true\' id=\'" + id +
+                    "' value=\'" + value +
+                    "\'/><span class=\'input-group-btn\'><button class=\'btn btn-primary\' onclick=\'split(this)\'><i class=\'fa fa-hand-o-right\'></i></button></span><span class=\'input-group-btn\'><button type=\'button\' class=\'btn btn-primary moveright\' onclick=\'right(this)\'><i class=\'fa fa-arrow-right\'></i></button></span></div></td></tr>";
+            return string;
+        }
+
+        function rightline(id,value,title){
+            var string =
+                    "<tr style=\'vertical-align:middle;\'><td><div class=\'input-group\'><span class=\'input-group-btn\'><button type=\'button\' class=\'btn btn-primary moveleft\' onclick=\'left(this)\'><i class=\'fa fa-arrow-left\'></i></button></span><span class=\'input-group-btn\'><button class=\'btn btn-primary\' onclick=\'split(this)\'><i class=\'fa fa-hand-o-left\'></i></button></span><input type=\'number\' class=\'form-control text-xs-center\' readonly=\'true\' id=\'" + id +
+                    "' value=\'" + value +
+                    "\'/></div></td><td><span class=\'product-description\'>" + title +
+                    "</span></td></tr>";
+            return string;
+        }
+
+    /*]]>*/
+</script>
+</body>
+</html>

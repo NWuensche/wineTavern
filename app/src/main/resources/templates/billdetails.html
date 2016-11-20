@@ -26,6 +26,9 @@
                 <span th:text="${bill.staff.userAccount.lastname}"></span>
             </div>
             <div class="col-xs-4 text-xs-right">
+                <a th:href="@{'/service/bills/details/' + ${bill.id} + '/split'}">
+                    <button class="btn btn-primary">Aufteilen</button>
+                </a>
                 <a th:href="@{'/service/bills/details/' + ${bill.id} + '/print'}" target="_blank">
                     <button class="btn btn-primary">Drucken</button>
                 </a>
