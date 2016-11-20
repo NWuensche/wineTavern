@@ -27,7 +27,7 @@ public class BillItem {
         return item.getPrice().multiply(quantity);
     }
 
-    protected void changeQuantity(int quantity) {
+    void changeQuantity(int quantity) {
         this.quantity = quantity;
     }
 

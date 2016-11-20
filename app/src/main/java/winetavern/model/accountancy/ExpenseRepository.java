@@ -1,6 +1,8 @@
 package winetavern.model.accountancy;
 
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.accountancy.AccountancyEntry;
+import org.salespointframework.core.Streamable;
 import winetavern.model.user.Person;
 
 import java.util.List;

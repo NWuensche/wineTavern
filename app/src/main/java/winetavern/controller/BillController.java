@@ -103,11 +103,12 @@ public class BillController {
         return "printbill";
     }
 
-    private void changeBillItem(Bill bill, BillItem billItem, int quantity) { //adds orders to expenses of staff
-        if (quantity > billItem.getQuantity()) {
-            accountancy.add(
-                    new Expense(billItem.getItem().getPrice().multiply(quantity).subtract(billItem.getPrice()).multiply(0.9),
-                    "Rechnung Nr. " + bill.getId() + ": " + billItem,
+    private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
+        int diff = quantity - billItem.getQuantity();
+        if (diff > 0) { //adds orders to expenses of staff
+            accountancy.add( //the staff pays 90% of the selling price
+                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9),
+                    "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
                     persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
                     expenseGroups.findByName("Bestellung").get())
             );

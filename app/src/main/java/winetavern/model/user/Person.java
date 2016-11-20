@@ -75,4 +75,8 @@ public class Person {
         return Roles.getDisplayNameRole(role);
     }
 
+    @Override
+    public String toString() {
+        return userAccount.getFirstname() + " " + userAccount.getLastname();
+    }
 }

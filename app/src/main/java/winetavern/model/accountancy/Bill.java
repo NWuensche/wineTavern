@@ -7,8 +7,9 @@ import winetavern.model.user.Person;
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -24,7 +25,7 @@ public class Bill {
     private MonetaryAmount totalPrice = Money.of(0, EURO);
     private LocalDateTime payTime;
     @ManyToOne private Person staff;
-    @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new HashSet<>();
+    @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new TreeSet<>();
 
     @Deprecated
     protected Bill() {}
