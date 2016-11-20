@@ -26,7 +26,7 @@
                 <div class="form-group"> 
                     <label for="menuItem">Example select</label> 
                     <select class="form-control" id="menuItem" th:field="${menuitem.product}"> 
-                        <option th:each="product : ${products}" th:value="${product.getId()}" th:text="${product.name}"> </option>
+                        <option th:each="onestock : ${stock}" th:value="${onestock.product.getId()}" th:text="${onestock.product.name}"> </option>
                     </select> 
                 </div>
 

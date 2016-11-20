@@ -57,4 +57,8 @@ public class DayMenu {
     public void removeMenuItem(DayMenuItem dayMenuItem) {
         dayMenuItems.remove(dayMenuItem);
     }
+
+    //public String toString() {
+    //    return "yoloswag";
+    //}
 }

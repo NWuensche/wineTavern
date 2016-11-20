@@ -49,11 +49,20 @@
                 </a>
 
                 <!-- RESERVIERUNG-->
+                <!-- TODO: richtige Rolle für Reservierungen setzen -->
 
-                <a th:href="@{/reservation}" class="list-group-item list-group-item-action side__menu side-module__container">
+                <a th:href="@{/reservation}" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#reservierungen">
                     <i class="fa fa-clock-o fa-lg" aria-hidden="true"></i>
                     <span>Reservierung</span>
                 </a>
+                <div id="reservierungen" class="collapse">
+                    <a th:href="@{/reservation}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <span>Abfrage</span>
+                    </a>
+                    <a th:href="@{/reservation/showall}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <span>Alle anzeigen</span>
+                    </a>
+                </div>
 
                 <!-- ABRECHNUNG -->
 

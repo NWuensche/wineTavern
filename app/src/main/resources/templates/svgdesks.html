@@ -75,7 +75,7 @@
         <text transform="matrix(1 0 0 1 915.9438 579.6964)" class="st4 st6">B7</text>
         </svg>
         <form id="deskSelector" method="get" action="/reservation">
-            <input type="hidden" th:name="reservationtime" th:value="${reservationtime}"/>
+            <input type="hidden" th:name="reservationtime" th:value="${reservationtime.format(datetimeformatter)}"/>
             <input type="hidden" th:name="desk" name="desk"/>
         </form>
 

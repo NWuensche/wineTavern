@@ -26,8 +26,8 @@
 
                                 <div class="form-group">
                                     <label for="reservationtime">Datum und Uhrzeit:</label>
-                                    <input type="text" name="reservationtime" id="reservationtime" class="form-control"
-                                           th:value="${reservationtime}"/>
+                                    <input type="text" th:name="${'reservationtime'}" id="reservationtime" class="form-control"
+                                           th:value="${reservationtime.format(datetimeformatter)}"/>
                                 </div>
                                 <button class="btn btn-primary btn-lg" name="check">Verfügbarkeit abfragen</button>
 
@@ -43,7 +43,8 @@
             <div class="container" th:if="${desk != null and reservationtime != null}">
                 <form method="post" action="/reservation/add">
                     <p>Tisch: </p><input type="text" th:name="desk" th:value="${desk}" readonly="readonly" />
-                    <p>Datum und Uhrzeit:</p><input type="text" th:name="reservationtime" th:value="${reservationtime}" readonly="readonly" />
+                    <p>Personen: </p><input type="text" th:name="amount" th:value="${deskcapacity}" />
+                    <p>Datum und Uhrzeit:</p><input type="text" th:name="reservationtime" th:value="${reservationtime.format(datetimeformatter)}" readonly="readonly" />
                     <p>Dauer in Minuten:</p><input type="text" th:name="duration" value="60" />
                     <p>Name des Reservators:</p><input type="text" th:name="name" />
                     <button>Reservieren</button>

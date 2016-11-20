@@ -109,6 +109,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         deskList.add(new Desk("4", 2));
         deskList.add(new Desk("5", 2));
         deskList.add(new Desk("6", 2));
+        deskList.add(new Desk("7", 2));
 
 
         //Bar

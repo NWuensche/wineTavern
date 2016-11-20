@@ -53,7 +53,7 @@ public class DayMenuItemManager {
         DayMenuItem dayMenuItem = new DayMenuItem();
         dayMenuItem.setDayMenu(dayMenuRepository.findById(cameFrom));
         model.addAttribute("menuitem", dayMenuItem);
-        model.addAttribute("products", stock.findAll());
+        model.addAttribute("stock", stock.findAll());
         return "addmenuitem";
     }
 
@@ -62,7 +62,7 @@ public class DayMenuItemManager {
      * Custom Initbinder makes DayMenu and Product usable with form
      */
     @InitBinder
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+    protected void initBinder(WebDataBinder binder) throws Exception {
         binder.registerCustomEditor(DayMenu.class, "dayMenu", new PropertyEditorSupport() {
             @Override
             public String getAsText() {
