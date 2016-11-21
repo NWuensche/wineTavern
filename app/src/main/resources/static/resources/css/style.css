@@ -388,9 +388,18 @@ body.mini .list-group-item-action span {
     background-color: #fff;
     border: none;
     margin: 0.5rem 0;
-    border-radius: 0.3rem 0 0 0.2rem;
 }
 
 .users .icon__button .fa {
     color: #243648;
+
+}
+
+.users .icon-list {
+    border-radius: 0.2rem 0 0 0.2rem;
+}
+
+.users .icon-card {
+    border-radius: 0 0.2rem 0.2rem 0;
+    float: right;
 }
