@@ -94,7 +94,6 @@ public class BillController {
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
         if(query.isPresent()) {
-            System.out.println(bill.getItems() + " wird zu:");
             Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
             bills.save(newBill);
             Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
@@ -103,8 +102,8 @@ public class BillController {
                     bill.changeItem(billItem, 0);
                     newBill.changeItem(billItem, billItem.getQuantity());
                 } else {
-                    BillItem newBillItem = new BillItem(billItem.getItem());
-                    newBill.changeItem(newBillItem, (billItem.getQuantity() - args.get(billItem)));
+                    newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
+                    bills.save(newBill);
                     bill.changeItem(billItem, args.get(billItem));
                 }
             }
