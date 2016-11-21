@@ -58,11 +58,6 @@ public class Bill {
         totalPrice = sum;
     }
 
-    public void removeAll(Collection<BillItem> items) {
-        this.items.removeAll(items);
-        reloadTotalPrice();
-    }
-
     public String getDesk() {
         return desk;
     }
@@ -88,7 +83,7 @@ public class Bill {
     }
 
     public Set<BillItem> getItems() {
-        return items;
+        return new TreeSet<>(items);
     }
 
     public Person getStaff() {
