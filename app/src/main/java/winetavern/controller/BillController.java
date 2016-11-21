@@ -16,8 +16,7 @@ import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.user.PersonManager;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Louis
@@ -61,7 +60,7 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
-    @RequestMapping("/service/bills/details/{billid}/remove/{productid}")
+    /*@RequestMapping("/service/bills/details/{billid}/remove/{productid}")
     public String removeProductFromBill(@PathVariable("billid") Long billid, @PathVariable("productid") Long
             productid) {
 
@@ -69,17 +68,15 @@ public class BillController {
         System.out.println("remove item " + productid);
 
         return "redirect:/service/bills/details/" + billid;
-    }
+    }*/
 
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
         if (query.isPresent() && !query.equals("")) {
-            String[] args = query.get().substring(0, query.get().length() - 1).split("\\|"); //split bill in arguments
-            for (String arg : args) { //split bill in billItemId,quantity
-                String[] itemString = arg.split(",");
-                BillItem billItem = billItems.findOne(Long.parseLong(itemString[0])).get();
-                changeBillItem(bill, billItem, Integer.parseInt(itemString[1]));
+            Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
+            for (BillItem billItem : args.keySet()) {
+                changeBillItem(bill, billItem, args.get(billItem));
             }
             bills.save(bill);
             return "redirect:/service/bills/details/" + billid;
@@ -90,6 +87,16 @@ public class BillController {
             model.addAttribute("menuitems", menuItems); //TODO show only items of the day
             return "billdetails";
         }
+    }
+
+    private Map<BillItem, Integer> queryToMap(String query) {
+        Map<BillItem, Integer> res = new HashMap<>();
+        String[] args = query.substring(0, query.length() - 1).split("\\|"); //split bill in arguments
+        for (String arg : args) { //split bill in billItemId,quantity
+            String[] itemString = arg.split(",");
+            res.put(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
+        }
+        return res;
     }
 
     @RequestMapping("/service/bills/details/{billid}/print")
@@ -105,20 +112,38 @@ public class BillController {
 
     @RequestMapping("/service/bills/details/{billid}/split")
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("first") Optional<String> first,
-                            @ModelAttribute("second") Optional<String> second,
-                            Model model){
+                            @ModelAttribute("second") Optional<String> second, Model model){
+        Bill bill = bills.findOne(billid).get();
         if(first.isPresent() && second.isPresent()) {
+            System.out.println(first.get() + ":" + second.get());
             if (first.get().equals("") || second.get().equals("")) {
                 //TODO give me back two bills and an error
-                return "splitbill";
+                return "redirect:/service/bills";
             } else {
                 //TODO split bill, both strings formatted like: id,quantity|id,quantity|... for first and second,
-                // look for firstquantity + secondquantity = oldquantity, otherwise error: give me back two temporary
-                // bills splitted like it was
+                Map<BillItem, Integer> argsFirst = queryToMap(first.get()); //split bill in billItemId,quantity
+                Map<BillItem, Integer> argsSecond = queryToMap(first.get()); //split bill in billItemId,quantity
+                for (BillItem billItem : argsFirst.keySet()) {
+                    bill.changeItem(billItem, argsFirst.get(billItem));
+                }
+                Set<BillItem> itemsToRemove = bill.getItems();
+                itemsToRemove.removeAll(argsFirst.keySet());
+                System.out.println("items to remove: " + itemsToRemove) ;
+                bill.removeAll(itemsToRemove);
+                bills.save(bill);
+
+                Bill bill2 = new Bill(bill.getDesk(), bill.getStaff()); //copy bill with empty BillItems
+                for (BillItem billItem : argsSecond.keySet()) {
+                    if (itemsToRemove.contains(billItem)) {
+                        bill2.changeItem(billItem, argsSecond.get(billItem)); //whole quantity in new Bill
+                    } else {
+                        bill2.changeItem(new BillItem(billItem.getItem()), argsSecond.get(billItem));
+                    }
+                }
+                bills.save(bill2);
                 return "redirect:/service/bills";
             }
         } else {
-            Bill bill = bills.findOne(billid).get();
             model.addAttribute("bill", bill);
             return "splitbill";
         }

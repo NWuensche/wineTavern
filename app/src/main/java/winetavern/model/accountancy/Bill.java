@@ -7,6 +7,7 @@ import winetavern.model.user.Person;
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -55,6 +56,11 @@ public class Bill {
         MonetaryAmount sum = Money.of(0, EURO);
         for (BillItem item : items) sum = sum.add(item.getPrice());
         totalPrice = sum;
+    }
+
+    public void removeAll(Collection<BillItem> items) {
+        this.items.removeAll(items);
+        reloadTotalPrice();
     }
 
     public String getDesk() {

@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 
 @Entity
-public class BillItem {
+public class BillItem implements Comparable<BillItem> {
     @GeneratedValue @Id private long id;
     @OneToOne(cascade = CascadeType.ALL) private DayMenuItem item;
     private int quantity;
@@ -46,5 +46,10 @@ public class BillItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public int compareTo(BillItem o) {
+        return Long.compare(id, o.getId());
     }
 }
