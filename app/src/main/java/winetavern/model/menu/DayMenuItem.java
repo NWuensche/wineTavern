@@ -6,6 +6,9 @@ import javax.persistence.*;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Michel on 11/3/2016.
  */
@@ -28,15 +31,20 @@ public class DayMenuItem {
     private Double quantityPerProduct;
     private boolean enabled;
 
-    @ManyToOne(fetch=FetchType.EAGER, targetEntity = DayMenu.class)
-    @JoinColumn(name = "day_menu_id")
-    private DayMenu dayMenu;
+    @ManyToMany(fetch=FetchType.EAGER, targetEntity = DayMenu.class)
+    @JoinTable (joinColumns = {@JoinColumn(name="day_menu_id")},
+            inverseJoinColumns = {@JoinColumn(name = "day_menu_item_id")}
+    )
+    private List<DayMenu> dayMenus;
 
-    public DayMenuItem() {};
+    public DayMenuItem() {
+        this.dayMenus = new LinkedList<DayMenu>();
+    };
 
     public DayMenuItem(String name, Money price) {
         this.name = name;
         this.price = price;
+        this.dayMenus = new LinkedList<DayMenu>();
     }
 
     public DayMenuItem(String name, String description, Money price, Double quantityPerProduct) {
@@ -44,6 +52,7 @@ public class DayMenuItem {
         this.price = price;
         this.description = description;
         this.quantityPerProduct = quantityPerProduct;
+        this.dayMenus = new LinkedList<DayMenu>();
     }
 
 
@@ -80,7 +89,7 @@ public class DayMenuItem {
         this.enabled = enabled;
     }
 
-    public void setPrice(Money price) {
+    public void setPrice(MonetaryAmount price) {
         this.price = price;
     }
 
@@ -104,12 +113,16 @@ public class DayMenuItem {
         this.enabled = false;
     }
 
-    public void setDayMenu(DayMenu dayMenu) {
-        this.dayMenu = dayMenu;
+    public void setDayMenus(List<DayMenu> dayMenus) {
+        this.dayMenus = dayMenus;
     }
 
-    public DayMenu getDayMenu() {
-        return dayMenu;
+    public List<DayMenu> getDayMenus() {
+        return dayMenus;
+    }
+
+    public void addDayMenu(DayMenu dayMenu) {
+        dayMenus.add(dayMenu);
     }
 
     public Double getQuantityPerProduct() {

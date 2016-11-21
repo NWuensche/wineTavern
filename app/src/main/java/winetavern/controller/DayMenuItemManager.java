@@ -20,6 +20,7 @@ import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.ProductCatalog;
 
+import javax.money.MonetaryAmount;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
@@ -46,13 +47,11 @@ public class DayMenuItemManager {
 
     /**
      * Initially called for adding a menu item.
-     * Data gets processed in  {@link #addMenuItemPost(DayMenuItem, BindingResult, ModelAndView)}
+     * Data gets processed in  {@link #addMenuItemPost(Product, String, MonetaryAmount, String, Double, Boolean, Long, ModelAndView)}
      */
     @RequestMapping("/admin/addMenuItem")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
-        DayMenuItem dayMenuItem = new DayMenuItem();
-        dayMenuItem.setDayMenu(dayMenuRepository.findById(cameFrom));
-        model.addAttribute("menuitem", dayMenuItem);
+        model.addAttribute("dayMenu", dayMenuRepository.findById(cameFrom));
         model.addAttribute("stock", stock.findAll());
         return "addmenuitem";
     }
@@ -98,18 +97,26 @@ public class DayMenuItemManager {
      * 2) setting DayMenuItem name, price and optionally a description.
      */
     @RequestMapping(value = "/admin/addMenuItem", method = RequestMethod.POST)
-    public ModelAndView addMenuItemPost(@Valid @ModelAttribute("menuitem") DayMenuItem dayMenuItem,
-                                        BindingResult bindingResultDayMenuItem,
+    public ModelAndView addMenuItemPost(@RequestParam("product") Product product,
+                                        @RequestParam("name") String name,
+                                        @RequestParam("price") MonetaryAmount price,
+                                        @RequestParam("description") String description,
+                                        @RequestParam("quantityPerProduct") Double quantityPerProduct,
+                                        @RequestParam("enabled") Boolean enabled,
+                                        @RequestParam("dayMenu") Long dayMenu,
                                         ModelAndView modelAndView) {
 
-        if(dayMenuItem.getName() == null) {
-            modelAndView.addObject("menuitem", dayMenuItem);
-            modelAndView.setViewName("addmenuitem");
-            return modelAndView;
-        } else {
-            dayMenuItemRepository.save(dayMenuItem);
-            modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(dayMenuItem.getDayMenu().getId()));
-            return modelAndView;
-        }
+        DayMenuItem dayMenuItem = new DayMenuItem();
+        dayMenuItem.setProduct(product);
+        dayMenuItem.setName(name);
+        dayMenuItem.setPrice(price);
+        dayMenuItem.setDescription(description);
+        dayMenuItem.setQuantityPerProduct(quantityPerProduct);
+        dayMenuItem.setEnabled(enabled);
+        dayMenuItem.addDayMenu(dayMenuRepository.findById(dayMenu));
+        dayMenuItemRepository.save(dayMenuItem);
+
+        modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(dayMenu));
+        return modelAndView;
     }
 }
