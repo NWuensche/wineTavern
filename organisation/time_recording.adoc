@@ -159,4 +159,6 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |18.10.2016 |09:00 |12:00 |Gruppenbesprechung
 |19.10.2016 |14:00 |16:00 |Initbinder
 |20.10.2016 |13:00 |15:00 |Reservation
+|21.10.2016 |08:30 |10:45 |Reservation Manager
+|21.10.2016 |11:30 |12:30 |Organisation
 |===
