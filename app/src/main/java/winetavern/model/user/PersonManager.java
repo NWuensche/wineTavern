@@ -1,8 +1,10 @@
 package winetavern.model.user;
 
 import org.salespointframework.core.SalespointRepository;
+import org.salespointframework.useraccount.UserAccount;
 
 import javax.persistence.Entity;
+import java.util.Optional;
 
 /**
  * Repository interface to handle {@link Person}s
@@ -11,5 +13,5 @@ import javax.persistence.Entity;
 
 
 public interface PersonManager extends SalespointRepository<Person, Long> {
-
+    Optional<Person> findByUserAccount(UserAccount account);
 }

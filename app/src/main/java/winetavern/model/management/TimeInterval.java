@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * @author Louis
+ * @author Louis, Michel
  */
 
 @Entity
@@ -20,9 +20,13 @@ public class TimeInterval {
     @Deprecated
     protected TimeInterval() {}
 
-    public TimeInterval(LocalDateTime start, LocalDateTime end) {
+    public TimeInterval(LocalDateTime start, LocalDateTime end) throws IllegalArgumentException {
+        if(start.compareTo(end) == 1) {
+            throw new IllegalArgumentException("End should not be before start");
+        }
+
         this.start = start;
-        setEnd(end);
+        this.end = end;
     }
 
     public long getId() {
@@ -34,9 +38,6 @@ public class TimeInterval {
     }
 
     public void setStart(LocalDateTime start) {
-        if (start == null || end == null) throw new NullPointerException("the time stamp(s) must not be null");
-        if (start.compareTo(end) == 0) throw new IllegalArgumentException("the start time must not be the end time");
-        if (start.compareTo(end) == 1) throw new IllegalArgumentException("the start must be sooner than the end");
         this.start = start;
     }
 
@@ -45,9 +46,6 @@ public class TimeInterval {
     }
 
     public void setEnd(LocalDateTime end) {
-        if (start == null || end == null) throw new NullPointerException("the time stamp(s) must not be null");
-        if (start.compareTo(end) == 0) throw new IllegalArgumentException("the start time must not be the end time");
-        if (start.compareTo(end) == 1) throw new IllegalArgumentException("the start must be sooner than the end");
         this.end = end;
     }
 
@@ -70,12 +68,14 @@ public class TimeInterval {
         return this;
     }
 
-    public static boolean intersects(TimeInterval first, TimeInterval second){
-        return (timeInInterval(first.getStart(), second) || timeInInterval(first.getEnd(), second) ||
-                first.getStart().isEqual(second.getStart()) || first.getEnd().isEqual(second.getEnd()));
+    public boolean intersects(TimeInterval other) {
+        return (timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
+                this.getStart().isEqual(other.getStart()) || this.getEnd().isEqual(other.getEnd()));
     }
 
-    public static boolean timeInInterval(LocalDateTime time, TimeInterval interval){
-        return (interval.getStart().isBefore(time) && interval.getEnd().isAfter(time));
+    public boolean timeInInterval(LocalDateTime time) {
+        Interval interval = this.toInterval();
+        return (interval.getStart().isBefore(time) &&
+                interval.getEnd().isAfter(time));
     }
 }

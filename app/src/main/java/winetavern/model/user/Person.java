@@ -2,9 +2,10 @@ package winetavern.model.user;
 
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
-import winetavern.model.DateParameter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,12 @@ import java.util.stream.Collectors;
 @Entity
 public class Person {
 
-    @Id @GeneratedValue private long id;
+    @Id @GeneratedValue private Long id;
     @OneToOne private UserAccount userAccount;
 
     private String address;
-    private Calendar birthday;
+    private LocalDate birthday;
+    private String personTitle;
 
     @Deprecated
     protected Person() {}
@@ -33,23 +35,33 @@ public class Person {
      * @param birthday can be null
      * @throws IllegalArgumentException if userAccount has not exactly 1 Role
      */
-    public Person(UserAccount userAccount, String address, DateParameter birthday) throws IllegalArgumentException {
-
+    public Person(UserAccount userAccount, String address, String birthday, String personTitle) throws IllegalArgumentException {
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
         }
 
         this.userAccount = userAccount;
         this.address = address;
-        this.birthday = (birthday != null) ? birthday.getCalendar() : null;
+        this.birthday = parseBirthday(birthday);
+        this.personTitle = personTitle;
+    }
 
+    private LocalDate parseBirthday(String birthday) {
+        if(birthday == null) {
+            return null;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDate localDate = LocalDate.parse(birthday, formatter);
+
+        return localDate;
     }
 
     private int numberOfRoles(UserAccount userAccount) {
         return userAccount.getRoles().stream().collect(Collectors.toList()).size();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -61,7 +73,7 @@ public class Person {
         return Optional.ofNullable(address);
     }
 
-    public Optional<Calendar> getBirthday() {
+    public Optional<LocalDate> getBirthday() {
         return Optional.ofNullable(birthday);
     }
 
@@ -73,6 +85,14 @@ public class Person {
         List<Role> roles = userAccount.getRoles().stream().collect(Collectors.toList());
         Role role = roles.get(0);
         return Roles.getDisplayNameRole(role);
+    }
+
+    public boolean isEnabled() {
+        return userAccount.isEnabled();
+    }
+
+    public String getPersonTitle() {
+        return personTitle;
     }
 
 }

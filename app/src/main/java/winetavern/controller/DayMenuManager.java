@@ -33,6 +33,9 @@ public class DayMenuManager {
         return "addmenu";
     }
 
+    /**
+     * @param dateParameter if day starts with a 0, the month will be count up by one
+     */
     @RequestMapping(value = "/admin/addMenu", method = RequestMethod.POST)
     public String addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter, Model model) {
         Calendar creationDate = dateParameter.getCalendar();
