@@ -91,18 +91,21 @@ public class BillController {
     }
 
     @RequestMapping("/service/bills/details/{billid}/split")
-    public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("first") Optional<String> query, Model model){
+    public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
         if(query.isPresent()) {
+            System.out.println(bill.getItems() + " wird zu:");
             Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
+            bills.save(newBill);
             Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
             for (BillItem billItem : bill.getItems()) { //work with every item that existed before
                 if (!args.keySet().contains(billItem)) {
                     bill.changeItem(billItem, 0);
                     newBill.changeItem(billItem, billItem.getQuantity());
                 } else {
+                    BillItem newBillItem = new BillItem(billItem.getItem());
+                    newBill.changeItem(newBillItem, (billItem.getQuantity() - args.get(billItem)));
                     bill.changeItem(billItem, args.get(billItem));
-                    newBill.changeItem(new BillItem(billItem.getItem()), billItem.getQuantity() - args.get(billItem));
                 }
             }
             bills.save(bill);

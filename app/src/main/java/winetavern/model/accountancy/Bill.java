@@ -41,6 +41,7 @@ public class Bill {
     public void changeItem(BillItem item, int quantity) {
         if (isClosed) throw new IllegalStateException("Bill is already closed");
         if (item == null) throw new NullPointerException("the item must not be null");
+        System.out.println("Change on bill " + id + ": " + item + " to " + quantity);
         if (quantity == 0) {
             items.remove(item);
         } else {
