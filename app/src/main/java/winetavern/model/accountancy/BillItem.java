@@ -19,6 +19,7 @@ public class BillItem implements Comparable<BillItem> {
     protected BillItem() {}
 
     public BillItem(DayMenuItem item) {
+        if (item == null) throw new NullPointerException("the item must not be null");
         this.item = item;
         this.quantity = 0;
     }
@@ -28,6 +29,7 @@ public class BillItem implements Comparable<BillItem> {
     }
 
     void changeQuantity(int quantity) {
+        if (quantity < 0) throw new IllegalArgumentException("the quantity must not be negative");
         this.quantity = quantity;
     }
 
