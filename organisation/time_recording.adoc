@@ -47,6 +47,9 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 13.11.2016 | 15:00 | 17:00 | Reservation
 | 14:11.2016 | 17:00 | 18:30 | Bill, tests
 | 15.11.2016 | 16:00 | 18:00 | Bill, initial template
+| 18.11.2016 | 15:00 | 18:00 | billdetail template
+| 19.11.2016 | 11:00 | 13:00 | billdetail template
+| 20.11.2016 | 14:00 | 17:00 | splitbill template
 |===
 
 == Louis
