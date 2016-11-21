@@ -125,12 +125,27 @@ public class WineTavernDataInitializer implements DataInitializer{
         DayMenu dayMenu = new DayMenu(calendar);
         dayMenuRepository.save(dayMenu);
 
-        DayMenuItem vodka = new DayMenuItem("Vodka vom Fass", "really good", Money.of(2, "EUR"));
+        DayMenuItem vodka = new DayMenuItem("Vodka 2cl vom Fass", "really good", Money.of(2, "EUR"), 35.0);
         vodka.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        vodka.setDayMenu(dayMenu);
+        vodka.enable();
         dayMenuItemRepository.save(vodka);
 
-        DayMenuItem berlinerBrandstifter = new DayMenuItem("Berliner Brandstifter", "der beste", Money.of(1.99, "EUR"));
+        DayMenuItem vodka2cl = new DayMenuItem("Vodka 2cl", "Kleiner Vodka für zwischendurch", Money.of(1.80, "EUR"), 35.0);
+        vodka2cl.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        vodka2cl.setDayMenu(dayMenu);
+        vodka2cl.enable();
+        dayMenuItemRepository.save(vodka2cl);
+
+        DayMenuItem vodka4cl = new DayMenuItem("Vodka 4cl", "Großer Vodka für coole Leute", Money.of(2.50, "EUR"), 12.0);
+        vodka4cl.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        vodka4cl.setDayMenu(dayMenu);
+        vodka4cl.enable();
+        dayMenuItemRepository.save(vodka4cl);
+
+        DayMenuItem berlinerBrandstifter = new DayMenuItem("Berliner Brandstifter", "der beste", Money.of(1.99, "EUR"), 12.0);
         berlinerBrandstifter.setProduct(productCatalog.findByName("Berliner Brandstifter").iterator().next());
+        berlinerBrandstifter.setDayMenu(dayMenu);
         dayMenuItemRepository.save(berlinerBrandstifter);
 
 

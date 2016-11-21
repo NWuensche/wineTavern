@@ -22,6 +22,10 @@ public class DayMenuItem {
     private Product product;
     private String name;
     private String description;
+    /**
+     * Amount of this DayMenuItem you get out of one Product.
+     */
+    private Double quantityPerProduct;
     private boolean enabled;
 
     @ManyToOne(fetch=FetchType.EAGER, targetEntity = DayMenu.class)
@@ -35,10 +39,11 @@ public class DayMenuItem {
         this.price = price;
     }
 
-    public DayMenuItem(String name, String description, Money price) {
+    public DayMenuItem(String name, String description, Money price, Double quantityPerProduct) {
         this.name = name;
         this.price = price;
         this.description = description;
+        this.quantityPerProduct = quantityPerProduct;
     }
 
 
@@ -65,6 +70,14 @@ public class DayMenuItem {
 
     public Boolean isEnabled() {
         return enabled;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public void setPrice(Money price) {
@@ -97,6 +110,14 @@ public class DayMenuItem {
 
     public DayMenu getDayMenu() {
         return dayMenu;
+    }
+
+    public Double getQuantityPerProduct() {
+        return quantityPerProduct;
+    }
+
+    public void setQuantityPerProduct(Double quantityPerProduct) {
+        this.quantityPerProduct = quantityPerProduct;
     }
 
 }

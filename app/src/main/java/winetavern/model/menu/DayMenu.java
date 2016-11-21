@@ -58,7 +58,4 @@ public class DayMenu {
         dayMenuItems.remove(dayMenuItem);
     }
 
-    //public String toString() {
-    //    return "yoloswag";
-    //}
 }

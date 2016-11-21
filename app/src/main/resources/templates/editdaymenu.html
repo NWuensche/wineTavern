@@ -39,7 +39,7 @@ th:include="backend-temp :: page">
             <th>#</th>
             <th>Produkt</th>
             <th>Preis</th>
-            <th>Menge</th>
+            <th>Menge auf Lager</th>
             <th>Bearbeiten</th>
         </tr>
         </thead>
@@ -47,8 +47,8 @@ th:include="backend-temp :: page">
         <tr th:each="item : ${daymenu.dayMenuItems}">
             <th scope="row">-</th>
             <td th:text="${item.name}"></td>
-            <td></td>
-            <td></td>
+            <td th:text="${item.price}"></td>
+            <td th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
             <td>
                 <button type="button"  class="btn btn-primary">
                     <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
