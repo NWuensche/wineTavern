@@ -60,16 +60,6 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
-    /*@RequestMapping("/service/bills/details/{billid}/remove/{productid}")
-    public String removeProductFromBill(@PathVariable("billid") Long billid, @PathVariable("productid") Long
-            productid) {
-
-        //TODO needs to be removed from bill, if quantity is just 1
-        System.out.println("remove item " + productid);
-
-        return "redirect:/service/bills/details/" + billid;
-    }*/
-
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
@@ -89,16 +79,6 @@ public class BillController {
         }
     }
 
-    private Map<BillItem, Integer> queryToMap(String query) {
-        Map<BillItem, Integer> res = new HashMap<>();
-        String[] args = query.substring(0, query.length() - 1).split("\\|"); //split bill in arguments
-        for (String arg : args) { //split bill in billItemId,quantity
-            String[] itemString = arg.split(",");
-            res.put(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
-        }
-        return res;
-    }
-
     @RequestMapping("/service/bills/details/{billid}/print")
     public String printBill(@PathVariable("billid") Long billid, Model model){
         Bill bill = bills.findOne(billid).get();
@@ -111,42 +91,38 @@ public class BillController {
     }
 
     @RequestMapping("/service/bills/details/{billid}/split")
-    public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("first") Optional<String> first,
-                            @ModelAttribute("second") Optional<String> second, Model model){
+    public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("first") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
-        if(first.isPresent() && second.isPresent()) {
-            System.out.println(first.get() + ":" + second.get());
-            if (first.get().equals("") || second.get().equals("")) {
-                //TODO give me back two bills and an error
-                return "redirect:/service/bills";
-            } else {
-                //TODO split bill, both strings formatted like: id,quantity|id,quantity|... for first and second,
-                Map<BillItem, Integer> argsFirst = queryToMap(first.get()); //split bill in billItemId,quantity
-                Map<BillItem, Integer> argsSecond = queryToMap(first.get()); //split bill in billItemId,quantity
-                for (BillItem billItem : argsFirst.keySet()) {
-                    bill.changeItem(billItem, argsFirst.get(billItem));
+        if(query.isPresent()) {
+            Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
+            Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
+            for (BillItem billItem : bill.getItems()) { //work with every item that existed before
+                if (!args.keySet().contains(billItem)) {
+                    bill.changeItem(billItem, 0);
+                    newBill.changeItem(billItem, billItem.getQuantity());
+                } else {
+                    bill.changeItem(billItem, args.get(billItem));
+                    newBill.changeItem(new BillItem(billItem.getItem()), billItem.getQuantity() - args.get(billItem));
                 }
-                Set<BillItem> itemsToRemove = bill.getItems();
-                itemsToRemove.removeAll(argsFirst.keySet());
-                System.out.println("items to remove: " + itemsToRemove) ;
-                bill.removeAll(itemsToRemove);
-                bills.save(bill);
-
-                Bill bill2 = new Bill(bill.getDesk(), bill.getStaff()); //copy bill with empty BillItems
-                for (BillItem billItem : argsSecond.keySet()) {
-                    if (itemsToRemove.contains(billItem)) {
-                        bill2.changeItem(billItem, argsSecond.get(billItem)); //whole quantity in new Bill
-                    } else {
-                        bill2.changeItem(new BillItem(billItem.getItem()), argsSecond.get(billItem));
-                    }
-                }
-                bills.save(bill2);
-                return "redirect:/service/bills";
             }
+            bills.save(bill);
+            bills.save(newBill);
+            return "redirect:/service/bills";
+
         } else {
             model.addAttribute("bill", bill);
             return "splitbill";
         }
+    }
+
+    private Map<BillItem, Integer> queryToMap(String query) {
+        Map<BillItem, Integer> res = new HashMap<>();
+        String[] args = query.substring(0, query.length() - 1).split("\\|"); //split bill in arguments
+        for (String arg : args) { //split bill in billItemId,quantity
+            String[] itemString = arg.split(",");
+            res.put(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
+        }
+        return res;
     }
 
     private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
