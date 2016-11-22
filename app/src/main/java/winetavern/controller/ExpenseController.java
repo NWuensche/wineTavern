@@ -13,7 +13,6 @@ import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,6 +36,8 @@ public class ExpenseController {
         model.addAttribute("expenseAmount", expensesToday.size());
         model.addAttribute("exptoday", expensesToday);
         model.addAttribute("expold",expensesOld);
+        model.addAttribute("persons",persons.findAll());
+        model.addAttribute("groups",expenseGroups.findAll());
         return "expenses";
     }
 
