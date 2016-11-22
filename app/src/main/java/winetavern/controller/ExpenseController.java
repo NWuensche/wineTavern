@@ -1,6 +1,8 @@
 package winetavern.controller;
 
+import org.salespointframework.accountancy.Accountancy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +19,14 @@ import java.util.List;
 
 @Controller
 public class ExpenseController {
-
+    @Autowired private Accountancy accountancy;
     @Autowired private ExpenseGroupRepository expenseGroups;
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(Model model) {
-        List<Expense> expenseList = new ArrayList<>();
-        //expenses.findAll().forEach(it -> expenseList.add((Expense) it));
-        model.addAttribute("expenseAmount", expenseList.size());
-        model.addAttribute("expenses", expenseList);
+        List<Expense> allExpenses = ExpenseRepository.findAll(accountancy);
+        model.addAttribute("expenseAmount", allExpenses.size());
+        model.addAttribute("expenses", allExpenses);
         return "expenses";
     }
 }

@@ -8,7 +8,7 @@
 <body th:fragment="content">
 <div class="container__wrap">
     <div class="container__head">
-        <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben (<span th:text="${expenseAmount}"></span> Events)</h1>
+        <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben (<span th:text="${expenseAmount}"></span> Einträge)</h1>
     </div>
     <table class="table table-striped">
         <thead>
@@ -16,6 +16,7 @@
             <th>Typ</th>
             <th>Person</th>
             <th>Datum</th>
+            <th>Beschreibung</th>
             <th>Betrag</th>
             <th>Gedeckt</th>
         </tr>
@@ -24,7 +25,8 @@
         <tr th:each="expense : ${expenses}">
             <td th:text="${expense.expenseGroup.name}"></td>
             <td th:text="${expense.person}"></td>
-            <td th:text="${expense.date.toLocalDate()} + ' ' + ${expense.interval.start.toLocalTime()}"></td>
+            <td th:text="${expense.date.get().toLocalDate()} + ' ' + ${expense.date.get().toLocalTime()}"></td>
+            <td th:text="${expense.description}"></td>
             <td th:text="${expense.value.number} + '€'"></td>
             <td th:text="${expense.isCovered()}"></td>
         </tr>
