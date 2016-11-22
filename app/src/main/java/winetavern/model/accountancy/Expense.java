@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
  */
 
 @Entity
-public class Expense extends AccountancyEntry {
+public class Expense extends AccountancyEntry implements Comparable<Expense> {
     private boolean isCovered = false;
     @ManyToOne private Person person;
     @ManyToOne private ExpenseGroup expenseGroup;
@@ -54,5 +54,11 @@ public class Expense extends AccountancyEntry {
     public void cover() {
         if (isCovered) throw new IllegalStateException("Expense is already covered");
         this.isCovered = true;
+    }
+
+    @Override
+    public int compareTo(Expense o) {
+        if (super.hasDate() && o.hasDate()) return -super.getDate().get().compareTo(o.getDate().get());
+        return getPerson().getUserAccount().getLastname().compareTo(o.getPerson().getUserAccount().getLastname());
     }
 }

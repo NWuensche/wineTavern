@@ -1,17 +1,22 @@
 package winetavern.controller;
 
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import winetavern.model.accountancy.Expense;
+import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
-import winetavern.model.accountancy.ExpenseRepository;
+import winetavern.model.user.Person;
+import winetavern.model.user.PersonManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Louis
@@ -21,14 +26,42 @@ import java.util.List;
 public class ExpenseController {
     @Autowired private Accountancy accountancy;
     @Autowired private ExpenseGroupRepository expenseGroups;
+    @Autowired private BusinessTime businessTime;
+    @Autowired private PersonManager persons;
 
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(Model model) {
-        List<Expense> expensestoday = ExpenseRepository.findAll(accountancy);
-        List<Expense> expensesold = ExpenseRepository.findAll(accountancy); //TODO findold and find todays
-        model.addAttribute("expenseAmount", expensestoday.size());
-        model.addAttribute("exptoday", expensestoday);
-        model.addAttribute("expold",expensesold);
+    public String showExpenses(@ModelAttribute String type, @ModelAttribute String person,
+                               @ModelAttribute Optional<String> covered, Model model) {
+        Set<Expense> expensesToday = filter(true, type, person, covered);
+        Set<Expense> expensesOld = filter(false, type, person, covered);
+        model.addAttribute("expenseAmount", expensesToday.size());
+        model.addAttribute("exptoday", expensesToday);
+        model.addAttribute("expold",expensesOld);
         return "expenses";
+    }
+
+    private Set<Expense> filter(boolean getCurrent, String typeId, String personId, Optional<String> covered) {
+        Set<Expense> res = findAll();
+        if (getCurrent)
+            res.removeIf(expense -> expense.hasDate() && !expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
+        else
+            res.removeIf(expense -> expense.hasDate() && expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
+        if (!typeId.equals("0")) {
+            ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
+            res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
+        }
+        if (!personId.equals("0")) {
+            Person person = persons.findOne(Long.parseLong(personId)).get();
+            res.removeIf(expense -> expense.getPerson() != person);
+        }
+        if (covered.isPresent())
+            res.removeIf(expense -> !expense.isCovered());
+        return res;
+    }
+
+    private Set<Expense> findAll() {
+        Set<Expense> set = new TreeSet<>();
+        accountancy.findAll().forEach(it -> set.add(((Expense) it)));
+        return set;
     }
 }
