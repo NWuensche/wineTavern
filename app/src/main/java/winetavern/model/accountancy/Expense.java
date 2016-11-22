@@ -6,6 +6,7 @@ import winetavern.model.user.Person;
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Louis
@@ -40,6 +41,10 @@ public class Expense extends AccountancyEntry {
 
     public Person getPerson() {
         return person;
+    }
+
+    public String getDateString() {
+        return super.getDate().get().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 
     public boolean isCovered() {

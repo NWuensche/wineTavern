@@ -25,7 +25,7 @@
         <tr th:each="expense : ${expenses}">
             <td th:text="${expense.expenseGroup.name}"></td>
             <td th:text="${expense.person}"></td>
-            <td th:text="${expense.date.get().toLocalDate()} + ' ' + ${expense.date.get().toLocalTime()}"></td>
+            <td th:text="${expense.dateString}"></td>
             <td th:text="${expense.description}"></td>
             <td th:text="${expense.value.number} + '€'"></td>
             <td th:text="${expense.isCovered()}"></td>
