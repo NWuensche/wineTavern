@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.accountancy.ExpenseRepository;
+import winetavern.model.user.PersonManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.List;
 public class ExpenseController {
     @Autowired private Accountancy accountancy;
     @Autowired private ExpenseGroupRepository expenseGroups;
+    @Autowired private PersonManager persons;
+
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(Model model) {
@@ -29,6 +32,8 @@ public class ExpenseController {
         model.addAttribute("expenseAmount", expensestoday.size());
         model.addAttribute("exptoday", expensestoday);
         model.addAttribute("expold",expensesold);
+        model.addAttribute("persons",persons.findAll());
+        model.addAttribute("groups",expenseGroups.findAll());
         return "expenses";
     }
 }
