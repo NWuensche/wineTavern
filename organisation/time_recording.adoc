@@ -149,16 +149,17 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |07.11.2016 |11:00 |13:00 |verschiedenes
 |09.11.2016 |11:00 |12:00 |Menu Management
 |10.11.2016 |14:00 |15:00 |Menu Management
-|11.10.2016 |14:00 |18:00 |Menu Management
-|13.10.2016 |16:00 |18:00 |Menu Management
-|14.10.2016 |12:00 |16:00 |Menu Management
-|14.10.2016 |18:00 |20:00 |Menu Management
-|15.10.2016 |09:45 |10:45 |Reservation Management
-|15.10.2016 |15:00 |20:00 |Reservation Management
-|16.10.2016 |13:00 |14:30 |Reservation Management
-|18.10.2016 |09:00 |12:00 |Gruppenbesprechung
-|19.10.2016 |14:00 |16:00 |Initbinder
-|20.10.2016 |13:00 |15:00 |Reservation
-|21.10.2016 |08:30 |10:45 |Reservation Manager
-|21.10.2016 |11:30 |13:30 |Organisation
+|11.11.2016 |14:00 |18:00 |Menu Management
+|13.11.2016 |16:00 |18:00 |Menu Management
+|14.11.2016 |12:00 |16:00 |Menu Management
+|14.11.2016 |18:00 |20:00 |Menu Management
+|15.11.2016 |09:45 |10:45 |Reservation Management
+|15.11.2016 |15:00 |20:00 |Reservation Management
+|16.11.2016 |13:00 |14:30 |Reservation Management
+|18.11.2016 |09:00 |12:00 |Gruppenbesprechung
+|19.11.2016 |14:00 |16:00 |Initbinder
+|20.11.2016 |13:00 |15:00 |Reservation
+|21.11.2016 |08:30 |10:45 |Reservation Manager
+|21.11.2016 |11:30 |13:30 |Organisation
+|22.10.2016 |14:00 |16:30 |Menu Management
 |===
