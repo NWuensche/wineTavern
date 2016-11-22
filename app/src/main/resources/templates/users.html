@@ -72,11 +72,9 @@
             <td th:text="${person.userAccount.lastname}"></td>
             <td th:text="${person.userAccount.username}"></td>
             <td>
-                <a th:href="@{'/admin/management/users/details/' + ${person.id}}">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
                     </button>
-                </a>
             </td>
         </tr>
         </tbody>
@@ -127,59 +125,59 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <form method="post" th:action="@{/admin/management/users/addNew}" th:object="${accountcredentials}"> 
+                    <form method="post" th:action="@{/admin/management/users/addNew}" th:object="${accountcredentials}">
                         <div class="form__bg">
                             <div class="dark__bg">
                                 <h2>Personendaten</h2>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Anrede</label> 
-                                <select class="form-control" name="personTitle"> 
+                            <div class="form-group">
+                                <label>Anrede</label>
+                                <select class="form-control" name="personTitle">
                                     <option th:each="personTitle : ${T(winetavern.model.user.PersonTitle).values()}" th:text="${personTitle.getGerman()}"
                                             th:value="${personTitle.getGerman()}"></option>
-                                </select> 
+                                </select>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Vorname</label> 
-                                <input name="firstName" type="text" class="form-control" placeholder="Hans" required="true"/> 
+                            <div class="form-group">
+                                <label>Vorname</label>
+                                <input name="firstName" type="text" class="form-control" placeholder="Hans" required="true"/>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Nachname</label> 
-                                <input name="lastName" type="text" class="form-control" placeholder="Müller" required="true"/> 
+                            <div class="form-group">
+                                <label>Nachname</label>
+                                <input name="lastName" type="text" class="form-control" placeholder="Müller" required="true"/>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Geburtstag</label> 
-                                <input name="birthday" id="birthday" type="text" class="form-control" th:value="${birthday}"/> 
+                            <div class="form-group">
+                                <label>Geburtstag</label>
+                                <input name="birthday" id="birthday" type="text" class="form-control" th:value="${birthday}"/>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Username</label> 
-                                <input name="username" type="text" class="form-control" placeholder="hMueller" required="true"/> 
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input name="username" type="text" class="form-control" placeholder="hMueller" required="true"/>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Password</label> 
-                                <input name="password" type="password" class="form-control" required="true" pattern="[0-9]{4}"/> 
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input name="password" type="password" class="form-control" required="true" pattern="[0-9]{4}"/>
                             </div>
 
-                            <div class="form-group"> 
-                                <label>Rolle</label> 
-                                <select class="form-control" name="role"> 
+                            <div class="form-group">
+                                <label>Rolle</label>
+                                <select class="form-control" name="role">
                                     <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(role)}"
                                             th:value="${role.getNameOfRoleWithPrefix()}"></option>
-                                </select> 
+                                </select>
                             </div>
 
                             <div class="dark__bg">
                                 <h2>Adresse</h2>
                             </div>
-                            <div class="form-group"> 
-                                <label>Adresse</label> 
-                                <input name="address" type="text" class="form-control" /> 
+                            <div class="form-group">
+                                <label>Adresse</label>
+                                <input name="address" type="text" class="form-control" />
                             </div>
 
                             <div class="row">
@@ -194,6 +192,29 @@
         </div>
     </div>
 </div>
+
+<div class="container__user-cards">
+<div class="row">
+<div class="col-xs-3">
+<div class="user-card"><div class="row">
+<div class="col-xs-12">
+<img src="/resources/img/pokemon.jpg" class="image-user rounded-circle"/>
+</div>
+</div>
+<div class="row">
+<div class="col-xs-12">
+<span class="user-title" th:text="${#authentication.getName()}">USERNAME</span>
+<div class="user-role" th:if="${!#authentication.getAuthorities().isEmpty()}">
+<p th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(#authentication.getAuthorities()[0])}">ROLE</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
 </body>
 
 </html>
