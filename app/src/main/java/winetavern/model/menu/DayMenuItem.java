@@ -31,7 +31,7 @@ public class DayMenuItem {
     private Double quantityPerProduct;
     private boolean enabled;
 
-    @ManyToMany(fetch=FetchType.EAGER, targetEntity = DayMenu.class)
+    @ManyToMany(fetch=FetchType.EAGER, targetEntity = DayMenu.class, cascade = CascadeType.ALL)
     @JoinTable (joinColumns = {@JoinColumn(name="day_menu_id")},
             inverseJoinColumns = {@JoinColumn(name = "day_menu_item_id")}
     )
@@ -131,6 +131,10 @@ public class DayMenuItem {
 
     public void setQuantityPerProduct(Double quantityPerProduct) {
         this.quantityPerProduct = quantityPerProduct;
+    }
+
+    public void removeDayMenu(DayMenu dayMenu) {
+        this.dayMenus.remove(dayMenu);
     }
 
 }
