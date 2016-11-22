@@ -29,8 +29,12 @@ public class ExpenseController {
     @Autowired private PersonManager persons;
 
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute String type, @ModelAttribute String person,
-                               @ModelAttribute Optional<String> covered, Model model) {
+    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
+                               @ModelAttribute("covered") Optional<String> covered, Model model) {
+        if (type.equals("") || person.equals("")) {
+            type = "0";
+            person = "0";
+        }
         Set<Expense> expensesToday = filter(true, type, person, covered);
         Set<Expense> expensesOld = filter(false, type, person, covered);
         model.addAttribute("expenseAmount", expensesToday.size());
@@ -42,6 +46,7 @@ public class ExpenseController {
     }
 
     private Set<Expense> filter(boolean getCurrent, String typeId, String personId, Optional<String> covered) {
+        System.out.println(typeId + ", " + personId + ", " + covered.isPresent());
         Set<Expense> res = findAll();
         if (getCurrent)
             res.removeIf(expense -> expense.hasDate() && !expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
