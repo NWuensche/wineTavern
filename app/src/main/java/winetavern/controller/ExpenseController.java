@@ -24,9 +24,11 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(Model model) {
-        List<Expense> allExpenses = ExpenseRepository.findAll(accountancy);
-        model.addAttribute("expenseAmount", allExpenses.size());
-        model.addAttribute("expenses", allExpenses);
+        List<Expense> expensestoday = ExpenseRepository.findAll(accountancy);
+        List<Expense> expensesold = ExpenseRepository.findAll(accountancy); //TODO findold and find todays
+        model.addAttribute("expenseAmount", expensestoday.size());
+        model.addAttribute("exptoday", expensestoday);
+        model.addAttribute("expold",expensesold);
         return "expenses";
     }
 }

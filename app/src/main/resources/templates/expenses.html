@@ -6,49 +6,72 @@
 
 </head>
 <body th:fragment="content">
-<div class="container__wrap">
-    <div class="container__head">
-        <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben (<span th:text="${expenseAmount}"></span> Einträge)</h1>
-    </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Typ</th>
-            <th>Person</th>
-            <th>Datum</th>
-            <th>Beschreibung</th>
-            <th>Betrag</th>
-            <th>Gedeckt</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="expense : ${expenses}">
-            <td th:text="${expense.expenseGroup.name}"></td>
-            <td th:text="${expense.person}"></td>
-            <td th:text="${expense.dateString}"></td>
-            <td th:text="${expense.description}"></td>
-            <td th:text="${expense.value.number} + '€'"></td>
-            <td th:text="${expense.isCovered()}"></td>
-        </tr>
-        </tbody>
-    </table>
+<div class="bill__tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#today" role="tab">Heute</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#old" role="tab">Vergangenheit</a>
+        </li>
+    </ul>
 </div>
-<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+<div class="container__wrap">
+    <div class="tab-content">
+        <div class="tab-pane active" id="today" role="tabpanel">
+            <div class="container__head">
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben heute (<span th:text="${expenseAmount}"></span>
+                    Einträge)</h1>
             </div>
-            <div class="modal-body">
-                ...
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Person</th>
+                    <th>Datum</th>
+                    <th>Beschreibung</th>
+                    <th>Betrag</th>
+                    <th>Gedeckt</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="expense : ${exptoday}">
+                    <td th:text="${expense.expenseGroup.name}"></td>
+                    <td th:text="${expense.person}"></td>
+                    <td th:text="${expense.dateString}"></td>
+                    <td th:text="${expense.description}"></td>
+                    <td th:text="${expense.value.number} + '€'"></td>
+                    <td th:text="${expense.isCovered()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="old" role="tabpanel">
+            <div class="container__head">
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben alt</h1>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Person</th>
+                    <th>Datum</th>
+                    <th>Beschreibung</th>
+                    <th>Betrag</th>
+                    <th>Gedeckt</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="expense : ${expold}">
+                    <td th:text="${expense.expenseGroup.name}"></td>
+                    <td th:text="${expense.person}"></td>
+                    <td th:text="${expense.dateString}"></td>
+                    <td th:text="${expense.description}"></td>
+                    <td th:text="${expense.value.number} + '€'"></td>
+                    <td th:text="${expense.isCovered()}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
