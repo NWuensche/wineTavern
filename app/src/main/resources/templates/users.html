@@ -193,26 +193,6 @@
     </div>
 </div>
 
-<div class="container__user-cards">
-<div class="row">
-<div class="col-xs-3">
-<div class="user-card"><div class="row">
-<div class="col-xs-12">
-<img src="/resources/img/pokemon.jpg" class="image-user rounded-circle"/>
-</div>
-</div>
-<div class="row">
-<div class="col-xs-12">
-<span class="user-title" th:text="${#authentication.getName()}">USERNAME</span>
-<div class="user-role" th:if="${!#authentication.getAuthorities().isEmpty()}">
-<p th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(#authentication.getAuthorities()[0])}">ROLE</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 
 
 </body>
