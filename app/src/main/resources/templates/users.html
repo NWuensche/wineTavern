@@ -72,11 +72,9 @@
             <td th:text="${person.userAccount.lastname}"></td>
             <td th:text="${person.userAccount.username}"></td>
             <td>
-                <a th:href="@{'/admin/management/users/details/' + ${person.id}}">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
                     </button>
-                </a>
             </td>
         </tr>
         </tbody>
