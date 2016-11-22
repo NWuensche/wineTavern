@@ -57,4 +57,9 @@ public class PersonManagerController {
         model.addAttribute("personManager", personManager);
         return "users";
     }
+
+    @RequestMapping("/admin/management/users/change")
+    public String changeUser(Model model) {
+        return "users";
+    }
 }
