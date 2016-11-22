@@ -84,7 +84,7 @@
 </div>
 
 <!-- show person details -->
-<div class="modal" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" th:if="${currPerson}">
+<div class="modal" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" th:if="${currPerson}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,7 +94,7 @@
                 <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
             </div>
             <div class="modal-body">
-                <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post" th:object="${accountcredentials}">
+                <form id="productDetailsForm" th:action="@{/admin/management/users/change}" method="post" th:object="${accountcredentials}">
                     <div class="form-group" hidden = "true">
                         <label for="id">Konto</label>
                         <input type="text" class="form-control" name="id" id="id" readonly="true"
@@ -195,5 +195,9 @@
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+    $('#details').modal('show');
+</script>
+
 
 </html>
