@@ -31,7 +31,6 @@ public class ReservationManager {
      * ToDo: Currently iterating through nearly all reservations. Make MySQL do the job.
      */
     public List<Desk> getReservatedTablesByTime(LocalDateTime localDateTime) {
-        //localDateTime.format(DateTimeFormatter.ISO_DATE)
         Iterable<Desk> allDesks = desks.findAll();
         List<Desk> reservedDesks = new ArrayList<Desk>();
         for(Iterator<Desk> deskIterator = allDesks.iterator(); deskIterator.hasNext(); ) {
