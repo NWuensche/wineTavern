@@ -16,6 +16,7 @@ import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.user.PersonManager;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -24,15 +25,28 @@ import java.util.*;
 
 @Controller
 public class BillController {
-    @Autowired private BillRepository bills;
-    @Autowired private BillItemRepository billItems;
-    @Autowired private AuthenticationManager authenticationManager;
-    @Autowired private PersonManager persons;
-    @Autowired private DayMenuItemRepository dayMenuItems;
-    @Autowired private DeskRepository tables;
-    @Autowired private Accountancy accountancy;
-    @Autowired private ExpenseGroupRepository expenseGroups;
-    @Autowired private BusinessTime businessTime;
+    @NotNull private final BillRepository bills;
+    @NotNull private final BillItemRepository billItems;
+    @NotNull private final AuthenticationManager authenticationManager;
+    @NotNull private final PersonManager persons;
+    @NotNull private final DayMenuItemRepository dayMenuItems;
+    @NotNull private final DeskRepository tables;
+    @NotNull private final Accountancy accountancy;
+    @NotNull private final ExpenseGroupRepository expenseGroups;
+    @NotNull private final BusinessTime businessTime;
+
+    @Autowired
+    public BillController(BillRepository bills, BillItemRepository billItems, AuthenticationManager authenticationManager, PersonManager persons, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime) {
+        this.bills = bills;
+        this.billItems = billItems;
+        this.authenticationManager = authenticationManager;
+        this.persons = persons;
+        this.dayMenuItems = dayMenuItems;
+        this.tables = tables;
+        this.accountancy = accountancy;
+        this.expenseGroups = expenseGroups;
+        this.businessTime = businessTime;
+    }
 
     @RequestMapping("/service/bills")
     public String showBills(Model model){
@@ -139,6 +153,4 @@ public class BillController {
         }
         bill.changeItem(billItem, quantity);
     }
-
-
 }
