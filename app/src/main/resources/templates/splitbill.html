@@ -10,7 +10,14 @@
             <a class="nav-link" th:href="@{/service/bills}"><i class="fa fa-arrow-left"></i></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active">Rechnung #<span th:text="${bill.id}"></span></a>
+            <a class="nav-link" th:href="@{'/service/bills/details/' + ${bill.id}}" th:if="${bill}">Rechnung #<span
+                    th:text="${bill.id}"></span></a>
+            <a class="nav-link" th:href="@{'/service/bills/details/' + ${leftbill.id}}" th:if="${leftbill}">Rechnung
+                #<span
+                    th:text="${leftbill.id}"></span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active"><i class="fa fa-scissors"></i> Teilen</a>
         </li>
     </ul>
 </div>
@@ -20,60 +27,121 @@
             <div class="col-xs-6">
                 <h1>Rechnung teilen</h1>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" th:if="${bill}">
                 Tisch <span th:text="${bill.desk}"></span><br/>
                 <span th:text="${bill.staff.userAccount.firstname}"></span>
                 <span th:text="${bill.staff.userAccount.lastname}"></span>
+            </div>
+            <div class="col-xs-6" th:if="${leftbill}">
+                Tisch <span th:text="${leftbill.desk}"></span><br/>
+                <span th:text="${leftbill.staff.userAccount.firstname}"></span>
+                <span th:text="${leftbill.staff.userAccount.lastname}"></span>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-6">
             <table class="table table-striped text-xs-center hidespinner" style="table-layout:fixed;">
-                <thead>
+                <thead th:if="${bill}">
                 <tr>
                     <th class="text-xs-center">Produkt</th>
                     <th class="text-xs-center">Optionen</th>
                 </tr>
                 </thead>
-                <tbody id="leftbill">
-                <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
-                    <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number} + '€)'"
-                              class="product-description"></span></td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" th:value="${product.quantity}"
-                                   class="form-control text-xs-center" readonly="true" th:id="${product.id}"/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary" onclick="oneright(this)">
-                                    <i class="fa fa-hand-o-right"></i>
-                                </button>
-                            </span>
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary moveright">
-                                    <i class="fa fa-arrow-right"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </td>
+                <thead th:if="${leftbill}">
+                <tr>
+                    <th class="text-xs-center">Produkt</th>
+                    <th class="text-xs-center">Anzahl</th>
+                </tr>
+                </thead>
+                <tbody id="leftbill"  th:if="${bill}">
+                    <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
+                        <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number} + '€)'"
+                                  class="product-description"></span></td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" th:value="${product.quantity}"
+                                       class="form-control text-xs-center" readonly="true" th:id="${product.id}"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" onclick="oneright(this)">
+                                        <i class="fa fa-hand-o-right"></i>
+                                    </button>
+                                </span>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary moveright">
+                                        <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody th:if="${leftbill}">
+                    <tr th:each="product : ${leftbill.items}" style="vertical-align:middle;">
+                        <td th:text="${product.item.name}"></td>
+                        <td th:text="${product.quantity}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Alte Rechnung mit #
+                                <span th:text="${leftbill.id}">000</span>
+                                <i class="fa fa-arrow-right"></i>
+                                <span th:text="${leftbill.price.number} + ' €'"></span>
+                            </b></td>
+                    </tr>
+                    <tr th:if="${leftbill}" style="vertical-align:middle;">
+                        <td colspan="2">
+                            <a th:href="@{'/service/bills/details/' + ${leftbill.id}}">
+                                <button type="button" class="btn btn-primary">&Ouml;ffne alte Rechnung</button>
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="col-xs-6">
             <table class="table table-striped text-xs-center hidespinner" style="table-layout:fixed;">
-                <thead>
-                <tr>
-                    <th class="text-xs-center">Optionen</th>
-                    <th class="text-xs-center">Produkt</th>
-                </tr>
+                <thead th:if="${bill}">
+                    <tr>
+                        <th class="text-xs-center">Optionen</th>
+                        <th class="text-xs-center">Produkt</th>
+                    </tr>
                 </thead>
-                <tbody id="rightbill">
+                <thead th:if="${rightbill}">
+                    <tr>
+                        <th class="text-xs-center">Produkt</th>
+                        <th class="text-xs-center">Anzahl</th>
+                    </tr>
+                </thead>
+                <tbody id="rightbill" th:if="${bill}">
+
+                </tbody>
+                <tbody th:if="${rightbill}" >
+                    <tr th:each="product : ${rightbill.items}" style="vertical-align:middle;">
+                        <td th:text="${product.item.name}"></td>
+                        <td th:text="${product.quantity}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Neue Rechnung mit #
+                                <span th:text="${rightbill.id}">000</span>
+                                <i class="fa fa-arrow-right"></i>
+                                <span th:text="${rightbill.price.number} + ' €'"></span>
+                            </b>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:middle;">
+                        <td colspan="2">
+                            <a th:href="@{'/service/bills/details/' + ${rightbill.id}}">
+                                <button type="button" class="btn btn-primary">&Ouml;ffne neue Rechnung</button>
+                            </a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="row">
+    <div class="row" th:if="${bill}">
         <div class="col-xs-12">
             <a onclick="splitbill()">
                 <button type="button" class="btn btn-primary">
@@ -83,7 +151,7 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript">
+<script th:inline="javascript" th:if="${bill}">
     /*<![CDATA[*/
         var leftlist = new Array();
         var rightlist = new Array();

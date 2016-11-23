@@ -122,7 +122,9 @@ public class BillController {
             }
             bills.save(bill);
             bills.save(newBill);
-            return "redirect:/service/bills";
+            model.addAttribute("leftbill",bill);
+            model.addAttribute("rightbill",newBill);
+            return "splitbill";
 
         } else {
             model.addAttribute("bill", bill);
