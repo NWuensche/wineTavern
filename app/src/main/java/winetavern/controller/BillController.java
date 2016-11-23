@@ -5,11 +5,9 @@ import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
@@ -50,12 +48,13 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
-    @RequestMapping("/service/bills/details/{billid}/add/{productid}")
-    public String addProductToBill(@PathVariable("billid") Long billid, @PathVariable("productid") Long productid) {
+    @RequestMapping(value="/service/bills/details/{billid}/add",method = RequestMethod.POST)
+    public String addProductToBill(@PathVariable("billid") Long billid, @RequestParam("itemid") Long productid,
+                                   @RequestParam("quantity") Integer quantity) {
         Bill bill = bills.findOne(billid).get();
         DayMenuItem item = dayMenuItems.findOne(productid).get();
         BillItem billItem = new BillItem(item);
-        changeBillItem(bill, billItem, 1);
+        changeBillItem(bill, billItem, quantity);
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
     }

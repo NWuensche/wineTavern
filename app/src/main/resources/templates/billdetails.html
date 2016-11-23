@@ -87,7 +87,7 @@
     <div class="card-columns card__daymenuitems">
 
         <div class="card" th:each="product:${menuitems}">
-            <a th:href="@{'/service/bills/details/' + ${bill.id} + '/add/' + ${product.id}}">
+            <a th:onclick="@{'showModal(' + ${product.id} + ',\'' + ${product.name} + '\');'}">
                 <div class="card-block">
                     <h3 class="card-title" th:text="${product.name}">Name</h3>
                     <p class="card-text" th:text="${product.price}">Preis</p>
@@ -96,6 +96,55 @@
         </div>
     </div>
 </div>
+
+
+<!-- add daymenuitem to bill modal -->
+<div class="modal" id="addItem" tabindex="-1" role="dialog"
+     aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel">Hinzuf&uuml;gen</h4>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm" th:action="@{'/service/bills/details/' + ${bill.id} + '/add'}" method="post">
+                    <div class="input-group">
+                        <label for="itemname">Name:</label>
+                        <input type="text" id="itemname" name="name" class="form-control" readonly="true" />
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label for="quantity">Anzahl:</label>
+                        <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" onclick="down(this)">
+                                <i class="fa fa-minus fa-lg"></i>
+                            </button>
+                        </span>
+                            <input type="number" value="1" min="1" max="99" class="form-control text-xs-center"
+                                   readonly="true" id="quantity" name="quantity"/>
+                            <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" onclick="up(this)">
+                                <i class="fa fa-plus fa-lg"></i>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="itemid" name="itemid"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zur&uuml;ck</button>
+                <button type="submit" form="itemForm" class="btn btn-primary">Hinzuf&uuml;gen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script th:inline="javascript">
     /*<![CDATA[*/
 
@@ -123,8 +172,11 @@
         window.location = location.pathname + query;
     }
 
-    function remove(productid){
-        window.location = location.pathname + '/remove/' + productid;
+    function showModal(id,name){
+        document.getElementById("itemid").value=id;
+        document.getElementById("itemname").value=name;
+        document.getElementById("quantity").value=1;
+        $("#addItem").modal("show");
     }
 
     /*]]>*/
