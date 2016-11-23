@@ -16,8 +16,15 @@ public class DayMenu {
 
     private Calendar day;
 
-    @ManyToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, cascade=CascadeType.ALL, mappedBy = "dayMenus")
+    @ManyToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, mappedBy = "dayMenus")
     private List<DayMenuItem> dayMenuItems;
+
+    @PreRemove
+    private void removeDayMenusFromDayMenuItems() {
+        for (DayMenuItem dayMenuItem : dayMenuItems) {
+            dayMenuItem.getDayMenus().remove(this);
+        }
+    }
 
     public DayMenu() {}
 

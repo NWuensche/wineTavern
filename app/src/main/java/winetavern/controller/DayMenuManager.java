@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuRepository;
@@ -31,8 +32,8 @@ public class DayMenuManager {
     }
 
     @RequestMapping("/admin/daymenulist")
-    public String showMenus(Model model) {
-        return showMenuList(model);
+    public ModelAndView showMenus(ModelAndView modelAndView) {
+        return showMenuList(modelAndView);
     }
 
     @RequestMapping("/admin/addMenu")
@@ -46,24 +47,23 @@ public class DayMenuManager {
      * @param dateParameter if day starts with a 0, the month will be count up by one
      */
     @RequestMapping(value = "/admin/addMenu", method = RequestMethod.POST)
-    public String addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter, Model model) {
+    public ModelAndView addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter,
+                                    ModelAndView modelAndView) {
         dateParameter.setMonth(dateParameter.getMonth()-1); //workaround, see above
         Calendar creationDate = dateParameter.getCalendar();
         DayMenu dayMenu = new DayMenu(creationDate);
         dayMenuRepository.save(dayMenu);
 
-        return showMenuList(model);
+        return showMenuList(modelAndView);
     }
 
-    @RequestMapping("/admin/removeMenu")
-    public String removeMenu(@RequestParam("id") long id, Model model) {
-        DayMenu dayMenu = dayMenuRepository.findById(id);
-        if(dayMenu == null) {
-            return showMenuList(model);
-        } else {
-            dayMenuRepository.delete(dayMenuRepository.findById(id));
-            return showMenuList(model);
+    @RequestMapping(value = "/admin/removeMenu", method = RequestMethod.POST)
+    public ModelAndView removeMenu(@RequestParam("daymenuid") Long dayMenuId, ModelAndView modelAndView) {
+        DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
+        if(dayMenu != null) {
+            dayMenuRepository.delete(dayMenu);
         }
+        return showMenuList(modelAndView);
     }
 
     @RequestMapping("/admin/editMenu")
@@ -80,10 +80,11 @@ public class DayMenuManager {
         return "daymenu";
     }
 
-    public String showMenuList(Model model) {
+    public ModelAndView showMenuList(ModelAndView modelAndView) {
         Iterable<DayMenu> dayMenuList = dayMenuRepository.findAll();
-        model.addAttribute("menus", dayMenuList);
-        return "daymenulist";
+        modelAndView.addObject("menus", dayMenuList);
+        modelAndView.setViewName("daymenulist");
+        return modelAndView;
     }
 
 }

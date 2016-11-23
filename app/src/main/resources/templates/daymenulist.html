@@ -32,6 +32,7 @@
             </div>
         </div>
         <table class="table table-striped">
+            <form method="POST" th:action="@{'/admin/removeMenu'}">
             <thead>
             <tr>
                 <th>#</th>
@@ -52,14 +53,13 @@
                     </a>
                 </td>
                 <td>
-                    <a th:href="${'/admin/removeMenu?id=' + menu.id}">
-                        <button type="button"  class="btn btn-primary">
+                        <button type="submit"  th:name="daymenuid" th:value="${menu.id}" class="btn btn-primary">
                             <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
                         </button>
-                    </a>
                 </td>
             </tr>
             </tbody>
+            </form>
         </table>
     </div>
 </body>

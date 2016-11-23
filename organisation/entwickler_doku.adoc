@@ -40,6 +40,12 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 *** Durch das Erstellen einer `Bill` Klasse mit einem Attribut `Order order` stellten sich einige Umwege beim Suchen der Aktiven und Archivierten Rechnungen ein. Desweiteren gab es einen Konflikt mit dem Schlagwort *Order* (=sortieren) und dem Suchen nach dem Attribut `Order order` in SQL.
 ** Statt den obigen Designs haben wir uns deshalb zu einer unabhängigen Rechnungsklasse `Bill` entschieden, welche ein `Set<BillItem> items` enthält und diese wiederrum eine `@OneToOne` Verbindung zu Produkten die auf der aktuellen Tageskarte stehen. Somit ist auch sichergestellt, dass ausschließlich Produkte der Tageskarte verkauft werden.
 
+* Verwenden von Java-seitiger DB-Suche, statt effizienterer Implementierung in dem Repository von `Expense`
+** Unsere Klasse `Expense` steht für Ausgaben und erweitert die Klasse `Salespoint.AccountancyEntry`. Da das Repository  `AccountancyEntryRepository` allerdings package-private ist, lässt sich dieses nicht erweitern und dort dementsprechend keine weiteren Suchfunktionen eintragen.
+** `ExpenseRepository extends Accountancy` kommt ebenfalls nicht in Frage, da `Salespoint.Accountancy` selbst kein Repository ist und unseres dann nichtmehr als Bean erkannt werden würde.
+** Ein vollständig eigenes Repository `ExpenseRepository extends SalespointRepository` ist nicht sinnvoll, da dann jegliche Funktionalitäten von Accountancy verloren gehen würden, wie etwa `package-private setDate()`, welches für unsere Verwaltung notwendig ist.
+** Die Filter für die Ausgaben lassen sich nun in dem Template beliebig setzen und werden dann im Controller angewendet, um das gewünschte Ergebnis zu liefern.
+
 == Bausteinsicht
 * Package-Diagramme
 

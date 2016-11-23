@@ -58,8 +58,8 @@ public class PersonManagerController {
         return "users";
     }
 
-    @RequestMapping("/admin/management/users/change")
-    public String changeUser(Model model) {
-        return "users";
-    }
+//    @RequestMapping("/admin/management/users/change")
+//    public String changeUser(Model model) {
+//        return "users";
+//    }
 }

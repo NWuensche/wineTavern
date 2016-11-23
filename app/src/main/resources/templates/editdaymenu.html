@@ -34,13 +34,15 @@ th:include="backend-temp :: page">
         </div>
     </div>
     <table class="table table-striped">
+        <form th:action="@{'/admin/removeDayMenuItemFromDayMenu'}" method="POST">
+            <input type="hidden" name="dayMenu" th:value="${daymenu.id}" />
         <thead>
         <tr>
             <th>#</th>
             <th>Produkt</th>
             <th>Preis</th>
             <th>Menge auf Lager</th>
-            <th>Bearbeiten</th>
+            <th>Löschen</th>
         </tr>
         </thead>
         <tbody>
@@ -50,12 +52,13 @@ th:include="backend-temp :: page">
             <td th:text="${item.price}"></td>
             <td th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
             <td>
-                <button type="button"  class="btn btn-primary">
+                <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary">
                     <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
                 </button>
             </td>
         </tr>
         </tbody>
+        </form>
     </table>
 </div>
 </body>
