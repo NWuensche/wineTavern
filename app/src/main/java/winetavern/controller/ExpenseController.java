@@ -50,9 +50,12 @@ public class ExpenseController {
         Set<Expense> expcovered = filter(type, person, true, date);
         model.addAttribute("expenseAmount", expopen.size());
         model.addAttribute("expopen", expopen);
-        model.addAttribute("expcovered",expcovered);
-        model.addAttribute("persons",persons.findAll());
-        model.addAttribute("groups",expenseGroups.findAll());
+        model.addAttribute("expcovered", expcovered);
+        model.addAttribute("persons", persons.findAll());
+        model.addAttribute("groups", expenseGroups.findAll());
+        model.addAttribute("selectedType", Long.parseLong(type));
+        model.addAttribute("selectedPerson", Long.parseLong(person));
+        model.addAttribute("selectedDate", date);
         return "expenses";
     }
 
