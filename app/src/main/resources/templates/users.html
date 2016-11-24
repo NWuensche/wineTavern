@@ -89,28 +89,30 @@
                                 <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
                             </div>
                             <div class="modal-body">
-                                <form id="productDetailsForm" th:action="@{'/admin/management/users/details/' + ${person.id}}" method="post" th:object="${accountcredentials}">
+                                <form id="productDetailsForm" th:action="@{'/admin/management/users/changeUser/' + ${person.id}}" method="post" th:object="${accountcredentials}">
                                     <div class="form-group" hidden = "true">
                                         <label for="id">Konto</label>
                                         <input type="text" class="form-control" name="id" id="id" readonly="true" />
                                     </div>
                                     <div class="form-group">
-                                        <label for="firstName">Vorname</label>
-                                        <input type="text" class="form-control" th:value="${person.userAccount.firstname}" name="firstName" id="firstName" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="firstName">Nachname</label>
+                                        <label for="lastName">Nachname</label>
                                         <input type="text" class="form-control" th:value="${person.userAccount.lastname}" name="lastName" id="lastName" />
                                     </div>
                                     <div class="form-group">
-                                        <label for="firstName">Rolle</label>
+                                        <label for="role">Rolle</label>
                                         <input type="text" class="form-control" th:value="${person.displayNameOfRole}" name="role" id="role" />
                                     </div>
+                                    <div class="form-group">
+                                        <label for="address">Adresse</label>
+                                        <input type="text" class="form-control" th:value="${person.address.get()}" name="address" id="address" />
+                                    </div>
+                                    <div class="row">
+                                        <div class=" col-xs-6 text-xs-right">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="button btn btn-primary">Ändern</button>
+                                        </div>
+                                    </div>
                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>
