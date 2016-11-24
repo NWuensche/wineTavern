@@ -35,7 +35,7 @@ public class PersonManagerController {
     }
 
     @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
-    public String addUser(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
+    public String addPerson(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
         newAccount.setFirstname(registerCredentials.getFirstName());
         newAccount.setLastname(registerCredentials.getLastName());
@@ -48,8 +48,8 @@ public class PersonManagerController {
         return "redirect:/users";
     }
 
-    @RequestMapping(value= "/admin/management/users/changeUser/{pid}")
-    public String changeUser(@PathVariable("pid") Long id, @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
+    @RequestMapping(value= "/admin/management/users/changePerson/{pid}")
+    public String changePerson(@PathVariable("pid") Long id, @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
         Person changePerson = personManager.findOne(id).get();
 
         changePerson.getUserAccount().setLastname(changeCredentials.getLastName());
@@ -71,8 +71,8 @@ public class PersonManagerController {
         return person;
     }
 
-    @RequestMapping(value= "/admin/management/users/disableUser/{pid}")
-    public String deleteUser(@PathVariable("pid") Long id) {
+    @RequestMapping(value= "/admin/management/users/disablePerson/{pid}")
+    public String disablePerson(@PathVariable("pid") Long id) {
         Person disablePerson = personManager.findOne(id).get();
         disablePerson.getUserAccount().setEnabled(false);
         userAccountManager.save(disablePerson.getUserAccount());

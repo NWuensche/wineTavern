@@ -113,7 +113,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         saveNewPerson();
         String personId = getPersonId();
 
-        mvc.perform(get("/admin/management/users/changeUser/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        mvc.perform(get("/admin/management/users/changePerson/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("firstName", "DontSave")
                 .param("lastName", "Schwab")
                 .param("address", "Best House")
@@ -135,6 +135,20 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
 
     private String getPersonId() {
         return personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get().getId().toString();
+    }
+
+    @Test
+    public void deletePerson() throws Exception{
+        saveNewPerson();
+        String personId = getPersonId();
+
+        mvc.perform(get("/admin/management/users/disablePerson/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
+
+        Person deletedPerson = personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
+
+        assertThat(deletedPerson.isEnabled(), is(false));
+        assertThat(deletedPerson.getUserAccount().isEnabled(), is(false));
+
     }
 
 }
