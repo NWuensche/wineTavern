@@ -100,7 +100,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="role">Rolle</label>
-                                        <input type="text" class="form-control" th:value="${person.displayNameOfRole}" name="role" id="role" />
+                                        <select type="text" class="form-control" name="role" id="role" >
+                                            <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(role)}"
+                                                    th:value="${role.getNameOfRoleWithPrefix()}"
+                                                    th:selected="${T(winetavern.model.user.Roles).getDisplayNameRole(person.role).equals(T(winetavern.model.user.Roles).getDisplayNameRole(role))}"></option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="address">Adresse</label>
