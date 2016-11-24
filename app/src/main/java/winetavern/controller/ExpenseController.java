@@ -2,6 +2,7 @@ package winetavern.controller;
 
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.time.BusinessTime;
+import org.salespointframework.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,9 @@ import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,12 +42,12 @@ public class ExpenseController {
     }
 
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person, Model
-            model) {
+    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
+                               @ModelAttribute("date") String date, Model model) {
         if (type.equals("")) type = "0";
         if (person.equals("")) person = "0";
-        Set<Expense> expopen = filter(type, person, false);
-        Set<Expense> expcovered = filter(type, person, true);
+        Set<Expense> expopen = filter(type, person, false, date);
+        Set<Expense> expcovered = filter(type, person, true, date);
         model.addAttribute("expenseAmount", expopen.size());
         model.addAttribute("expopen", expopen);
         model.addAttribute("expcovered",expcovered);
@@ -52,15 +56,19 @@ public class ExpenseController {
         return "expenses";
     }
 
-    private Set<Expense> filter(String typeId, String personId, boolean covered) {
-        Set<Expense> res = findAll();
-        /*
-        if (getCurrent)
-            res.removeIf(expense -> expense.hasDate() && !expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
-        else
-            res.removeIf(expense -> expense.hasDate() && expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
-            */
-        //TODO date
+    private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
+        Set<Expense> res;
+        if (!date.equals("")) {
+            String[] interval = date.split("(\\s-\\s)");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay();
+            LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
+            res = findByInterval(Interval.from(start).to(end));
+            System.out.println("by date: " + start + " - " + end);
+        } else {
+            System.out.println("all");
+            res = findAll();
+        }
         if (!typeId.equals("0")) {
             ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
             res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
@@ -78,6 +86,12 @@ public class ExpenseController {
     private Set<Expense> findAll() {
         Set<Expense> set = new TreeSet<>();
         accountancy.findAll().forEach(it -> set.add(((Expense) it)));
+        return set;
+    }
+
+    private Set<Expense> findByInterval(Interval interval) {
+        Set<Expense> set = new TreeSet<>();
+        accountancy.find(interval).forEach(it -> set.add(((Expense) it)));
         return set;
     }
 }
