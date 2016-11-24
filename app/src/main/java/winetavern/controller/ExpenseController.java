@@ -61,12 +61,10 @@ public class ExpenseController {
         if (!date.equals("")) {
             String[] interval = date.split("(\\s-\\s)");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay();
+            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withSecond(0).withNano(1);
             LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
             res = findByInterval(Interval.from(start).to(end));
-            System.out.println("by date: " + start + " - " + end);
         } else {
-            System.out.println("all");
             res = findAll();
         }
         if (!typeId.equals("0")) {
