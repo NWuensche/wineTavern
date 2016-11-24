@@ -166,7 +166,7 @@
         var inputs = document.getElementsByTagName("input");
         var quantities = document.getElementsByClassName("product-quantity");
         var query = "?save=";
-        for(i = 0; i < inputs.length; i++){
+        for(i = 0; i < quantities.length; i++){
             query += inputs[i].id + "," + (parseInt(inputs[i].value) + parseInt(quantities[i].innerHTML)) + "|";
         }
         window.location = location.pathname + query;
