@@ -53,4 +53,16 @@ public class RolesTests {
         assertThat(Roles.getDisplayNameRole("ROLE_COOK"), is("Koch"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenFalseRole() {
+        Roles.getDisplayNameRole("NOROLE");
+    }
+
+    @Test
+    public void withMissingRolePrefix() {
+        assertThat(Roles.getDisplayNameRole(Role.of("ACCOUNTANT")), is("Buchhalter"));
+        assertThat(Roles.getDisplayNameRole("ACCOUNTANT"), is("Buchhalter"));
+
+    }
+
 }

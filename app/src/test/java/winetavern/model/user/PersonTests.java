@@ -33,7 +33,7 @@ public class PersonTests extends AbstractIntegrationTests{
 
     @Before
     public void setUp() {
-        acc = userAccountManager.create("testAccount", "1234", Role.of(Roles.SERVICE.getNameOfRoleWithPrefix()));
+        acc = userAccountManager.create("testAccount", "1234", Roles.SERVICE.getRole());
         address = "Neuer Weg 3, 04912 Berlin";
         birthday = "1980/12/30";
     }
@@ -43,9 +43,11 @@ public class PersonTests extends AbstractIntegrationTests{
         person = new Person(acc, address, birthday, personTitle);
         personManager.save(person);
         assertThat(personManager.findOne(person.getId()).isPresent(), is(true));
-        assertThat(personManager.findOne(person.getId()).get().getAddress().get(), is("Neuer Weg 3, 04912 Berlin"));
-        assertThat(personManager.findOne(person.getId()).get().getBirthday().get(), is(LocalDate.of(1980, 12, 30)));
-        assertThat(personManager.findOne(person.getId()).get().getPersonTitle(), is(PersonTitle.MISTER.getGerman()));
+        Person savedPerson = personManager.findOne(person.getId()).get();
+        assertThat(savedPerson.getBirthday().get(), is(LocalDate.of(1980, 12, 30)));
+        assertThat(savedPerson.getPersonTitle(), is(PersonTitle.MISTER.getGerman()));
+        assertThat(savedPerson.getUserAccount(), is(acc));
+        assertThat(savedPerson.getRole(), is(Roles.SERVICE.getRole()));
     }
 
         @Test
@@ -71,14 +73,38 @@ public class PersonTests extends AbstractIntegrationTests{
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenPersonHas2Roles() {
-        acc = userAccountManager.create("testAccount", "1234", Roles.SERVICE.getRole(), Roles.ACCOUNTANT.getRole());
+        acc = userAccountManager.create("testAccount2", "1234", Roles.SERVICE.getRole(), Roles.ACCOUNTANT.getRole());
         person = new Person(acc, address, birthday, personTitle);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenPersonHas0Roles() {
-        acc = userAccountManager.create("testAccount", "1234");
+        acc = userAccountManager.create("testAccount2", "1234");
         person = new Person(acc, address, birthday, personTitle);
+    }
+
+    @Test
+    public void isNotEnabled() {
+        person = new Person(acc, address, null, personTitle);
+        personManager.save(person);
+        acc.setEnabled(false);
+        assertThat(person.isEnabled(), is(false));
+    }
+
+    @Test
+    public void isEnabled() {
+        person = new Person(acc, address, null, personTitle);
+        personManager.save(person);
+        acc.setEnabled(true);
+        assertThat(person.isEnabled(), is(true));
+    }
+
+    @Test
+    public void setAddressRight() {
+        person = new Person(acc, address, null, personTitle);
+        String newAddress = "New Address";
+        person.setAddress(newAddress);
+        assertThat(person.getAddress().get(), is(newAddress));
     }
 
 }
