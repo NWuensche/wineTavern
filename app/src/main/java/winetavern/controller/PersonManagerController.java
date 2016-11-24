@@ -48,4 +48,28 @@ public class PersonManagerController {
         return "redirect:/users";
     }
 
+    @RequestMapping(value= "/admin/management/users/changeUser/{pid}")
+    public String changeUser(@PathVariable("pid") Long id, @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
+        Person changePerson = personManager.findOne(id).get();
+
+        changePerson.getUserAccount().setLastname(changeCredentials.getLastName());
+        deleteRole(changePerson);
+
+        changePerson.getUserAccount().add(Role.of(changeCredentials.getRole()));
+
+        changePerson.setAddress(changeCredentials.getAddress());
+
+        userAccountManager.save(changePerson.getUserAccount());
+        personManager.save(changePerson);
+
+
+        return "redirect:/admin/management/users";
+    }
+
+    private Person deleteRole(Person person) {
+        person.getUserAccount().remove(person.getRole());
+        return person;
+    }
+
+
 }
