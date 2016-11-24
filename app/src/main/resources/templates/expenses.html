@@ -110,8 +110,11 @@
     firstDayOfYear.setMonth(0);
     firstDayOfYear.setDate(1);
     $('input[name="date"]').daterangepicker({
+        linkedCalendars:false,
+        showISOWeekNumbers:true,
+        opens:"left",
         maxDate: businessTime,
-        buttonClasses: "btn",
+        buttonClasses:"btn",
         applyClass:"btn-primary",
         autoApply:true,
         locale: {
