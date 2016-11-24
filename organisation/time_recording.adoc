@@ -87,7 +87,11 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 18.11.2016 | 22:00 | 23:59 | Package: Accountancy
 | 19.11.2016 | 14:00 | 18:00 | BillItems, Bill, Expense & ExpenseGroup
 | 20.11.2016 | 09:00 | 12:00 | BillController
-| 20.11.2016 | 20:00 | 22:30 | Time Script and BillController
+| 21.11.2016 | 11:00 | 15:00 | Expense Class
+| 21.11.2016 | 20:00 | 22:30 | Time Script and BillController
+| 22.11.2016 | 11:00 | 15:00 | ExpenseController
+| 23.11.2016 | 15:30 | 17:00 | Expense search functions
+| 24.11.2016 | 15:00 | 18:30 | Finished Expense Template - Controller
 |===
 
 == Niklas
