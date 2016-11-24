@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.junit.Before;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccountManager;
 import winetavern.AbstractWebIntegrationTests;
@@ -29,11 +30,20 @@ import java.util.Optional;
  * @author Niklas Wünsche
  */
 
-@Transactional // Rolls the database after the tests back, to remove new Accounts
+@Transactional
 public class PersonManagerControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired PersonManager personManager;
     @Autowired UserAccountManager userAccountManager;
+
+    private String userName;
+    private String password;
+
+    @Before
+    public void before() {
+        userName = "userName";
+        password = "1234";
+    }
 
     @Test
     public void redirectToUsers() throws Exception {
@@ -51,37 +61,28 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
                 .param("birthday", "1990/12/12")
                 .param("username", userName)
                 .param("password", password)
-                .param("role", "COOK")
+                .param("role", Roles.COOK.getNameOfRoleWithPrefix())
                 .param("address", "Mein Haus");
         return request;
     }
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoName() throws Exception {
-        String userName = null;
-        String password = "1234";
-
-        RequestBuilder request = createRequestBuilder(userName, password);
+        RequestBuilder request = createRequestBuilder(null, password);
 
         mvc.perform(request);
     }
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoPassword() throws Exception {
-        String userName = "testAccount";
-        String password = null;
-
-        RequestBuilder request = createRequestBuilder(userName, password);
+        RequestBuilder request = createRequestBuilder(userName, null);
 
         mvc.perform(request);
     }
 
     @Test(expected = NestedServletException.class)
     public void throwWhenTwoUsersWithSameName() throws Exception {
-        String username = "testAccount";
-        String password = "1234";
-
-        RequestBuilder request = createRequestBuilder(username, password);
+        RequestBuilder request = createRequestBuilder(userName, password);
 
         mvc.perform(request);
         mvc.perform(request);
@@ -89,16 +90,13 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
 
     @Test
     public void savedNewPerson() throws Exception {
-        String username = "testAccount";
-        String password = "1234";
-
-        RequestBuilder request = createRequestBuilder(username, password);
+        RequestBuilder request = createRequestBuilder(userName, password);
         mvc.perform(request);
 
-        Optional<UserAccount> user = userAccountManager.findByUsername(username);
+        Optional<UserAccount> user = userAccountManager.findByUsername(userName);
         assertThat(user.isPresent(), is(true));
-        assertThat(user.get().getRoles().stream().findFirst().get(), is(Role.of("COOK")));
-        assertThat(user.get().getUsername(), is("testAccount"));
+        assertThat(user.get().getRoles().stream().findFirst().get(), is(Role.of("ROLE_COOK")));
+        assertThat(user.get().getUsername(), is("userName"));
         assertThat(user.get().getFirstname(), is("Hans"));
         assertThat(user.get().getLastname(), is("Müller"));
 
@@ -108,6 +106,35 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         assertThat(person.get().getAddress().get(), is("Mein Haus"));
         assertThat(person.get().getDisplayNameOfRole(), is("Koch"));
         assertThat(person.get().getPersonTitle(), is("Herr"));
+    }
+
+    @Test
+    public void changeNewPerson() throws Exception{
+        saveNewPerson();
+        String personId = getPersonId();
+
+        mvc.perform(get("/admin/management/users/changeUser/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("firstName", "DontSave")
+                .param("lastName", "Schwab")
+                .param("address", "Best House")
+                .param("role", Roles.SERVICE.getNameOfRoleWithPrefix()));
+
+        Person changedPerson = personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
+
+        assertThat(changedPerson.getUserAccount().getFirstname(), is("Hans"));
+        assertThat(changedPerson.getUserAccount().getLastname(), is("Schwab"));
+        assertThat(changedPerson.getAddress().get(), is("Best House"));
+        assertThat(changedPerson.getUserAccount().getRoles().stream().findFirst().get(), is(Roles.SERVICE.getRole()));
+
+    }
+
+    private void saveNewPerson() throws Exception{
+        RequestBuilder request = createRequestBuilder(userName, password);
+        mvc.perform(request);
+    }
+
+    private String getPersonId() {
+        return personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get().getId().toString();
     }
 
 }
