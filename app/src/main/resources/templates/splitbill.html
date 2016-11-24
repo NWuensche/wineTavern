@@ -144,7 +144,7 @@
     <div class="row" th:if="${bill}">
         <div class="col-xs-12">
             <a onclick="splitbill()">
-                <button type="button" class="btn btn-primary">
+                <button id="splitbutton" type="button" class="btn btn-primary" disabled="true">
                     Teilen
                 </button>
             </a>
@@ -266,6 +266,11 @@
     }
 
         function show(){
+            if (leftlist.length == 0 || rightlist.length == 0 ) {
+                document.getElementById("splitbutton").disabled = true;
+            } else {
+                document.getElementById("splitbutton").disabled = false;
+            }
             document.getElementById("leftbill").innerHTML = "";
             for(i=0;i<leftlist.length;i++){
                 document.getElementById("leftbill").innerHTML += leftline(leftlist[i][0],leftlist[i][1],leftlist[i][2]);
