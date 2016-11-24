@@ -403,3 +403,7 @@ body.mini .list-group-item-action span {
     border-radius: 0 0.2rem 0.2rem 0;
     float: right;
 }
+
+#disablePerson {
+    background-color: tomato;
+}

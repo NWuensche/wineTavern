@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-xs-6">
                 <h1>
-                    <span class="fa fa-users" th:text="'Management (' + ${personManager.findAll().spliterator().getExactSizeIfKnown()} + ' Konten)'"></span>
+                    <span class="fa fa-users" th:text="'Management (' + ${personManager.findEnabled().size()} + ' Konten)'"></span>
                 </h1>
             </div>
             <div class="col-xs-6 text-xs-right">
@@ -65,7 +65,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="person : ${personManager.findAll()}">
+        <tr th:each="person : ${personManager.findEnabled()}">
             <th th:text="${person.displayNameOfRole}"></th>
             <th th:text="${person.personTitle}"></th>
             <td th:text="${person.userAccount.firstname}"></td>
@@ -110,9 +110,14 @@
                                         <label for="address">Adresse</label>
                                         <input type="text" class="form-control" th:value="${person.address.get()}" name="address" id="address" />
                                     </div>
+                                    <div class="form-group">
+                                        <a th:href="@{'/admin/management/users/disableUser/' + ${person.id}}">
+                                            <button id="disablePerson" type="button" class="btn btn-secondary btn-block">Deaktiviere das Konto</button>
+                                        </a>
+                                    </div>
                                     <div class="row">
-                                        <div class=" col-xs-6 text-xs-right">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <div class=" col-xs-6 text-xs-right pull-right">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
                                             <button type="submit" class="button btn btn-primary">Ändern</button>
                                         </div>
                                     </div>
