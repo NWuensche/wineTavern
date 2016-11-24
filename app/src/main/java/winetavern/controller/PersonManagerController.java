@@ -71,5 +71,14 @@ public class PersonManagerController {
         return person;
     }
 
+    @RequestMapping(value= "/admin/management/users/disableUser/{pid}")
+    public String deleteUser(@PathVariable("pid") Long id) {
+        Person disablePerson = personManager.findOne(id).get();
+        disablePerson.getUserAccount().setEnabled(false);
+        userAccountManager.save(disablePerson.getUserAccount());
+        personManager.save(disablePerson);
+
+        return "redirect:/admin/management/users";
+    }
 
 }
