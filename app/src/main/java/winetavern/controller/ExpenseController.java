@@ -56,40 +56,34 @@ public class ExpenseController {
         return "expenses";
     }
 
+
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
-        Set<Expense> res;
-        if (!date.equals("")) {
+        Set<Expense> res = new TreeSet<>();
+
+        if (!date.equals("")) { //Interval filter: start - end
             String[] interval = date.split("(\\s-\\s)");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withSecond(0).withNano(1);
             LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
-            res = findByInterval(Interval.from(start).to(end));
+            accountancy.find(Interval.from(start).to(end)).forEach(it -> res.add(((Expense) it)));
         } else {
-            res = findAll();
+            accountancy.findAll().forEach(it -> res.add(((Expense) it)));
         }
-        if (!typeId.equals("0")) {
+
+        if (!typeId.equals("0")) { //ExpenseGroup filter: must contain expenseGroup
             ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
             res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
         }
-        if (!personId.equals("0")) {
+
+        if (!personId.equals("0")) { //Person filter: must contain person
             Person person = persons.findOne(Long.parseLong(personId)).get();
             res.removeIf(expense -> expense.getPerson() != person);
         }
-        if(covered){
+
+        if(covered){ //isCovered filter: true -> returns only paid expenses
             res.removeIf(expense -> !expense.isCovered());
         }
+
         return res;
-    }
-
-    private Set<Expense> findAll() {
-        Set<Expense> set = new TreeSet<>();
-        accountancy.findAll().forEach(it -> set.add(((Expense) it)));
-        return set;
-    }
-
-    private Set<Expense> findByInterval(Interval interval) {
-        Set<Expense> set = new TreeSet<>();
-        accountancy.find(interval).forEach(it -> set.add(((Expense) it)));
-        return set;
     }
 }

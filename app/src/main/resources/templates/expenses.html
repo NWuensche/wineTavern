@@ -106,10 +106,13 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 <script>
+    var firstDayOfYear = new Date(businessTime);
+    firstDayOfYear.setMonth(0);
+    firstDayOfYear.setDate(1);
     $('input[name="date"]').daterangepicker({
-        startDate: moment().subtract(1,'days'),
-        endDate: moment(),
-        maxDate: moment(),
+        startDate: businessTime,
+        endDate: businessTime,
+        maxDate: businessTime,
         buttonClasses: "btn",
         applyClass:"btn-primary",
         autoApply:true,
@@ -120,15 +123,14 @@
             customRangeLabel:"Benutzerdefiniert",
             daysOfWeek:["So","Mo","Di","Mi","Do","Fr","Sa"],
             monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
-            firstDay:1,
+            firstDay:1
         },
         ranges: {
-            'Heute': [moment(), moment()],
-            'Gestern': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Letzte 7 Tage': [moment().subtract(6, 'days'), moment()],
-            'Dieser Monat': [moment().startOf('month'), moment().endOf('month')],
-            'Dieses Jahr': [moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')]
+            'Heute': [businessTime, businessTime],
+            'Gestern': [new Date(businessTime.getTime() - 86400000), new Date(businessTime.getTime() - 86400000)],
+            'Letzte 7 Tage': [new Date(businessTime.getTime() - 604800000), businessTime],
+            'Dieser Monat': [new Date(businessTime).setDate(1), businessTime],
+            'Dieses Jahr': [firstDayOfYear, businessTime]
         }
     });
 </script>

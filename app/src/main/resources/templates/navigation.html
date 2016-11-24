@@ -13,11 +13,11 @@
                                 /*<![CDATA[*/
                                 const bt = /*[[${businessTime}]]*/ "November 13, 2016 22:02:36";
                                 const offset = new Date(bt) - new Date();
+                                var businessTime = new Date(new Date().getTime() + offset);
                                 clock();
 
                                 function clock () {
-                                    var businessTime = new Date();
-                                    businessTime.setTime(businessTime.getTime() + offset);
+                                    businessTime = new Date(new Date().getTime() + offset);
                                     var h = checkTime(businessTime.getHours());
                                     var m = checkTime(businessTime.getMinutes());
                                     var s = checkTime(businessTime.getSeconds());
@@ -27,7 +27,7 @@
                                 }
 
                                 function checkTime(i) {
-                                    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+                                    if (i < 10) {i = "0" + i}  // add zero in front of numbers < 10
                                     return i;
                                 }
                                 /*]]>*/
