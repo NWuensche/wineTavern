@@ -38,26 +38,29 @@ public class ExpenseController {
     }
 
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
-                               @ModelAttribute("covered") Optional<String> covered, Model model) {
+    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person, Model
+            model) {
         if (type.equals("")) type = "0";
         if (person.equals("")) person = "0";
-        Set<Expense> expensesToday = filter(true, type, person, covered);
-        Set<Expense> expensesOld = filter(false, type, person, covered);
-        model.addAttribute("expenseAmount", expensesToday.size());
-        model.addAttribute("exptoday", expensesToday);
-        model.addAttribute("expold",expensesOld);
+        Set<Expense> expopen = filter(type, person, false);
+        Set<Expense> expcovered = filter(type, person, true);
+        model.addAttribute("expenseAmount", expopen.size());
+        model.addAttribute("expopen", expopen);
+        model.addAttribute("expcovered",expcovered);
         model.addAttribute("persons",persons.findAll());
         model.addAttribute("groups",expenseGroups.findAll());
         return "expenses";
     }
 
-    private Set<Expense> filter(boolean getCurrent, String typeId, String personId, Optional<String> covered) {
+    private Set<Expense> filter(String typeId, String personId, boolean covered) {
         Set<Expense> res = findAll();
+        /*
         if (getCurrent)
             res.removeIf(expense -> expense.hasDate() && !expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
         else
             res.removeIf(expense -> expense.hasDate() && expense.getDate().get().toLocalDate().isEqual(businessTime.getTime().toLocalDate()));
+            */
+        //TODO date
         if (!typeId.equals("0")) {
             ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
             res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
@@ -66,7 +69,9 @@ public class ExpenseController {
             Person person = persons.findOne(Long.parseLong(personId)).get();
             res.removeIf(expense -> expense.getPerson() != person);
         }
-        covered.ifPresent(s -> res.removeIf(expense -> !expense.isCovered()));
+        if(covered){
+            res.removeIf(expense -> !expense.isCovered());
+        }
         return res;
     }
 

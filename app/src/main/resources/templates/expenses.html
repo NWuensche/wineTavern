@@ -9,18 +9,19 @@
 <div class="bill__tabs">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#today" role="tab">Heute</a>
+            <a class="nav-link active" data-toggle="tab" href="#open" role="tab">Offen</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#old" role="tab">Vergangenheit</a>
+            <a class="nav-link" data-toggle="tab" href="#covered" role="tab">Bezahlt</a>
         </li>
     </ul>
 </div>
 <div class="container__wrap">
     <div class="tab-content">
-        <div class="tab-pane active" id="today" role="tabpanel">
+        <div class="tab-pane active" id="open" role="tabpanel">
             <div class="container__head">
-                <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben heute (<span th:text="${expenseAmount}"></span>
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben, ungedeckt (<span
+                        th:text="${expenseAmount}"></span>
                     Einträge)</h1>
             </div>
             <table class="table table-striped">
@@ -43,12 +44,9 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-check">
-                                    <label for="covered" class="form-check-label">
-                                        <input type="checkbox" id="covered" name="covered" class="form-check-input"
-                                               value="true"/>
-                                        Gedeckt
-                                    </label>
+                                <div class="form-group">
+                                    <label for="date">Datum:</label>
+                                    <input type="text" id="date" name="date" class="form-control"/>
                                 </div>
                                 <button class="btn btn-primary">Neu laden</button>
                             </form>
@@ -62,22 +60,20 @@
                     <th>Datum</th>
                     <th>Beschreibung</th>
                     <th>Betrag</th>
-                    <th>Gedeckt</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="expense : ${exptoday}">
+                <tr th:each="expense : ${expopen}">
                     <td th:text="${expense.expenseGroup.name}"></td>
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>
                     <td th:text="${expense.description}"></td>
                     <td th:text="${expense.value.number} + '€'"></td>
-                    <td th:text="${expense.isCovered()}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div class="tab-pane" id="old" role="tabpanel">
+        <div class="tab-pane" id="covered" role="tabpanel">
             <div class="container__head">
                 <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben alt</h1>
             </div>
@@ -89,26 +85,68 @@
                     <th>Datum</th>
                     <th>Beschreibung</th>
                     <th>Betrag</th>
-                    <th>Gedeckt</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="expense : ${expold}">
+                <tr th:each="expense : ${expcovered}">
                     <td th:text="${expense.expenseGroup.name}"></td>
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>
                     <td th:text="${expense.description}"></td>
                     <td th:text="${expense.value.number} + '€'"></td>
-                    <td th:text="${expense.isCovered()}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-    if(window.location.href.includes("covered"))
-        document.getElementById("covered").checked = true;
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+<script>
+    $('input[name="date"]').daterangepicker({
+        startDate: moment().subtract(1,'days'),
+        endDate: moment(),
+        maxDate: moment(),
+        buttonClasses: "btn",
+        applyClass:"btn-primary",
+        autoApply:true,
+        locale: {
+            format:"DD.MM.YYYY",
+            applyLabel:"&#10004;",
+            cancelLabel:"&#128473;",
+            customRangeLabel:"Benutzerdefiniert",
+            daysOfWeek:["So","Mo","Di","Mi","Do","Fr","Sa"],
+            monthNames:["Januar","Februar","März","April","Mai","Juni","August","September","Oktober","November","Dezember"],
+            firstDay:1,
+        },
+        ranges: {
+            'Heute': [moment(), moment()],
+            'Gestern': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Letzte 7 Tage': [moment().subtract(6, 'days'), moment()],
+            'Dieser Monat': [moment().startOf('month'), moment().endOf('month')],
+            'Dieses Jahr': [moment().subtract(1, 'month').startOf('month'),
+                moment().subtract(1, 'month').endOf('month')]
+        }
+    });
 </script>
+<!--
+<link rel="stylesheet" type="text/css" href="/resources/css/jquery.datetimepicker.css"/>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/resources/js/jquery.datetimepicker.full.js"></script>
+<script>
+    $.datetimepicker.setLocale('de');
+    $('#date').datetimepicker({
+        timepicker:false,
+        format:'d.m.Y',
+        dayOfWeekStart : 1,
+        step:30,
+        minDate:'-1970/01/02',
+        startDate:'-1970/01/02'
+    });
+</script>
+-->
 </body>
 </html>
