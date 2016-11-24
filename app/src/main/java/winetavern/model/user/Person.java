@@ -95,4 +95,8 @@ public class Person {
         return personTitle;
     }
 
+    public Role getRole() {
+        return userAccount.getRoles().stream().findFirst().get();
+    }
+
 }
