@@ -30,24 +30,27 @@
                         <td colspan="6">
                             <form class="form-inline">
                                 <div class="form-group">
-                                    <label for="type">Typ:</label>
+                                    <label for="type"><b>Typ:</b></label>
                                     <select id="type" name="type" class="form-control">
                                         <option value="0">Alle</option>
                                         <option th:each="group:${groups}" th:selected="${group.id == selectedType}" th:text="${group.name}" th:value="${group.id}"></option>
                                     </select>
                                 </div>
+                                &nbsp;
                                 <div class="form-group">
-                                    <label for="person">Person:</label>
+                                    <label for="person"><b>Person:</b></label>
                                     <select id="person" name="person" class="form-control">
                                         <option value="0">Alle</option>
                                         <option th:each="person:${persons}" th:selected="${person.id == selectedPerson}" th:text="${person}" th:value="${person.id}">test
                                         </option>
                                     </select>
                                 </div>
+                                &nbsp;
                                 <div class="form-group">
-                                    <label for="date">Datum:</label>
+                                    <label for="date"><b>Datum:</b></label>
                                     <input th:value="${selectedDate}" type="text" id="date" name="date" class="form-control"/>
                                 </div>
+                                &nbsp;
                                 <button class="btn btn-primary">Neu laden</button>
                             </form>
                         </td>
@@ -75,7 +78,7 @@
         </div>
         <div class="tab-pane" id="covered" role="tabpanel">
             <div class="container__head">
-                <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben alt</h1>
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Ausgaben, gedeckt</h1>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -85,6 +88,39 @@
                     <th>Datum</th>
                     <th>Beschreibung</th>
                     <th>Betrag</th>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <td colspan="6">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="oldtype"><b>Typ:</b></label>
+                                <select id="oldtype" name="type" class="form-control">
+                                    <option value="0">Alle</option>
+                                    <option th:each="group:${groups}" th:selected="${group.id == selectedType}" th:text="${group.name}" th:value="${group.id}"></option>
+                                </select>
+                            </div>
+                            &nbsp;
+                            <div class="form-group">
+                                <label for="oldperson"><b>Person:</b></label>
+                                <select id="oldperson" name="person" class="form-control">
+                                    <option value="0">Alle</option>
+                                    <option th:each="person:${persons}" th:selected="${person.id == selectedPerson}" th:text="${person}" th:value="${person.id}">test
+                                    </option>
+                                </select>
+                            </div>
+                            &nbsp;
+                            <div class="form-group">
+                                <label for="olddate"><b>Datum:</b></label>
+                                <input th:value="${selectedDate}" type="text" id="olddate" name="date"
+                                       class="form-control"/>
+                            </div>
+                            <input type="hidden" name="tab" value="covered"/>
+                            &nbsp;
+                            <button class="btn btn-primary">Neu laden</button>
+                        </form>
+                    </td>
                 </tr>
                 </thead>
                 <tbody>
@@ -134,6 +170,10 @@
             'Dieses Jahr': [firstDayOfYear, businessTime]
         }
     });
+
+    if(window.location.href.includes("covered")) {
+        $('.nav-tabs a[href="#covered"').tab("show");
+    }
 </script>
 </body>
 </html>
