@@ -48,14 +48,4 @@ public class PersonManagerController {
         return "redirect:/users";
     }
 
-    @RequestMapping("/admin/management/users/details/{pid}")
-    public String detail(@PathVariable("pid") String id, Model model) {
-        Long idLong = Long.parseLong(id);
-        model.addAttribute("currPerson", personManager.findOne(idLong).get());
-        AccountCredentials registerCredentials = new AccountCredentials();
-        model.addAttribute("accountcredentials", registerCredentials);
-        model.addAttribute("personManager", personManager);
-        return "users";
-    }
-
 }
