@@ -34,7 +34,7 @@ import java.util.List;
 import static org.salespointframework.core.Currencies.EURO;
 
 /**
- * Initializes Data in the Database for the prototype
+ * Initializes Data
  * @author Niklas Wünsche
  */
 

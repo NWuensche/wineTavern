@@ -89,7 +89,7 @@
                                 <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
                             </div>
                             <div class="modal-body">
-                                <form id="productDetailsForm" th:action="@{'/admin/management/users/changeUser/' + ${person.id}}" method="post" th:object="${accountcredentials}">
+                                <form id="productDetailsForm" th:action="@{'/admin/management/users/edit/' + ${person.id}}" method="post" th:object="${accountcredentials}">
                                     <div class="form-group" hidden = "true">
                                         <label for="id">Konto</label>
                                         <input type="text" class="form-control" name="id" id="id" readonly="true" />
@@ -98,7 +98,7 @@
                                         <label for="lastName">Nachname</label>
                                         <input type="text" class="form-control" th:value="${person.userAccount.lastname}" name="lastName" id="lastName" />
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" th:if="${!currUserAccount.equals(person.userAccount)}">
                                         <label for="role">Rolle</label>
                                         <select type="text" class="form-control" name="role" id="role" >
                                             <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(role)}"
@@ -111,7 +111,7 @@
                                         <input type="text" class="form-control" th:value="${person.address.get()}" name="address" id="address" />
                                     </div>
                                     <div class="form-group">
-                                        <a th:href="@{'/admin/management/users/disableUser/' + ${person.id}}">
+                                        <a th:href="@{'/admin/management/users/disable/' + ${person.id}}">
                                             <button id="disablePerson" type="button" class="btn btn-secondary btn-block">Deaktiviere das Konto</button>
                                         </a>
                                     </div>
@@ -164,7 +164,7 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <form method="post" th:action="@{/admin/management/users/addNew}" th:object="${accountcredentials}">
+                    <form method="post" th:action="@{/admin/management/users/add}" th:object="${accountcredentials}">
                         <div class="form__bg">
                             <div class="dark__bg">
                                 <h2>Personendaten</h2>
