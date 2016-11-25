@@ -3,6 +3,8 @@ package winetavern.controller;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
+import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +15,13 @@ import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
+import winetavern.model.user.Roles;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author Louis
@@ -27,18 +29,9 @@ import java.util.TreeSet;
 
 @Controller
 public class ExpenseController {
-    @NotNull private final Accountancy accountancy;
-    @NotNull private final ExpenseGroupRepository expenseGroups;
-    @NotNull private final BusinessTime businessTime;
-    @NotNull private final PersonManager persons;
-
-    @Autowired
-    public ExpenseController(Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime, PersonManager persons) {
-        this.accountancy = accountancy;
-        this.expenseGroups = expenseGroups;
-        this.businessTime = businessTime;
-        this.persons = persons;
-    }
+    @NotNull @Autowired private Accountancy accountancy;
+    @NotNull @Autowired private ExpenseGroupRepository expenseGroups;
+    @NotNull @Autowired private PersonManager persons;
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
@@ -60,7 +53,12 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff")
     public String doPayoff(Model model) {
-        return "index";
+        Set<Person> service = new TreeSet<>(Comparator.comparing(o -> o.getUserAccount().getLastname()));
+        for (Person person : persons.findAll()) {
+            if (person.getRole().equals(Roles.SERVICE.getRole())) service.add(person);
+        }
+        model.addAttribute("service", service);
+        return "payoff";
     }
 
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
