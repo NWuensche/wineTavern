@@ -48,7 +48,7 @@ public class Application {
                     antMatchers("/kitchen/**").hasAnyRole("ADMIN, COOK").
                     antMatchers("/visitor/**").permitAll().
                     antMatchers("/admin/**").hasRole("ADMIN").
-                    antMatchers("/**").authenticated().and().
+                    antMatchers("/*/**").authenticated().and().
                     formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll().and().
                     logout().logoutUrl("/logout").logoutSuccessUrl("/");
         }
