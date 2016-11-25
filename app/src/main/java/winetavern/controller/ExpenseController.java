@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -66,7 +65,7 @@ public class ExpenseController {
         if (!date.equals("")) { //Interval filter: start - end
             String[] interval = date.split("(\\s-\\s)");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withSecond(0).withNano(1);
+            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withNano(1);
             LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
             accountancy.find(Interval.from(start).to(end)).forEach(it -> res.add(((Expense) it)));
         } else {
