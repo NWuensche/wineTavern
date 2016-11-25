@@ -83,26 +83,4 @@ public class StockController {
         product.getCategories().forEach(cat -> product.removeCategory(cat));
         return product;
     }
-
-    @RequestMapping(value = "/admin/stock/increaseQuantity", method = RequestMethod.POST)
-    public String increaseQuantity(@ModelAttribute("product") ProductIdentifier productId,
-                                   @ModelAttribute("quantity") String quantityNumber) {
-        Optional<Product> product = products.findOne(productId);
-        if (product.isPresent()) {
-            Optional<InventoryItem> item = stock.findByProduct(product.get());
-            if (item.isPresent()) item.get().increaseQuantity(Quantity.of(new Integer(quantityNumber)));
-        }
-        return "redirect:/admin/stock";
-    }
-
-    @RequestMapping(value = "/admin/stock/decreaseQuantity", method = RequestMethod.POST)
-    public String decreaseQuantity(@ModelAttribute("product") ProductIdentifier productId,
-                                   @ModelAttribute("quantity") String quantityNumber) {
-        Optional<Product> product = products.findOne(productId);
-        if (product.isPresent()) {
-            Optional<InventoryItem> item = stock.findByProduct(product.get());
-            if (item.isPresent()) item.get().decreaseQuantity(Quantity.of(new Integer(quantityNumber)));
-        }
-        return "redirect:/admin/stock";
-    }
 }
