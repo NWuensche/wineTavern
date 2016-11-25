@@ -36,20 +36,23 @@ public class PersonManagerController {
 
     @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
     public String addPerson(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
-        UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
+        UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(),
+                registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
         newAccount.setFirstname(registerCredentials.getFirstName());
         newAccount.setLastname(registerCredentials.getLastName());
 
         userAccountManager.save(newAccount);
 
-        Person newPerson = new Person(newAccount, registerCredentials.getAddress(), registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
+        Person newPerson = new Person(newAccount, registerCredentials.getAddress(),
+                registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
         personManager.save(newPerson);
 
         return "redirect:/users";
     }
 
     @RequestMapping(value= "/admin/management/users/changePerson/{pid}")
-    public String changePerson(@PathVariable("pid") Long id, @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
+    public String changePerson(@PathVariable("pid") Long id,
+                               @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
         Person changePerson = personManager.findOne(id).get();
 
         changePerson.getUserAccount().setLastname(changeCredentials.getLastName());

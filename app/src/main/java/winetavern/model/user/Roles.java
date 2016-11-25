@@ -8,10 +8,13 @@ import org.salespointframework.useraccount.Role;
 
 public enum Roles {
 
+
     ADMIN ("ROLE_ADMIN"),
     SERVICE ("ROLE_SERVICE"),
     ACCOUNTANT ("ROLE_ACCOUNTANT"),
     COOK ("ROLE_COOK");
+
+    private final String ROLE_PREFIX = "ROLE_";
 
     private final String nameOfRole;
     private final Role role;
@@ -26,7 +29,7 @@ public enum Roles {
     }
 
     public String getRealNameOfRole() {
-        return nameOfRole.substring(5);
+        return nameOfRole.substring(ROLE_PREFIX.length());
     }
 
     /**
@@ -40,11 +43,9 @@ public enum Roles {
      * @return not null
      */
     public static String getDisplayNameRole(String roleName) throws IllegalArgumentException {
-        if(!roleName.startsWith("ROLE_")) {
-            roleName = "ROLE_" + roleName;
-        }
+        String roleWithPrefix = roleName.startsWith("ROLE_") ? roleName : "ROLE_" + roleName;
 
-        switch(roleName) {
+        switch(roleWithPrefix) {
             case "ROLE_ADMIN":
                 return "Administrator";
             case "ROLE_SERVICE":
