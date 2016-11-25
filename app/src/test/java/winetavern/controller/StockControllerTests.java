@@ -30,7 +30,7 @@ public class StockControllerTests extends AbstractWebIntegrationTests {
     @Before
     public void setUp() {
         product = new Product("Äpfel", Money.of(1.99, EURO));
-        product.addCategory(Category.SNACK.getCategoryName());
+        product.addCategory(Category.SNACK.toString());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class StockControllerTests extends AbstractWebIntegrationTests {
         assertTrue(products.exists(product.getId()));
 
         String savedProductCategory = products.findOne(product.getId()).get().getCategories().stream().findFirst().get();
-        assertThat(savedProductCategory, is(Category.SNACK.getCategoryName()));
+        assertThat(savedProductCategory, is(Category.SNACK.toString()));
     }
 
     @Test
