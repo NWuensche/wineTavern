@@ -22,7 +22,7 @@
 </script>
 
 <div class="users">
-    <div class="row">
+    <div class="row">   
         <div class="col-xs-12 text-xs-right">
             <div class="icon__wrap">
                 <button class="icon__button icon-card btn btn-primary">
@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-xs-6">
                 <h1>
-                    <span class="fa fa-users" th:text="'Management (' + ${personManager.findEnabled().size()} + ' Konten)'"></span>
+                    <span class="fa fa-users" ></span> Management (<span th:text="${personManager.findEnabled().size()}"></span>Knoten)
                 </h1>
             </div>
             <div class="col-xs-6 text-xs-right">
