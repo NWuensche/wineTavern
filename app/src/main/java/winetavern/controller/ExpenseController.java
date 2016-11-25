@@ -69,8 +69,8 @@ public class ExpenseController {
     }
 
     @PostMapping("/accountancy/expenses/payoff")
-    public String redirectPayoff(@ModelAttribute String personId, Model model) {
-        return "redirect:payoff/" + personId;
+    public String redirectPayoff(@ModelAttribute("personId") String personId, Model model) {
+        return "redirect:/accountancy/expenses/payoff/" + personId;
     }
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}")
@@ -82,10 +82,23 @@ public class ExpenseController {
         model.addAttribute("staff", staff);
         MonetaryAmount sum = Money.of(0, EURO);
         for (Expense exp : expenses) {
-            sum.add(exp.getValue());
+            sum = sum.add(exp.getValue());
         }
         model.addAttribute("price", sum);
         return "payoff";
+    }
+
+    @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
+    public String coverExpensesForPerson(@PathVariable("pid") String personId, Model model) {
+        Person staff = persons.findOne(Long.parseLong(personId)).get();
+        Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
+                personId, false, "today");
+        for(Expense expense : expenses){
+            expense.cover(); //TODO remove expense or change old one
+            accountancy.add(expense);
+        }
+
+        return "redirect:/accountancy/expenses/payoff";
     }
 
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {

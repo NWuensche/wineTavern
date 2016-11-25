@@ -15,7 +15,7 @@
             <a class="nav-link" th:href="@{'/accountancy/expenses?tab=covered'}">Bezahlt</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active">Bezahlen</a>
+            <a class="nav-link active">Tagesabrechnung</a>
         </li>
     </ul>
 </div>
@@ -26,22 +26,24 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="padding__box">
-                <form>
+                <form th:if="${service}" method="post">
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <select id="name" name="name" class="form-control">
-                            <option th:each="person:${service}" th:text="${person}"></option>
+                        <select id="name" name="personId" class="form-control">
+                            <option th:each="person:${service}" th:text="${person}" th:value="${person.id}"></option>
                         </select>
                     </div>
+                    <button class="btn btn-primary">Auswählen</button>
                 </form>
+                <p th:if="${staff}" th:text="'Für: ' + ${staff}"></p>
             </div>
         </div>
     </div>
 </div>
-<div class="text-xs-center">
+<div class="text-xs-center" th:if="${price}">
     <i class="fa fa-arrow-down fa-2x"></i>
 </div>
-<div class="container__wrap">
+<div class="container__wrap" th:if="${price}">
     <div class="container__head">
         <h1>Heutige Ausgaben</h1>
     </div>
@@ -51,24 +53,24 @@
             <th>Wert</th>
         </thead>
         <tbody>
-            <tr>
-                <td>TEST</td>
-                <td>5€</td>
+            <tr th:each="expense:${expenses}">
+                <td th:text="${expense.description}">TEST</td>
+                <td th:text="${expense.value.number} +' €'">5€</td>
             </tr>
             <tr>
                 <td colspan="2" class="text-xs-center">
-                    Gesamtwert
+                    <h2><b><span th:text="${price.number} + ' €'"></span></b></h2>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
-<div class="text-xs-center">
+<div class="text-xs-center" th:if="${price}">
     <i class="fa fa-arrow-down fa-2x"></i>
 </div>
 <div class="container__wrap text-xs-center">
-    <div class="padding__box">
-        <a th:href="@{/accountancy/expenses/payoff/ /pay}">
+    <div class="padding__box" th:if="${price}">
+        <a th:href="@{'/accountancy/expenses/payoff/' + ${staff.id} + '/pay'}">
             <button type="button" class="btn btn-primary">Bezahlen</button>
         </a>
     </div>
