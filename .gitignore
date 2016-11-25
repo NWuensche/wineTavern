@@ -5,6 +5,7 @@ target/
 .springBeans
 .DS_Store
 .idea
+.exe
 
 # Intellij
 .idea/
@@ -17,4 +18,3 @@ target/
 # Maven
 log/
 target/
-

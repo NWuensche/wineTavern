@@ -23,6 +23,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |04.11.2016 | 09:20 |12:40 | Abnahme Pflichtenheft, Aufteilung der Software auf Gruppenmitglieder
 |11.11.2016 | 09:40 |12:40 | Treffen & Coden
 |18.11.2016 | 09:00 |12:50 | Treffen & Coden
+|25.11.2016 | 09:00 |13:30 | Treffen & Coden
 |===
 
 == Severin
