@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head>
+
+</head>
+<body th:fragment="content" class="bills">
+<div class="bill__tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/service/bills}"><i class="fa fa-arrow-left"></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{'/service/bills/details/' + ${bill.id}}" th:if="${bill}">Rechnung #<span
+                    th:text="${bill.id}"></span></a>
+            <a class="nav-link" th:href="@{'/service/bills/details/' + ${leftbill.id}}" th:if="${leftbill}">Rechnung
+                #<span
+                    th:text="${leftbill.id}"></span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active"><i class="fa fa-scissors"></i> Teilen</a>
+        </li>
+    </ul>
+</div>
+<div class="container__wrap">
+    <div class="heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <h1>Rechnung teilen</h1>
+            </div>
+            <div class="col-xs-6" th:if="${bill}">
+                Tisch <span th:text="${bill.desk}"></span><br/>
+                <span th:text="${bill.staff.userAccount.firstname}"></span>
+                <span th:text="${bill.staff.userAccount.lastname}"></span>
+            </div>
+            <div class="col-xs-6" th:if="${leftbill}">
+                Tisch <span th:text="${leftbill.desk}"></span><br/>
+                <span th:text="${leftbill.staff.userAccount.firstname}"></span>
+                <span th:text="${leftbill.staff.userAccount.lastname}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <table class="table table-striped text-xs-center hidespinner" style="table-layout:fixed;">
+                <thead th:if="${bill}">
+                <tr>
+                    <th class="text-xs-center">Produkt</th>
+                    <th class="text-xs-center">Optionen</th>
+                </tr>
+                </thead>
+                <thead th:if="${leftbill}">
+                <tr>
+                    <th class="text-xs-center">Produkt</th>
+                    <th class="text-xs-center">Anzahl</th>
+                </tr>
+                </thead>
+                <tbody id="leftbill"  th:if="${bill}">
+                    <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
+                        <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number} + '€)'"
+                                  class="product-description"></span></td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" th:value="${product.quantity}"
+                                       class="form-control text-xs-center" readonly="true" th:id="${product.id}"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" onclick="oneright(this)">
+                                        <i class="fa fa-hand-o-right"></i>
+                                    </button>
+                                </span>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary moveright">
+                                        <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody th:if="${leftbill}">
+                    <tr th:each="product : ${leftbill.items}" style="vertical-align:middle;">
+                        <td th:text="${product.item.name}"></td>
+                        <td th:text="${product.quantity}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Alte Rechnung mit #
+                                <span th:text="${leftbill.id}">000</span>
+                                <i class="fa fa-arrow-right"></i>
+                                <span th:text="${leftbill.price.number} + ' €'"></span>
+                            </b></td>
+                    </tr>
+                    <tr th:if="${leftbill}" style="vertical-align:middle;">
+                        <td colspan="2">
+                            <a th:href="@{'/service/bills/details/' + ${leftbill.id}}">
+                                <button type="button" class="btn btn-primary">&Ouml;ffne alte Rechnung</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <table class="table table-striped text-xs-center hidespinner" style="table-layout:fixed;">
+                <thead th:if="${bill}">
+                    <tr>
+                        <th class="text-xs-center">Optionen</th>
+                        <th class="text-xs-center">Produkt</th>
+                    </tr>
+                </thead>
+                <thead th:if="${rightbill}">
+                    <tr>
+                        <th class="text-xs-center">Produkt</th>
+                        <th class="text-xs-center">Anzahl</th>
+                    </tr>
+                </thead>
+                <tbody id="rightbill" th:if="${bill}">
+
+                </tbody>
+                <tbody th:if="${rightbill}" >
+                    <tr th:each="product : ${rightbill.items}" style="vertical-align:middle;">
+                        <td th:text="${product.item.name}"></td>
+                        <td th:text="${product.quantity}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Neue Rechnung mit #
+                                <span th:text="${rightbill.id}">000</span>
+                                <i class="fa fa-arrow-right"></i>
+                                <span th:text="${rightbill.price.number} + ' €'"></span>
+                            </b>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align:middle;">
+                        <td colspan="2">
+                            <a th:href="@{'/service/bills/details/' + ${rightbill.id}}">
+                                <button type="button" class="btn btn-primary">&Ouml;ffne neue Rechnung</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" th:if="${bill}">
+        <div class="col-xs-12">
+            <a onclick="splitbill()">
+                <button id="splitbutton" type="button" class="btn btn-primary" disabled="true">
+                    Teilen
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript" th:if="${bill}">
+    /*<![CDATA[*/
+        var leftlist = new Array();
+        var rightlist = new Array();
+        setup();
+
+        function setup(){
+            var rightbuttons = document.getElementsByClassName("moveright");
+            for(i=0;i<rightbuttons.length;i++){
+                rightbuttons[i].setAttribute('onclick','right(this)');
+            }
+            var leftlines = document.getElementById("leftbill").getElementsByTagName("tr");
+
+            for(i=0;i<leftlines.length;i++){
+                var value = new
+                        Array(leftlines[i].getElementsByTagName("input")[0].id,leftlines[i].getElementsByTagName("input")[0].value,leftlines[i].getElementsByClassName("product-description")[0].innerHTML);
+                leftlist[i] = value;
+            }
+        }
+
+        function splitbill(){
+            var left = "";
+            var left_inputs = document.getElementById("leftbill").getElementsByTagName("input");
+            for(i=0;i<left_inputs.length;i++){
+                left += left_inputs[i].id + "," + left_inputs[i].value + "|";
+            }
+
+            var query = "?query=" + left;
+            window.location = location.pathname + query;
+        }
+
+        function right(node){
+            var id = node.parentNode.parentNode.getElementsByTagName("input")[0].id;
+            var entry = new Array();
+            for(i=0;i<leftlist.length;i++){
+                if(leftlist[i][0] == id){
+                    entry = new Array(leftlist[i][0],leftlist[i][1],leftlist[i][2]);
+                    leftlist.splice(i,1);
+                    break;
+                }
+            }
+            checkedPush(entry,rightlist);
+            show();
+        }
+
+        function left(node){
+            var id = node.parentNode.parentNode.getElementsByTagName("input")[0].id;
+            var entry = new Array();
+            for(i=0;i<rightlist.length;i++){
+                if(rightlist[i][0] == id){
+                    entry = new Array(rightlist[i][0],rightlist[i][1],rightlist[i][2])
+                    rightlist.splice(i,1);
+                    break;
+                }
+            }
+
+            checkedPush(entry,leftlist);
+            show();
+        }
+
+        function oneright(node){
+            var id = node.parentNode.parentNode.getElementsByTagName("input")[0].id;
+            var entry = new Array();
+            for(i=0;i<leftlist.length;i++){
+                if(leftlist[i][0] == id){
+                    var title = leftlist[i][2];
+                    if(leftlist[i][1] == 1){
+                        leftlist.splice(i,1);
+                    } else {
+                        leftlist[i][1] -= 1;
+                    }
+                    entry = new Array(id,1,title);
+                }
+            }
+
+            checkedPush(entry,rightlist);
+
+            show();
+        }
+
+    function oneleft(node) {
+        var id = node.parentNode.parentNode.getElementsByTagName("input")[0].id;
+        var entry = new Array();
+        for (i = 0; i < rightlist.length; i++) {
+            if (rightlist[i][0] == id) {
+                var title = rightlist[i][2];
+                if (rightlist[i][1] == 1) {
+                    rightlist.splice(i, 1);
+                } else {
+                    rightlist[i][1] -= 1;
+                }
+                entry = new Array(id, 1, title);
+            }
+        }
+
+        checkedPush(entry,leftlist);
+
+        show();
+    }
+
+    function checkedPush(entry,list){
+        var flag = 0;
+        for (i = 0; i < list.length; i++) {
+            if (list[i][0] == entry[0]) {
+                list[i][1] += entry[1];
+                flag = 1;
+            }
+        }
+
+        if (flag == 0) {
+            list.push(entry);
+        }
+    }
+
+        function show(){
+            if (leftlist.length == 0 || rightlist.length == 0 ) {
+                document.getElementById("splitbutton").disabled = true;
+            } else {
+                document.getElementById("splitbutton").disabled = false;
+            }
+            document.getElementById("leftbill").innerHTML = "";
+            for(i=0;i<leftlist.length;i++){
+                document.getElementById("leftbill").innerHTML += leftline(leftlist[i][0],leftlist[i][1],leftlist[i][2]);
+            }
+
+            document.getElementById("rightbill").innerHTML = "";
+            for(i=0;i<rightlist.length;i++){
+                document.getElementById("rightbill").innerHTML +=
+                        rightline(rightlist[i][0],rightlist[i][1],rightlist[i][2]);
+            }
+        }
+
+
+        function leftline(id,value,title){
+            var string =
+                    "<tr style=\'vertical-align:middle;\'><td><span class=\'product-description\'>" + title +
+                    "</span></td><td><div class=\'input-group\'><input type=\'number\' class=\'form-control text-xs-center\' readonly=\'true\' id=\'" + id +
+                    "' value=\'" + value +
+                    "\'/><span class=\'input-group-btn\'><button class=\'btn btn-primary\' onclick=\'oneright(this)\'><i class=\'fa fa-hand-o-right\'></i></button></span><span class=\'input-group-btn\'><button type=\'button\' class=\'btn btn-primary moveright\' onclick=\'right(this)\'><i class=\'fa fa-arrow-right\'></i></button></span></div></td></tr>";
+            return string;
+        }
+
+        function rightline(id,value,title){
+            var string =
+                    "<tr style=\'vertical-align:middle;\'><td><div class=\'input-group\'><span class=\'input-group-btn\'><button type=\'button\' class=\'btn btn-primary moveleft\' onclick=\'left(this)\'><i class=\'fa fa-arrow-left\'></i></button></span><span class=\'input-group-btn\'><button class=\'btn btn-primary\' onclick=\'oneleft(this)\'><i class=\'fa fa-hand-o-left\'></i></button></span><input type=\'number\' class=\'form-control text-xs-center\' readonly=\'true\' id=\'" + id +
+                    "' value=\'" + value +
+                    "\'/></div></td><td><span class=\'product-description\'>" + title +
+                    "</span></td></tr>";
+            return string;
+        }
+
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -11,9 +11,9 @@ import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import winetavern.model.accountancy.ExpenseGroup;
+import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.management.*;
-import winetavern.model.management.Event;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
@@ -45,6 +45,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private PersonManager personManager;
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private ExpenseGroupRepository expenseGroups;
     @Autowired private ShiftRepository shifts;
     @Autowired private DeskRepository deskRepository;
     @Autowired private DayMenuRepository dayMenuRepository;
@@ -60,6 +61,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeEvents();
             initializeStock();
             initializeShift();
+            initializeExpenseGroups();
             initializeTables();
             initializeDayMenuWithItems();
         }
@@ -98,6 +100,11 @@ public class WineTavernDataInitializer implements DataInitializer{
 
         stock.save(new InventoryItem(vodka, Quantity.of(15)));
         stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
+    }
+
+    private void initializeExpenseGroups() {
+        expenseGroups.save(new ExpenseGroup("Bestellung"));
+        expenseGroups.save(new ExpenseGroup("Künstlergage"));
     }
 
     public void initializeTables() {

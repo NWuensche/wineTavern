@@ -1,18 +1,16 @@
 package winetavern.controller;
 
-import org.javamoney.moneta.*;
 import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
@@ -21,14 +19,9 @@ import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.ProductCatalog;
 
 import javax.money.MonetaryAmount;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 /**
  * Controller responsible for DayMenuItem's creation and managing.
@@ -143,7 +136,7 @@ public class DayMenuItemManager {
     public ModelAndView addMenuItemPostExisting(@RequestParam("daymenuitem") Long dayMenuItemId,
                                                 @RequestParam("dayMenu") Long dayMenuId,
                                                 ModelAndView modelAndView) {
-        DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId);
+        DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId).get();
         DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
         dayMenuItem.addDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);
@@ -156,7 +149,7 @@ public class DayMenuItemManager {
     public ModelAndView removeDayMenuItemFromDayMenu(@RequestParam("daymenuitem") Long dayMenuItemId,
                                                      @RequestParam("dayMenu") Long dayMenuId,
                                                      ModelAndView modelAndView) {
-        DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId);
+        DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId).get();
         DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
         dayMenuItem.removeDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);

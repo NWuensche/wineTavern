@@ -99,4 +99,8 @@ public class Person {
         return userAccount.getRoles().stream().findFirst().get();
     }
 
+    @Override
+    public String toString() {
+        return userAccount.getFirstname() + " " + userAccount.getLastname();
+    }
 }

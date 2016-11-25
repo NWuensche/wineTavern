@@ -1,15 +1,36 @@
 package winetavern.model.accountancy;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Created by Michel on 11/4/2016.
+ * @author Louis
  */
+
 @Entity
 public class ExpenseGroup {
-    @Id
-    private long id;
+    @GeneratedValue @Id private long id;
+    private String name;
 
-    private String description;
+    @Deprecated
+    protected ExpenseGroup() {}
+
+    public ExpenseGroup(String name) {
+        setName(name);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name == null) throw new NullPointerException();
+        if (name.equals("")) throw new IllegalArgumentException("The name must not be empty");
+        this.name = name;
+    }
 }
