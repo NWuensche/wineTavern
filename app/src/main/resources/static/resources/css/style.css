@@ -272,6 +272,9 @@ main table thead{
 main table tbody tr{
 
 }
+main .container__wrap .container__table{
+    display: block;
+}
 
 main .container__wrap .table__bottom {
     background-color: #1D997D;
@@ -431,10 +434,15 @@ body .list-group-item-action .fa-circle-o{
     border: none;
     margin: 0.5rem 0;
 }
+.users .icon__button.btn-primary.active{
+    background-color: #243648;
+}
 
 .users .icon__button .fa {
     color: #243648;
-
+}
+.users .icon__button.btn-primary.active .fa{
+    color: #A6B2C5;
 }
 
 .users .icon-list {
