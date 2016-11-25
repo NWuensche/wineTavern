@@ -66,7 +66,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="expense : ${expopen}">
+                <tr th:each="expense : ${expOpen}">
                     <td th:text="${expense.expenseGroup.name}"></td>
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>
@@ -124,7 +124,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="expense : ${expcovered}">
+                <tr th:each="expense : ${expCovered}">
                     <td th:text="${expense.expenseGroup.name}"></td>
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>

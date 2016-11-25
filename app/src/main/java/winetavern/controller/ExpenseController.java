@@ -45,11 +45,11 @@ public class ExpenseController {
                                @ModelAttribute("date") String date, Model model) {
         if (type.equals("")) type = "0";
         if (person.equals("")) person = "0";
-        Set<Expense> expopen = filter(type, person, false, date);
-        Set<Expense> expcovered = filter(type, person, true, date);
-        model.addAttribute("expenseAmount", expopen.size());
-        model.addAttribute("expopen", expopen);
-        model.addAttribute("expcovered", expcovered);
+        Set<Expense> expOpen = filter(type, person, false, date);
+        Set<Expense> expCovered = filter(type, person, true, date);
+        model.addAttribute("expenseAmount", expOpen.size());
+        model.addAttribute("expOpen", expOpen);
+        model.addAttribute("expCovered", expCovered);
         model.addAttribute("persons", persons.findAll());
         model.addAttribute("groups", expenseGroups.findAll());
         model.addAttribute("selectedType", Long.parseLong(type));
@@ -58,6 +58,10 @@ public class ExpenseController {
         return "expenses";
     }
 
+    @RequestMapping("/accountancy/expenses/payoff")
+    public String doPayoff(Model model) {
+        return "index";
+    }
 
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
         Set<Expense> res = new TreeSet<>();
