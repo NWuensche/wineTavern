@@ -60,7 +60,7 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff")
     public String doPayoff(Model model) {
-        return "index";
+        return "payoff";
     }
 
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {

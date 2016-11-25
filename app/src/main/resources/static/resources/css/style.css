@@ -379,6 +379,10 @@ body.mini .list-group-item-action span {
     background:#eee;
 }
 
+.padding__box {
+    padding:20px;
+}
+
 /* Form Style */
 
 .addMenuItem .form__bg, .addPerson .form__bg {
