@@ -22,26 +22,26 @@
 </script>
 
 <div class="users">
-    <div class="row">
+    <div class="row">   
         <div class="col-xs-12 text-xs-right">
             <div class="icon__wrap">
                 <button class="icon__button icon-card btn btn-primary">
-                    <i class="fa fa-th-large fa-fw fa-lg" aria-hidden="true"></i>
+                    <i id="cardBtn" class="fa fa-th-large fa-fw fa-lg" aria-hidden="true"></i>
                 </button>
                 <button class="icon__button icon-list btn btn-primary">
-                    <i class="fa fa-th-list fa-fw fa-lg" aria-hidden="true"></i>
+                    <i id="listBtn" class="fa fa-th-list fa-fw fa-lg" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
     </div>
-</div>
+
 
 <div class="container__wrap">
     <div class="heading">
         <div class="row">
             <div class="col-xs-6">
                 <h1>
-                    <span class="fa fa-users" th:text="'Management (' + ${personManager.findEnabled().size()} + ' Konten)'"></span>
+                    <span class="fa fa-users" ></span> Management (<span th:text="${personManager.findEnabled().size()}"></span>Knoten)
                 </h1>
             </div>
             <div class="col-xs-6 text-xs-right">
@@ -129,6 +129,25 @@
 
             </td>
         </tr>
+        <div  class="container__user-cards">
+            <div class="row">
+                <div class="col-xs-3" th:each="person : ${personManager.findEnabled()}">
+                    <div class="user-card" >
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <img src="/resources/img/pokemon.jpg" class="image-user rounded-circle"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span class="user-title" th:text="${person.personTitle}"></span>
+                                <span class="user-role" th:text="${person.displayNameOfRole}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </tbody>
     </table>
 </div>
@@ -212,11 +231,7 @@
         </div>
     </div>
 </div>
-
-
+</div>
 
 </body>
-
-
-
 </html>

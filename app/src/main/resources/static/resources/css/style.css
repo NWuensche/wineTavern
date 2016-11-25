@@ -445,6 +445,9 @@ body .list-group-item-action .fa-circle-o{
     border-radius: 0 0.2rem 0.2rem 0;
     float: right;
 }
+.users .container__user-cards{
+    display: none;
+}
 
 #disablePerson {
     background-color: tomato;
