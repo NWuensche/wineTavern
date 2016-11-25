@@ -13,18 +13,12 @@ public class CategoryTests {
 
     @Test
     public void isRedWineDataRight() {
-        Category redWine = Category.RED_WINE;
-
-        assertThat(redWine.getCategoryName(), is("RED_WINE"));
-        assertThat(Category.getDisplayNameCategory(Category.RED_WINE), is("Rotwein"));
+        assertThat(Category.RED_WINE.toString(), is("Rotwein"));
     }
 
     @Test
     public void isSnackDataRight() {
-        Category snack = Category.SNACK;
-
-        assertThat(snack.getCategoryName(), is("SNACK"));
-        assertThat(Category.getDisplayNameCategory(Category.SNACK), is("Snacks"));
+        assertThat(Category.SNACK.toString(), is("Snacks"));
     }
 
 }
