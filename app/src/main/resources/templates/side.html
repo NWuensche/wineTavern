@@ -57,9 +57,11 @@
                 </a>
                 <div id="reservierungen" class="collapse">
                     <a th:href="@{/reservation}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Abfrage</span>
                     </a>
                     <a th:href="@{/reservation/showall}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Alle anzeigen</span>
                     </a>
                 </div>
@@ -72,9 +74,11 @@
                 </a>
                 <div id="rechnungen" class="collapse">
                     <a th:href="@{/accountancy/accountancy}" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT','ROLE_ADMIN')" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Tagesabrechnung</span>
                     </a>
                     <a th:href="@{/service/accountancy}" sec:authorize="hasAnyRole('ROLE_SERVICE','ROLE_ADMIN')" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Rechnungen</span>
                     </a>
                 </div>
@@ -95,9 +99,11 @@
                 </a>
                 <div id="events" class="collapse">
                     <a th:href="@{/admin/events}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Events</span>
                     </a>
                     <a th:href="@{/events}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Events</span>
                     </a>
                 </div>
@@ -110,12 +116,15 @@
                 </a>
                 <div id="management" class="collapse">
                     <a th:href="@{/admin/management/users}" class="list-group-item list-group-item-action side__menu side-module__container" >
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Users</span>
                     </a>
                     <a th:href="@{/users}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Users</span>
                     </a>
                     <a th:href="@{/admin/management/shifts}" class="list-group-item list-group-item-action side__menu side-module__container">
+                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Shifts</span>
                     </a>
                 </div>

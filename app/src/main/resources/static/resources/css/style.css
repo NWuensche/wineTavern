@@ -193,10 +193,6 @@ button.logout__btn {
 }
 
 .side-module__container {
-    /*background-color: #243648;*/
-    /*color: #A6B2C5;*/
-    /*display: inline-block;*/
-    /*width: 100%;*/
     padding-left: 2.5rem;
     line-height: 3rem;
 }
@@ -312,10 +308,14 @@ body .list-group-item-action{
     white-space: nowrap;
     overflow: hidden;
 }
-body.mini .list-group-item-action i{
+body.mini .list-group-item-action i, body.mini .list-group-item-action .fa-circle-o{
     padding-right: 0;
+    display: inline-block;
 }
 body.mini .list-group-item-action span {
+    display: none;
+}
+body .list-group-item-action .fa-circle-o{
     display: none;
 }
 
