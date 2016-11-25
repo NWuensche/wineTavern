@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head>
+
+    <title>Lager</title>
+
+</head>
+<body th:fragment="content" class="bills">
+<div class="bill__tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#current" role="tab">Aktiv</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#old" role="tab">Archiviert</a>
+        </li>
+    </ul>
+</div>
+    <div class="container__wrap">
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="current" role="tabpanel">
+                <div class="heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h1>Aktive Rechnungen</h1>
+                        </div>
+                        <div class="col-xs-6 text-xs-center">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#addBill">
+                                <i class="fa fa-plus fa-lg"></i> Rechnung
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th><b>#</b></th>
+                        <th>Tisch</th>
+                        <th>Betrag</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="bill: ${active}">
+
+                            <td th:text="${bill.id}"><a ></a></td>
+                            <td th:text="${bill.desk}"></td>
+                            <td th:text="${bill.price.number} + '€'"></td>
+                            <td><a th:href="@{'/service/bills/details/' + ${bill.id}}">
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-cog fa-lg"></i>
+                                </button>
+                            </a></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="old" role="tabpanel">
+                <div class="container__head">
+                    <h1>Archivierte Rechnungen</h1>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><b>#</b></th>
+                            <th>Datum</th>
+                            <th>Tisch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="bill: ${old}">
+                        <td th:text="${bill.id}"></td>
+                        <td th:text="${bill.closeTime}"></td>
+                        <td th:text="${bill.desk}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- old  -->
+        </div>
+    </div>
+    <div class="modal" id="addBill" tabindex="-1" role="dialog" aria-labelledby="addBillLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="addBillLabel">Rechnung hinzuf&uuml;gen</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="tableform" th:action="@{/service/bills/add}" th:method="post">
+                        <div class="form-group">
+                            <label for="table">Tisch-Nummer:</label>
+                            <select id="table" name="table" class="form-control">
+                                <option th:each="table:${tables}" th:text="${table.number}">1</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" form="tableform">Anlegen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

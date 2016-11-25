@@ -254,6 +254,7 @@ main .container__wrap{
 }
 main .container__wrap .heading {
     background: #243648;
+    color: #A6B2C5;
 }
 main .container__wrap h1{
     background-color: #243648;
@@ -335,6 +336,47 @@ body.mini .list-group-item-action span {
     font-size:2rem;
     padding:5px;
     border-radius:5px;
+}
+
+/* BILLS */
+.bill__tabs {
+    margin: 1rem 2rem -1rem 2rem;
+    background:lightgrey;
+}
+
+.nav-tabs > li.nav-item > a.nav-link.active {
+    background:#243648;
+    color:#A6B2C5;
+    border:1px solid #243648;
+}
+
+.nav-tabs > li > a.nav-link {
+    background:darkgrey;
+    color:white;
+}
+
+.nav-tabs > li > a.nav-link:hover, .nav-tabs > li > a.nav-link.active:hover {
+    background:#2F3F52;
+    border:1px solid #2f3f52;
+    color:white;
+}
+
+.hidespinner input[type="number"]::-webkit-outer-spin-button,
+.hidespinner input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.hidespinner input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.card__daymenuitems a {
+    color:black;
+    text-decoration: none;
+}
+
+.card__daymenuitems .card:hover {
+    background:#eee;
 }
 
 /* Form Style */
