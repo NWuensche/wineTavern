@@ -65,17 +65,19 @@
         </tbody>
     </table>
 </div>
-<div class="text-xs-center" th:if="${price}">
-    <i class="fa fa-arrow-down fa-2x"></i>
-</div>
-<div class="container__wrap text-xs-center">
-    <div class="padding__box" th:if="${price}">
-        <a th:href="@{'/accountancy/expenses/payoff/' + ${staff.id} + '/pay'}">
-            <button type="button" class="btn btn-primary">Bezahlen</button>
-        </a>
+<span th:if="${price}">
+<span th:if="${price.number != 0}">
+    <div class="text-xs-center">
+        <i class="fa fa-arrow-down fa-2x"></i>
     </div>
-</div>
-
-
+    <div class="container__wrap text-xs-center">
+        <div class="padding__box">
+            <a th:href="@{'/accountancy/expenses/payoff/' + ${staff.id} + '/pay'}">
+                <button type="button" class="btn btn-primary">Bezahlen</button>
+            </a>
+        </div>
+    </div>
+</span>
+</span>
 </body>
 </html>

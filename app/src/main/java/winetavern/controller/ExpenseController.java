@@ -90,11 +90,10 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
     public String coverExpensesForPerson(@PathVariable("pid") String personId, Model model) {
-        Person staff = persons.findOne(Long.parseLong(personId)).get();
         Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
                 personId, false, "today");
         for(Expense expense : expenses){
-            expense.cover(); //TODO remove expense or change old one
+            expense.cover();
             accountancy.add(expense);
         }
 
@@ -128,9 +127,8 @@ public class ExpenseController {
             res.removeIf(expense -> expense.getPerson() != person);
         }
 
-        if(covered){ //isCovered filter: true -> returns only paid expenses
-            res.removeIf(expense -> !expense.isCovered());
-        }
+        //isCovered filter: true -> returns only paid expenses
+        res.removeIf(expense -> expense.isCovered() != covered);
 
         return res;
     }
