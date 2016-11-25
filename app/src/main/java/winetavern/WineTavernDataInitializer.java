@@ -56,8 +56,9 @@ public class WineTavernDataInitializer implements DataInitializer{
 
     @Override
     public void initialize() {
-        if(!isAdminInDB(userAccountManager, adminName)) {
-            initializeAdmin(userAccountManager);
+        if(!isAdminInDB(adminName)) {
+            initializeAdmin();
+            initializeService();
             initializeEvents();
             initializeStock();
             initializeShift();
@@ -67,21 +68,31 @@ public class WineTavernDataInitializer implements DataInitializer{
         }
     }
 
-    private void initializeAdmin(UserAccountManager manager) {
-        UserAccount admin = manager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
+    private void initializeAdmin() {
+        UserAccount admin = userAccountManager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
         admin.setFirstname("Hans-Peter");
         admin.setLastname("Maffay");
         admin.setEmail("peter.maffay@t-online.de");
-        manager.save(admin);
+        userAccountManager.save(admin);
         String birthday = "1979/07/15";
         personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
     }
 
-    private boolean isAdminInDB(UserAccountManager manager, String adminName) {
-        return manager.findByUsername(adminName).isPresent();
+    private void initializeService() {
+        UserAccount service = userAccountManager.create("service1", "1234", Role.of("ROLE_SERVICE"));
+        service.setFirstname("Sabine");
+        service.setLastname("Weber");
+        service.setEmail("sabine.weber@coolmail.com");
+        userAccountManager.save(service);
+        String birthday = "1998/05/12";
+        personManager.save(new Person(service, "Engelweg 5, 66666 Downtown", birthday, PersonTitle.MISSES.getGerman()));
     }
 
-    public void initializeEvents() {
+    private boolean isAdminInDB(String adminName) {
+        return userAccountManager.findByUsername(adminName).isPresent();
+    }
+
+    private void initializeEvents() {
         eventCatalog.save(new Event("Go hard or go home - Ü80 Party", Money.of(7, EURO),
                 new TimeInterval(LocalDateTime.of(2016, 9, 11, 21, 30), LocalDateTime.of(2016, 9, 11, 23, 30)),
                 "SW4G ist ein muss!"));
@@ -91,7 +102,7 @@ public class WineTavernDataInitializer implements DataInitializer{
                 "Es wird gegrillt und überteuerter Wein verkauft."));
     }
 
-    public void initializeStock() {
+    private void initializeStock() {
         Product vodka = new Product("Vodka", Money.of(12.50, EURO));
         vodka.addCategory(Category.LIQUOR.getCategoryName());
 
@@ -107,7 +118,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         expenseGroups.save(new ExpenseGroup("Künstlergage"));
     }
 
-    public void initializeTables() {
+    private void initializeTables() {
         //Ordinary desks
         List<Desk> deskList = new ArrayList<Desk>();
         deskList.add(new Desk("1", 8));
@@ -126,7 +137,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         deskRepository.save(deskList);
     }
 
-    public void initializeDayMenuWithItems() {
+    private void initializeDayMenuWithItems() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2013, 10, 30);
         DayMenu dayMenu = new DayMenu(calendar);
@@ -161,7 +172,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     /**
      * Should be deleted in the final programm
      */
-    public void initializeShift() {
+    private void initializeShift() {
         shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),
                 personManager.findAll().iterator().next()));
     }

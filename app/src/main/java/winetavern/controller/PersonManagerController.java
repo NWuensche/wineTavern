@@ -1,17 +1,16 @@
 package winetavern.controller;
 
-import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.useraccount.Role;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import winetavern.AccountCredentials;
 import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.web.bind.annotation.RequestMethod;
+import winetavern.AccountCredentials;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
 

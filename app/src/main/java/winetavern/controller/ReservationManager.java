@@ -1,32 +1,23 @@
 package winetavern.controller;
 
-import org.salespointframework.catalog.Product;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.menu.DayMenu;
-import winetavern.model.reservation.*;
-
+import winetavern.model.reservation.Desk;
+import winetavern.model.reservation.DeskRepository;
+import winetavern.model.reservation.Reservation;
+import winetavern.model.reservation.ReservationRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
-import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
