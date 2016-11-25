@@ -110,7 +110,7 @@ public class PersonTests extends AbstractIntegrationTests{
 
     @Test
     public void findEnabled() {
-        disableAdminFromInitalizer();
+        personManager.deleteAll();
 
         savePersons();
         disableOnePerson();
@@ -119,11 +119,6 @@ public class PersonTests extends AbstractIntegrationTests{
 
         Person person3 = personManager.findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
         assertArrayEquals(enabled.toArray(), new Person[]{person, person3});
-    }
-
-    private void disableAdminFromInitalizer() {
-        Person disableAdmin = personManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get();
-        disableAdmin.getUserAccount().setEnabled(false);
     }
 
     private void savePersons() {
