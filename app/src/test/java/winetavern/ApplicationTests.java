@@ -14,8 +14,14 @@ public class ApplicationTests extends AbstractWebIntegrationTests {
 
     @Test
     public void redirectIfNotLoggedIn() throws Exception{
-        mvc.perform(get("/"))
+        mvc.perform(get("/admin/events"))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void notRedirectedOnIndex() throws Exception {
+        mvc.perform(get("/"))
+                .andExpect(status().isOk());
     }
 
 }
