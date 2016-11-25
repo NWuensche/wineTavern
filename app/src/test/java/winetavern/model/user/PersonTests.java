@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * Test class for {@link Person}
@@ -105,6 +106,40 @@ public class PersonTests extends AbstractIntegrationTests{
         String newAddress = "New Address";
         person.setAddress(newAddress);
         assertThat(person.getAddress().get(), is(newAddress));
+    }
+
+    @Test
+    public void findEnabled() {
+        disableAdminFromInitalizer();
+
+        savePersons();
+        disableOnePerson();
+
+        ArrayList<Person> enabled = personManager.findEnabled();
+
+        Person person3 = personManager.findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
+        assertArrayEquals(enabled.toArray(), new Person[]{person, person3});
+    }
+
+    private void disableAdminFromInitalizer() {
+        Person disableAdmin = personManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get();
+        disableAdmin.getUserAccount().setEnabled(false);
+    }
+
+    private void savePersons() {
+        UserAccount acc2 = userAccountManager.create("testAccount2", "1234", Roles.SERVICE.getRole());
+        UserAccount acc3 = userAccountManager.create("testAccount3", "1234", Roles.SERVICE.getRole());
+        person = new Person(acc, address, birthday, personTitle);
+        Person person2 = new Person(acc2, address, birthday, personTitle);
+        Person person3 = new Person(acc3, address, birthday, personTitle);
+        personManager.save(person);
+        personManager.save(person2);
+        personManager.save(person3);
+    }
+
+    private void disableOnePerson() {
+        Person disablePerson2 = personManager.findByUserAccount(userAccountManager.findByUsername("testAccount2").get()).get();
+        disablePerson2.getUserAccount().setEnabled(false);
     }
 
 }
