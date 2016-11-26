@@ -340,6 +340,13 @@ body .list-group-item-action .fa-circle-o{
     padding:5px;
     border-radius:5px;
 }
+.reservation .icon-list {
+    border-radius: 0.2rem 0 0 0.2rem;
+}
+.reservation .icon-card {
+    border-radius: 0 0.2rem 0.2rem 0;
+    float: right;
+}
 .reservation .svg__tables{
     margin: 2rem 1.5rem;
 }
@@ -348,6 +355,9 @@ body .list-group-item-action .fa-circle-o{
 }
 .reservation .reservation__form .form-group input{
     width: 12.2rem;
+}
+.reservation g.deskGroup:hover > rect{
+    fill: rgb(241, 143, 1);
 }
 
 /* BILLS */

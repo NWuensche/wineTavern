@@ -7,6 +7,18 @@
 </head>
 <body th:fragment="content">
 <div class="reservation">
+    <div class="row">
+        <div class="col-xs-12 text-xs-right">
+            <div class="icon__wrap">
+                <button id="cardBtn" class="icon__button icon-card btn btn-primary">
+                    <i class="fa fa-th-large fa-fw fa-lg" aria-hidden="true"></i>
+                </button>
+                <button id="listBtn" class="icon__button active icon-list btn btn-primary">
+                    <i class="fa fa-th-list fa-fw fa-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
 <div class="container" th:if="${success == null and desk == null}">
     <div class="row">

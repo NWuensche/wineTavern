@@ -102,16 +102,12 @@
             <g id="Tisch-1" transform="translate(219.000000, 1.000000)">
                 <rect stroke="#000000" fill="#243648" x="61" y="58" width="325.572973" height="146.726711" rx="6"></rect>
                 <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="0.382476024" y="104.270999" width="50" height="50" rx="25"></rect>
-                <g id="Group-2" transform="translate(95.000000, 213.000000)" stroke="#000000" fill="#26AA8C">
-                    <rect id="Rectangle-path" x="0.523016565" y="0.899048827" width="50" height="50" rx="25"></rect>
-                    <rect id="Rectangle-path" x="94.4264167" y="0.899048827" width="50" height="50" rx="25"></rect>
-                    <rect id="Rectangle-path" x="198" y="1" width="50" height="50" rx="25"></rect>
-                </g>
-                <g id="Group" transform="translate(90.000000, 0.000000)" stroke="#000000" fill="#26AA8C">
-                    <rect id="Rectangle-path" x="0.638448126" y="0" width="50" height="50" rx="25"></rect>
-                    <rect id="Rectangle-path" x="104.426417" y="0" width="50" height="50" rx="25"></rect>
-                    <rect id="Rectangle-path" x="208.008457" y="0" width="50" height="50" rx="25"></rect>
-                </g>
+                <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="95.5230166" y="213.899049" width="50" height="50" rx="25"></rect>
+                <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="189.426417" y="213.899049" width="50" height="50" rx="25"></rect>
+                <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="293" y="214" width="50" height="50" rx="25"></rect>
+                <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="90.6384481" y="0" width="50" height="50" rx="25"></rect>
+                <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="194.426417" y="0" width="50" height="50" rx="25"></rect>
+                <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="298.008457" y="0" width="50" height="50" rx="25"></rect>
                 <rect id="Rectangle-path" stroke="#000000" fill="#26AA8C" x="397.139669" y="104.270999" width="50" height="50" rx="25"></rect>
                 <text id="1" fill="#A6B2C5" font-family="Helvetica" font-size="72" font-weight="normal">
                     <tspan x="203" y="153">1</tspan>
