@@ -25,7 +25,7 @@
                                 <h1><span class="fa fa-clock-o fa-lg"></span> Reservierungen (<span th:text="${reservationAmount}"></span>)</h1>
                             </div>
                             <div class="col-xs-6 text-xs-right">
-                                <a th:href="@{/reservation}">
+                                <a th:href="@{/service/reservation}">
                                     <button class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> Reservierung
                                     </button>
                                 </a>
@@ -36,11 +36,11 @@
                         <thead>
                         <tr>
 
-                            <th class="text-xs-center"><a th:href="@{'/reservation/showall?sort=date'}">Datum</a></th>
-                            <th class="text-xs-center"><a th:href="@{'/reservation/showall?sort=date'}">Uhrzeit</a></th>
-                            <th class="text-xs-center"><a th:href="@{'/reservation/showall?sort=name'}">Name</a></th>
-                            <th class="text-xs-center"><a th:href="@{'/reservation/showall?sort=persons'}">Personenzahl</a></th>
-                            <th class="text-xs-center"><a th:href="@{'/reservation/showall?sort=desk'}">Tisch</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=date'}">Datum</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=date'}">Uhrzeit</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=name'}">Name</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=persons'}">Personenzahl</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=desk'}">Tisch</a></th>
                             <th class="text-xs-center">&Auml;ndern</th>
                             <th class="text-xs-center">Löschen</th>
                         </tr>
@@ -60,7 +60,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a th:href="${'/reservation/remove?reservation=' + reservation.id}">
+                                <a th:href="${'/service/reservation/remove?reservation=' + reservation.id}">
                                     <button type="button"  class="btn btn-primary">
                                         <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
                                     </button>

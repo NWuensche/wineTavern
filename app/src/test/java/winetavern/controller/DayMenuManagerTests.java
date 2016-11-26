@@ -33,7 +33,7 @@ public class DayMenuManagerTests extends AbstractWebIntegrationTests {
 
     @Test
     public void createDayMenuWithWrongYear() throws Exception {
-        RequestBuilder request = post("/admin/addMenu").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        RequestBuilder request = post("/admin/menu/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("day", "30")
                 .param("month", "10")
                 .param("year", "as2013");
@@ -42,7 +42,7 @@ public class DayMenuManagerTests extends AbstractWebIntegrationTests {
 
     @Test
     public void createDayMenuWithRealDate() throws Exception {
-        RequestBuilder request = post("/admin/addMenu").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        RequestBuilder request = post("/admin/menu/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("day", "9")
                 .param("month", "11")
                 .param("year", "1918");
