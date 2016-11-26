@@ -6,20 +6,27 @@
 
 </head>
 <body th:fragment="content">
+<div class="reservation">
 
 <div class="container" th:if="${success == null and desk == null}">
-    <form method="get">
-        <div class="row">
-            <div class="col-xs-12 ">
-                <div class="form-group">
-                    <label for="reservationtime">Datum und Uhrzeit:</label>
-                    <input type="text" th:name="${'reservationtime'}" id="reservationtime" class="form-control" th:value="${reservationtime.format(datetimeformatter)}"/>
-                </div>
-                <button class="btn btn-primary btn-lg" name="check">Verfügbarkeit abfragen</button>
+    <div class="row">
+        <div class="col-md-9">
+            <div th:include="svgdesks::svgdesks">
             </div>
         </div>
-    </form>
-    <div th:include="svgdesks::svgdesks">
+        <div class="col-md-3">
+            <form class="reservation__form" method="get">
+                        <div class="form-group">
+                            <label for="reservationtime">Datum und Uhrzeit:</label>
+                            <input type="text" th:name="${'reservationtime'}" id="reservationtime" class="form-control" th:value="${reservationtime.format(datetimeformatter)}"/>
+                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class=" button btn btn-primary" name="check">Verfügbarkeit abfragen</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -52,6 +59,7 @@
             </a>
         </div>
     </div>
+</div>
 </div>
 <script>
     $.datetimepicker.setLocale('de');

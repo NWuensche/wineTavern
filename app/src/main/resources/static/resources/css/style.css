@@ -340,6 +340,15 @@ body .list-group-item-action .fa-circle-o{
     padding:5px;
     border-radius:5px;
 }
+.reservation .svg__tables{
+    margin: 2rem 1.5rem;
+}
+.reservation .reservation__form{
+    margin: 3rem 0;
+}
+.reservation .reservation__form .form-group input{
+    width: 12.2rem;
+}
 
 /* BILLS */
 .bill__tabs {
