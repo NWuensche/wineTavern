@@ -456,6 +456,30 @@ body .list-group-item-action .fa-circle-o{
 .users .container__user-cards{
     display: none;
 }
+.users .user-card{
+    border-radius: 0.2rem;
+    margin: 1.2rem;
+    border: 0.1rem solid;
+    background-color: lightgrey;
+}
+.users .container__user-cards .user-card img.image-user{
+    margin: 1rem 0 2rem 0;
+    float: none;
+}
+.users .user__wrap{
+    margin-bottom: 1rem;
+}
+.users .user__wrap > span{
+    display: block;
+    text-align: center;
+}
+.users .user__wrap .user-firstname,.users .user__wrap .user-lastname{
+    font-weight: 600;
+}
+.users .user__wrap .user-role{
+    font-weight: 200;
+    margin-top: 1rem;
+}
 
 #disablePerson {
     background-color: tomato;
