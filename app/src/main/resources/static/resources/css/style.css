@@ -272,6 +272,9 @@ main table thead{
 main table tbody tr{
 
 }
+main .container__wrap .container__table{
+    display: block;
+}
 
 main .container__wrap .table__bottom {
     background-color: #1D997D;
@@ -431,10 +434,15 @@ body .list-group-item-action .fa-circle-o{
     border: none;
     margin: 0.5rem 0;
 }
+.users .icon__button.btn-primary.active{
+    background-color: #243648;
+}
 
 .users .icon__button .fa {
     color: #243648;
-
+}
+.users .icon__button.btn-primary.active .fa{
+    color: #A6B2C5;
 }
 
 .users .icon-list {
@@ -447,6 +455,30 @@ body .list-group-item-action .fa-circle-o{
 }
 .users .container__user-cards{
     display: none;
+}
+.users .user-card{
+    border-radius: 0.2rem;
+    margin: 1.2rem;
+    border: 0.1rem solid;
+    background-color: lightgrey;
+}
+.users .container__user-cards .user-card img.image-user{
+    margin: 1rem 0 2rem 0;
+    float: none;
+}
+.users .user__wrap{
+    margin-bottom: 1rem;
+}
+.users .user__wrap > span{
+    display: block;
+    text-align: center;
+}
+.users .user__wrap .user-firstname,.users .user__wrap .user-lastname{
+    font-weight: 600;
+}
+.users .user__wrap .user-role{
+    font-weight: 200;
+    margin-top: 1rem;
 }
 
 #disablePerson {
