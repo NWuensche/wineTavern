@@ -1,86 +1,66 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
 <head th:include="links::links">
 
     <title>Lager</title>
 
 </head>
-<body>
+<body th:fragment="content">
 
-<main class="main container-fluid">
-    <div class="row">
-
-        <div class="col-md-3" th:include="side::side">
-
-        </div>
-        <!--MAIN CONTENT-->
-
-
-        <div class="col-md-9 no-gutter">
-            <div th:include="navigation::navigation" ></div>
-
-            <div class="container" th:if="${success == null and desk == null}">
-                <form method="get">
-                    <div class="row">
-                        <div class="col-xs-12 ">
-
-                                <div class="form-group">
-                                    <label for="reservationtime">Datum und Uhrzeit:</label>
-                                    <input type="text" th:name="${'reservationtime'}" id="reservationtime" class="form-control"
-                                           th:value="${reservationtime.format(datetimeformatter)}"/>
-                                </div>
-                                <button class="btn btn-primary btn-lg" name="check">Verfügbarkeit abfragen</button>
-
-                        </div>
-                    </div>
-                </form>
-
-                    <div th:include="svgdesks::svgdesks">
-
-                    </div>
-            </div>
-
-            <div class="container" th:if="${desk != null and reservationtime != null}">
-                <form method="post" action="/service/reservation/add">
-                    <p>Tisch: </p><input type="text" th:name="desk" th:value="${desk}" readonly="readonly" />
-                    <p>Personen: </p><input type="text" th:name="amount" th:value="${deskcapacity}" />
-                    <p>Datum und Uhrzeit:</p><input type="text" th:name="reservationtime" th:value="${reservationtime.format(datetimeformatter)}" readonly="readonly" />
-                    <p>Dauer in Minuten:</p><input type="text" th:name="duration" value="60" />
-                    <p>Name des Reservators:</p><input type="text" th:name="name" />
-                    <button>Reservieren</button>
-                    <p>Hier muss wieder die Tabelle zu den Reservierungen des Tisches eingebaut werden.</p>
-                </form>
-            </div>
-
-            <div class="container" th:if="${success != null}">
-                <div class="row">
-                    <div class="col-xs-12  reservation__box text-xs-center">
-                        <h1 th:text="${success}">gespeichert</h1>
-                        <p th:text="${userdata}">Infos</p>
-                        <a th:href="@{/allReservations}">
-                            <button class="btn btn-primary btn-lg" type="button">zurück
-                                zur Übersicht
-                            </button></a>
-                    </div>
+<div class="container" th:if="${success == null and desk == null}">
+    <form method="get">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div class="form-group">
+                    <label for="reservationtime">Datum und Uhrzeit:</label>
+                    <input type="text" th:name="${'reservationtime'}" id="reservationtime" class="form-control" th:value="${reservationtime.format(datetimeformatter)}"/>
                 </div>
+                <button class="btn btn-primary btn-lg" name="check">Verfügbarkeit abfragen</button>
             </div>
         </div>
-
-
+    </form>
+    <div th:include="svgdesks::svgdesks">
     </div>
+</div>
 
-</main>
-</body>
-<link rel="stylesheet" type="text/css" href="/resources/css/jquery.datetimepicker.css"/>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="/resources/js/jquery.datetimepicker.full.js"></script>
+<div class="container" th:if="${desk != null and reservationtime != null}">
+    <form method="post" action="/service/reservation/add">
+        <p>Tisch: </p>
+        <input type="text" th:name="desk" th:value="${desk}" readonly="readonly"/>
+        <p>Personen: </p>
+        <input type="text" th:name="amount" th:value="${deskcapacity}"/>
+        <p>Datum und Uhrzeit:</p>
+        <input type="text" th:name="reservationtime" th:value="${reservationtime.format(datetimeformatter)}" readonly="readonly"/>
+        <p>Dauer in Minuten:</p>
+        <input type="text" th:name="duration" value="60"/>
+        <p>Name des Reservators:</p>
+        <input type="text" th:name="name"/>
+        <button>Reservieren</button>
+        <p>Hier muss wieder die Tabelle zu den Reservierungen des Tisches eingebaut werden.</p>
+    </form>
+</div>
+
+<div class="container" th:if="${success != null}">
+    <div class="row">
+        <div class="col-xs-12  reservation__box text-xs-center">
+            <h1 th:text="${success}">gespeichert</h1>
+            <p th:text="${userdata}">Infos</p>
+            <a th:href="@{/allReservations}">
+                <button class="btn btn-primary btn-lg" type="button">
+                    zurück zur Übersicht
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
 <script>
     $.datetimepicker.setLocale('de');
     $('#reservationtime').datetimepicker({
-        dayOfWeekStart : 1,
-        step:30,
-        minDate:'-1970/01/02',
-        startDate:'-1970/01/02'
+        dayOfWeekStart: 1,
+        step: 30,
+        minDate: '-1970/01/02',
+        startDate: '-1970/01/02'
     });
 </script>
+</body>
 </html>
