@@ -8,59 +8,48 @@ import org.salespointframework.useraccount.Role;
 
 public enum Roles {
 
+    ADMIN ("Administrator"),
+    SERVICE ("Bedienung"),
+    ACCOUNTANT ("Buchhalter"),
+    COOK ("Koch");
 
-    ADMIN ("ROLE_ADMIN"),
-    SERVICE ("ROLE_SERVICE"),
-    ACCOUNTANT ("ROLE_ACCOUNTANT"),
-    COOK ("ROLE_COOK");
+    private static final String ROLE_PREFIX = "ROLE_";
 
-    private final String ROLE_PREFIX = "ROLE_";
+    private final String germanRoleName;
 
-    private final String nameOfRole;
-    private final Role role;
-
-    Roles(String nameOfRole) {
-        this.nameOfRole = nameOfRole;
-        this.role = Role.of(nameOfRole);
+    Roles(String germanRoleName) {
+        this.germanRoleName = germanRoleName;
     }
 
     public String getNameOfRoleWithPrefix() {
-        return nameOfRole;
+        return ROLE_PREFIX + toString();
     }
 
     public String getRealNameOfRole() {
-        return nameOfRole.substring(ROLE_PREFIX.length());
-    }
-
-    /**
-     * @return not null
-     */
-    public static String getDisplayNameRole(Role role) {
-        return getDisplayNameRole(role.getName());
-    }
-
-    /**
-     * @return not null
-     */
-    public static String getDisplayNameRole(String roleName) throws IllegalArgumentException {
-        String roleWithPrefix = roleName.startsWith("ROLE_") ? roleName : "ROLE_" + roleName;
-
-        switch(roleWithPrefix) {
-            case "ROLE_ADMIN":
-                return "Administrator";
-            case "ROLE_SERVICE":
-                return "Bedienung";
-            case "ROLE_ACCOUNTANT":
-                return "Buchhalter";
-            case "ROLE_COOK":
-                return "Koch";
-            default:
-                throw new IllegalArgumentException();
-        }
+        return toString();
     }
 
     public Role getRole() {
-        return role;
+        return Role.of(getNameOfRoleWithPrefix());
+    }
+
+    public String getDisplayName() {
+        return germanRoleName;
+    }
+
+    public static String getGermanNameOfRole(Role role) {
+        return getGermanNameOfRole(role.getName());
+    }
+
+    public static String getGermanNameOfRole(String role) throws IllegalArgumentException {
+        String prefixRole = role.startsWith("ROLE_") ? role : ROLE_PREFIX + role;
+        for(Roles r : values()) {
+            if(r.getNameOfRoleWithPrefix().equals(prefixRole)) {
+                return r.germanRoleName;
+            }
+        }
+
+        throw new IllegalArgumentException("Role isn't defined: " + role);
     }
 
 }

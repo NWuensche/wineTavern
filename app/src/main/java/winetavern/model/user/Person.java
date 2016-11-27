@@ -85,7 +85,7 @@ public class Person {
     public String getDisplayNameOfRole() {
         List<Role> roles = userAccount.getRoles().stream().collect(Collectors.toList());
         Role role = roles.get(0);
-        return Roles.getDisplayNameRole(role);
+        return Roles.getGermanNameOfRole(role);
     }
 
     public boolean isEnabled() {

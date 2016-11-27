@@ -18,8 +18,8 @@ public class RolesTests {
         assertThat(admin.getRole(), is(Role.of("ROLE_ADMIN")));
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_ADMIN"));
         assertThat(admin.getRealNameOfRole(), is("ADMIN"));
-        assertThat(Roles.getDisplayNameRole(Role.of("ROLE_ADMIN")), is("Administrator"));
-        assertThat(Roles.getDisplayNameRole("ROLE_ADMIN"), is("Administrator"));
+        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_ADMIN")), is("Administrator"));
+        assertThat(Roles.getGermanNameOfRole("ROLE_ADMIN"), is("Administrator"));
     }
 
     @Test
@@ -28,8 +28,8 @@ public class RolesTests {
         assertThat(admin.getRole(), is(Role.of("ROLE_SERVICE")));
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_SERVICE"));
         assertThat(admin.getRealNameOfRole(), is("SERVICE"));
-        assertThat(Roles.getDisplayNameRole(Role.of("ROLE_SERVICE")), is("Bedienung"));
-        assertThat(Roles.getDisplayNameRole("ROLE_SERVICE"), is("Bedienung"));
+        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_SERVICE")), is("Bedienung"));
+        assertThat(Roles.getGermanNameOfRole("ROLE_SERVICE"), is("Bedienung"));
     }
 
     @Test
@@ -38,8 +38,8 @@ public class RolesTests {
         assertThat(admin.getRole(), is(Role.of("ROLE_ACCOUNTANT")));
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_ACCOUNTANT"));
         assertThat(admin.getRealNameOfRole(), is("ACCOUNTANT"));
-        assertThat(Roles.getDisplayNameRole(Role.of("ROLE_ACCOUNTANT")), is("Buchhalter"));
-        assertThat(Roles.getDisplayNameRole("ROLE_ACCOUNTANT"), is("Buchhalter"));
+        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_ACCOUNTANT")), is("Buchhalter"));
+        assertThat(Roles.getGermanNameOfRole("ROLE_ACCOUNTANT"), is("Buchhalter"));
 
     }
 
@@ -49,19 +49,19 @@ public class RolesTests {
         assertThat(admin.getRole(), is(Role.of("ROLE_COOK")));
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_COOK"));
         assertThat(admin.getRealNameOfRole(), is("COOK"));
-        assertThat(Roles.getDisplayNameRole(Role.of("ROLE_COOK")), is("Koch"));
-        assertThat(Roles.getDisplayNameRole("ROLE_COOK"), is("Koch"));
+        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_COOK")), is("Koch"));
+        assertThat(Roles.getGermanNameOfRole("ROLE_COOK"), is("Koch"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwsWhenFalseRole() {
-        Roles.getDisplayNameRole("NOROLE");
+        Roles.getGermanNameOfRole("NOROLE");
     }
 
     @Test
     public void withMissingRolePrefix() {
-        assertThat(Roles.getDisplayNameRole(Role.of("ACCOUNTANT")), is("Buchhalter"));
-        assertThat(Roles.getDisplayNameRole("ACCOUNTANT"), is("Buchhalter"));
+        assertThat(Roles.getGermanNameOfRole(Role.of("ACCOUNTANT")), is("Buchhalter"));
+        assertThat(Roles.getGermanNameOfRole("ACCOUNTANT"), is("Buchhalter"));
 
     }
 
