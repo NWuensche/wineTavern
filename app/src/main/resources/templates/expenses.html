@@ -85,6 +85,39 @@
             </div>
             <table class="table table-striped">
                 <thead>
+                    <tr>
+                        <td colspan="6">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="oldtype"><b>Typ:</b></label>
+                                    <select id="oldtype" name="type" class="form-control">
+                                        <option value="0">Alle</option>
+                                        <option th:each="group:${groups}" th:selected="${group.id == selectedType}" th:text="${group.name}" th:value="${group.id}"></option>
+                                    </select>
+                                </div>
+                                &nbsp;
+                                <div class="form-group">
+                                    <label for="oldperson"><b>Person:</b></label>
+                                    <select id="oldperson" name="person" class="form-control">
+                                        <option value="0">Alle</option>
+                                        <option th:each="person:${persons}" th:selected="${person.id == selectedPerson}" th:text="${person}" th:value="${person.id}">test
+                                        </option>
+                                    </select>
+                                </div>
+                                &nbsp;
+                                <div class="form-group">
+                                    <label for="olddate"><b>Datum:</b></label>
+                                    <input th:value="${selectedDate}" type="text" id="olddate" name="date"
+                                           class="form-control"/>
+                                </div>
+                                <input type="hidden" name="tab" value="covered"/>
+                                &nbsp;
+                                <button class="btn btn-primary">Neu laden</button>
+                            </form>
+                        </td>
+                    </tr>
+                </thead>
+                <thead>
                 <tr>
                     <th>Typ</th>
                     <th>Person</th>
@@ -93,39 +126,7 @@
                     <th>Betrag</th>
                 </tr>
                 </thead>
-                <thead>
-                <tr>
-                    <td colspan="6">
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <label for="oldtype"><b>Typ:</b></label>
-                                <select id="oldtype" name="type" class="form-control">
-                                    <option value="0">Alle</option>
-                                    <option th:each="group:${groups}" th:selected="${group.id == selectedType}" th:text="${group.name}" th:value="${group.id}"></option>
-                                </select>
-                            </div>
-                            &nbsp;
-                            <div class="form-group">
-                                <label for="oldperson"><b>Person:</b></label>
-                                <select id="oldperson" name="person" class="form-control">
-                                    <option value="0">Alle</option>
-                                    <option th:each="person:${persons}" th:selected="${person.id == selectedPerson}" th:text="${person}" th:value="${person.id}">test
-                                    </option>
-                                </select>
-                            </div>
-                            &nbsp;
-                            <div class="form-group">
-                                <label for="olddate"><b>Datum:</b></label>
-                                <input th:value="${selectedDate}" type="text" id="olddate" name="date"
-                                       class="form-control"/>
-                            </div>
-                            <input type="hidden" name="tab" value="covered"/>
-                            &nbsp;
-                            <button class="btn btn-primary">Neu laden</button>
-                        </form>
-                    </td>
-                </tr>
-                </thead>
+
                 <tbody>
                 <tr th:each="expense : ${expCovered}">
                     <td th:text="${expense.expenseGroup.name}"></td>
