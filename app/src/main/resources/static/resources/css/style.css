@@ -462,8 +462,9 @@ body .list-group-item-action .fa-circle-o{
     border: 0.1rem solid;
     background-color: lightgrey;
     position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
-.users .user-card:hover .plus-test{
+.users .user-card:hover .user-pencil{
     position: absolute;
     text-align: center;
     background-color: rgba(36, 54, 72, 0.95);
@@ -473,14 +474,14 @@ body .list-group-item-action .fa-circle-o{
     left: 0;
     width: 100%;
     height: 100%;
+    box-shadow:  0 4px 13px -2px rgba(0,0,0,0.8);
 }
-.users .plus-test{
+.users .user-pencil{
     display: none;
 }
-.users .plus-test .fa-pencil{
+.users .user-pencil .fa-pencil{
     align-self: center;
     width: 100%;
-    /*font-size: 50px;*/
     color: #A6B2C5;
 }
 .users .container__user-cards .user-card img.image-user{

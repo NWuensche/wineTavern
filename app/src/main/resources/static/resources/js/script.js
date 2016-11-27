@@ -24,8 +24,4 @@ $(document).ready(function(){
         $('.container__table').slideDown('slow');
     });
 
-    //
-    // $('.user-card').hover(function(){
-    //     $(this).css('backgroundColor','#000');
-    // });
 });

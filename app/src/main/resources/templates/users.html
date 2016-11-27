@@ -56,7 +56,7 @@
     <div  class="container__user-cards">
         <div class="row">
             <div class="col-xs-3" th:each="person : ${personManager.findEnabled()}">
-                <div class="user-card">
+                <div class="user-card" data-toggle="modal" th:attr="data-target='#details'+${person.id}">
                     <div class="row">
                         <div class="col-xs-12 text-xs-center">
                             <img src="/resources/img/pokemon.jpg" class="image-user rounded-circle"/>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="plus-test"><i class="fa fa-pencil fa-4x" aria-hidden="true"></i>
+                    <div class="user-pencil"><i class="fa fa-pencil fa-4x" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
@@ -101,55 +101,6 @@
                         th:attr="data-target='#details'+${person.id}">
                     <i class="fa fa-user-circle" aria-hidden="true"></i>
                 </button>
-                <!-- show person details -->
-                <div class="modal fade" th:id="details+${person.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form id="productDetailsForm" th:action="@{'/admin/management/users/edit/' + ${person.id}}" method="post" th:object="${accountcredentials}">
-                                    <div class="form-group" hidden = "true">
-                                        <label for="id">Konto</label>
-                                        <input type="text" class="form-control" name="id" id="id" readonly="true" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastName">Nachname</label>
-                                        <input type="text" class="form-control" th:value="${person.userAccount.lastname}" name="lastName" id="lastName" />
-                                    </div>
-                                    <div class="form-group" th:if="${!currUserAccount.equals(person.userAccount)}">
-                                        <label for="role">Rolle</label>
-                                        <select type="text" class="form-control" name="role" id="role" >
-                                            <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getGermanNameOfRole(role)}"
-                                                    th:value="${role.getNameOfRoleWithPrefix()}"
-                                                    th:selected="${T(winetavern.model.user.Roles).getGermanNameOfRole(person.role).equals(T(winetavern.model.user.Roles).getGermanNameOfRole(role))}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="address">Adresse</label>
-                                        <input type="text" class="form-control" th:value="${person.address.get()}" name="address" id="address" />
-                                    </div>
-                                    <div class="form-group">
-                                        <a th:href="@{'/admin/management/users/disable/' + ${person.id}}">
-                                            <button id="disablePerson" type="button" class="btn btn-secondary btn-block">Deaktiviere das Konto</button>
-                                        </a>
-                                    </div>
-                                    <div class="row">
-                                        <div class=" col-xs-6 text-xs-right pull-right">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
-                                            <button type="submit" class="button btn btn-primary">Ändern</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </td>
         </tr>
         </tbody>
@@ -157,6 +108,56 @@
     </div>
 </div>
 
+    <!-- show person details -->
+<div class="text" th:each="person : ${personManager.findEnabled()}">
+    <div class="modal fade" th:id="details+${person.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="productDetailsForm" th:action="@{'/admin/management/users/edit/' + ${person.id}}" method="post" th:object="${accountcredentials}">
+                        <div class="form-group" hidden = "true">
+                            <label for="id">Konto</label>
+                            <input type="text" class="form-control" name="id" id="id" readonly="true" />
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Nachname</label>
+                            <input type="text" class="form-control" th:value="${person.userAccount.lastname}" name="lastName" id="lastName" />
+                        </div>
+                        <div class="form-group" th:if="${!currUserAccount.equals(person.userAccount)}">
+                            <label for="role">Rolle</label>
+                            <select type="text" class="form-control" name="role" id="role" >
+                                <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getGermanNameOfRole(role)}"
+                                        th:value="${role.getNameOfRoleWithPrefix()}"
+                                        th:selected="${T(winetavern.model.user.Roles).getGermanNameOfRole(person.role).equals(T(winetavern.model.user.Roles).getGermanNameOfRole(role))}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Adresse</label>
+                            <input type="text" class="form-control" th:value="${person.address.get()}" name="address" id="address" />
+                        </div>
+                        <div class="form-group">
+                            <a th:href="@{'/admin/management/users/disable/' + ${person.id}}">
+                                <button id="disablePerson" type="button" class="btn btn-secondary btn-block">Deaktiviere das Konto</button>
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class=" col-xs-6 text-xs-right pull-right">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                                <button type="submit" class="button btn btn-primary">Ändern</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- addPerson Modal -->
 <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
     <div class="modal-dialog" role="document">
