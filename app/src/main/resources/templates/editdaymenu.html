@@ -24,7 +24,7 @@ th:include="backend-temp :: page">
                 </h1>
             </div>
             <div class="col-xs-6 text-xs-right">
-                <a th:href="${'/admin/addMenuItem?frommenuitemid='+frommenuitemid}">
+                <a th:href="${'/admin/menuitem/add?frommenuitemid='+frommenuitemid}">
                     <button type="button" class="btn btn-primary ">
                         <i class="fa fa-plus fa-fw"></i>
                         Produkt
@@ -34,7 +34,7 @@ th:include="backend-temp :: page">
         </div>
     </div>
     <table class="table table-striped">
-        <form th:action="@{'/admin/removeDayMenuItemFromDayMenu'}" method="POST">
+        <form th:action="@{'/admin/menuitem/removeFromDayMenu'}" method="POST">
             <input type="hidden" name="dayMenu" th:value="${daymenu.id}" />
         <thead>
         <tr>

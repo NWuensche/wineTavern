@@ -120,7 +120,7 @@ public class ReservationManager {
     }
 
 
-    @RequestMapping("/reservation")
+    @RequestMapping("/service/reservation")
     public ModelAndView reservationTimeValidator(@RequestParam(name = "reservationtime", required = false)
                                                        LocalDateTime reservationTime,
                                            @RequestParam("desk") Optional<String> desk,
@@ -149,7 +149,7 @@ public class ReservationManager {
         return modelAndView;
     }
 
-    @RequestMapping("/reservation/add")
+    @RequestMapping("/service/reservation/add")
     public ModelAndView reservationAdd(@RequestParam("reservationtime") LocalDateTime reservationTime,
                                        @RequestParam("desk") String deskName,
                                        @RequestParam("amount") Integer amount,
@@ -162,19 +162,19 @@ public class ReservationManager {
         Reservation reservation = new Reservation(name, amount, desk, timeInterval);
         reservations.save(reservation);
 
-        mvc.setViewName("redirect:/reservation");
+        mvc.setViewName("redirect:/service/reservation");
         return mvc;
     }
 
-    @RequestMapping("/reservation/remove")
+    @RequestMapping("/service/reservation/remove")
     public ModelAndView reservationRemove(@RequestParam("reservation") Long reservationId, ModelAndView mvc) {
         reservations.delete(reservationId);
-        mvc.setViewName("redirect:/reservation/showall");
+        mvc.setViewName("redirect:/service/reservation/showall");
         return mvc;
     }
 
 
-    @RequestMapping(value = "/reservation/showall", method = RequestMethod.GET)
+    @RequestMapping(value = "/service/reservation/showall", method = RequestMethod.GET)
     public String showAllReservations(@RequestParam("sort") Optional<String> sort, Model model){
         Iterable<Reservation> reservationIterator;
 

@@ -22,7 +22,7 @@
                     </h1>
                 </div>
                 <div class="col-xs-6 text-xs-right">
-                    <a th:href="@{/admin/addMenu}">
+                    <a th:href="@{/admin/menu/add}">
                         <button type="button" class="btn btn-primary ">
                             <i class="fa fa-plus fa-fw"></i>
                             Menu
@@ -32,7 +32,7 @@
             </div>
         </div>
         <table class="table table-striped">
-            <form method="POST" th:action="@{'/admin/removeMenu'}">
+            <form method="POST" th:action="@{'/admin/menu/remove'}">
             <thead>
             <tr>
                 <th>#</th>
@@ -46,7 +46,7 @@
                 <th scope="row">1</th>
                 <td th:text="${menu.getReadableDay()}"></td>
                 <td>
-                    <a th:href="${'/admin/editMenu?id=' + menu.id}">
+                    <a th:href="${'/admin/menu/edit/' + menu.id}">
                         <button type="button"  class="btn btn-primary">
                             <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
                         </button>
