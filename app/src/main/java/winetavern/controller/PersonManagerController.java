@@ -1,6 +1,7 @@
 package winetavern.controller;
 
 import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.useraccount.AuthenticationManager;
 import org.salespointframework.useraccount.Role;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,31 +26,36 @@ public class PersonManagerController {
 
     @Autowired private UserAccountManager userAccountManager;
     @Autowired private PersonManager personManager;
+    @Autowired private AuthenticationManager authManager;
 
-    @RequestMapping({"/admin/management/users", "/users"})
+    @RequestMapping("/admin/management/users")
     public String addUsersMapper(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
         model.addAttribute("personManager", personManager);
+        model.addAttribute("currUserAccount", authManager.getCurrentUser().get());
         return "users";
     }
 
-    @RequestMapping(value= "/admin/management/users/addNew", method=RequestMethod.POST)
+    @RequestMapping("/admin/management/users/add")
     public String addPerson(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
-        UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(), registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
+        UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(),
+                registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
         newAccount.setFirstname(registerCredentials.getFirstName());
         newAccount.setLastname(registerCredentials.getLastName());
 
         userAccountManager.save(newAccount);
 
-        Person newPerson = new Person(newAccount, registerCredentials.getAddress(), registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
+        Person newPerson = new Person(newAccount, registerCredentials.getAddress(),
+                registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
         personManager.save(newPerson);
 
-        return "redirect:/users";
+        return "redirect:/admin/management/users";
     }
 
-    @RequestMapping(value= "/admin/management/users/changePerson/{pid}")
-    public String changePerson(@PathVariable("pid") Long id, @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
+    @RequestMapping("/admin/management/users/edit/{pid}")
+    public String edit(@PathVariable("pid") Long id,
+                       @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
         Person changePerson = personManager.findOne(id).get();
 
         changePerson.getUserAccount().setLastname(changeCredentials.getLastName());
@@ -71,7 +77,7 @@ public class PersonManagerController {
         return person;
     }
 
-    @RequestMapping(value= "/admin/management/users/disablePerson/{pid}")
+    @RequestMapping("/admin/management/users/disable/{pid}")
     public String disablePerson(@PathVariable("pid") Long id) {
         Person disablePerson = personManager.findOne(id).get();
         disablePerson.getUserAccount().setEnabled(false);

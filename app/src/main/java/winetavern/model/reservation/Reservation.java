@@ -27,7 +27,7 @@ public class Reservation {
     public Reservation(String guestName, int persons, Desk desk, TimeInterval interval) {
         this.guestName = guestName;
         this.persons = persons;
-        this.desk = desk;
+        this.setDesk(desk);
         this.interval = interval;
     }
 
@@ -57,6 +57,7 @@ public class Reservation {
 
     public void setDesk(Desk desk) {
         this.desk = desk;
+        desk.addReservation(this);
     }
 
     public TimeInterval getInterval() {

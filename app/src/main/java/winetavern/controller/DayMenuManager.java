@@ -31,12 +31,12 @@ public class DayMenuManager {
         this.dayMenuRepository = dayMenuRepository;
     }
 
-    @RequestMapping("/admin/daymenulist")
+    @RequestMapping("/admin/menu/show")
     public ModelAndView showMenus(ModelAndView modelAndView) {
         return showMenuList(modelAndView);
     }
 
-    @RequestMapping("/admin/addMenu")
+    @RequestMapping("/admin/menu/add")
     public String addMenu(Model model) {
         DateParameter dateParameter = new DateParameter();
         model.addAttribute("date", dateParameter);
@@ -46,7 +46,7 @@ public class DayMenuManager {
     /**
      * @param dateParameter if day starts with a 0, the month will be count up by one
      */
-    @RequestMapping(value = "/admin/addMenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/menu/add", method = RequestMethod.POST)
     public ModelAndView addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter,
                                     ModelAndView modelAndView) {
         dateParameter.setMonth(dateParameter.getMonth()-1); //workaround, see above
@@ -57,7 +57,7 @@ public class DayMenuManager {
         return showMenuList(modelAndView);
     }
 
-    @RequestMapping(value = "/admin/removeMenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public ModelAndView removeMenu(@RequestParam("daymenuid") Long dayMenuId, ModelAndView modelAndView) {
         DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
         if(dayMenu != null) {
@@ -66,8 +66,8 @@ public class DayMenuManager {
         return showMenuList(modelAndView);
     }
 
-    @RequestMapping("/admin/editMenu")
-    public String editMenu(@RequestParam("id") Long id, Model model) {
+    @RequestMapping("/admin/menu/edit/{pid}")
+    public String editMenu(@PathVariable("pid") Long id, Model model) {
         DayMenu dayMenu = dayMenuRepository.findById(id);
         model.addAttribute("daymenu", dayMenu);
         model.addAttribute("stock", stock);

@@ -44,7 +44,7 @@ public class DayMenuItemManager {
      * Initially called for adding a menu item.
      * Data gets processed in  {@link #addMenuItemPost(Product, String, MonetaryAmount, String, Double, Boolean, Long, ModelAndView)}
      */
-    @RequestMapping("/admin/addMenuItem")
+    @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findAll(),
                 dayMenuRepository.findById(cameFrom)));
@@ -108,7 +108,7 @@ public class DayMenuItemManager {
      * 1) choosing the corresponding Product from a list.
      * 2) setting DayMenuItem name, price and optionally a description.
      */
-    @RequestMapping(value = "/admin/addMenuItem", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/menuitem/add", method = RequestMethod.POST)
     public ModelAndView addMenuItemPost(@RequestParam("product") Product product,
                                         @RequestParam("name") String name,
                                         @RequestParam("price") MonetaryAmount price,
@@ -128,11 +128,11 @@ public class DayMenuItemManager {
         dayMenuItem.addDayMenu(dayMenuRepository.findById(dayMenu));
         dayMenuItemRepository.save(dayMenuItem);
 
-        modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(dayMenu));
+        modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenu));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/admin/addMenuItemExisting", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/menuitem/addExisting", method = RequestMethod.POST)
     public ModelAndView addMenuItemPostExisting(@RequestParam("daymenuitem") Long dayMenuItemId,
                                                 @RequestParam("dayMenu") Long dayMenuId,
                                                 ModelAndView modelAndView) {
@@ -141,11 +141,11 @@ public class DayMenuItemManager {
         dayMenuItem.addDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);
 
-        modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(dayMenuId));
+        modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenuId));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/admin/removeDayMenuItemFromDayMenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/menuitem/removeFromDayMenu", method = RequestMethod.POST)
     public ModelAndView removeDayMenuItemFromDayMenu(@RequestParam("daymenuitem") Long dayMenuItemId,
                                                      @RequestParam("dayMenu") Long dayMenuId,
                                                      ModelAndView modelAndView) {
@@ -154,7 +154,7 @@ public class DayMenuItemManager {
         dayMenuItem.removeDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);
 
-        modelAndView.setViewName("redirect:/admin/editMenu?id="+String.valueOf(dayMenuId));
+        modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenuId));
         return modelAndView;
     }
 }

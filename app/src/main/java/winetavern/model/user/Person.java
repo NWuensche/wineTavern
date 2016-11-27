@@ -35,7 +35,8 @@ public class Person {
      * @param birthday can be null
      * @throws IllegalArgumentException if userAccount has not exactly 1 Role
      */
-    public Person(UserAccount userAccount, String address, String birthday, String personTitle) throws IllegalArgumentException {
+    public Person(UserAccount userAccount, String address, String birthday, String personTitle)
+            throws IllegalArgumentException {
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
         }
@@ -84,7 +85,7 @@ public class Person {
     public String getDisplayNameOfRole() {
         List<Role> roles = userAccount.getRoles().stream().collect(Collectors.toList());
         Role role = roles.get(0);
-        return Roles.getDisplayNameRole(role);
+        return Roles.getGermanNameOfRole(role);
     }
 
     public boolean isEnabled() {

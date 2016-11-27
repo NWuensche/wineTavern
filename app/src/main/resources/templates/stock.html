@@ -35,7 +35,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="item : ${stockItems}">
-                                <td th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(item.product.getCategories().stream().findFirst().get())}"></td>
+                                <td th:text="${item.product.getCategories().stream().findFirst().get()}"></td>
                                 <td th:text="${item.product.name}"></td>
                                 <td th:text="@{${item.product.price.number} + '€'}"></td>
                                 <td th:text="${item.quantity}"></td>
@@ -75,8 +75,8 @@
                     <div class="form-group">
                         <label for="category">Kategorie:</label>
                         <select type="text" class="form-control" name="category" id="category">
-                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
-                                    th:value="${category.getCategoryName()}"></option>
+                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
+                                    th:value="${category}"></option>
                         </select>
                     </div>
                 </form>
@@ -151,9 +151,9 @@
                     <div class="form-group">
                         <label for="productcategory">Kategorie:</label>
                         <select type="text" class="form-control" name="productcategory" id="productcategory" >
-                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${T(winetavern.model.stock.Category).getDisplayNameCategory(category)}"
-                                    th:value="${category.getCategoryName()}"
-                                    th:selected="${productCategory.equals(category.getCategoryName())}"></option>
+                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
+                                    th:value="${category}"
+                                    th:selected="${productCategory.toString().equals(category.toString())}"></option>
                         </select>
                     </div>
                 </form>

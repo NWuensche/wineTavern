@@ -34,7 +34,7 @@ import java.util.List;
 import static org.salespointframework.core.Currencies.EURO;
 
 /**
- * Initializes Data in the Database for the prototype
+ * Initializes Data
  * @author Niklas Wünsche
  */
 
@@ -93,10 +93,10 @@ public class WineTavernDataInitializer implements DataInitializer{
 
     public void initializeStock() {
         Product vodka = new Product("Vodka", Money.of(12.50, EURO));
-        vodka.addCategory(Category.LIQUOR.getCategoryName());
+        vodka.addCategory(Category.LIQUOR.toString());
 
         Product brandstifter = new Product("Berliner Brandstifter", Money.of(33.99, EURO));
-        brandstifter.addCategory(Category.LIQUOR.getCategoryName());
+        brandstifter.addCategory(Category.LIQUOR.toString());
 
         stock.save(new InventoryItem(vodka, Quantity.of(15)));
         stock.save(new InventoryItem(brandstifter, Quantity.of(93)));

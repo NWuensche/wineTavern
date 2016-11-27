@@ -54,7 +54,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
     }
 
     private RequestBuilder createRequestBuilder(String userName, String password) {
-        RequestBuilder request = post("/admin/management/users/addNew").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        RequestBuilder request = post("/admin/management/users/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("personTitle", "Herr")
                 .param("firstName", "Hans")
                 .param("lastName", "Müller")
@@ -113,7 +113,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         saveNewPerson();
         String personId = getPersonId();
 
-        mvc.perform(get("/admin/management/users/changePerson/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        mvc.perform(get("/admin/management/users/edit/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("firstName", "DontSave")
                 .param("lastName", "Schwab")
                 .param("address", "Best House")
@@ -142,7 +142,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         saveNewPerson();
         String personId = getPersonId();
 
-        mvc.perform(get("/admin/management/users/disablePerson/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
+        mvc.perform(get("/admin/management/users/disable/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
 
         Person deletedPerson = personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
 

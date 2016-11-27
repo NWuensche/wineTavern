@@ -21,7 +21,7 @@
                     <img src="/resources/img/pokemon.jpg" class="image-user rounded-circle" width="100%" />
                     <span class="user-title" th:text="${#authentication.getName()}">USERNAME</span>
                     <div class="user-role" th:if="${!#authentication.getAuthorities().isEmpty()}">
-                        <p th:text="${T(winetavern.model.user.Roles).getDisplayNameRole(#authentication.getAuthorities()[0])}">ROLE</p>
+                        <p th:text="${T(winetavern.model.user.Roles).getGermanNameOfRole(#authentication.getAuthorities()[0])}">ROLE</p>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                 <!-- KARTE -->
 
 
-                <a th:href="@{/admin/daymenulist}" class="list-group-item list-group-item-action side__menu side-module__container">
+                <a th:href="@{/admin/menu/show}" class="list-group-item list-group-item-action side__menu side-module__container">
                     <i class="fa fa-cutlery fa-lg" aria-hidden="true"></i>
                     <span>Karte</span>
                 </a>
@@ -51,16 +51,16 @@
                 <!-- RESERVIERUNG-->
                 <!-- TODO: richtige Rolle für Reservierungen setzen -->
 
-                <a th:href="@{/reservation}" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#reservierungen">
+                <a th:href="@{/service/reservation}" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#reservierungen">
                     <i class="fa fa-clock-o fa-lg" aria-hidden="true"></i>
                     <span>Reservierung</span>
                 </a>
                 <div id="reservierungen" class="collapse">
-                    <a th:href="@{/reservation}" class="list-group-item list-group-item-action side__menu side-module__container">
+                    <a th:href="@{/service/reservation}" class="list-group-item list-group-item-action side__menu side-module__container">
                         <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Abfrage</span>
                     </a>
-                    <a th:href="@{/reservation/showall}" class="list-group-item list-group-item-action side__menu side-module__container">
+                    <a th:href="@{/service/reservation/showall}" class="list-group-item list-group-item-action side__menu side-module__container">
                         <i class="fa fa-circle-o" aria-hidden="true"></i>
                         <span>Alle anzeigen</span>
                     </a>

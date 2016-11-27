@@ -1,6 +1,9 @@
 package winetavern.model.reservation;
 
+import com.sun.org.apache.regexp.internal.RE;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,7 @@ public class Desk {
 
         this.name = name;
         this.capacity = capacity;
+        this.reservationList = new ArrayList<>();
     }
 
     public  long getId() {
@@ -51,6 +55,10 @@ public class Desk {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public void addReservation(Reservation reservation) {
+        this.reservationList.add(reservation);
     }
 
     public List<Reservation> getReservationList() {
