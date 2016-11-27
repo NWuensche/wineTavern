@@ -43,20 +43,40 @@
 </div>
 
 <div class="container" th:if="${desk != null and reservationtime != null}">
-    <form method="post" action="/service/reservation/add">
-        <p>Tisch: </p>
-        <input type="text" th:name="desk" th:value="${desk}" readonly="readonly"/>
-        <p>Personen: </p>
-        <input type="text" th:name="amount" th:value="${deskcapacity}"/>
-        <p>Datum und Uhrzeit:</p>
-        <input type="text" th:name="reservationtime" th:value="${reservationtime.format(datetimeformatter)}" readonly="readonly"/>
-        <p>Dauer in Minuten:</p>
-        <input type="text" th:name="duration" value="60"/>
-        <p>Name des Reservators:</p>
-        <input type="text" th:name="name"/>
-        <button>Reservieren</button>
-        <p>Hier muss wieder die Tabelle zu den Reservierungen des Tisches eingebaut werden.</p>
-    </form>
+    <div class="row">
+        <div class="col-xs-8 ">
+            <form method="post" action="/service/reservation/add">
+                <div class="form__bg">
+                    <div class="form-group"> 
+                        <label for="formGroupExampleInput">Tisch</label> 
+                        <input type="text" class="form-control" id="formGroupExampleInput"  th:name="desk" th:value="${desk}" readonly="readonly"/> 
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Personen</label>
+                            <input class="form-control" type="text" id="formGroupExampleInput" th:name="amount" th:value="${deskcapacity}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Datum und Uhrzeit</label>
+                            <input class="form-control" type="text" id="formGroupExampleInput" th:name="reservationtime" th:value="${reservationtime.format(datetimeformatter)}" readonly="readonly"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Dauer in Minuten</label>
+                            <input class="form-control" type="text" id="formGroupExampleInput" th:name="duration" value="60"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Name des Reservators</label>
+                            <input class="form-control" type="text" id="formGroupExampleInput" th:name="name"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="button btn btn-primary">Reservieren</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <p>Hier muss wieder die Tabelle zu den Reservierungen des Tisches eingebaut werden.</p>
+        </div>
+    </div>
 </div>
 
 <div class="container" th:if="${success != null}">
