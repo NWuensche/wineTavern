@@ -16,7 +16,6 @@ import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.user.Person;
 import winetavern.model.user.PersonManager;
-import winetavern.model.user.Roles;
 
 import javax.money.MonetaryAmount;
 import javax.validation.constraints.NotNull;
@@ -39,6 +38,7 @@ public class ExpenseController {
     @NotNull @Autowired private ExpenseGroupRepository expenseGroups;
     @NotNull @Autowired private PersonManager persons;
     @NotNull @Autowired private BusinessTime bt;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
@@ -61,9 +61,7 @@ public class ExpenseController {
     @RequestMapping("/accountancy/expenses/payoff")
     public String doPayoff(Model model) {
         Set<Person> service = new TreeSet<>(Comparator.comparing(o -> o.getUserAccount().getLastname()));
-        for (Person person : persons.findAll()) {
-            if (person.getRole().equals(Roles.SERVICE.getRole())) service.add(person);
-        }
+        persons.findAll().forEach(service::add);
         model.addAttribute("service", service);
         return "payoff";
     }
@@ -77,7 +75,7 @@ public class ExpenseController {
     public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
         Person staff = persons.findOne(Long.parseLong(personId)).get();
         Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
-                personId, false, "today");
+                personId, false, "");
         model.addAttribute("expenses", expenses);
         model.addAttribute("staff", staff);
         MonetaryAmount sum = Money.of(0, EURO);
@@ -91,18 +89,22 @@ public class ExpenseController {
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
     public String coverExpensesForPerson(@PathVariable("pid") String personId, Model model) {
         Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
-                personId, false, "today");
+                personId, false, "");
+        MonetaryAmount sum = Money.of(0, EURO);
         for(Expense expense : expenses){
+            sum = sum.add(expense.getValue());
             expense.cover();
             accountancy.add(expense);
         }
-
+        accountancy.add(new Expense(sum,
+                "Tagesabrechnung vom " + bt.getTime().toLocalDate().format(formatter),
+                persons.findOne(Long.parseLong(personId)).get(),
+                expenseGroups.findByName("Abrechnung").get()));
         return "redirect:/accountancy/expenses/payoff";
     }
 
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
         Set<Expense> res = new TreeSet<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
         if (date.equals("today")) { //Interval filter: today
             date = bt.getTime().format(formatter);

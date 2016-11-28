@@ -26,6 +26,7 @@ public class Expense extends AccountancyEntry implements Comparable<Expense> {
         if (person == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
         this.person = person;
+        if (expenseGroup.getName().equals("Abrechnung")) isCovered = true;
     }
 
     public Expense(MonetaryAmount value, String description, Person person, ExpenseGroup expenseGroup) {
@@ -33,6 +34,7 @@ public class Expense extends AccountancyEntry implements Comparable<Expense> {
         if (person == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
         this.person = person;
+        if (expenseGroup.getName().equals("Abrechnung")) isCovered = true;
     }
 
     public ExpenseGroup getExpenseGroup() {

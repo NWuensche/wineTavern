@@ -116,6 +116,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     private void initializeExpenseGroups() {
         expenseGroups.save(new ExpenseGroup("Bestellung"));
         expenseGroups.save(new ExpenseGroup("Künstlergage"));
+        expenseGroups.save(new ExpenseGroup("Abrechnung"));
     }
 
     private void initializeTables() {
