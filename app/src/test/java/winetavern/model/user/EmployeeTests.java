@@ -2,7 +2,6 @@ package winetavern.model.user;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
-import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Before;
 import org.junit.Test;
