@@ -1,5 +1,7 @@
 /* CSS RESET */
-
+::-webkit-scrollbar {
+    display: none;
+}
 
 /*--------  BASE  --------*/
 
@@ -381,6 +383,11 @@ body.mini .list-group-item-action span {
 
 .padding__box {
     padding:20px;
+}
+
+.checkbox__huge {
+    width:25px;
+    height:25px;
 }
 
 /* Form Style */

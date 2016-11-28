@@ -5,6 +5,7 @@
     <title>Events</title>
 
 </head>
+
 <body th:fragment="content">
 <div class="bill__tabs">
     <ul class="nav nav-tabs" role="tablist">
@@ -55,6 +56,11 @@
                                 </div>
                                 &nbsp;
                                 <button class="btn btn-primary">Neu laden</button>
+                                &nbsp;
+                                <button type="button" class="btn btn-primary" onclick="cover();" id="coverbtn"
+                                        style="display:none">
+                                    Abrechnen
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -66,6 +72,7 @@
                     <th>Datum</th>
                     <th>Beschreibung</th>
                     <th>Betrag</th>
+                    <th><input type="checkbox" class="checkbox__huge" id="checkall" onclick="checkall();"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -73,8 +80,11 @@
                     <td th:text="${expense.expenseGroup.name}"></td>
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>
-                    <td th:text="${expense.description}"></td>
-                    <td th:text="${expense.value.number} + '€'"></td>
+                    <td th:text="${expense.description}" class="expense-desc"></td>
+                    <td th:text="${expense.value.number} + '€'" class="expense-price"></td>
+                    <td><input type="checkbox" class="checkbox__huge" name="singlecheckbox" th:value="${expense.id}"
+                               onclick="check();"/>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -140,12 +150,43 @@
         </div>
     </div>
 </div>
+<div class="modal" id="coverModal" tabindex="-1" role="dialog"
+     aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel1">Einzelabrechnung</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <th>Beschreibung</th>
+                        <th>Preis</th>
+                    </thead>
+                    <tbody id="coverTable"></tbody>
+                </table>
+            </div>
+            <form id="coverForm"><input type="hidden" name="cover" id="coverid"/></form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fa fa-times"></i>
+                </button>
+                <button form="coverForm" class="btn btn-primary">Abrechnung</button>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <!-- Include Date Range Picker -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     var firstDayOfYear = new Date(businessTime);
     firstDayOfYear.setMonth(0);
     firstDayOfYear.setDate(1);
@@ -178,6 +219,65 @@
     if(window.location.href.includes("covered")) {
         $('.nav-tabs a[href="#covered"').tab("show");
     }
+
+    function check(){
+        var inputs = new Array();
+
+        $("input:checkbox[name=singlecheckbox]:checked").each(function(){
+            inputs.push($(this).val());
+        });
+
+        if(inputs.length == 0){
+            document.getElementById("coverbtn").style.display="none";
+        } else {
+            document.getElementById("coverbtn").style.display="inline";
+        }
+    }
+
+    function checkall(){
+        var checkbox = document.getElementById("checkall");
+        if(!checkbox.checked){
+            $("input:checkbox[name=singlecheckbox]").each(function(){
+                $(this).prop("checked",false);
+            });
+        } else {
+            $("input:checkbox[name=singlecheckbox]").each(function(){
+                $(this).prop("checked",true);
+            });
+        }
+        check();
+    }
+
+    function cover(){
+        var ids = new Array();
+        var inputs = new Array();
+        $("input:checkbox[name=singlecheckbox]:checked").each(function(){
+            inputs.push($(this).get(0));
+            ids.push($(this).val());
+        });
+
+        document.getElementById("coverid").value=ids.join("|");
+
+
+
+        var table = document.getElementById("coverTable");
+        var total = 0;
+
+        table.innerHTML = "";
+        for(i=0;i<inputs.length;i++){
+            var row = inputs[i].parentNode.parentNode;
+            var desc = row.getElementsByClassName("expense-desc")[0].innerHTML;
+            var price = row.getElementsByClassName("expense-price")[0].innerHTML;
+            total += parseFloat(price.replace('€',''));
+            table.innerHTML += "<tr><td>" + desc + "</td><td>" + price + "</td></tr>";
+        }
+        table.innerHTML += "<tr><td colspan='2' class='text-xs-center'><b>Gesamtpreis: " + total.toFixed(2) +
+            "€</b></td>";
+        $("#coverModal").modal("show");
+
+        //window.location.href="/accountancy/expenses?cover=" + inputs.join("|");
+    }
+    /*]]>*/
 </script>
 </body>
 </html>
