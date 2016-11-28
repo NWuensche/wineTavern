@@ -49,6 +49,9 @@ main > .row-eq-height > .col-md-3{
     background-color: #243648;
     min-height: 100vh;
 }
+.form-control{
+    display: inline;
+}
 
 .form-control:focus, a:focus,button:focus {
     border-color: #1D997D;
@@ -361,6 +364,12 @@ body .list-group-item-action .fa-circle-o{
 }
 .reservation .form__bg{
     padding: 1rem;
+}
+.reservation form{
+    margin: 2rem 0;
+}
+.reservation .container__wrap{
+    margin: 2rem;
 }
 
 /* BILLS */
