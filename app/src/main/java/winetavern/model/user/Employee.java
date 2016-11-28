@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 
 @Entity
-public class Employee {
+public class Employee extends Person {
 
     @Id @GeneratedValue private Long id;
     @OneToOne private UserAccount userAccount;
