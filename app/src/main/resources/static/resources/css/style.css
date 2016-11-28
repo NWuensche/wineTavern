@@ -49,6 +49,9 @@ main > .row-eq-height > .col-md-3{
     background-color: #243648;
     min-height: 100vh;
 }
+.form-control{
+    display: inline;
+}
 
 .form-control:focus, a:focus,button:focus {
     border-color: #1D997D;
@@ -340,6 +343,37 @@ body .list-group-item-action .fa-circle-o{
     padding:5px;
     border-radius:5px;
 }
+.reservation .icon__wrap{
+    margin-top: 1rem;
+}
+.reservation .icon-list {
+    border-radius: 0.2rem 0 0 0.2rem;
+}
+.reservation .icon-card {
+    border-radius: 0 0.2rem 0.2rem 0;
+    float: right;
+}
+.reservation .svg__tables{
+    margin: 2rem 1.5rem;
+}
+.reservation .reservation__form{
+    margin: 3rem 0;
+}
+.reservation .reservation__form .form-group input{
+    width: 12.2rem;
+}
+.reservation g.deskGroup:hover > rect{
+    fill: rgb(241, 143, 1);
+}
+.reservation .form__bg{
+    padding: 1rem;
+}
+.reservation form{
+    margin: 2rem 0;
+}
+.reservation .container__wrap{
+    margin: 2rem;
+}
 
 /* BILLS */
 .bill__tabs {
@@ -384,14 +418,15 @@ body .list-group-item-action .fa-circle-o{
 
 /* Form Style */
 
-.addMenuItem .form__bg, .addEmployee .form__bg {
+.form__bg {
     background-color: #fff;
     border-radius: 0.2rem;
     overflow: hidden;
 }
-
-.addMenuItem .form-group, .addEmployee .form-group {
-    /*margin-bottom: -0.5rem;*/
+.form__bg button{
+    width: 100%;
+}
+.addMenuItem .form-group, .addPerson .form-group {
     margin:0 3.5rem -0.3rem 3.5rem;
 }
 
@@ -429,31 +464,29 @@ body .list-group-item-action .fa-circle-o{
 
 /* Users */
 
-.users .icon__button.btn-primary {
+.icon__button.btn-primary {
     background-color: #fff;
     border: none;
     margin: 0.5rem 0;
 }
-.users .icon__button.btn-primary.active{
+.icon__button.btn-primary.active{
     background-color: #243648;
 }
 
-.users .icon__button .fa {
+.icon__button .fa {
     color: #243648;
 }
-.users .icon__button.btn-primary.active .fa{
+.icon__button.btn-primary.active .fa{
     color: #A6B2C5;
 }
-
-.users .icon-list {
+.icon-list {
     border-radius: 0.2rem 0 0 0.2rem;
 }
-
-.users .icon-card {
+.icon-card {
     border-radius: 0 0.2rem 0.2rem 0;
     float: right;
 }
-.users .container__user-cards{
+.container__cards{
     display: none;
 }
 .users .user-card{
@@ -484,7 +517,7 @@ body .list-group-item-action .fa-circle-o{
     width: 100%;
     color: #A6B2C5;
 }
-.users .container__user-cards .user-card img.image-user{
+.users .container__cards .user-card img.image-user{
     margin: 1rem 0 2rem 0;
     float: none;
 }
