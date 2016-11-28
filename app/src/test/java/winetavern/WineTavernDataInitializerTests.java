@@ -21,6 +21,7 @@ import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
+import winetavern.model.user.ExternalManager;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class WineTavernDataInitializerTests extends AbstractWebIntegrationTests{
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ShiftRepository shifts;
+    @Autowired private ExternalManager externalManager;
 
     @Test
     public void adminInDB() throws Exception {
@@ -93,6 +95,11 @@ public class WineTavernDataInitializerTests extends AbstractWebIntegrationTests{
         mvc.perform(get("/"));
 
         assertThat(isDataInitaliyerShift[0], is(true));
+    }
+
+    @Test
+    public void externalInDB() throws Exception {
+        assertThat(externalManager.findByName("DJ Cool").isPresent(), is(true));
     }
 
 }

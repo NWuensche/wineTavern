@@ -2,7 +2,8 @@ package winetavern.model.user;
 
 import winetavern.model.management.Event;
 
-import javax.money.Monetary;
+import javax.money.MonetaryAmount;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -11,6 +12,7 @@ import javax.persistence.OneToOne;
  * @author Niklas Wünsche
  */
 
+@Entity
 public class External extends Person {
 
     @Id @GeneratedValue private Long id;
@@ -18,13 +20,13 @@ public class External extends Person {
     @OneToOne private Event event;
 
     private String name;
-    private Monetary wage;
+    private MonetaryAmount wage;
     private boolean wagePayed;
 
     @Deprecated
     protected External() {}
 
-    public External(Event event, String name, Monetary wage) {
+    public External(Event event, String name, MonetaryAmount wage) {
         this.event = event;
         this.name = name;
         this.wage = wage;
@@ -39,11 +41,11 @@ public class External extends Person {
         return name;
     }
 
-    public Monetary getWage() {
+    public MonetaryAmount getWage() {
         return wage;
     }
 
-    public void payExternal() {
+    public void pay() throws IllegalStateException{
         if(wasPayed()) {
             throw new IllegalStateException("External was already payed!");
         }
