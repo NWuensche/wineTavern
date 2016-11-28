@@ -10,14 +10,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Entity for Persons
+ * Entity for Employees
  * Adds information to UserAccount
  * @author Niklas Wünsche
  * @implNote The UserAccount has exactly 1 Role
  */
 
 @Entity
-public class Person {
+public class Employee {
 
     @Id @GeneratedValue private Long id;
     @OneToOne private UserAccount userAccount;
@@ -27,7 +27,7 @@ public class Person {
     private String personTitle;
 
     @Deprecated
-    protected Person() {}
+    protected Employee() {}
 
     /**
      * @param userAccount needs to have exactly 1 role
@@ -35,7 +35,7 @@ public class Person {
      * @param birthday can be null
      * @throws IllegalArgumentException if userAccount has not exactly 1 Role
      */
-    public Person(UserAccount userAccount, String address, String birthday, String personTitle)
+    public Employee(UserAccount userAccount, String address, String birthday, String personTitle)
             throws IllegalArgumentException {
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");

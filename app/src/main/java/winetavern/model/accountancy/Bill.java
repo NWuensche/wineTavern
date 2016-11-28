@@ -2,7 +2,7 @@ package winetavern.model.accountancy;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.time.BusinessTime;
-import winetavern.model.user.Person;
+import winetavern.model.user.Employee;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
@@ -23,13 +23,13 @@ public class Bill {
     private boolean isClosed = false;
     private MonetaryAmount totalPrice = Money.of(0, EURO);
     private LocalDateTime payTime;
-    @ManyToOne private Person staff;
+    @ManyToOne private Employee staff;
     @OneToMany(cascade=CascadeType.ALL) private Set<BillItem> items = new TreeSet<>();
 
     @Deprecated
     protected Bill() {}
 
-    public Bill(String desk, Person staff) {
+    public Bill(String desk, Employee staff) {
         this.desk = desk;
         this.staff = staff;
     }
@@ -84,7 +84,7 @@ public class Bill {
         return new TreeSet<>(items);
     }
 
-    public Person getStaff() {
+    public Employee getStaff() {
         return staff;
     }
 }

@@ -5,7 +5,7 @@ package winetavern;
  * @author michel
  */
 
-// TODO Make this an inner class of PersonManagerController
+// TODO Make this an inner class of EmployeeManagerController
 public class AccountCredentials {
 
     private String personTitle;

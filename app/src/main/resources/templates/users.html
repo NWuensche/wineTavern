@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-xs-6">
                 <h1>
-                    <span class="fa fa-users" ></span> Management (<span th:text="${personManager.findEnabled().size()}"></span>Knoten)
+                    <span class="fa fa-users" ></span> Management (<span th:text="${employeeManager.findEnabled().size()}"></span>Knoten)
                 </h1>
             </div>
             <div class="col-xs-6 text-xs-right">
@@ -65,21 +65,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="person : ${personManager.findEnabled()}">
-            <th th:text="${person.displayNameOfRole}"></th>
-            <th th:text="${person.personTitle}"></th>
-            <td th:text="${person.userAccount.firstname}"></td>
-            <td th:text="${person.userAccount.lastname}"></td>
-            <td th:text="${person.userAccount.username}"></td>
+        <tr th:each="employee : ${employeeManager.findEnabled()}">
+            <th th:text="${employee.displayNameOfRole}"></th>
+            <th th:text="${employee.personTitle}"></th>
+            <td th:text="${employee.userAccount.firstname}"></td>
+            <td th:text="${employee.userAccount.lastname}"></td>
+            <td th:text="${employee.userAccount.username}"></td>
             <td>
 
                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                        th:attr="data-target='#details'+${person.id}">
+                        th:attr="data-target='#details'+${employee.id}">
                     <i class="fa fa-user-circle" aria-hidden="true"></i>
                 </button>
 
-                <!-- show person details -->
-                <div class="modal fade" th:id="details+${person.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <!-- show employee details -->
+                <div class="modal fade" th:id="details+${employee.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -89,30 +89,30 @@
                                 <h4 class="modal-title" id="myModalLabel">Kontodetails ändern</h4>
                             </div>
                             <div class="modal-body">
-                                <form id="productDetailsForm" th:action="@{'/admin/management/users/edit/' + ${person.id}}" method="post" th:object="${accountcredentials}">
+                                <form id="productDetailsForm" th:action="@{'/admin/management/users/edit/' + ${employee.id}}" method="post" th:object="${accountcredentials}">
                                     <div class="form-group" hidden = "true">
                                         <label for="id">Konto</label>
                                         <input type="text" class="form-control" name="id" id="id" readonly="true" />
                                     </div>
                                     <div class="form-group">
                                         <label for="lastName">Nachname</label>
-                                        <input type="text" class="form-control" th:value="${person.userAccount.lastname}" name="lastName" id="lastName" />
+                                        <input type="text" class="form-control" th:value="${employee.userAccount.lastname}" name="lastName" id="lastName" />
                                     </div>
-                                    <div class="form-group" th:if="${!currUserAccount.equals(person.userAccount)}">
+                                    <div class="form-group" th:if="${!currUserAccount.equals(employee.userAccount)}">
                                         <label for="role">Rolle</label>
                                         <select type="text" class="form-control" name="role" id="role" >
                                             <option th:each="role : ${T(winetavern.model.user.Roles).values()}" th:text="${T(winetavern.model.user.Roles).getGermanNameOfRole(role)}"
                                                     th:value="${role.getNameOfRoleWithPrefix()}"
-                                                    th:selected="${T(winetavern.model.user.Roles).getGermanNameOfRole(person.role).equals(T(winetavern.model.user.Roles).getGermanNameOfRole(role))}"></option>
+                                                    th:selected="${T(winetavern.model.user.Roles).getGermanNameOfRole(employee.role).equals(T(winetavern.model.user.Roles).getGermanNameOfRole(role))}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="address">Adresse</label>
-                                        <input type="text" class="form-control" th:value="${person.address.get()}" name="address" id="address" />
+                                        <input type="text" class="form-control" th:value="${employee.address.get()}" name="address" id="address" />
                                     </div>
                                     <div class="form-group">
-                                        <a th:href="@{'/admin/management/users/disable/' + ${person.id}}">
-                                            <button id="disablePerson" type="button" class="btn btn-secondary btn-block">Deaktiviere das Konto</button>
+                                        <a th:href="@{'/admin/management/users/disable/' + ${employee.id}}">
+                                            <button id="disableEmployee" type="button" class="btn btn-secondary btn-block">Deaktiviere das Konto</button>
                                         </a>
                                     </div>
                                     <div class="row">
@@ -131,7 +131,7 @@
         </tr>
         <div  class="container__user-cards">
             <div class="row">
-                <div class="col-xs-3" th:each="person : ${personManager.findEnabled()}">
+                <div class="col-xs-3" th:each="employee : ${employeeManager.findEnabled()}">
                     <div class="user-card" >
                         <div class="row">
                             <div class="col-xs-12">
@@ -140,8 +140,8 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <span class="user-title" th:text="${person.personTitle}"></span>
-                                <span class="user-role" th:text="${person.displayNameOfRole}"></span>
+                                <span class="user-title" th:text="${employee.personTitle}"></span>
+                                <span class="user-role" th:text="${employee.displayNameOfRole}"></span>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
     </table>
 </div>
 
-<!-- addPerson Modal -->
+<!-- addEmployee Modal -->
 <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="dunno" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -167,7 +167,7 @@
                     <form method="post" th:action="@{/admin/management/users/add}" th:object="${accountcredentials}">
                         <div class="form__bg">
                             <div class="dark__bg">
-                                <h2>Personendaten</h2>
+                                <h2>Mitarbeiterdaten</h2>
                             </div>
 
                             <div class="form-group">

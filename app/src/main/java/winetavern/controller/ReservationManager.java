@@ -1,31 +1,23 @@
 package winetavern.controller;
 
-import org.salespointframework.catalog.Product;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.menu.DayMenu;
 import winetavern.model.reservation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
-import java.time.LocalDate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -189,8 +181,8 @@ public class ReservationManager {
         } else if(sort.get().equals("name")) {
             reservationIterator = reservations.findAllByOrderByGuestName();
             reservationIterator.forEach(reservationList::add);
-        } else if(sort.get().equals("persons")) {
-            reservationIterator = reservations.findAllByOrderByPersons();
+        } else if(sort.get().equals("employees")) {
+            reservationIterator = reservations.findAllByOrderByEmployees();
             reservationIterator.forEach(reservationList::add);
         } else {
             reservationIterator = reservations.findAll();

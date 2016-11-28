@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
-import winetavern.model.user.Person;
-import winetavern.model.user.PersonManager;
+import winetavern.model.user.Employee;
+import winetavern.model.user.EmployeeManager;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -30,36 +30,36 @@ public class ExpenseController {
     @NotNull private final Accountancy accountancy;
     @NotNull private final ExpenseGroupRepository expenseGroups;
     @NotNull private final BusinessTime businessTime;
-    @NotNull private final PersonManager persons;
+    @NotNull private final EmployeeManager employees;
 
     @Autowired
-    public ExpenseController(Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime, PersonManager persons) {
+    public ExpenseController(Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime, EmployeeManager employees) {
         this.accountancy = accountancy;
         this.expenseGroups = expenseGroups;
         this.businessTime = businessTime;
-        this.persons = persons;
+        this.employees = employees;
     }
 
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
+    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String employee,
                                @ModelAttribute("date") String date, Model model) {
         if (type.equals("")) type = "0";
-        if (person.equals("")) person = "0";
-        Set<Expense> expopen = filter(type, person, false, date);
-        Set<Expense> expcovered = filter(type, person, true, date);
+        if (employee.equals("")) employee = "0";
+        Set<Expense> expopen = filter(type, employee, false, date);
+        Set<Expense> expcovered = filter(type, employee, true, date);
         model.addAttribute("expenseAmount", expopen.size());
         model.addAttribute("expopen", expopen);
         model.addAttribute("expcovered", expcovered);
-        model.addAttribute("persons", persons.findAll());
+        model.addAttribute("employees", employees.findAll());
         model.addAttribute("groups", expenseGroups.findAll());
         model.addAttribute("selectedType", Long.parseLong(type));
-        model.addAttribute("selectedPerson", Long.parseLong(person));
+        model.addAttribute("selectedEmployee", Long.parseLong(employee));
         model.addAttribute("selectedDate", date);
         return "expenses";
     }
 
 
-    private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
+    private Set<Expense> filter(String typeId, String employeeId, boolean covered, String date) {
         Set<Expense> res = new TreeSet<>();
 
         if (!date.equals("")) { //Interval filter: start - end
@@ -77,9 +77,9 @@ public class ExpenseController {
             res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
         }
 
-        if (!personId.equals("0")) { //Person filter: must contain person
-            Person person = persons.findOne(Long.parseLong(personId)).get();
-            res.removeIf(expense -> expense.getPerson() != person);
+        if (!employeeId.equals("0")) { //Employee filter: must contain employee
+            Employee employee = employees.findOne(Long.parseLong(employeeId)).get();
+            res.removeIf(expense -> expense.getEmployee() != employee);
         }
 
         if(covered){ //isCovered filter: true -> returns only paid expenses

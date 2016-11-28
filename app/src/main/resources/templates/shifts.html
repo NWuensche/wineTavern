@@ -25,8 +25,8 @@
         <tbody>
         <tr th:each="shift : ${shifts}">
             <th scope="row">-</th>
-            <td th:text="@{${shift.person.userAccount.firstname} + ' ' + ${shift.person.userAccount.lastname}}"></td>
-            <td th:text="${shift.person.displayNameOfRole}"></td>
+            <td th:text="@{${shift.employee.userAccount.firstname} + ' ' + ${shift.employee.userAccount.lastname}}"></td>
+            <td th:text="${shift.employee.displayNameOfRole}"></td>
             <td th:text="${shift.interval.start.toLocalDate()}"></td>
             <td th:text="${shift.interval.start.toLocalTime()}"></td>
             <td th:text="${shift.interval.end.toLocalTime()}"></td>

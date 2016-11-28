@@ -1,7 +1,7 @@
 package winetavern.model.accountancy;
 
 import org.salespointframework.accountancy.AccountancyEntry;
-import winetavern.model.user.Person;
+import winetavern.model.user.Employee;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
@@ -15,32 +15,32 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Expense extends AccountancyEntry implements Comparable<Expense> {
     private boolean isCovered = false;
-    @ManyToOne private Person person;
+    @ManyToOne private Employee employee;
     @ManyToOne private ExpenseGroup expenseGroup;
 
     @Deprecated
     protected Expense() {}
 
-    public Expense(MonetaryAmount value, Person person, ExpenseGroup expenseGroup) {
+    public Expense(MonetaryAmount value, Employee employee, ExpenseGroup expenseGroup) {
         super(value);
-        if (person == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
+        if (employee == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
-        this.person = person;
+        this.employee = employee;
     }
 
-    public Expense(MonetaryAmount value, String description, Person person, ExpenseGroup expenseGroup) {
+    public Expense(MonetaryAmount value, String description, Employee employee, ExpenseGroup expenseGroup) {
         super(value, description);
-        if (person == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
+        if (employee == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
-        this.person = person;
+        this.employee = employee;
     }
 
     public ExpenseGroup getExpenseGroup() {
         return expenseGroup;
     }
 
-    public Person getPerson() {
-        return person;
+    public Employee getEmployee() {
+        return employee;
     }
 
     public String getDateString() {
@@ -59,6 +59,6 @@ public class Expense extends AccountancyEntry implements Comparable<Expense> {
     @Override
     public int compareTo(Expense o) {
         if (super.hasDate() && o.hasDate()) return -super.getDate().get().compareTo(o.getDate().get());
-        return getPerson().getUserAccount().getLastname().compareTo(o.getPerson().getUserAccount().getLastname());
+        return getEmployee().getUserAccount().getLastname().compareTo(o.getEmployee().getUserAccount().getLastname());
     }
 }

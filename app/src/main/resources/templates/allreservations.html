@@ -39,7 +39,7 @@
                             <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=date'}">Datum</a></th>
                             <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=date'}">Uhrzeit</a></th>
                             <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=name'}">Name</a></th>
-                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=persons'}">Personenzahl</a></th>
+                            <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=employees'}">Personenzahl</a></th>
                             <th class="text-xs-center"><a th:href="@{'/service/reservation/showall?sort=desk'}">Tisch</a></th>
                             <th class="text-xs-center">&Auml;ndern</th>
                             <th class="text-xs-center">Löschen</th>
@@ -50,7 +50,7 @@
                             <td th:text="${reservation.interval.start.toLocalDate()}"></td>
                             <td th:text="${reservation.interval.start.toLocalTime()}"></td>
                             <td th:text="${reservation.guestName}"></td>
-                            <td th:text="${reservation.persons}"></td>
+                            <td th:text="${reservation.employees}"></td>
                             <td th:text="${reservation.desk.name} + ' (' + ${reservation.desk.capacity} + ' Pers.)'"></td>
                             <td>
                                 <a th:href="@{'#'}">

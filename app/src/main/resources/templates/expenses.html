@@ -38,10 +38,10 @@
                                 </div>
                                 &nbsp;
                                 <div class="form-group">
-                                    <label for="person"><b>Person:</b></label>
-                                    <select id="person" name="person" class="form-control">
+                                    <label for="employee"><b>Mitarbeiter:</b></label>
+                                    <select id="employee" name="employee" class="form-control">
                                         <option value="0">Alle</option>
-                                        <option th:each="person:${persons}" th:selected="${person.id == selectedPerson}" th:text="${person}" th:value="${person.id}">test
+                                        <option th:each="employee:${employees}" th:selected="${employee.id == selectedEmployee}" th:text="${employee}" th:value="${employee.id}">test
                                         </option>
                                     </select>
                                 </div>
@@ -59,7 +59,7 @@
                 <thead>
                 <tr>
                     <th>Typ</th>
-                    <th>Person</th>
+                    <th>Mitarbeiter</th>
                     <th>Datum</th>
                     <th>Beschreibung</th>
                     <th>Betrag</th>
@@ -68,7 +68,7 @@
                 <tbody>
                 <tr th:each="expense : ${expopen}">
                     <td th:text="${expense.expenseGroup.name}"></td>
-                    <td th:text="${expense.person}"></td>
+                    <td th:text="${expense.employee}"></td>
                     <td th:text="${expense.dateString}"></td>
                     <td th:text="${expense.description}"></td>
                     <td th:text="${expense.value.number} + '€'"></td>
@@ -84,7 +84,7 @@
                 <thead>
                 <tr>
                     <th>Typ</th>
-                    <th>Person</th>
+                    <th>Mitarbeiter</th>
                     <th>Datum</th>
                     <th>Beschreibung</th>
                     <th>Betrag</th>
@@ -103,10 +103,10 @@
                             </div>
                             &nbsp;
                             <div class="form-group">
-                                <label for="oldperson"><b>Person:</b></label>
-                                <select id="oldperson" name="person" class="form-control">
+                                <label for="oldemployees"><b>Mitarbeiter:</b></label>
+                                <select id="oldemployees" name="employee" class="form-control">
                                     <option value="0">Alle</option>
-                                    <option th:each="person:${persons}" th:selected="${person.id == selectedPerson}" th:text="${person}" th:value="${person.id}">test
+                                    <option th:each="employee:${employees}" th:selected="${employee.id == selectedEmployee}" th:text="${employee}" th:value="${employee.id}">test
                                     </option>
                                 </select>
                             </div>
@@ -126,7 +126,7 @@
                 <tbody>
                 <tr th:each="expense : ${expcovered}">
                     <td th:text="${expense.expenseGroup.name}"></td>
-                    <td th:text="${expense.person}"></td>
+                    <td th:text="${expense.employee}"></td>
                     <td th:text="${expense.dateString}"></td>
                     <td th:text="${expense.description}"></td>
                     <td th:text="${expense.value.number} + '€'"></td>

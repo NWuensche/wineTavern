@@ -1,6 +1,6 @@
 package winetavern.model.management;
 
-import winetavern.model.user.Person;
+import winetavern.model.user.Employee;
 
 import javax.persistence.*;
 
@@ -10,18 +10,18 @@ import javax.persistence.*;
 
 @Entity
 public class Shift implements Comparable<Shift> {
-    //@Transient @Autowired private PersonManager personManager;
+    //@Transient @Autowired private EmployeeManager employeeManager;
 
     @Id @GeneratedValue private long id;
     @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
-    @ManyToOne private Person worker;
+    @ManyToOne private Employee worker;
 
     @Deprecated
     protected Shift() {}
 
-    public Shift(TimeInterval interval, Person worker) {
+    public Shift(TimeInterval interval, Employee worker) {
         setInterval(interval);
-        setPerson(worker);
+        setEmployee(worker);
     }
 
     public long getId() {
@@ -37,11 +37,11 @@ public class Shift implements Comparable<Shift> {
         this.interval = interval;
     }
 
-    public Person getPerson() {
+    public Employee getEmployee() {
         return worker;
     }
 
-    public void setPerson(Person worker) {
+    public void setEmployee(Employee worker) {
         if (worker == null) throw new NullPointerException("the worker must not be null");
         this.worker = worker;
     }

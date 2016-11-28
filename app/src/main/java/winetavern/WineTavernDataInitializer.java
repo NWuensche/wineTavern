@@ -22,8 +22,8 @@ import winetavern.model.reservation.Desk;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.user.Person;
-import winetavern.model.user.PersonManager;
+import winetavern.model.user.Employee;
+import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.PersonTitle;
 
 import java.time.LocalDateTime;
@@ -42,7 +42,7 @@ import static org.salespointframework.core.Currencies.EURO;
 public class WineTavernDataInitializer implements DataInitializer{
 
     @Autowired private UserAccountManager userAccountManager;
-    @Autowired private PersonManager personManager;
+    @Autowired private EmployeeManager employeeManager;
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ExpenseGroupRepository expenseGroups;
@@ -74,7 +74,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         admin.setEmail("peter.maffay@t-online.de");
         manager.save(admin);
         String birthday = "1979/07/15";
-        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
+        employeeManager.save(new Employee(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
     }
 
     private boolean isAdminInDB(UserAccountManager manager, String adminName) {
@@ -163,7 +163,7 @@ public class WineTavernDataInitializer implements DataInitializer{
      */
     public void initializeShift() {
         shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),
-                personManager.findAll().iterator().next()));
+                employeeManager.findAll().iterator().next()));
     }
 
 }
