@@ -11,10 +11,10 @@
     <div class="row">
         <div class="col-xs-12 text-xs-right">
             <div class="icon__wrap">
-                <button id="cardBtn" class="icon__button icon-card btn btn-primary">
+                <button id="cardBtn" class="icon__button active icon-card btn btn-primary">
                     <i class="fa fa-th-large fa-fw fa-lg" aria-hidden="true"></i>
                 </button>
-                <button id="listBtn" class="icon__button active icon-list btn btn-primary">
+                <button id="listBtn" class="icon__button  icon-list btn btn-primary">
                     <i class="fa fa-th-list fa-fw fa-lg" aria-hidden="true"></i>
                 </button>
             </div>
@@ -43,7 +43,7 @@
 
 <div class="container" th:if="${desk != null and reservationtime != null}">
     <div class="row">
-        <div class="col-xs-8 ">
+        <div class="col-xs-12 col-md-4">
             <form method="post" action="/service/reservation/add">
                 <div class="form__bg">
                     <div class="form-group"> 
@@ -73,8 +73,40 @@
                     </div>
                 </div>
             </form>
-            <p>Hier muss wieder die Tabelle zu den Reservierungen des Tisches eingebaut werden.</p>
         </div>
+    <div class="col-md-8">
+        <div class="container__wrap">
+            <div class="heading">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>
+                            <span class="fa fa-users" ></span> Tisch (#) Reservierung
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container__table">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Zeit</th>
+                        <th>Personen</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr >
+                        <th ></th>
+                        <th ></th>
+                        <td ></td>
+                        <td ></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 
