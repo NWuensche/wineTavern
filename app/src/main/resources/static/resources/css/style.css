@@ -343,6 +343,9 @@ body .list-group-item-action .fa-circle-o{
     padding:5px;
     border-radius:5px;
 }
+.reservation .icon__wrap{
+    margin-top: 1rem;
+}
 .reservation .icon-list {
     border-radius: 0.2rem 0 0 0.2rem;
 }
@@ -462,31 +465,29 @@ body .list-group-item-action .fa-circle-o{
 
 /* Users */
 
-.users .icon__button.btn-primary {
+.icon__button.btn-primary {
     background-color: #fff;
     border: none;
     margin: 0.5rem 0;
 }
-.users .icon__button.btn-primary.active{
+.icon__button.btn-primary.active{
     background-color: #243648;
 }
 
-.users .icon__button .fa {
+.icon__button .fa {
     color: #243648;
 }
-.users .icon__button.btn-primary.active .fa{
+.icon__button.btn-primary.active .fa{
     color: #A6B2C5;
 }
-
-.users .icon-list {
+.icon-list {
     border-radius: 0.2rem 0 0 0.2rem;
 }
-
-.users .icon-card {
+.icon-card {
     border-radius: 0 0.2rem 0.2rem 0;
     float: right;
 }
-.users .container__user-cards{
+.container__cards{
     display: none;
 }
 .users .user-card{
@@ -495,7 +496,7 @@ body .list-group-item-action .fa-circle-o{
     border: 0.1rem solid;
     background-color: lightgrey;
 }
-.users .container__user-cards .user-card img.image-user{
+.users .container__cards .user-card img.image-user{
     margin: 1rem 0 2rem 0;
     float: none;
 }

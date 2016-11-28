@@ -12,7 +12,7 @@ $(document).ready(function(){
         if($(this).hasClass('active')) return false;
         $('.icon__wrap button').toggleClass('active');
         $('.container__table').slideUp('slow');
-        $('.container__user-cards').slideDown('slow');
+        $('.container__cards').slideDown('slow');
     });
 
     //  click table show list
@@ -20,7 +20,9 @@ $(document).ready(function(){
         e.preventDefault();
         if($(this).hasClass('active')) return false;
         $('.icon__wrap button').toggleClass('active');
-        $('.container__user-cards').slideUp('slow');
+        $('.container__cards').slideUp('slow');
         $('.container__table').slideDown('slow');
     });
+
+
 });
