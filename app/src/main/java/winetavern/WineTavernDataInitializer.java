@@ -22,10 +22,9 @@ import winetavern.model.reservation.Desk;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.user.Person;
-import winetavern.model.user.PersonManager;
-import winetavern.model.user.PersonTitle;
+import winetavern.model.user.*;
 
+import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +41,7 @@ import static org.salespointframework.core.Currencies.EURO;
 public class WineTavernDataInitializer implements DataInitializer{
 
     @Autowired private UserAccountManager userAccountManager;
-    @Autowired private PersonManager personManager;
+    @Autowired private EmployeeManager employeeManager;
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ExpenseGroupRepository expenseGroups;
@@ -51,6 +50,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private DayMenuRepository dayMenuRepository;
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private ProductCatalog productCatalog;
+    @Autowired private ExternalManager externalManager;
 
     private String adminName = "admin";
 
@@ -64,6 +64,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeExpenseGroups();
             initializeTables();
             initializeDayMenuWithItems();
+            initializeExterns();
         }
     }
 
@@ -74,12 +75,14 @@ public class WineTavernDataInitializer implements DataInitializer{
         admin.setEmail("peter.maffay@t-online.de");
         manager.save(admin);
         String birthday = "1979/07/15";
-        personManager.save(new Person(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
+        employeeManager.save(new Employee(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
     }
 
     private boolean isAdminInDB(UserAccountManager manager, String adminName) {
         return manager.findByUsername(adminName).isPresent();
     }
+
+
 
     public void initializeEvents() {
         eventCatalog.save(new Event("Go hard or go home - Ü80 Party", Money.of(7, EURO),
@@ -163,7 +166,19 @@ public class WineTavernDataInitializer implements DataInitializer{
      */
     public void initializeShift() {
         shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),
-                personManager.findAll().iterator().next()));
+                employeeManager.findAll().iterator().next()));
+    }
+
+    public void initializeExterns() {
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusHours(3);
+        TimeInterval timeInterval = new TimeInterval(start, end);
+
+        MonetaryAmount wage = Money.of(300, EURO);
+        Event event = eventCatalog.findByName("Go hard or go home - Ü80 Party").iterator().next();
+        External external = new External(event, "DJ Cool", wage);
+
+        externalManager.save(external);
     }
 
 }

@@ -5,14 +5,13 @@ import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
-import winetavern.model.user.PersonManager;
+import winetavern.model.user.EmployeeManager;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -26,7 +25,7 @@ public class BillController {
     @NotNull private final BillRepository bills;
     @NotNull private final BillItemRepository billItems;
     @NotNull private final AuthenticationManager authenticationManager;
-    @NotNull private final PersonManager persons;
+    @NotNull private final EmployeeManager employees;
     @NotNull private final DayMenuItemRepository dayMenuItems;
     @NotNull private final DeskRepository tables;
     @NotNull private final Accountancy accountancy;
@@ -34,11 +33,11 @@ public class BillController {
     @NotNull private final BusinessTime businessTime;
 
     @Autowired
-    public BillController(BillRepository bills, BillItemRepository billItems, AuthenticationManager authenticationManager, PersonManager persons, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime) {
+    public BillController(BillRepository bills, BillItemRepository billItems, AuthenticationManager authenticationManager, EmployeeManager employees, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime) {
         this.bills = bills;
         this.billItems = billItems;
         this.authenticationManager = authenticationManager;
-        this.persons = persons;
+        this.employees = employees;
         this.dayMenuItems = dayMenuItems;
         this.tables = tables;
         this.accountancy = accountancy;
@@ -57,7 +56,7 @@ public class BillController {
     @RequestMapping("/service/bills/add")
     public String addBill(@ModelAttribute("table") String desk) {
         if(desk.equals("")){return "redirect:/service/bills";}
-        Bill bill = new Bill(desk, persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
+        Bill bill = new Bill(desk, employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get());
         bills.save(bill);
         return "redirect:/service/bills/details/" + bill.getId();
     }
@@ -148,7 +147,7 @@ public class BillController {
             accountancy.add( //the staff pays 90% of the selling price
                     new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9),
                     "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
-                    persons.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
+                            employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
                     expenseGroups.findByName("Bestellung").get())
             );
         }

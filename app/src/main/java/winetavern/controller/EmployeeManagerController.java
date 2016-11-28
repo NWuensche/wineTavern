@@ -1,6 +1,5 @@
 package winetavern.controller;
 
-import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.salespointframework.useraccount.Role;
 import org.springframework.ui.Model;
@@ -12,33 +11,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.UserAccountManager;
-import org.springframework.web.bind.annotation.RequestMethod;
-import winetavern.model.user.Person;
-import winetavern.model.user.PersonManager;
+import winetavern.model.user.Employee;
+import winetavern.model.user.EmployeeManager;
 
 /**
- * Controller, which maps {@link Person} related stuff
+ * Controller, which maps {@link Employee} related stuff
  * @author michel
  */
 
 @Controller
-public class PersonManagerController {
+public class EmployeeManagerController {
 
     @Autowired private UserAccountManager userAccountManager;
-    @Autowired private PersonManager personManager;
+    @Autowired private EmployeeManager employeeManager;
     @Autowired private AuthenticationManager authManager;
 
     @RequestMapping("/admin/management/users")
     public String addUsersMapper(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
-        model.addAttribute("personManager", personManager);
+        model.addAttribute("employeeManager", employeeManager);
         model.addAttribute("currUserAccount", authManager.getCurrentUser().get());
         return "users";
     }
 
     @RequestMapping("/admin/management/users/add")
-    public String addPerson(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
+    public String addEmployee(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
         UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(),
                 registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
         newAccount.setFirstname(registerCredentials.getFirstName());
@@ -46,43 +44,43 @@ public class PersonManagerController {
 
         userAccountManager.save(newAccount);
 
-        Person newPerson = new Person(newAccount, registerCredentials.getAddress(),
+        Employee newEmployee = new Employee(newAccount, registerCredentials.getAddress(),
                 registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
-        personManager.save(newPerson);
+        employeeManager.save(newEmployee);
 
         return "redirect:/admin/management/users";
     }
 
     @RequestMapping("/admin/management/users/edit/{pid}")
-    public String edit(@PathVariable("pid") Long id,
+    public String editEmployee(@PathVariable("pid") Long id,
                        @ModelAttribute(value="accountcredentials") AccountCredentials changeCredentials) {
-        Person changePerson = personManager.findOne(id).get();
+        Employee changeEmployee = employeeManager.findOne(id).get();
 
-        changePerson.getUserAccount().setLastname(changeCredentials.getLastName());
-        deleteRole(changePerson);
+        changeEmployee.getUserAccount().setLastname(changeCredentials.getLastName());
+        deleteRole(changeEmployee);
 
-        changePerson.getUserAccount().add(Role.of(changeCredentials.getRole()));
+        changeEmployee.getUserAccount().add(Role.of(changeCredentials.getRole()));
 
-        changePerson.setAddress(changeCredentials.getAddress());
+        changeEmployee.setAddress(changeCredentials.getAddress());
 
-        userAccountManager.save(changePerson.getUserAccount());
-        personManager.save(changePerson);
+        userAccountManager.save(changeEmployee.getUserAccount());
+        employeeManager.save(changeEmployee);
 
 
         return "redirect:/admin/management/users";
     }
 
-    private Person deleteRole(Person person) {
-        person.getUserAccount().remove(person.getRole());
-        return person;
+    private Employee deleteRole(Employee employee) {
+        employee.getUserAccount().remove(employee.getRole());
+        return employee;
     }
 
     @RequestMapping("/admin/management/users/disable/{pid}")
-    public String disablePerson(@PathVariable("pid") Long id) {
-        Person disablePerson = personManager.findOne(id).get();
-        disablePerson.getUserAccount().setEnabled(false);
-        userAccountManager.save(disablePerson.getUserAccount());
-        personManager.save(disablePerson);
+    public String disableEmployee(@PathVariable("pid") Long id) {
+        Employee disableEmployee = employeeManager.findOne(id).get();
+        disableEmployee.getUserAccount().setEnabled(false);
+        userAccountManager.save(disableEmployee.getUserAccount());
+        employeeManager.save(disableEmployee);
 
         return "redirect:/admin/management/users";
     }

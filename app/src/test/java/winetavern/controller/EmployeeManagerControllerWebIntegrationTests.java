@@ -18,22 +18,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
-import winetavern.model.user.Person;
-import winetavern.model.user.PersonManager;
+import winetavern.model.user.Employee;
+import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 /**
- * Test class für {@link PersonManagerController}
+ * Test class für {@link EmployeeManagerController}
  * @author Niklas Wünsche
  */
 
 @Transactional
-public class PersonManagerControllerWebIntegrationTests extends AbstractWebIntegrationTests {
+public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
-    @Autowired PersonManager personManager;
+    @Autowired
+    EmployeeManager employeeManager;
     @Autowired UserAccountManager userAccountManager;
 
     private String userName;
@@ -89,7 +90,7 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
     }
 
     @Test
-    public void savedNewPerson() throws Exception {
+    public void savedNewEmployee() throws Exception {
         RequestBuilder request = createRequestBuilder(userName, password);
         mvc.perform(request);
 
@@ -100,54 +101,54 @@ public class PersonManagerControllerWebIntegrationTests extends AbstractWebInteg
         assertThat(user.get().getFirstname(), is("Hans"));
         assertThat(user.get().getLastname(), is("Müller"));
 
-        Optional<Person> person = personManager.findByUserAccount(user.get());
-        assertThat(person.isPresent(), is(true));
-        assertThat(person.get().getBirthday().get(), is(LocalDate.of(1990,12,12)));
-        assertThat(person.get().getAddress().get(), is("Mein Haus"));
-        assertThat(person.get().getDisplayNameOfRole(), is("Koch"));
-        assertThat(person.get().getPersonTitle(), is("Herr"));
+        Optional<Employee> employee = employeeManager.findByUserAccount(user.get());
+        assertThat(employee.isPresent(), is(true));
+        assertThat(employee.get().getBirthday().get(), is(LocalDate.of(1990,12,12)));
+        assertThat(employee.get().getAddress().get(), is("Mein Haus"));
+        assertThat(employee.get().getDisplayNameOfRole(), is("Koch"));
+        assertThat(employee.get().getPersonTitle(), is("Herr"));
     }
 
     @Test
-    public void changeNewPerson() throws Exception{
-        saveNewPerson();
-        String personId = getPersonId();
+    public void changeNewEmployee() throws Exception{
+        saveNewEmployee();
+        String employeeId = getEmployeeId();
 
-        mvc.perform(get("/admin/management/users/edit/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        mvc.perform(get("/admin/management/users/edit/" + employeeId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("firstName", "DontSave")
                 .param("lastName", "Schwab")
                 .param("address", "Best House")
                 .param("role", Roles.SERVICE.getNameOfRoleWithPrefix()));
 
-        Person changedPerson = personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
+        Employee changedEmployee = employeeManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
 
-        assertThat(changedPerson.getUserAccount().getFirstname(), is("Hans"));
-        assertThat(changedPerson.getUserAccount().getLastname(), is("Schwab"));
-        assertThat(changedPerson.getAddress().get(), is("Best House"));
-        assertThat(changedPerson.getUserAccount().getRoles().stream().findFirst().get(), is(Roles.SERVICE.getRole()));
+        assertThat(changedEmployee.getUserAccount().getFirstname(), is("Hans"));
+        assertThat(changedEmployee.getUserAccount().getLastname(), is("Schwab"));
+        assertThat(changedEmployee.getAddress().get(), is("Best House"));
+        assertThat(changedEmployee.getUserAccount().getRoles().stream().findFirst().get(), is(Roles.SERVICE.getRole()));
 
     }
 
-    private void saveNewPerson() throws Exception{
+    private void saveNewEmployee() throws Exception{
         RequestBuilder request = createRequestBuilder(userName, password);
         mvc.perform(request);
     }
 
-    private String getPersonId() {
-        return personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get().getId().toString();
+    private String getEmployeeId() {
+        return employeeManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get().getId().toString();
     }
 
     @Test
-    public void deletePerson() throws Exception{
-        saveNewPerson();
-        String personId = getPersonId();
+    public void deleteEmployee() throws Exception{
+        saveNewEmployee();
+        String employeeId = getEmployeeId();
 
-        mvc.perform(get("/admin/management/users/disable/" + personId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
+        mvc.perform(get("/admin/management/users/disable/" + employeeId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
 
-        Person deletedPerson = personManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
+        Employee deletedEmployee = employeeManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
 
-        assertThat(deletedPerson.isEnabled(), is(false));
-        assertThat(deletedPerson.getUserAccount().isEnabled(), is(false));
+        assertThat(deletedEmployee.isEnabled(), is(false));
+        assertThat(deletedEmployee.getUserAccount().isEnabled(), is(false));
 
     }
 
