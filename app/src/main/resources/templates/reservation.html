@@ -7,6 +7,7 @@
 </head>
 <body th:fragment="content">
 <div class="reservation">
+<div class="container" th:if="${success == null and desk == null}">
     <div class="row">
         <div class="col-xs-12 text-xs-right">
             <div class="icon__wrap">
@@ -19,8 +20,6 @@
             </div>
         </div>
     </div>
-
-<div class="container" th:if="${success == null and desk == null}">
     <div class="row">
         <div class="col-md-9">
             <div th:include="svgdesks::svgdesks">
