@@ -30,7 +30,7 @@ public class EmployeeManagerController {
     public String addUsersMapper(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
-        model.addAttribute("personManager", employeeManager);
+        model.addAttribute("employeeManager", employeeManager);
         model.addAttribute("currUserAccount", authManager.getCurrentUser().get());
         return "users";
     }

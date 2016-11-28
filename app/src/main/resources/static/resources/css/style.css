@@ -272,6 +272,9 @@ main table thead{
 main table tbody tr{
 
 }
+main .container__wrap .container__table{
+    display: block;
+}
 
 main .container__wrap .table__bottom {
     background-color: #1D997D;
@@ -431,10 +434,15 @@ body .list-group-item-action .fa-circle-o{
     border: none;
     margin: 0.5rem 0;
 }
+.users .icon__button.btn-primary.active{
+    background-color: #243648;
+}
 
 .users .icon__button .fa {
     color: #243648;
-
+}
+.users .icon__button.btn-primary.active .fa{
+    color: #A6B2C5;
 }
 
 .users .icon-list {
@@ -447,6 +455,52 @@ body .list-group-item-action .fa-circle-o{
 }
 .users .container__user-cards{
     display: none;
+}
+.users .user-card{
+    border-radius: 0.2rem;
+    margin: 1.2rem;
+    border: 0.1rem solid;
+    background-color: lightgrey;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+.users .user-card:hover .user-pencil{
+    position: absolute;
+    text-align: center;
+    background-color: rgba(36, 54, 72, 0.95);
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow:  0 4px 13px -2px rgba(0,0,0,0.8);
+}
+.users .user-pencil{
+    display: none;
+}
+.users .user-pencil .fa-pencil{
+    align-self: center;
+    width: 100%;
+    color: #A6B2C5;
+}
+.users .container__user-cards .user-card img.image-user{
+    margin: 1rem 0 2rem 0;
+    float: none;
+}
+.users .user__wrap{
+    margin-bottom: 1rem;
+}
+.users .user__wrap > span{
+    display: block;
+    text-align: center;
+}
+.users .user__wrap .user-firstname,.users .user__wrap .user-lastname{
+    font-weight: 600;
+}
+.users .user__wrap .user-role{
+    font-weight: 200;
+    margin-top: 1rem;
 }
 
 #disablePerson {

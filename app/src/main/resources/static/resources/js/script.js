@@ -9,14 +9,19 @@ $(document).ready(function(){
     // click table show userCards
     $('#cardBtn').on('click', function(e){
        e.preventDefault();
-        $('table').slideUp('slow');
-        $('.container__user-cards').slideDown('slow').removeAttr('display');
+        if($(this).hasClass('active')) return false;
+        $('.icon__wrap button').toggleClass('active');
+        $('.container__table').slideUp('slow');
+        $('.container__user-cards').slideDown('slow');
     });
 
     //  click table show list
     $('#listBtn').on('click', function(e){
         e.preventDefault();
-        $('.container__user-cards').slideUp('slow').css('display', 'none');
-        $('table').slideDown('slow');
+        if($(this).hasClass('active')) return false;
+        $('.icon__wrap button').toggleClass('active');
+        $('.container__user-cards').slideUp('slow');
+        $('.container__table').slideDown('slow');
     });
+
 });

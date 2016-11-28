@@ -181,8 +181,8 @@ public class ReservationManager {
         } else if(sort.get().equals("name")) {
             reservationIterator = reservations.findAllByOrderByGuestName();
             reservationIterator.forEach(reservationList::add);
-        } else if(sort.get().equals("employees")) {
-            reservationIterator = reservations.findAllByOrderByEmployees();
+        } else if(sort.get().equals("persons")) {
+            reservationIterator = reservations.findAllByOrderByPersons();
             reservationIterator.forEach(reservationList::add);
         } else {
             reservationIterator = reservations.findAll();
