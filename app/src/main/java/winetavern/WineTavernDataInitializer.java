@@ -22,10 +22,9 @@ import winetavern.model.reservation.Desk;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.user.Employee;
-import winetavern.model.user.EmployeeManager;
-import winetavern.model.user.PersonTitle;
+import winetavern.model.user.*;
 
+import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +50,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private DayMenuRepository dayMenuRepository;
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private ProductCatalog productCatalog;
+    @Autowired private ExternalManager externalManager;
 
     private String adminName = "admin";
 
@@ -64,6 +64,7 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeExpenseGroups();
             initializeTables();
             initializeDayMenuWithItems();
+            initializeExterns();
         }
     }
 
@@ -80,6 +81,8 @@ public class WineTavernDataInitializer implements DataInitializer{
     private boolean isAdminInDB(UserAccountManager manager, String adminName) {
         return manager.findByUsername(adminName).isPresent();
     }
+
+
 
     public void initializeEvents() {
         eventCatalog.save(new Event("Go hard or go home - Ü80 Party", Money.of(7, EURO),
@@ -164,6 +167,18 @@ public class WineTavernDataInitializer implements DataInitializer{
     public void initializeShift() {
         shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),
                 employeeManager.findAll().iterator().next()));
+    }
+
+    public void initializeExterns() {
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusHours(3);
+        TimeInterval timeInterval = new TimeInterval(start, end);
+
+        MonetaryAmount wage = Money.of(300, EURO);
+        Event event = eventCatalog.findByName("Go hard or go home - Ü80 Party").iterator().next();
+        External external = new External(event, "DJ Cool", wage);
+
+        externalManager.save(external);
     }
 
 }
