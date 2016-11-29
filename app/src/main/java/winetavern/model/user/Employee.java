@@ -1,5 +1,7 @@
 package winetavern.model.user;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 
@@ -19,11 +21,11 @@ import java.util.stream.Collectors;
 @Entity
 public class Employee extends Person {
 
-    @Id @GeneratedValue private Long id;
-    @OneToOne private UserAccount userAccount;
+    @Id @GeneratedValue @Getter private Long id;
+    @OneToOne @Getter private UserAccount userAccount;
 
-    private String address;
-    private LocalDate birthday;
+    @Getter @Setter private String address;
+    @Getter private LocalDate birthday;
     private String personTitle;
 
     @Deprecated
@@ -60,26 +62,6 @@ public class Employee extends Person {
 
     private int numberOfRoles(UserAccount userAccount) {
         return userAccount.getRoles().stream().collect(Collectors.toList()).size();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Optional<String> getAddress() {
-        return Optional.ofNullable(address);
-    }
-
-    public Optional<LocalDate> getBirthday() {
-        return Optional.ofNullable(birthday);
-    }
-
-    public UserAccount getUserAccount() {
-        return userAccount;
     }
 
     public String getDisplayNameOfRole() {

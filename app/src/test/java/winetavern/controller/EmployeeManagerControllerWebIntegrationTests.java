@@ -103,8 +103,8 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
 
         Optional<Employee> employee = employeeManager.findByUserAccount(user.get());
         assertThat(employee.isPresent(), is(true));
-        assertThat(employee.get().getBirthday().get(), is(LocalDate.of(1990,12,12)));
-        assertThat(employee.get().getAddress().get(), is("Mein Haus"));
+        assertThat(employee.get().getBirthday(), is(LocalDate.of(1990,12,12)));
+        assertThat(employee.get().getAddress(), is("Mein Haus"));
         assertThat(employee.get().getDisplayNameOfRole(), is("Koch"));
         assertThat(employee.get().getPersonTitle(), is("Herr"));
     }
@@ -124,7 +124,7 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
 
         assertThat(changedEmployee.getUserAccount().getFirstname(), is("Hans"));
         assertThat(changedEmployee.getUserAccount().getLastname(), is("Schwab"));
-        assertThat(changedEmployee.getAddress().get(), is("Best House"));
+        assertThat(changedEmployee.getAddress(), is("Best House"));
         assertThat(changedEmployee.getUserAccount().getRoles().stream().findFirst().get(), is(Roles.SERVICE.getRole()));
 
     }

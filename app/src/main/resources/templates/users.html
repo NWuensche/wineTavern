@@ -139,7 +139,7 @@
                         </div>
                         <div class="form-group">
                             <label for="address">Adresse</label>
-                            <input type="text" class="form-control" th:value="${employee.address.get()}" name="address" id="address" />
+                            <input type="text" class="form-control" th:value="${employee.address}" name="address" id="address" />
                         </div>
                         <div class="form-group" th:if="${!currUserAccount.equals(employee.userAccount)}">
                             <a th:href="@{'/admin/management/users/disable/' + ${employee.id}}">

@@ -3,6 +3,7 @@ package winetavern.model.user;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
 
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.useraccount.UserAccount;
@@ -43,7 +44,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
         employeeManager.save(employee);
         assertThat(employeeManager.findOne(employee.getId()).isPresent(), is(true));
         Employee savedEmployee = employeeManager.findOne(employee.getId()).get();
-        assertThat(savedEmployee.getBirthday().get(), is(LocalDate.of(1980, 12, 30)));
+        assertThat(savedEmployee.getBirthday(), is(LocalDate.of(1980, 12, 30)));
         assertThat(savedEmployee.getPersonTitle(), is(PersonTitle.MISTER.getGerman()));
         assertThat(savedEmployee.getUserAccount(), is(acc));
         assertThat(savedEmployee.getRole(), is(Roles.SERVICE.getRole()));
@@ -60,14 +61,14 @@ public class EmployeeTests extends AbstractIntegrationTests{
     public void newEmployeeInDBWithoutAddress() {
         employee = new Employee(acc, null, birthday, personTitle);
         employeeManager.save(employee);
-        assertThat(employeeManager.findOne(employee.getId()).get().getAddress().isPresent(), is((false)));
+        assertThat(employeeManager.findOne(employee.getId()).get().getAddress(), is(IsNull.nullValue()));
     }
 
     @Test
     public void newEmployeeInDBWithoutBirthday() {
         employee = new Employee(acc, address, null, personTitle);
         employeeManager.save(employee);
-        assertThat(employeeManager.findOne(employee.getId()).get().getBirthday().isPresent(), is(false));
+        assertThat(employeeManager.findOne(employee.getId()).get().getBirthday(), is(IsNull.nullValue()));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -103,7 +104,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
         employee = new Employee(acc, address, null, personTitle);
         String newAddress = "New Address";
         employee.setAddress(newAddress);
-        assertThat(employee.getAddress().get(), is(newAddress));
+        assertThat(employee.getAddress(), is(newAddress));
     }
 
     @Test
