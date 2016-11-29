@@ -40,6 +40,7 @@
                     <table class="table table-striped">
                         <thead>                        <tr>
                             <th>#</th>
+                            <th>Tisch</th>
                             <th>Name</th>
                             <th>Datum</th>
                             <th>Zeit</th>
@@ -47,15 +48,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="deskReservation : ${deskReservations}">
-                            <th th:text="${deskReservation.id}"></th>
-                            <th th:text="${deskReservation.guestName}"></th>
-                            <td th:text="${deskReservation.interval.start.toLocalDate()}"></td>
+                        <tr th:each="reservation : ${reservationTableList}">
+                            <th th:text="${reservation.id}"></th>
+                            <th th:text="${reservation.desk.name}"></th>
+                            <th th:text="${reservation.guestName}"></th>
+                            <td th:text="${reservation.interval.start.toLocalDate()}"></td>
                             <td th:text="
-                                ${ deskReservation.interval.start.toLocalTime() + ' - ' +
-                                deskReservation.interval.end.toLocalTime() }"
+                                ${ reservation.interval.start.toLocalTime() + ' - ' +
+                                reservation.interval.end.toLocalTime() }"
                             ></td>
-                            <td th:text="${deskReservation.persons}"></td>
+                            <td th:text="${reservation.persons}"></td>
                         </tr>
                         </tbody>
                     </table>

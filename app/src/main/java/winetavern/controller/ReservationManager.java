@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.apache.tomcat.jni.Local;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,33 +40,6 @@ public class ReservationManager {
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
     }
 
-    /**
-     * Custom Initbinder makes LocalDateTime working with javascript
-     */
-    @InitBinder
-    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
-        binder.registerCustomEditor(LocalDateTime.class, new LocalDateTimeEditor());
-    }
-
-    public class LocalDateTimeEditor extends PropertyEditorSupport {
-
-        // Converts a String to a LocalDateTime (when submitting form)
-        @Override
-        public void setAsText(String text) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-            LocalDateTime localDateTime = LocalDateTime.parse(text, formatter);
-            setValue(localDateTime);
-        }
-
-        // Converts a LocalDateTime to a String (when displaying form)
-        // not getting called (fuck spring)
-        @Override
-        public String getAsText() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-            String time = ((LocalDateTime)getValue()).format(formatter);
-            return time;
-        }
-    }
 
     /**
      * Creates a List containing all reserved Tables at the given time. Other desks can be assumed free.
@@ -113,10 +87,12 @@ public class ReservationManager {
 
 
     @RequestMapping("/service/reservation")
-    public ModelAndView reservationTimeValidator(@RequestParam(name = "reservationtime", required = false)
-                                                       LocalDateTime reservationTime,
-                                           @RequestParam("desk") Optional<String> deskName,
+    public ModelAndView reservationTimeValidator(@RequestParam("form") Optional<String> formType,
+                                                 @RequestParam("reservationtime") Optional<String> reservationTimeString,
+                                                 @RequestParam("sort") Optional<String> sort,
+                                                 @RequestParam("desk") Optional<String> deskName,
                                            ModelAndView modelAndView) {
+
         if(deskName.isPresent()) {
             modelAndView.addObject("desk", deskName.get());
             Desk desk = desks.findByName(deskName.get());
@@ -124,10 +100,15 @@ public class ReservationManager {
             modelAndView.addObject("deskcapacity", desk.getCapacity());
         }
 
-        if(reservationTime == null) {
-            return reservationCurrentTime(modelAndView);
-        } else {
+        if(reservationTimeString.isPresent()) {
+            LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter);
+            //get data for the table view
+            reservationTableData(sort, reservationTime, modelAndView);
             return reservationTime(reservationTime, modelAndView);
+        } else {
+            //get data for the table view
+            reservationTableData(sort, businessTime.getTime(), modelAndView);
+            return reservationCurrentTime(modelAndView);
         }
     }
 
@@ -144,35 +125,41 @@ public class ReservationManager {
     }
 
     @RequestMapping("/service/reservation/add")
-    public ModelAndView reservationAdd(@RequestParam("reservationtime") LocalDateTime reservationTime,
+    public ModelAndView reservationAdd(@RequestParam("reservationtime") String reservationTimeString,
                                        @RequestParam("desk") String deskName,
                                        @RequestParam("amount") Integer amount,
                                        @RequestParam("duration") Integer duration,
                                        @RequestParam("name") String name,
-                                       ModelAndView mvc) {
+                                       ModelAndView modelAndView) {
+        LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString, dateTimeFormatter);
         Desk desk = desks.findByName(deskName);
         LocalDateTime endTime = reservationTime.plusMinutes(duration);
         TimeInterval timeInterval = new TimeInterval(reservationTime, endTime);
         Reservation reservation = new Reservation(name, amount, desk, timeInterval);
         reservations.save(reservation);
 
-        mvc.setViewName("redirect:/service/reservation");
-        return mvc;
+        modelAndView.setViewName("redirect:/service/reservation");
+        return modelAndView;
     }
 
     @RequestMapping("/service/reservation/remove")
-    public ModelAndView reservationRemove(@RequestParam("reservation") Long reservationId, ModelAndView mvc) {
+    public ModelAndView reservationRemove(@RequestParam("reservation") Long reservationId,
+                                          ModelAndView modelAndView) {
         reservations.delete(reservationId);
-        mvc.setViewName("redirect:/service/reservation/showall");
-        return mvc;
+        modelAndView.setViewName("redirect:/service/reservation");
+        return modelAndView;
     }
 
+    /**
+     * returns data for the table view.
+     */
+    public ModelAndView reservationTableData(Optional<String> sort,
+                                             LocalDateTime time,
+                                             ModelAndView modelAndView) {
 
-    @RequestMapping(value = "/service/reservation/showall", method = RequestMethod.GET)
-    public String showAllReservations(@RequestParam("sort") Optional<String> sort, Model model){
         Iterable<Reservation> reservationIterator;
-
         List<Reservation> reservationList = new LinkedList<>();
+
         if(!sort.isPresent()) {
             reservationIterator = reservations.findAll();
             reservationIterator.forEach(reservationList::add);
@@ -191,52 +178,21 @@ public class ReservationManager {
             reservationIterator.forEach(reservationList::add);
         }
 
-
-        reservationList = selectGreaterThanNow(reservationList);
-        model.addAttribute("reservationAmount", reservationList.size());
-        model.addAttribute("reservationList", reservationList);
-        return "allreservations";
+        reservationList = pickLater(time, reservationList);
+        //modelAndView.addObject("reservationAmount", reservationList.size());
+        modelAndView.addObject("reservationTableList", reservationList);
+        return modelAndView;
     }
 
-    private List<Reservation> selectGreaterThanNow(List<Reservation> list) {
+    private List<Reservation> pickLater(LocalDateTime time, List<Reservation> list) {
         List<Reservation> res = new LinkedList<>();
         for (Reservation reservation: list)
-            if (reservation.getInterval().getEnd().isAfter(businessTime.getTime()))
+            if (reservation.getInterval().getEnd().isAfter(time))
                 res.add(reservation);
 
         return res;
     }
 
-    private Map<LocalDateTime, Desk> getFreeDesks(LocalDateTime time, int capacity) {
-        Map<LocalDateTime, Desk> res = new TreeMap<>();
-
-
-        Iterable<Reservation> allReservations = reservations.findAll();
-        List<LocalDateTime> offset = new ArrayList<>();
-        offset.add(time);
-        for(int i = 1; i < 6; i++) {
-            offset.add(time.plusMinutes(i * 30));
-            offset.add(time.minusMinutes(i * 30));
-        }
-        for(LocalDateTime i : offset){
-            Iterable<Desk> allTables = desks.findByCapacityGreaterThanEqualOrderByCapacity(capacity);
-            List<Desk> tableList = new ArrayList<>();
-            allTables.forEach(tableList::add);
-            for (Reservation reservation : allReservations) {
-                TimeInterval interval = new TimeInterval(i, i.plusMinutes(150));
-                if(interval.intersects(reservation.getInterval())){
-                    tableList.remove(reservation.getDesk());
-                }
-            }
-            if(i.equals(time) && !tableList.isEmpty()){
-                res.put(time, tableList.get(0));
-                return res;
-            }
-            if(!tableList.isEmpty()) res.put(i,tableList.get(0));
-        }
-
-        return res;
-    }
 
 
 
