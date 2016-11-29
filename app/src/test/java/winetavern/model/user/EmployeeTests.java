@@ -1,5 +1,6 @@
 package winetavern.model.user;
 
+import static java.lang.reflect.Modifier.PROTECTED;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
 
@@ -16,6 +17,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 /**
  * Test class for {@link Employee}
@@ -144,9 +146,21 @@ public class EmployeeTests extends AbstractIntegrationTests{
 
     @Test
     public void depractedAndProtectedConstructorExists() {
-        Constructor<?> protectedConstructor = Employee.class.getDeclaredConstructors()[1];
+        Constructor<?> protectedConstructor = findProtectedConstructor();
         Annotation annotation = protectedConstructor.getDeclaredAnnotations()[0];
         assertThat(annotation.annotationType().toString(), is(Deprecated.class.toString()));
+    }
+
+    /**
+     * @implNote Because the place of the constructors in the array can vary, you have search the protected one
+     */
+    private Constructor<?> findProtectedConstructor() {
+        for(Constructor<?> constructor : Employee.class.getDeclaredConstructors()) {
+            if(constructor.getModifiers() == PROTECTED) {
+                return constructor;
+            }
+        }
+        throw new NoSuchElementException("Protected constructor not found!");
     }
 
 }
