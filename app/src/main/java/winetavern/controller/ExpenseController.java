@@ -2,6 +2,9 @@ package winetavern.controller;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.accountancy.AccountancyEntry;
+import org.salespointframework.accountancy.AccountancyEntryIdentifier;
+import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -42,7 +46,20 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
-                               @ModelAttribute("date") String date, Model model) {
+                               @ModelAttribute("date") String date,
+                               @ModelAttribute("cover") Optional<String> cover, Model model) {
+        if (cover.isPresent()) { //RLY SALESPOIN?! NO STRING -> ID????
+            String[] args = cover.get().split("\\|");
+            for (AccountancyEntry exp : accountancy.findAll()) {
+                for (String arg : args) {
+                    if (arg.equals(exp.getId().toString())) {
+                        ((Expense) exp).cover();
+                        accountancy.add(exp);
+                    }
+                }
+            }
+        }
+
         if (type.equals("")) type = "0";
         if (person.equals("")) person = "0";
         Set<Expense> expOpen = filter(type, person, false, date);
