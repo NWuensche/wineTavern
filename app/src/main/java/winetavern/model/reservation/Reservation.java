@@ -17,7 +17,9 @@ public class Reservation {
 
     private String guestName;
     private int persons;
-    @ManyToOne(targetEntity=Desk.class, cascade = CascadeType.ALL) Desk desk;
+    @ManyToOne(targetEntity=Desk.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "desk_id")
+    private Desk desk;
     @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
 
 

@@ -115,11 +115,13 @@ public class ReservationManager {
     @RequestMapping("/service/reservation")
     public ModelAndView reservationTimeValidator(@RequestParam(name = "reservationtime", required = false)
                                                        LocalDateTime reservationTime,
-                                           @RequestParam("desk") Optional<String> desk,
+                                           @RequestParam("desk") Optional<String> deskName,
                                            ModelAndView modelAndView) {
-        if(desk.isPresent()) {
-            modelAndView.addObject("desk", desk.get());
-            modelAndView.addObject("deskcapacity", desks.findByName(desk.get()).getCapacity());
+        if(deskName.isPresent()) {
+            modelAndView.addObject("desk", deskName.get());
+            Desk desk = desks.findByName(deskName.get());
+            modelAndView.addObject("deskReservations", desk.getReservationList());
+            modelAndView.addObject("deskcapacity", desk.getCapacity());
         }
 
         if(reservationTime == null) {

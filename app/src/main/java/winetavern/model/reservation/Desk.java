@@ -14,7 +14,8 @@ import java.util.List;
 public class Desk {
 
     @Id @GeneratedValue private long id;
-    @OneToMany(targetEntity=Reservation.class, mappedBy="desk") List<Reservation> reservationList;
+    @OneToMany(targetEntity=Reservation.class, mappedBy="desk", fetch = FetchType.EAGER)
+    List<Reservation> reservationList;
 
     private int capacity;
     private String name;
@@ -30,7 +31,6 @@ public class Desk {
 
         this.name = name;
         this.capacity = capacity;
-        this.reservationList = new ArrayList<>();
     }
 
     public  long getId() {

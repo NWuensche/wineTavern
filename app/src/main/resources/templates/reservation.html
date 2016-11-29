@@ -38,20 +38,24 @@
                     </div>
                 </div>
                     <table class="table table-striped">
-                        <thead>
-                        <tr>
+                        <thead>                        <tr>
                             <th>#</th>
                             <th>Name</th>
+                            <th>Datum</th>
                             <th>Zeit</th>
                             <th>Personen</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr >
-                            <th ></th>
-                            <th ></th>
-                            <td ></td>
-                            <td ></td>
+                        <tr th:each="deskReservation : ${deskReservations}">
+                            <th th:text="${deskReservation.id}"></th>
+                            <th th:text="${deskReservation.guestName}"></th>
+                            <td th:text="${deskReservation.interval.start.toLocalDate()}"></td>
+                            <td th:text="
+                                ${ deskReservation.interval.start.toLocalTime() + ' - ' +
+                                deskReservation.interval.end.toLocalTime() }"
+                            ></td>
+                            <td th:text="${deskReservation.persons}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -126,16 +130,21 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Datum</th>
                         <th>Zeit</th>
                         <th>Personen</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr >
-                        <th ></th>
-                        <th ></th>
-                        <td ></td>
-                        <td ></td>
+                    <tr th:each="deskReservation : ${deskReservations}">
+                        <th th:text="${deskReservation.id}"></th>
+                        <th th:text="${deskReservation.guestName}"></th>
+                        <td th:text="${deskReservation.interval.start.toLocalDate()}"></td>
+                        <td th:text="
+                                ${ deskReservation.interval.start.toLocalTime() + ' - ' +
+                                deskReservation.interval.end.toLocalTime() }"
+                        ></td>
+                        <td th:text="${deskReservation.persons}"></td>
                     </tr>
                     </tbody>
                 </table>
