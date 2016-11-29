@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -138,6 +140,13 @@ public class EmployeeTests extends AbstractIntegrationTests{
     private void disableOneEmployee() {
         Employee disableEmployee2 = employeeManager.findByUserAccount(userAccountManager.findByUsername("testAccount2").get()).get();
         disableEmployee2.getUserAccount().setEnabled(false);
+    }
+
+    @Test
+    public void depractedAndProtectedConstructorExists() {
+        Constructor<?> protectedConstructor = Employee.class.getDeclaredConstructors()[1];
+        Annotation annotation = protectedConstructor.getDeclaredAnnotations()[0];
+        assertThat(annotation.annotationType().toString(), is(Deprecated.class.toString()));
     }
 
 }
