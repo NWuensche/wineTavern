@@ -57,6 +57,7 @@ public class Reservation {
 
     public void setDesk(Desk desk) {
         this.desk = desk;
+        // TODO Old Desk will not be deleted
         desk.addReservation(this);
     }
 
