@@ -1,7 +1,5 @@
 package winetavern.model.reservation;
 
-import com.sun.org.apache.regexp.internal.RE;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

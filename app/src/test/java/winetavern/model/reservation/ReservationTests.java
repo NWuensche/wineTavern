@@ -37,6 +37,7 @@ public class ReservationTests extends AbstractIntegrationTests {
         deskRepository.save(desk);
 
         reservation = new Reservation("Gast 1", 3, desk, interval);
+        reservationRepository.save(reservation);
     }
 
     @Test(expected = NumberOutOfRange.class)
