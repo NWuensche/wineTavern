@@ -1,6 +1,8 @@
 package winetavern.model.user;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  */
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class Employee extends Person {
 
     @Id @GeneratedValue @Getter private Long id;
@@ -26,10 +29,7 @@ public class Employee extends Person {
 
     @Getter @Setter private String address;
     @Getter private LocalDate birthday;
-    private String personTitle;
-
-    @Deprecated
-    protected Employee() {}
+    @Getter private String personTitle;
 
     /**
      * @param userAccount needs to have exactly 1 role
@@ -72,10 +72,6 @@ public class Employee extends Person {
 
     public boolean isEnabled() {
         return userAccount.isEnabled();
-    }
-
-    public String getPersonTitle() {
-        return personTitle;
     }
 
     public Role getRole() {
