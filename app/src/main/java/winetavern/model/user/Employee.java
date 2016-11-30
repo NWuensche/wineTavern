@@ -12,10 +12,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Entity for Employees
+ * Entity for all Persons, that have a login to the Website (like admin or service)
  * Adds information to UserAccount
  * @author Niklas Wünsche
- * @implNote The UserAccount has exactly 1 Role
+ * @implNote The UserAccount has to have exactly 1 Role
  */
 
 @Entity

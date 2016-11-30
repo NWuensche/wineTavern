@@ -1,7 +1,9 @@
 package winetavern.model.user;
 
 /**
- * Created by nwuensche on 28.11.16.
+ * Super class for {@link External}s and {@link Employee}s
+ * @author Niklas Wünsche
  */
+
 public abstract class Person {
 }

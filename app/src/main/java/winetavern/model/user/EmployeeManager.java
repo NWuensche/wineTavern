@@ -12,7 +12,6 @@ import java.util.Optional;
  * @author Niklas Wünsche
  */
 
-
 public interface EmployeeManager extends SalespointRepository<Employee, Long> {
     Optional<Employee> findByUserAccount(UserAccount account);
 

@@ -162,7 +162,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     /**
-     * Should be deleted in the final programm
+     * Should be deleted in the final program
      */
     public void initializeShift() {
         shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),

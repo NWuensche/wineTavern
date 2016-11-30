@@ -3,6 +3,7 @@ package winetavern.model.user;
 import org.salespointframework.useraccount.Role;
 
 /**
+ * Enum of all Roles that a {@link Employee} can have. Used for controlling visible sites on the website.
  * @author Niklas Wünsche
  */
 
