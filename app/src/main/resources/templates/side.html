@@ -73,12 +73,12 @@
                     <span>Abrechnung</span>
                 </a>
                 <div id="rechnungen" class="collapse">
-                    <a th:href="@{/accountancy/accountancy}" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT','ROLE_ADMIN')" class="list-group-item list-group-item-action side__menu side-module__container">
-                        <i class="fa fa-circle-o" aria-hidden="true"></i>
+                    <a th:href="@{/accountancy/expenses}" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT','ROLE_ADMIN')"
+                       class="list-group-item list-group-item-action side__menu side-module__container">
                         <span>Tagesabrechnung</span>
                     </a>
-                    <a th:href="@{/service/accountancy}" sec:authorize="hasAnyRole('ROLE_SERVICE','ROLE_ADMIN')" class="list-group-item list-group-item-action side__menu side-module__container">
-                        <i class="fa fa-circle-o" aria-hidden="true"></i>
+                    <a th:href="@{/service/bills}" sec:authorize="hasAnyRole('ROLE_SERVICE','ROLE_ADMIN')"
+                       class="list-group-item list-group-item-action side__menu side-module__container">
                         <span>Rechnungen</span>
                     </a>
                 </div>

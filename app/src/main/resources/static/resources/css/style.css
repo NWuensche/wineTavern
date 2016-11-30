@@ -1,5 +1,7 @@
 /* CSS RESET */
-
+::-webkit-scrollbar {
+    display: none;
+}
 
 /*--------  BASE  --------*/
 
@@ -414,6 +416,15 @@ body .list-group-item-action .fa-circle-o{
 
 .card__daymenuitems .card:hover {
     background:#eee;
+}
+
+.padding__box {
+    padding:20px;
+}
+
+.checkbox__huge {
+    width:25px;
+    height:25px;
 }
 
 /* Form Style */
