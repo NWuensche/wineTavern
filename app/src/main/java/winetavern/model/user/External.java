@@ -1,5 +1,6 @@
 package winetavern.model.user;
 
+import lombok.Getter;
 import winetavern.model.management.Event;
 
 import javax.money.MonetaryAmount;
@@ -13,15 +14,14 @@ import javax.persistence.OneToOne;
  */
 
 @Entity
+@Getter
 public class External extends Person {
 
     @Id @GeneratedValue private Long id;
-
     @OneToOne private Event event;
-
     private String name;
     private MonetaryAmount wage;
-    private boolean wagePayed;
+    private boolean payed;
 
     @Deprecated
     protected External() {}
@@ -30,31 +30,15 @@ public class External extends Person {
         this.event = event;
         this.name = name;
         this.wage = wage;
-        wagePayed = false;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public MonetaryAmount getWage() {
-        return wage;
+        payed = false;
     }
 
     public void pay() throws IllegalStateException{
-        if(wasPayed()) {
+        if(isPayed()) {
             throw new IllegalStateException("External was already payed!");
         }
 
-        wagePayed = true;
-    }
-
-    public boolean wasPayed() {
-        return wagePayed;
+        payed = true;
     }
 
 }
