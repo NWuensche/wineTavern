@@ -61,23 +61,20 @@ public class EmployeeTests extends AbstractIntegrationTests{
         assertThat(employeeManager.findOne(employee.getId()).get().getDisplayNameOfRole(), is("Bedienung"));
     }
 
-    @Test
-    public void newEmployeeInDBWithoutAddress() {
+    @Test(expected = NullPointerException.class)
+    public void throwWhenNoAddress() {
         employee = new Employee(acc, null, birthday, personTitle);
-        employeeManager.save(employee);
-        assertThat(employeeManager.findOne(employee.getId()).get().getAddress(), is(IsNull.nullValue()));
     }
 
-    @Test
-    public void newEmployeeInDBWithoutBirthday() {
+    @Test(expected = NullPointerException.class)
+    public void throwWhenNoBirthday() {
         employee = new Employee(acc, address, null, personTitle);
-        employeeManager.save(employee);
-        assertThat(employeeManager.findOne(employee.getId()).get().getBirthday(), is(IsNull.nullValue()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenEmployeeHas2Roles() {
-        acc = userAccountManager.create("testAccount2", "1234", Roles.SERVICE.getRole(), Roles.ACCOUNTANT.getRole());
+        acc = userAccountManager.create("testAccount2", "1234",
+                Roles.SERVICE.getRole(), Roles.ACCOUNTANT.getRole());
         employee = new Employee(acc, address, birthday, personTitle);
     }
 
@@ -89,7 +86,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
 
     @Test
     public void isNotEnabled() {
-        employee = new Employee(acc, address, null, personTitle);
+        employee = new Employee(acc, address, birthday, personTitle);
         employeeManager.save(employee);
         acc.setEnabled(false);
         assertThat(employee.isEnabled(), is(false));
@@ -97,7 +94,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
 
     @Test
     public void isEnabled() {
-        employee = new Employee(acc, address, null, personTitle);
+        employee = new Employee(acc, address, birthday, personTitle);
         employeeManager.save(employee);
         acc.setEnabled(true);
         assertThat(employee.isEnabled(), is(true));
@@ -105,7 +102,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
 
     @Test
     public void setAddressRight() {
-        employee = new Employee(acc, address, null, personTitle);
+        employee = new Employee(acc, address, birthday, personTitle);
         String newAddress = "New Address";
         employee.setAddress(newAddress);
         assertThat(employee.getAddress(), is(newAddress));
@@ -120,7 +117,8 @@ public class EmployeeTests extends AbstractIntegrationTests{
 
         ArrayList<Employee> enabled = employeeManager.findEnabled();
 
-        Employee employee3 = employeeManager.findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
+        Employee employee3 = employeeManager
+                .findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
         assertArrayEquals(enabled.toArray(), new Employee[]{employee, employee3});
     }
 

@@ -1,13 +1,11 @@
 package winetavern.model.user;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -34,11 +32,9 @@ public class Employee extends Person {
 
     /**
      * @param userAccount needs to have exactly 1 role
-     * @param address can be null
-     * @param birthday can be null
      * @throws IllegalArgumentException if userAccount has not exactly 1 Role
      */
-    public Employee(UserAccount userAccount, String address, String birthday, String personTitle)
+    public Employee(UserAccount userAccount, @NonNull String address, @NonNull String birthday, String personTitle)
             throws IllegalArgumentException {
         if(numberOfRoles(userAccount) != 1) {
             throw new IllegalArgumentException("The UserAccount should have exactly 1 Role!");
@@ -51,10 +47,6 @@ public class Employee extends Person {
     }
 
     private LocalDate parseBirthday(String birthday) {
-        if(birthday == null) {
-            return null;
-        }
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate localDate = LocalDate.parse(birthday, formatter);
 
