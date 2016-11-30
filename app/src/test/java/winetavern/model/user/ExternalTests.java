@@ -38,10 +38,11 @@ public class ExternalTests {
     }
 
     @Test
-    public void getterRight() {
+    public void standardFunctionsRight() {
         assertThat(external.getEvent(), is(event));
         assertThat(external.getName(), is("name"));
         assertThat(external.getWage(), is(wage));
+        assertThat(external.toString(), is("name"));
     }
 
     @Test(expected = IllegalStateException.class)

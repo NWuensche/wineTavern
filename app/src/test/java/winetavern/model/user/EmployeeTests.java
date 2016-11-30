@@ -39,6 +39,8 @@ public class EmployeeTests extends AbstractIntegrationTests{
     @Before
     public void setUp() {
         acc = userAccountManager.create("testAccount", "1234", Roles.SERVICE.getRole());
+        acc.setFirstname("Hans");
+        acc.setLastname("Müller");
         address = "Neuer Weg 3, 04912 Berlin";
         birthday = "1980/12/30";
     }
@@ -53,6 +55,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
         assertThat(savedEmployee.getPersonTitle(), is(PersonTitle.MISTER.getGerman()));
         assertThat(savedEmployee.getUserAccount(), is(acc));
         assertThat(savedEmployee.getRole(), is(Roles.SERVICE.getRole()));
+        assertThat(savedEmployee.toString(), is("Hans Müller"));
     }
 
         @Test

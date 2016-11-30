@@ -42,4 +42,9 @@ public class External extends Person {
         payed = true;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

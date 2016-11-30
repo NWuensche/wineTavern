@@ -27,7 +27,7 @@ public class EmployeeManagerController {
     @Autowired private AuthenticationManager authManager;
 
     @RequestMapping("/admin/management/users")
-    public String addUsersMapper(Model model){
+    public String usersSite(Model model){
         AccountCredentials registerCredentials = new AccountCredentials();
         model.addAttribute("accountcredentials", registerCredentials);
         model.addAttribute("employeeManager", employeeManager);
