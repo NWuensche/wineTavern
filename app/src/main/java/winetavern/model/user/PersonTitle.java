@@ -6,16 +6,18 @@ package winetavern.model.user;
  */
 
 public enum PersonTitle {
+
     MISTER("Herr"),
     MISSES("Frau");
 
-    private String personTitle;
+    private String germanTitle;
 
-    PersonTitle(String personTitle) {
-        this.personTitle = personTitle;
+    PersonTitle(String germanTitle) {
+        this.germanTitle = germanTitle;
     }
 
     public String getGerman() {
-        return personTitle;
+        return germanTitle;
     }
+
 }
