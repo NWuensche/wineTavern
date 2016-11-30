@@ -16,6 +16,7 @@ import winetavern.AbstractIntegrationTests;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -159,6 +160,11 @@ public class EmployeeTests extends AbstractIntegrationTests{
             }
         }
         throw new NoSuchElementException("Protected constructor not found!");
+    }
+
+    @Test(expected = DateTimeParseException.class)
+    public void throwWhenWrongBirthdayFormat() {
+        employee = new Employee(acc, address, "23/12/1996", personTitle);
     }
 
 }
