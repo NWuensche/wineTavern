@@ -21,7 +21,9 @@ public class Desk {
     private String name;
 
     @Deprecated
-    protected Desk(){}
+    protected Desk(){
+        this.reservationList = new ArrayList<>();
+    }
 
     public Desk(String name, int capacity) throws IllegalArgumentException {
 
@@ -31,6 +33,7 @@ public class Desk {
 
         this.name = name;
         this.capacity = capacity;
+        this.reservationList = new ArrayList<>();
     }
 
     public  long getId() {
