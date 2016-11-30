@@ -1,24 +1,16 @@
 package winetavern.controller;
 
-import org.apache.tomcat.jni.Local;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.reservation.*;
-
-
-import javax.servlet.http.HttpServletRequest;
-import java.beans.PropertyEditorSupport;
+import winetavern.model.reservation.Desk;
+import winetavern.model.reservation.DeskRepository;
+import winetavern.model.reservation.Reservation;
+import winetavern.model.reservation.ReservationRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

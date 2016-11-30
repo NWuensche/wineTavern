@@ -46,11 +46,10 @@ public class Application {
                     antMatchers("/accountancy/**").hasAnyRole("ADMIN, ACCOUNTANCY").
                     antMatchers("/service/**").hasAnyRole("ADMIN, SERVICE").
                     antMatchers("/kitchen/**").hasAnyRole("ADMIN, COOK").
-                    antMatchers("/visitor/**").permitAll().
                     antMatchers("/admin/**").hasRole("ADMIN").
                     antMatchers("/*/**").authenticated().and().
                     formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll().and().
-                    logout().logoutUrl("/logout").logoutSuccessUrl("/");
+                    logout().logoutUrl("/logout").logoutSuccessUrl("/login");
         }
 
     }

@@ -145,7 +145,7 @@ public class BillController {
         int diff = quantity - billItem.getQuantity();
         if (diff > 0) { //adds orders to expenses of staff
             accountancy.add( //the staff pays 90% of the selling price
-                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9),
+                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
                     "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
                             employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
                     expenseGroups.findByName("Bestellung").get())

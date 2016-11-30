@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head th:include="links::links">
+
+    <title>Tagesabrechnung</title>
+
+</head>
+<body th:fragment="content">
+<div class="bill__tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{'/accountancy/expenses'}">Offen</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{'/accountancy/expenses?tab=covered'}">Bezahlt</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active">Personenabrechnung</a>
+        </li>
+    </ul>
+</div>
+<div class="container__wrap">
+    <div class="container__head">
+        <h1>Tagesabrechnung</h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="padding__box">
+                <form th:if="${service}" method="post">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <select id="name" name="personId" class="form-control">
+                            <option th:each="person:${service}" th:text="${person}" th:value="${person.id}"></option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Auswählen</button>
+                </form>
+                <p th:if="${staff}" th:text="'Für: ' + ${staff}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-xs-center" th:if="${price}">
+    <i class="fa fa-arrow-down fa-2x"></i>
+</div>
+<div class="container__wrap" th:if="${price}">
+    <div class="container__head">
+        <h1>Heutige Ausgaben</h1>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <th>Ausgabe</th>
+            <th>Wert</th>
+        </thead>
+        <tbody>
+            <tr th:each="expense:${expenses}">
+                <td th:text="${expense.description}">TEST</td>
+                <td th:text="${expense.value.number} +' €'">5€</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-xs-center">
+                    <h2><b><span th:text="${price.number} + ' €'"></span></b></h2>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<span th:if="${price}">
+<span th:if="${price.number != 0}">
+    <div class="text-xs-center">
+        <i class="fa fa-arrow-down fa-2x"></i>
+    </div>
+    <div class="container__wrap text-xs-center">
+        <div class="padding__box">
+            <a th:href="@{'/accountancy/expenses/payoff/' + ${staff.id} + '/pay'}">
+                <button type="button" class="btn btn-primary">Bezahlen</button>
+            </a>
+        </div>
+    </div>
+</span>
+</span>
+</body>
+</html>

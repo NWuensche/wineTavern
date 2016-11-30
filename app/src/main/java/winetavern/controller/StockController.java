@@ -2,7 +2,6 @@ package winetavern.controller;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
-
-import java.util.Optional;
 
 import static org.salespointframework.core.Currencies.EURO;
 
