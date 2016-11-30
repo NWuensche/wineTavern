@@ -16,7 +16,7 @@
         $( "#birthday" ).datepicker({
             dateFormat: "yy/mm/dd",
             minDate:'1920/01/02',
-            maxDate:'0',
+            maxDate:'0'
         });
     });
 </script>
@@ -134,10 +134,9 @@
                             <label for="role">Rolle</label>
                             <select type="text" class="form-control" name="role" id="role" >
                                 <option th:each="role : ${T(winetavern.model.user.Roles).values()}"
-                                        th:text="${T(winetavern.model.user.Roles).getGermanNameOfRole(role)}"
+                                        th:text="${role.getDisplayName()}"
                                         th:value="${role.getNameOfRoleWithPrefix()}"
-                                        th:selected="${T(winetavern.model.user.Roles).getGermanNameOfRole(employee.role)
-                                                .equals(T(winetavern.model.user.Roles).getGermanNameOfRole(role))}">
+                                        th:selected="${employee.role.equals(role.getRole())}">
                                 </option>
                             </select>
                         </div>
@@ -225,7 +224,7 @@
                                 <label>Rolle</label>
                                 <select class="form-control" name="role">
                                     <option th:each="role : ${T(winetavern.model.user.Roles).values()}"
-                                            th:text="${T(winetavern.model.user.Roles).getGermanNameOfRole(role)}"
+                                            th:text="${role.getDisplayName()}"
                                             th:value="${role.getNameOfRoleWithPrefix()}">
                                     </option>
                                 </select>
