@@ -7,6 +7,8 @@ import org.salespointframework.accountancy.AccountancyEntryIdentifier;
 import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
+import org.salespointframework.useraccount.AuthenticationManager;
+import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +44,7 @@ public class ExpenseController {
     @NotNull @Autowired private ExpenseGroupRepository expenseGroups;
     @NotNull @Autowired private PersonManager persons;
     @NotNull @Autowired private BusinessTime bt;
+    @NotNull @Autowired private AuthenticationManager am;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @RequestMapping("/accountancy/expenses")
@@ -49,15 +52,26 @@ public class ExpenseController {
                                @ModelAttribute("date") String date,
                                @ModelAttribute("cover") Optional<String> cover, Model model) {
         if (cover.isPresent()) { //RLY SALESPOIN?! NO STRING -> ID????
-            String[] args = cover.get().split("\\|");
+            Expense expense = null;
+            MonetaryAmount sum = Money.of(0, EURO);
+            String[] args = cover.get().split("\\|"); //split into multiple ExpenseID's
             for (AccountancyEntry exp : accountancy.findAll()) {
                 for (String arg : args) {
                     if (arg.equals(exp.getId().toString())) {
-                        ((Expense) exp).cover();
-                        accountancy.add(exp);
+                        expense = ((Expense) exp);
+                        expense.cover();
+                        accountancy.add(expense);
+                        sum = sum.add(expense.getValue());
                     }
                 }
             }
+            Expense payoff = new Expense(sum,
+                    "Abrechnung " + bt.getTime().format(formatter) + " durch " +
+                            persons.findByUserAccount(am.getCurrentUser().get()).get(),
+                    expense.getPerson(),
+                    expenseGroups.findByName("Abrechnung").get());
+            accountancy.add(payoff);
+            return "redirect:/accountancy/expenses";
         }
 
         if (type.equals("")) type = "0";
@@ -114,7 +128,8 @@ public class ExpenseController {
             accountancy.add(expense);
         }
         accountancy.add(new Expense(sum,
-                "Tagesabrechnung vom " + bt.getTime().toLocalDate().format(formatter),
+                "Tagesabrechnung " + bt.getTime().toLocalDate().format(formatter) + " durch " +
+                        persons.findByUserAccount(am.getCurrentUser().get()).get(),
                 persons.findOne(Long.parseLong(personId)).get(),
                 expenseGroups.findByName("Abrechnung").get()));
         return "redirect:/accountancy/expenses/payoff";
