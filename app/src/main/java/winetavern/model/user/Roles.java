@@ -4,7 +4,6 @@ import lombok.NonNull;
 import org.salespointframework.useraccount.Role;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -33,9 +32,11 @@ public enum Roles {
 
     public static Roles of(String roleName) {
         String prefixRole = roleName.startsWith("ROLE_") ? roleName : ROLE_PREFIX + roleName;
+
         Stream<Roles> allRoles = Arrays.stream(values());
         @NonNull Roles rightRole = allRoles.filter(roles ->
                 roles.getNameOfRoleWithPrefix().equals(prefixRole)).findFirst().get();
+
         return rightRole;
     }
 
@@ -53,17 +54,6 @@ public enum Roles {
 
     public String getDisplayName() {
         return germanRoleName;
-    }
-
-    public static String getGermanNameOfRole(String role) throws IllegalArgumentException {
-        String prefixRole = role.startsWith("ROLE_") ? role : ROLE_PREFIX + role;
-        for(Roles r : values()) {
-            if(r.getNameOfRoleWithPrefix().equals(prefixRole)) {
-                return r.germanRoleName;
-            }
-        }
-
-        throw new IllegalArgumentException("Role isn't defined: " + role);
     }
 
 }
