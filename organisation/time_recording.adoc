@@ -176,4 +176,6 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |22.11.2016 |14:00 |16:30 |Menu Management
 |25.11.2016 |09:20 |11:30 |Gruppentreffen
 |26.11.2016 |11:00 |13:00 |Reservationtest und Linkstruktur
+|29.11.2016 |14:00 |15:00 |Reservation Management
+|30.11.2016 |11:00 |12:00 |Reservation und Koordinierung
 |===
