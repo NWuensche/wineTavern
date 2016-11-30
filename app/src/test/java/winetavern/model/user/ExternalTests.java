@@ -52,9 +52,9 @@ public class ExternalTests {
 
     @Test
     public void externalWasPayed() {
-        assertThat(external.wasPayed(), is(false));
+        assertThat(external.isPayed(), is(false));
         external.pay();
-        assertThat(external.wasPayed(), is(true));
+        assertThat(external.isPayed(), is(true));
     }
 
 }

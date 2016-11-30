@@ -22,14 +22,15 @@ import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
+@Getter
 public class Employee extends Person {
 
-    @Id @GeneratedValue @Getter private Long id;
-    @OneToOne @Getter private UserAccount userAccount;
+    @Id @GeneratedValue private Long id;
+    @OneToOne private UserAccount userAccount;
 
-    @Getter @Setter private String address;
-    @Getter private LocalDate birthday;
-    @Getter private String personTitle;
+    @Setter private String address;
+    private LocalDate birthday;
+    private String personTitle;
 
     /**
      * @param userAccount needs to have exactly 1 role

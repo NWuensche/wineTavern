@@ -14,13 +14,14 @@ import javax.persistence.OneToOne;
  */
 
 @Entity
+@Getter
 public class External extends Person {
 
-    @Id @GeneratedValue @Getter private Long id;
-    @OneToOne @Getter private Event event;
-    @Getter private String name;
-    @Getter private MonetaryAmount wage;
-    private boolean wagePayed;
+    @Id @GeneratedValue private Long id;
+    @OneToOne private Event event;
+    private String name;
+    private MonetaryAmount wage;
+    private boolean payed;
 
     @Deprecated
     protected External() {}
@@ -29,19 +30,15 @@ public class External extends Person {
         this.event = event;
         this.name = name;
         this.wage = wage;
-        wagePayed = false;
+        payed = false;
     }
 
     public void pay() throws IllegalStateException{
-        if(wasPayed()) {
+        if(isPayed()) {
             throw new IllegalStateException("External was already payed!");
         }
 
-        wagePayed = true;
-    }
-
-    public boolean wasPayed() {
-        return wagePayed;
+        payed = true;
     }
 
 }
