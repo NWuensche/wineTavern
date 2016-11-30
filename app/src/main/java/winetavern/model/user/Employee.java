@@ -60,7 +60,7 @@ public class Employee extends Person {
     public String getDisplayNameOfRole() {
         List<Role> roles = userAccount.getRoles().stream().collect(Collectors.toList());
         Role role = roles.get(0);
-        return Roles.getGermanNameOfRole(role);
+        return Roles.of(role).getDisplayName();
     }
 
     public boolean isEnabled() {

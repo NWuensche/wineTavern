@@ -1,6 +1,11 @@
 package winetavern.model.user;
 
+import lombok.NonNull;
 import org.salespointframework.useraccount.Role;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Enum of all Roles that a {@link Employee} can have. Used for controlling visible sites on the website.
@@ -22,6 +27,18 @@ public enum Roles {
         this.germanRoleName = germanRoleName;
     }
 
+    public static Roles of(Role role) {
+        return of(role.getName());
+    }
+
+    public static Roles of(String roleName) {
+        String prefixRole = roleName.startsWith("ROLE_") ? roleName : ROLE_PREFIX + roleName;
+        Stream<Roles> allRoles = Arrays.stream(values());
+        @NonNull Roles rightRole = allRoles.filter(roles ->
+                roles.getNameOfRoleWithPrefix().equals(prefixRole)).findFirst().get();
+        return rightRole;
+    }
+
     public String getNameOfRoleWithPrefix() {
         return ROLE_PREFIX + toString();
     }
@@ -36,10 +53,6 @@ public enum Roles {
 
     public String getDisplayName() {
         return germanRoleName;
-    }
-
-    public static String getGermanNameOfRole(Role role) {
-        return getGermanNameOfRole(role.getName());
     }
 
     public static String getGermanNameOfRole(String role) throws IllegalArgumentException {
