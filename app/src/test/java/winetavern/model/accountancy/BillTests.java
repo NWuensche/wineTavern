@@ -9,25 +9,18 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.time.BusinessTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
-import winetavern.Helper;
 import winetavern.model.menu.DayMenuItem;
 
 import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  * @author Louis
  */
 
-@Transactional
 public class BillTests extends AbstractIntegrationTests {
-    @Autowired private BillRepository bills;
-    @Autowired private BillItemRepository billItems;
-    @Autowired private BusinessTime businessTime;
+
 
     private Bill bill = new Bill("B1", null);
     private DayMenuItem dayMenuItem1 = new DayMenuItem("Stuff", Money.of(4, EURO));
@@ -37,38 +30,24 @@ public class BillTests extends AbstractIntegrationTests {
 
     @Before
     public void setup() {
-        billItems.save(Arrays.asList(billItem1, billItem2));
-
         bill.changeItem(billItem1, 1);
         bill.changeItem(billItem2, 1);
-
-        bills.save(bill);
-    }
-
-    @Test
-    public void isPreconditionRight() {
-        Bill firstStoredBill = Helper.getFirstItem(bills.findAll());
-
-        assertThat(firstStoredBill, is(bill));
-        assertThat(firstStoredBill.getItems().size(), is(2));
-    }
-
-    @Test
-    public void saveBill() {
-        Bill bill = new Bill("B1", null);
-        bills.save(bill);
-        assertThat(bills.findOne(bill.getId()).get(), is(bill));
     }
 
     @Test
     public void getCorrectPrice() {
-        MonetaryAmount addedPrices = billItem1.getPrice().add(billItem2.getPrice());
+        MonetaryAmount addedPrices = Money.from(dayMenuItem1.getPrice());
+        addedPrices.add(dayMenuItem2.getPrice());
         assertEquals(addedPrices, bill.getPrice());
     }
 
     @Test(expected = IllegalStateException.class)
     public void throwOnChangeIfClosed() {
-        bill.close(businessTime);
+        LocalDateTime time = LocalDateTime.of(2016, 11, 11, 11, 11, 11);
+        BusinessTime mockedBusinessTime = mock(BusinessTime.class);
+        when(mockedBusinessTime.getTime()).thenReturn(time);
+
+        bill.close(mockedBusinessTime);
         bill.changeItem(billItem1, 3);
     }
 
