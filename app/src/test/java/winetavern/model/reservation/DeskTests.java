@@ -12,6 +12,7 @@ import winetavern.model.management.TimeInterval;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Sev
@@ -53,8 +54,12 @@ public class DeskTests extends AbstractIntegrationTests {
 
     @Test
     public void addReservationCorrect() {
-        desk2.addReservation(reservation);
-        assertThat(reservationRepository.findByDesk(desk2).contains(reservation), is(true));
+        Reservation reservation2 = new Reservation("Peter Mueller", 3, desk2, interval);
+        reservationRepository.save(reservation2);
+        desk2.addReservation(reservation2);
+
+        List<Reservation> deskList = reservationRepository.findByDesk(desk2);
+        assertThat(deskList.contains(reservation2), is(true));
     }
 
 }

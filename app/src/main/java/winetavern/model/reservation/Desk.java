@@ -65,4 +65,5 @@ public class Desk {
     public List<Reservation> getReservationList() {
         return reservationList;
     }
+
 }

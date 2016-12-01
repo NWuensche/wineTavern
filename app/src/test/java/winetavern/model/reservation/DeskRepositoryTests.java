@@ -21,23 +21,14 @@ public class DeskRepositoryTests extends AbstractIntegrationTests {
 
     @Autowired private DeskRepository deskRepository;
 
-    private Desk desk;
-    private Desk desk2;
-    private Desk desk3;
-
-    @Before
-    public void before() {
+    @Test
+    public void findByCapacityWorks() {
         deskRepository.deleteAll();
-
         Desk desk = new Desk("Tisch 1", 4);
         Desk desk2 = new Desk("Tisch 2", 5);
         Desk desk3 = new Desk("Tisch 3", 6);
-
         deskRepository.save(Arrays.asList(desk, desk2, desk3));
-    }
 
-    @Test
-    public void findByCapacityWorks() {
         List<Desk> foundDeskdeskRepository = deskRepository.findByCapacityGreaterThanEqualOrderByCapacity(5);
         assertArrayEquals(foundDeskdeskRepository.toArray(), new Desk[]{desk2, desk3});
     }
