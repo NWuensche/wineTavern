@@ -40,11 +40,6 @@ public class ReservationTests extends AbstractIntegrationTests {
         reservationRepository.save(reservation);
     }
 
-    @Test(expected = NumberOutOfRange.class)
-    public void throwWhenDeskCapacityIsSmallerThanPersons() {
-        Reservation res = new Reservation("Gast 1", 5, desk, interval);
-    }
-
     @Test
     public void oldDeskDeleted() {
         Desk desk2 = new Desk("Tisch 2", 4);
