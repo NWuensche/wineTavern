@@ -3,6 +3,7 @@ package winetavern.model.accountancy;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
+import static org.mockito.Mockito.*;
 
 import org.javamoney.moneta.Money;
 import org.junit.Before;
@@ -14,6 +15,8 @@ import winetavern.AbstractIntegrationTests;
 import winetavern.Helper;
 import winetavern.model.menu.DayMenuItem;
 
+import javax.money.MonetaryAmount;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
@@ -59,7 +62,8 @@ public class BillTests extends AbstractIntegrationTests {
 
     @Test
     public void getCorrectPrice() {
-        assertEquals(billItem1.getPrice().add(billItem2.getPrice()), bill.getPrice());
+        MonetaryAmount addedPrices = billItem1.getPrice().add(billItem2.getPrice());
+        assertEquals(addedPrices, bill.getPrice());
     }
 
     @Test(expected = IllegalStateException.class)
@@ -96,6 +100,16 @@ public class BillTests extends AbstractIntegrationTests {
         bill.changeItem(billItem4, 0);
 
         assertThat(bill.getItems().contains(billItem4), is(false));
+    }
+
+    @Test
+    public void rightCloseTime() {
+        LocalDateTime time = LocalDateTime.of(2016, 11, 11, 11, 11, 11);
+        BusinessTime mockedBusinessTime = mock(BusinessTime.class);
+        when(mockedBusinessTime.getTime()).thenReturn(time);
+        bill.close(mockedBusinessTime);
+
+        assertThat(bill.getCloseTime(), is(time));
     }
 
 }
