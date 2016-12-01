@@ -1,23 +1,31 @@
 package winetavern.model.accountancy;
 
+import static org.salespointframework.core.Currencies.EURO;
+import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.*;
+
 import org.javamoney.moneta.Money;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import winetavern.AbstractWebIntegrationTests;
+import winetavern.AbstractIntegrationTests;
+import winetavern.Helper;
 import winetavern.model.menu.DayMenuItem;
 
-import static org.salespointframework.core.Currencies.EURO;
+import java.util.Arrays;
 
 /**
  * @author Louis
  */
 
 @Transactional
-public class BillTests extends AbstractWebIntegrationTests {
+public class BillTests extends AbstractIntegrationTests {
     @Autowired private BillRepository bills;
+    @Autowired private BillItemRepository billItems;
+    @Autowired private BusinessTime businessTime;
+
     private Bill bill = new Bill("B1", null);
     private DayMenuItem dayMenuItem1 = new DayMenuItem("Stuff", Money.of(4, EURO));
     private DayMenuItem dayMenuItem2 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
@@ -26,22 +34,68 @@ public class BillTests extends AbstractWebIntegrationTests {
 
     @Before
     public void setup() {
-        bills.save(bill);
+        billItems.save(Arrays.asList(billItem1, billItem2));
+
         bill.changeItem(billItem1, 1);
-        bills.save(bill);
         bill.changeItem(billItem2, 1);
+
         bills.save(bill);
+    }
+
+    @Test
+    public void isPreconditionRight() {
+        Bill firstStoredBill = Helper.getFirstItem(bills.findAll());
+
+        assertThat(firstStoredBill, is(bill));
+        assertThat(firstStoredBill.getItems().size(), is(2));
     }
 
     @Test
     public void saveBill() {
         Bill bill = new Bill("B1", null);
         bills.save(bill);
-        Assert.assertSame(bill, bills.findOne(bill.getId()).get());
+        assertThat(bills.findOne(bill.getId()).get(), is(bill));
     }
 
     @Test
     public void getCorrectPrice() {
-        Assert.assertEquals(billItem1.getPrice().add(billItem2.getPrice()), bill.getPrice());
+        assertEquals(billItem1.getPrice().add(billItem2.getPrice()), bill.getPrice());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void throwOnChangeIfClosed() {
+        bill.close(businessTime);
+        bill.changeItem(billItem1, 3);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void throwOnChangeIfItemIsNull() {
+        bill.changeItem(null, 3);
+    }
+
+    @Test
+    public void removeItem() {
+        bill.changeItem(billItem1, 0);
+        assertThat(bill.getItems().contains(billItem1), is(false));
+    }
+
+    @Test
+    public void addItem() {
+        DayMenuItem dayMenuItem3 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
+        BillItem billItem3 = new BillItem(dayMenuItem3);
+
+        bill.changeItem(billItem3, 4);
+
+        assertThat(bill.getItems().contains(billItem3), is(true));
+    }
+
+    @Test
+    public void dontAddEmptyNewItem() {
+        DayMenuItem dayMenuItem4 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
+        BillItem billItem4 = new BillItem(dayMenuItem4);
+        bill.changeItem(billItem4, 0);
+
+        assertThat(bill.getItems().contains(billItem4), is(false));
+    }
+
 }
