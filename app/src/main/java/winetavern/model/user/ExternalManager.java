@@ -6,8 +6,10 @@ import org.salespointframework.core.Streamable;
 import java.util.Optional;
 
 /**
- * Created by nwuensche on 28.11.16.
+ * Repository interface to handle {@link External}s.
+ * @author Niklas Wünsche
  */
+
 public interface ExternalManager extends SalespointRepository<External, Long> {
     Optional<External> findByName(String name);
 }

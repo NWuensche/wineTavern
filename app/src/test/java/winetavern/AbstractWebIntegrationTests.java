@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
+
 /**
  * Base class, which connects tests to {@link Application} and adds web layer in tests e.g. simulating HTTP requests.
  *
@@ -20,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = Application.class)
+@Transactional
 public abstract class AbstractWebIntegrationTests {
 
     @Autowired
