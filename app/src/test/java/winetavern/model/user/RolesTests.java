@@ -6,6 +6,8 @@ import static org.hamcrest.core.Is.*;
 import org.junit.Test;
 import org.salespointframework.useraccount.Role;
 
+import java.util.NoSuchElementException;
+
 /**
  * Tests for {@link Roles}
  */
@@ -17,52 +19,41 @@ public class RolesTests {
         Roles admin = Roles.ADMIN;
         assertThat(admin.getRole(), is(Role.of("ROLE_ADMIN")));
         assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_ADMIN"));
-        assertThat(admin.getRealNameOfRole(), is("ADMIN"));
-        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_ADMIN")), is("Administrator"));
-        assertThat(Roles.getGermanNameOfRole("ROLE_ADMIN"), is("Administrator"));
+        assertThat(Roles.of(Role.of("ROLE_ADMIN")), is(admin));
     }
 
     @Test
     public void isServiceDataRight() {
-        Roles admin = Roles.SERVICE;
-        assertThat(admin.getRole(), is(Role.of("ROLE_SERVICE")));
-        assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_SERVICE"));
-        assertThat(admin.getRealNameOfRole(), is("SERVICE"));
-        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_SERVICE")), is("Bedienung"));
-        assertThat(Roles.getGermanNameOfRole("ROLE_SERVICE"), is("Bedienung"));
+        Roles service = Roles.SERVICE;
+        assertThat(service.getRole(), is(Role.of("ROLE_SERVICE")));
+        assertThat(service.getNameOfRoleWithPrefix(), is("ROLE_SERVICE"));
+        assertThat(Roles.of(Role.of("ROLE_SERVICE")), is(service));
     }
 
     @Test
     public void isAccountantDataRight() {
-        Roles admin = Roles.ACCOUNTANT;
-        assertThat(admin.getRole(), is(Role.of("ROLE_ACCOUNTANT")));
-        assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_ACCOUNTANT"));
-        assertThat(admin.getRealNameOfRole(), is("ACCOUNTANT"));
-        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_ACCOUNTANT")), is("Buchhalter"));
-        assertThat(Roles.getGermanNameOfRole("ROLE_ACCOUNTANT"), is("Buchhalter"));
-
+        Roles accountant = Roles.ACCOUNTANT;
+        assertThat(accountant.getRole(), is(Role.of("ROLE_ACCOUNTANT")));
+        assertThat(accountant.getNameOfRoleWithPrefix(), is("ROLE_ACCOUNTANT"));
+        assertThat(Roles.of(Role.of("ROLE_ACCOUNTANT")), is(accountant));
     }
 
     @Test
     public void isCookDataRight() {
-        Roles admin = Roles.COOK;
-        assertThat(admin.getRole(), is(Role.of("ROLE_COOK")));
-        assertThat(admin.getNameOfRoleWithPrefix(), is("ROLE_COOK"));
-        assertThat(admin.getRealNameOfRole(), is("COOK"));
-        assertThat(Roles.getGermanNameOfRole(Role.of("ROLE_COOK")), is("Koch"));
-        assertThat(Roles.getGermanNameOfRole("ROLE_COOK"), is("Koch"));
+        Roles cook = Roles.COOK;
+        assertThat(cook.getRole(), is(Role.of("ROLE_COOK")));
+        assertThat(cook.getNameOfRoleWithPrefix(), is("ROLE_COOK"));
+        assertThat(Roles.of(Role.of("ROLE_COOK")), is(cook));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NoSuchElementException.class)
     public void throwsWhenFalseRole() {
-        Roles.getGermanNameOfRole("NOROLE");
+        Roles.of("NOROLE");
     }
 
     @Test
     public void withMissingRolePrefix() {
-        assertThat(Roles.getGermanNameOfRole(Role.of("ACCOUNTANT")), is("Buchhalter"));
-        assertThat(Roles.getGermanNameOfRole("ACCOUNTANT"), is("Buchhalter"));
-
+        assertThat(Roles.of(Role.of("ACCOUNTANT")), is(Roles.ACCOUNTANT));
     }
 
 }

@@ -1,19 +1,23 @@
 package winetavern.model.user;
 
 /**
- * Created by nwuensche on 18.11.16.
+ * Enum for the titles that a person can have.
+ * @author Niklas Wünsche
  */
+
 public enum PersonTitle {
+
     MISTER("Herr"),
     MISSES("Frau");
 
-    private String personTitle;
+    private String germanTitle;
 
-    PersonTitle(String personTitle) {
-        this.personTitle = personTitle;
+    PersonTitle(String germanTitle) {
+        this.germanTitle = germanTitle;
     }
 
     public String getGerman() {
-        return personTitle;
+        return germanTitle;
     }
+
 }
