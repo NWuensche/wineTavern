@@ -58,7 +58,7 @@ public class EmployeeTests extends AbstractIntegrationTests{
         assertThat(savedEmployee.toString(), is("Hans Müller"));
     }
 
-        @Test
+    @Test
     public void displayedRoleOfEmployeeIsRight() {
         employee = new Employee(acc, address, birthday, personTitle);
         employeeManager.save(employee);
