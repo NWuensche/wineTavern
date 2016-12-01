@@ -5,5 +5,5 @@ package winetavern.model.user;
  * @author Niklas Wünsche
  */
 
-public abstract class Person {
+public interface Person {
 }

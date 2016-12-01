@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 @Getter
-public class External extends Person {
+public class External implements Person {
 
     @Id @GeneratedValue private Long id;
     @OneToOne private Event event;
