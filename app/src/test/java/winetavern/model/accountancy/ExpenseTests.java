@@ -72,7 +72,7 @@ public class ExpenseTests {
     public void compareRight() {
         Expense expense2 = setUpExpensesToCompare("Müller", "Schulz");
 
-        assertThat(expense.compareTo(expense2), lessThan(0));
+        assertThat(expense.compareTo(expense2), is(lessThan(0)));
     }
 
     private Expense setUpExpensesToCompare(String lastName1, String lastName2) {
