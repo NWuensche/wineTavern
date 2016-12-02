@@ -33,10 +33,7 @@
         <script th:inline="javascript">
             /*<![CDATA[*/
             const bt = /*[[${businessTime}]]*/ "November 13, 2016 22:02:36";
-            alert(bt);
-
             const offset = new Date(bt).getTime() - new Date().getTime();
-            alert(offset);
             var businessTime = new Date(new Date().getTime() + offset);
             clock();
 
