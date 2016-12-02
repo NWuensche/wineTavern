@@ -1,9 +1,11 @@
 package winetavern.controller;
 
+import lombok.NonNull;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.accountancy.AccountancyEntryIdentifier;
+import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.AuthenticationManager;
@@ -53,6 +55,7 @@ public class ExpenseController {
         if (cover.isPresent()) { //RLY SALESPOIN?! NO STRING -> ID????
             Expense expense = null;
             MonetaryAmount sum = Money.of(0, EURO);
+
             String[] idQuery = cover.get().split("\\|"); //split into multiple ExpenseID's
             for (AccountancyEntry exp : accountancy.findAll()) {
                 for (String expenseId : idQuery) {
