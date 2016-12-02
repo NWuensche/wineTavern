@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import lombok.NonNull;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
@@ -8,7 +9,6 @@ import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.AuthenticationManager;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,10 +55,11 @@ public class ExpenseController {
         if (cover.isPresent()) { //RLY SALESPOIN?! NO STRING -> ID????
             Expense expense = null;
             MonetaryAmount sum = Money.of(0, EURO);
-            String[] args = cover.get().split("\\|"); //split into multiple ExpenseID's
+
+            String[] idQuery = cover.get().split("\\|"); //split into multiple ExpenseID's
             for (AccountancyEntry exp : accountancy.findAll()) {
-                for (String arg : args) {
-                    if (arg.equals(exp.getId().toString())) {
+                for (String expenseId : idQuery) {
+                    if (expenseId.equals(exp.getId().toString())) {
                         expense = ((Expense) exp);
                         expense.cover();
                         accountancy.add(expense);
@@ -75,8 +76,10 @@ public class ExpenseController {
             return "redirect:/accountancy/expenses";
         }
 
-        if (type.equals("")) type = "0";
-        if (person.equals("")) person = "0";
+        if (type.equals(""))
+            type = "0";
+        if (person.equals(""))
+            person = "0";
         Set<Expense> expOpen = filter(type, person, false, date);
         Set<Expense> expCovered = filter(type, person, true, date);
         model.addAttribute("expenseAmount", expOpen.size());
@@ -99,7 +102,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/accountancy/expenses/payoff")
-    public String redirectPayoff(@ModelAttribute("personId") String personId, Model model) {
+    public String redirectPayoff(@ModelAttribute("personId") String personId) {
         return "redirect:/accountancy/expenses/payoff/" + personId;
     }
 
@@ -119,7 +122,7 @@ public class ExpenseController {
     }
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
-    public String coverExpensesForPerson(@PathVariable("pid") String personId, Model model) {
+    public String coverExpensesForPerson(@PathVariable("pid") String personId) {
         Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
                 personId, false, "");
         MonetaryAmount sum = Money.of(0, EURO);
