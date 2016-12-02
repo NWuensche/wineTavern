@@ -9,7 +9,7 @@
                 <div class="col-xs-4">
                     <div class="nav-time">
                         <span id="clock">
-                            <script th:inline="javascript">
+                            <script th:inline="javascript" type="application/javascript">
                                 /*<![CDATA[*/
                                 const bt = /*[[${businessTime}]]*/ "November 13, 2016 22:02:36";
                                 const offset = new Date(bt) - new Date();
@@ -33,6 +33,7 @@
                                 /*]]>*/
                             </script>
                         </span>
+                        <span id="clock"></span>
                     </div>
                 </div>
                 <div class="col-xs-2">
@@ -54,4 +55,28 @@
                 </div>
             </div>
         </div>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const bt = /*[[${businessTime}]]*/ "November 13, 2016 22:02:36";
+            const offset = new Date(bt).getTime() - new Date().getTime();
+            var businessTime = new Date(new Date().getTime() + offset);
+            clock();
+
+            function clock () {
+                businessTime = new Date(new Date().getTime() + offset);
+                var h = checkTime(businessTime.getHours());
+                var m = checkTime(businessTime.getMinutes());
+                var s = checkTime(businessTime.getSeconds());
+                var date = checkTime(businessTime.getDate()) + "." + checkTime(businessTime.getMonth()+1) + "." + businessTime.getFullYear();
+                document.getElementById("clock").innerHTML = date + " " + parseInt(h) + ":" + m +
+                    ":" + s;
+                setTimeout(clock, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {i = "0" + i}  // add zero in front of numbers < 10
+                return i;
+            }
+            /*]]>*/
+        </script>
     </div>

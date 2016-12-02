@@ -6,7 +6,6 @@ import winetavern.model.user.Employee;
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.time.format.DateTimeFormatter;
 
 /**
  * @author Louis
@@ -20,14 +19,6 @@ public class Expense extends AccountancyEntry implements Comparable<Expense> {
 
     @Deprecated
     protected Expense() {}
-
-    public Expense(MonetaryAmount value, Employee employee, ExpenseGroup expenseGroup) {
-        super(value);
-        if (employee == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
-        this.expenseGroup = expenseGroup;
-        this.employee = employee;
-        if (expenseGroup.getName().equals("Abrechnung")) isCovered = true;
-    }
 
     public Expense(MonetaryAmount value, String description, Employee employee, ExpenseGroup expenseGroup) {
         super(value, description);
@@ -43,10 +34,6 @@ public class Expense extends AccountancyEntry implements Comparable<Expense> {
 
     public Employee getEmployee() {
         return employee;
-    }
-
-    public String getDateString() {
-        return super.getDate().get().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 
     public boolean isCovered() {
