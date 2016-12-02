@@ -46,6 +46,18 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 ** Ein vollständig eigenes Repository `ExpenseRepository extends SalespointRepository` ist nicht sinnvoll, da dann jegliche Funktionalitäten von Accountancy verloren gehen würden, wie etwa `package-private setDate()`, welches für unsere Verwaltung notwendig ist.
 ** Die Filter für die Ausgaben lassen sich nun in dem Template beliebig setzen und werden dann im Controller angewendet, um das gewünschte Ergebnis zu liefern.
 
+* Benenne Table in Desk um
+** Da wir große Schwierigkeiten bekommen haben, die Tables von WineTavern, HTML und MySQL auseinander zu halten, haben wir uns beschlossen, die WineTavern Tables in Desks umzubennenen.
+
+* Benenne Person in Employee um
+** Zuerst sollten alle externen und internen Personen ein Person-Objekt bekommen. Dieses ist allerdings fest mit einem UserAccount verbunden. Da sich externe (Künstler) allerdings nicht in das System einloggen müssen, haben wir die externen Personen zu "External" gemacht, während Interne nun "Employee" sind. 
+
+* Ziehe Integration- und Unittests auseinander
+** Als erstes wollten wir alle Tests, die zu einer Klasse gehören, in eine Klasse packen. Da so aber die Unittests sehr lange zum ausführen brauchten (Da im Hintergrund alles Nötige für die Integrationtests auch geladen wurde), haben wir uns entscheiden, diese in unterschiedliche Klassen zu stecken.
+
+* Nutze Mockito um Objekte zu mocken
+** Am Anfang haben wir in einem Unittest auch alle nötigen Hilfsobjekte erzeugt. Da so aber bei Fehlern in der Hilfsklasse auch Fehler in der anderen Klasse entstanden, haben wir uns entscheiden, Mocks zu nutzen. Dadurch sind die Unittests einer Klasse unabhängig von den Fehlern anderer Klassen.
+
 == Bausteinsicht
 * Package-Diagramme
 
