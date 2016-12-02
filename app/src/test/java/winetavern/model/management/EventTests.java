@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.lessThan;
 
 import org.javamoney.moneta.Money;
 import org.junit.Test;
-import winetavern.AbstractWebIntegrationTests;
 
 import java.time.LocalDateTime;
 
