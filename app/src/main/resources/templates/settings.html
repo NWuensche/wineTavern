@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head>
+
+</head>
+<body th:fragment="content" class="bills">
+<div class="container__wrap">
+    <h1>Einstellungen</h1>
+    <form style="padding:20px;" method="post">
+        <div class="form-group">
+            <label for="time" style="font-size:1.5rem">Zeit:</label>
+            <input type="text" id="time" name="time" class="form-control"/>
+        </div>
+        <div class="form-group text-xs-center" >
+            <button type="button" class="btn btn-secondary" onclick="setToNow();">Systemzeit</button>
+            <button class="btn btn-primary">Anpassen</button>
+        </div>
+    </form>
+</div>
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var firstDayOfYear = new Date(businessTime);
+    firstDayOfYear.setMonth(0);
+    firstDayOfYear.setDate(1);
+
+
+    $('input[name="time"]').daterangepicker({
+        singleDatePicker: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        timePickerIncrement:15,
+        linkedCalendars:false,
+        showISOWeekNumbers:true,
+        opens:"left",
+        startDate: businessTime,
+        buttonClasses:"btn",
+        applyClass:"btn-primary",
+        autoApply:true,
+        locale: {
+            format:"DD.MM.YYYY HH:mm",
+            applyLabel:"&#10004;",
+            cancelLabel:"&#128473;",
+            customRangeLabel:"Benutzerdefiniert",
+            daysOfWeek:["So","Mo","Di","Mi","Do","Fr","Sa"],
+            monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+            firstDay:1
+        },
+        ranges: {
+            'Heute': [businessTime, businessTime],
+            'Gestern': [new Date(businessTime.getTime() - 86400000), new Date(businessTime.getTime() - 86400000)],
+            'Letzte 7 Tage': [new Date(businessTime.getTime() - 604800000), businessTime],
+            'Dieser Monat': [new Date(businessTime).setDate(1), businessTime],
+            'Dieses Jahr': [firstDayOfYear, businessTime]
+        }
+    });
+
+    function setToNow(){
+        var time = new Date();
+        var string = checkTime(time.getDate()) + "." + checkTime(time.getMonth()+1) + "." +
+            checkTime(time.getFullYear()) + " " + checkTime(time.getHours()) + ":" + checkTime(time.getMinutes());
+        document.getElementById("time").value = string;
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>
