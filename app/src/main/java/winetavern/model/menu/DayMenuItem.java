@@ -2,14 +2,12 @@ package winetavern.model.menu;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,11 +44,12 @@ public class DayMenuItem {
     private boolean enabled;
 
     public DayMenuItem(String name, String description, Money price, Double quantityPerProduct) {
+        this.dayMenus = new LinkedList<DayMenu>();
+
         this.name = name;
         this.price = price;
         this.description = description;
         this.quantityPerProduct = quantityPerProduct;
-        this.dayMenus = new LinkedList<DayMenu>();
         this.enabled = true;
     }
 
@@ -61,7 +60,7 @@ public class DayMenuItem {
 
     // TODO Is this really necessary? Shouldn't dayMenu.remove(item) be enough?
     public void removeDayMenu(DayMenu dayMenu) {
-        this.dayMenus.remove(dayMenu);
+        dayMenus.remove(dayMenu);
     }
 
 }

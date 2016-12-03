@@ -3,10 +3,8 @@ package winetavern.model.menu;
 import lombok.*;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import java.util.List;
 
 /**
