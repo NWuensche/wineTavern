@@ -1,64 +1,40 @@
 package winetavern.model.menu;
 
+import lombok.*;
+
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
 /**
- * Created by Michel on 11/3/2016.
+ * @author Michel
  */
 
-
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
+@Getter
 public class DayMenu {
 
     @Id @GeneratedValue Long id;
 
-    private Calendar day;
+    @Setter @NonNull private LocalDate day;
 
     @ManyToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, mappedBy = "dayMenus")
     private List<DayMenuItem> dayMenuItems;
 
-    @PreRemove
-    private void removeDayMenusFromDayMenuItems() {
-        for (DayMenuItem dayMenuItem : dayMenuItems) {
-            dayMenuItem.getDayMenus().remove(this);
-        }
-    }
+    public DayMenu(@NonNull LocalDate day) {
+        dayMenuItems = new ArrayList<>();
 
-    public DayMenu() {}
-
-    public DayMenu(Calendar day) {
         this.day = day;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDay(Calendar day) {
-        this.day = day;
-    }
-
-    public Calendar getDay() {
-        return day;
     }
 
     public String getReadableDay() {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        return format.format(day.getTime());
+        return day.toString();
     }
 
-    public List<DayMenuItem> getDayMenuItems() {
-        return dayMenuItems;
-    }
-
-    public void addMenuItem(DayMenuItem dayMenuItem) {
-        dayMenuItems.add(dayMenuItem);
+    public void addMenuItem(DayMenuItem newItem) {
+        dayMenuItems.add(newItem);
     }
 
     public void removeMenuItem(DayMenuItem dayMenuItem) {

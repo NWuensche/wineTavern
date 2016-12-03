@@ -20,6 +20,7 @@ import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.user.Roles;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -48,17 +49,14 @@ public class DayMenuManagerTests extends AbstractWebIntegrationTests {
                 .param("year", "1918");
         mvc.perform(request);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 9);
-        calendar.set(Calendar.MONTH, 11);
-        calendar.set(Calendar.YEAR, 1918);
+        LocalDate givenDate = LocalDate.of(1918, 11, 9);
 
         boolean[] isDateInRepo = {false};
         Iterable<DayMenu> allDayMenus = dayMenuRepository.findAll();
 
         allDayMenus.forEach(dayMenu -> {
-            Calendar cal = dayMenu.getDay();
-            if(cal.equals(cal)) {
+            LocalDate date = dayMenu.getDay();
+            if(date.equals(givenDate)) {
                 isDateInRepo[0] = true;
             }
         });

@@ -25,9 +25,9 @@ import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -142,52 +142,43 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeDayMenuWithItems() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2013, 10, 30);
-        DayMenu dayMenu = new DayMenu(calendar);
+        LocalDate day = LocalDate.of(2013, 10, 30);
+        DayMenu dayMenu = new DayMenu(day);
         dayMenuRepository.save(dayMenu);
 
         DayMenuItem vodka = new DayMenuItem("Vodka 2cl vom Fass", "really good", Money.of(2, "EUR"), 35.0);
-        vodka.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        vodka.setProduct(Helper.getFirstItem(productCatalog.findByName("Vodka")));
         vodka.addDayMenu(dayMenu);
-        vodka.enable();
         dayMenuItemRepository.save(vodka);
 
         DayMenuItem vodka2cl = new DayMenuItem("Vodka 2cl", "Kleiner Vodka für zwischendurch", Money.of(1.80, "EUR"), 35.0);
-        vodka2cl.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        vodka2cl.setProduct(Helper.getFirstItem(productCatalog.findByName("Vodka")));
         vodka2cl.addDayMenu(dayMenu);
-        vodka2cl.enable();
         dayMenuItemRepository.save(vodka2cl);
 
         DayMenuItem vodka4cl = new DayMenuItem("Vodka 4cl", "Großer Vodka für coole Leute", Money.of(2.50, "EUR"), 12.0);
-        vodka4cl.setProduct(productCatalog.findByName("Vodka").iterator().next());
+        vodka4cl.setProduct(Helper.getFirstItem(productCatalog.findByName("Vodka")));
         vodka4cl.addDayMenu(dayMenu);
-        vodka4cl.enable();
         dayMenuItemRepository.save(vodka4cl);
 
         DayMenuItem berlinerBrandstifter = new DayMenuItem("Berliner Brandstifter", "der beste", Money.of(1.99, "EUR"), 12.0);
-        berlinerBrandstifter.setProduct(productCatalog.findByName("Berliner Brandstifter").iterator().next());
+        berlinerBrandstifter.setProduct(Helper.getFirstItem(productCatalog.findByName("Berliner Brandstifter")));
         berlinerBrandstifter.addDayMenu(dayMenu);
         dayMenuItemRepository.save(berlinerBrandstifter);
-
-
     }
 
     /**
      * Should be deleted in the final program
      */
     private void initializeShift() {
-        shifts.save(new Shift(new TimeInterval(LocalDateTime.of(2016, 11, 11, 11, 11), LocalDateTime.of(2016, 11, 11, 11, 11).plusHours(3)),
-                employeeManager.findAll().iterator().next()));
+        LocalDateTime start = LocalDateTime.of(2016, 11, 11, 11, 11);
+        shifts.save(new Shift(new TimeInterval(start, start.plusHours(3)),
+                Helper.getFirstItem(employeeManager.findAll())));
     }
 
     public void initializeExterns() {
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = start.plusHours(3);
-        TimeInterval timeInterval = new TimeInterval(start, end);
-
         MonetaryAmount wage = Money.of(300, EURO);
-        Event event = eventCatalog.findByName("Go hard or go home - Ü80 Party").iterator().next();
+        Event event = Helper.getFirstItem(eventCatalog.findByName("Go hard or go home - Ü80 Party"));
         External external = new External(event, "DJ Cool", wage);
 
         externalManager.save(external);

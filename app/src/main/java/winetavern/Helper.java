@@ -1,6 +1,7 @@
 package winetavern;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Niklas Wünsche
@@ -8,10 +9,14 @@ import java.util.ArrayList;
 
 public class Helper {
 
-    public static <T> T[] convertToArray(Iterable<T> stream) {
+    public static <T> List<T> convertToList(Iterable<T> iterable) {
         ArrayList<T> returnList = new ArrayList<T>();
-        stream.forEach(item -> returnList.add(item));
-        return (T[]) returnList.toArray();
+        iterable.forEach(item -> returnList.add(item));
+        return returnList;
+    }
+
+    public static <T> T[] convertToArray(Iterable<T> iterable) {
+        return (T[]) convertToList(iterable).toArray();
     }
 
     public static <T> T getFirstItem(Iterable<T> stream) {

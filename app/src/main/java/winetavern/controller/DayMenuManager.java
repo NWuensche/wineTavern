@@ -10,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuRepository;
-import winetavern.model.stock.ProductCatalog;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 
 /**
@@ -43,14 +43,11 @@ public class DayMenuManager {
         return "addmenu";
     }
 
-    /**
-     * @param dateParameter if day starts with a 0, the month will be count up by one
-     */
     @RequestMapping(value = "/admin/menu/add", method = RequestMethod.POST)
     public ModelAndView addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter,
                                     ModelAndView modelAndView) {
-        dateParameter.setMonth(dateParameter.getMonth()-1); //workaround, see above
-        Calendar creationDate = dateParameter.getCalendar();
+        dateParameter.setMonth(dateParameter.getMonth());
+        LocalDate creationDate = dateParameter.getDate();
         DayMenu dayMenu = new DayMenu(creationDate);
         dayMenuRepository.save(dayMenu);
 
@@ -59,7 +56,7 @@ public class DayMenuManager {
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public ModelAndView removeMenu(@RequestParam("daymenuid") Long dayMenuId, ModelAndView modelAndView) {
-        DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
+        DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         if(dayMenu != null) {
             dayMenuRepository.delete(dayMenu);
         }
@@ -68,7 +65,7 @@ public class DayMenuManager {
 
     @RequestMapping("/admin/menu/edit/{pid}")
     public String editMenu(@PathVariable("pid") Long id, Model model) {
-        DayMenu dayMenu = dayMenuRepository.findById(id);
+        DayMenu dayMenu = dayMenuRepository.findOne(id).get();
         model.addAttribute("daymenu", dayMenu);
         model.addAttribute("stock", stock);
         model.addAttribute("frommenuitemid", id);
