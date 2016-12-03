@@ -6,8 +6,6 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import winetavern.model.management.TimeInterval;
-import java.time.LocalDateTime;
 
 /**
  * @author Sev, Niklas
@@ -23,8 +21,14 @@ public class DeskTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void DeskConstructorNegativeCapacityTest() {
+    public void throwWhenNegativeCapacity() {
         new Desk("1", -2);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void throwWhenSetNegativeCapacity() {
+        desk.setCapacity(1);
+        desk.setCapacity(-1);
     }
 
     @Test
