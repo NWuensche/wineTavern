@@ -3,6 +3,7 @@ package winetavern.model.menu;
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
 
+import lombok.Getter;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 
@@ -10,14 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Michel on 11/3/2016.
+ * @author Michel
  */
 
 @Entity
+@Getter
 public class DayMenuItem {
 
-    @Id @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue private Long id;
     private MonetaryAmount price;
 
     @OneToOne(fetch=FetchType.EAGER, targetEntity = Product.class)
@@ -53,36 +54,7 @@ public class DayMenuItem {
         this.description = description;
         this.quantityPerProduct = quantityPerProduct;
         this.dayMenus = new LinkedList<DayMenu>();
-    }
-
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public MonetaryAmount getPrice() {
-        return price;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Boolean isEnabled() {
-        return enabled;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
+        this.enabled = true;
     }
 
     public void setEnabled(Boolean enabled) {
@@ -105,29 +77,13 @@ public class DayMenuItem {
         this.description = description;
     }
 
-    public void enable() {
-        this.enabled = true;
-    }
-
-    public void disable()  {
-        this.enabled = false;
-    }
-
     public void setDayMenus(List<DayMenu> dayMenus) {
         this.dayMenus = dayMenus;
-    }
-
-    public List<DayMenu> getDayMenus() {
-        return dayMenus;
     }
 
     // TODO Is this really necessary? shouldn't dayMenu.add(item) be enough?
     public void addDayMenu(DayMenu dayMenu) {
         dayMenus.add(dayMenu);
-    }
-
-    public Double getQuantityPerProduct() {
-        return quantityPerProduct;
     }
 
     public void setQuantityPerProduct(Double quantityPerProduct) {
