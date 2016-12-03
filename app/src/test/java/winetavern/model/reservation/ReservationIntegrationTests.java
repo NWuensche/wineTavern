@@ -1,5 +1,6 @@
 package winetavern.model.reservation;
 
+import com.mysql.cj.core.exceptions.NumberOutOfRange;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class ReservationIntegrationTests extends AbstractIntegrationTests{
         desk2 = new Desk("Tisch 2", 6);
         deskRepository.save(desk2);
     }
+
+
 
     @Test
     public void addReservationCorrect() {

@@ -1,5 +1,10 @@
 package winetavern.model.reservation;
 
+import com.mysql.cj.core.exceptions.NumberOutOfRange;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import winetavern.model.management.TimeInterval;
 
 import javax.persistence.*;
@@ -10,51 +15,29 @@ import java.time.LocalDateTime;
  * @author Sev
  */
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
+@Getter
 public class Reservation {
 
-    @Id @GeneratedValue
-    private long id;
+    @Id @GeneratedValue private long id;
 
-    private String guestName;
-    private int persons;
     @ManyToOne(targetEntity=Desk.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "desk_id")
     private Desk desk;
-    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
 
-
-    @Deprecated
-    protected Reservation(){}
+    @Setter @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
+    @Setter private String guestName;
+    private int persons;
 
     public Reservation(String guestName, int persons, Desk desk, TimeInterval interval) {
+        if(persons <= 0) {
+            throw new NumberOutOfRange("At least 1 person should reserve!");
+        }
+
         this.guestName = guestName;
         this.persons = persons;
         this.setDesk(desk);
         this.interval = interval;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getGuestName() {
-        return guestName;
-    }
-
-    public void setGuestName(String guestName) {
-        this.guestName = guestName;
-    }
-
-    public int getPersons() {
-        return persons;
-    }
-
-    public void setPersons(int persons) {
-        this.persons = persons;
-    }
-
-    public Desk getDesk() {
-        return desk;
     }
 
     public void setDesk(Desk desk) {
@@ -63,15 +46,16 @@ public class Reservation {
         desk.addReservation(this);
     }
 
-    public TimeInterval getInterval() {
-        return interval;
-    }
+    public void setPersons(int numberOfPersons) {
+        if(numberOfPersons <= 0) {
+            throw new NumberOutOfRange("At least 1 person should reserve!");
+        }
 
-    public void setInterval(TimeInterval interval) {
-        this.interval = interval;
+        this.persons = numberOfPersons;
     }
 
     public LocalDateTime getReservationStart() {
         return interval.getStart();
     }
+
 }

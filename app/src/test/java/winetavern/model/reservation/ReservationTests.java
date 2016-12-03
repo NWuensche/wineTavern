@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
+import com.mysql.cj.core.exceptions.NumberOutOfRange;
 import org.junit.Before;
 import org.junit.Test;
 import winetavern.model.management.TimeInterval;
@@ -30,10 +31,21 @@ public class ReservationTests {
     @Test
     public void setNewDesk() {
         Desk newDesk = mock(Desk.class);
-
         reservation.setDesk(newDesk);
 
         assertThat(reservation.getDesk(), is(newDesk));
+    }
+
+    @Test(expected = NumberOutOfRange.class)
+    public void throwWhenNegativePersons() {
+        new Reservation("Gast", -1, mockedDesk, mockedTimeInterval);
+    }
+
+    @Test(expected = NumberOutOfRange.class)
+    public void throwWhenSetNegativePersons() {
+        reservation.setPersons(3);
+
+        reservation.setPersons(-1);
     }
 
     @Test
