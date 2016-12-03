@@ -121,7 +121,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 18.11.2016    | 19:00     | 21:30     | Neue Benutzerkonten anlegen + Tests
 | 20.11.2016    | 19:00     | 20:00     | Nutzerdetails anzeigen
 | 21.11.2016    | 18:00     | 20:00     | Probiere, Details Modal anzuzeigen
-| 23.11.2016    | 14:00     | 25:00     | Probiere, Details Modal anzuzeigen
+| 23.11.2016    | 14:00     | 15:00     | Probiere, Details Modal anzuzeigen
 | 24.11.2016    | 09:00     | 14:00     | Modal richtig anzeigen, mehr Tests schreiben
 | 28.11.2016    | 17:00     | 20:00     | Tests für User Package
 | 29.11.2016    | 15:00     | 18:00     | Einsetzen von Lombok im User Package
