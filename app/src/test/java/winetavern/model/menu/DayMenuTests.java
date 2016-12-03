@@ -1,9 +1,7 @@
-package winetavern.model.reservation;
+package winetavern.model.menu;
 
 import org.junit.Before;
 import org.junit.Test;
-import winetavern.model.menu.DayMenu;
-import winetavern.model.menu.DayMenuItem;
 
 import java.time.LocalDate;
 import java.util.Calendar;
