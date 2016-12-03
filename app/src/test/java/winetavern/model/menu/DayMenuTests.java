@@ -1,14 +1,13 @@
 package winetavern.model.menu;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
 import static org.mockito.Mockito.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import java.time.LocalDate;
 
 /**
  * @author Niklas Wünsche
@@ -21,8 +20,7 @@ public class DayMenuTests {
 
     @Before
     public void before() {
-        Calendar calendar = Calendar.getInstance();
-        dayMenu = new DayMenu(calendar);
+        dayMenu = new DayMenu(LocalDate.now());
     }
 
     @Test(expected = NullPointerException.class)
@@ -37,10 +35,8 @@ public class DayMenuTests {
 
     @Test
     public void getReadableDayRight() {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        String formatedDate = format.format(dayMenu.getDay().getTime());
 
-        assertThat(dayMenu.getReadableDay(), is(formatedDate));
+        assertThat(dayMenu.getReadableDay(), is(dayMenu.getDay().toString()));
     }
 
     @Test

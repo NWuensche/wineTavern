@@ -1,5 +1,6 @@
 package winetavern.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,9 +37,7 @@ public class DateParameter {
         this.year = year;
     }
 
-    public Calendar getCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        return calendar;
+    public LocalDate getDate() {
+        return LocalDate.of(year, month, day);
     }
 }

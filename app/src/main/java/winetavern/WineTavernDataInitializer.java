@@ -25,9 +25,9 @@ import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -142,9 +142,8 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeDayMenuWithItems() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2013, 10, 30);
-        DayMenu dayMenu = new DayMenu(calendar);
+        LocalDate day = LocalDate.of(2013, 10, 30);
+        DayMenu dayMenu = new DayMenu(day);
         dayMenuRepository.save(dayMenu);
 
         DayMenuItem vodka = new DayMenuItem("Vodka 2cl vom Fass", "really good", Money.of(2, "EUR"), 35.0);

@@ -1,12 +1,10 @@
 package winetavern.model.menu;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -23,20 +21,19 @@ public class DayMenu {
 
     @Id @GeneratedValue Long id;
 
-    @Setter private Calendar day;
+    @Setter @NonNull private LocalDate day;
 
     @ManyToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, mappedBy = "dayMenus")
     private List<DayMenuItem> dayMenuItems;
 
-    public DayMenu(Calendar day) {
+    public DayMenu(@NonNull LocalDate day) {
         dayMenuItems = new ArrayList<>();
 
         this.day = day;
     }
 
     public String getReadableDay() {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        return format.format(day.getTime());
+        return day.toString();
     }
 
     public void addMenuItem(DayMenuItem newItem) {

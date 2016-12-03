@@ -10,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuRepository;
-import winetavern.model.stock.ProductCatalog;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 
 /**
@@ -43,14 +43,11 @@ public class DayMenuManager {
         return "addmenu";
     }
 
-    /**
-     * @param dateParameter if day starts with a 0, the month will be count up by one
-     */
     @RequestMapping(value = "/admin/menu/add", method = RequestMethod.POST)
     public ModelAndView addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter,
                                     ModelAndView modelAndView) {
-        dateParameter.setMonth(dateParameter.getMonth()-1); //workaround, see above
-        Calendar creationDate = dateParameter.getCalendar();
+        dateParameter.setMonth(dateParameter.getMonth());
+        LocalDate creationDate = dateParameter.getDate();
         DayMenu dayMenu = new DayMenu(creationDate);
         dayMenuRepository.save(dayMenu);
 
