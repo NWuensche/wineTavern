@@ -23,27 +23,27 @@ import java.util.List;
 @Setter
 public class DayMenuItem {
 
-    @Id @GeneratedValue private Long id;
-    private MonetaryAmount price;
+    @Setter(value = AccessLevel.NONE) @Id @GeneratedValue private Long id;
 
     @OneToOne(fetch=FetchType.EAGER, targetEntity = Product.class)
     @JoinColumn(name = "product_id")
     private Product product;
-    private String name;
-    private String description;
-
-    /**
-     * Amount of this DayMenuItem you get out of one Product.
-     */
-    private Double quantityPerProduct;
-
-    private boolean enabled;
 
     @ManyToMany(fetch=FetchType.EAGER, targetEntity = DayMenu.class, cascade = CascadeType.ALL)
     @JoinTable (joinColumns = {@JoinColumn(name="day_menu_id")},
             inverseJoinColumns = {@JoinColumn(name = "day_menu_item_id")}
     )
     private List<DayMenu> dayMenus;
+
+    /**
+     * Amount of this DayMenuItem you get out of one Product.
+     */
+    private Double quantityPerProduct;
+
+    private MonetaryAmount price;
+    private String name;
+    private String description;
+    private boolean enabled;
 
     public DayMenuItem(String name, String description, Money price, Double quantityPerProduct) {
         this.name = name;
@@ -54,37 +54,9 @@ public class DayMenuItem {
         this.enabled = true;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void setPrice(MonetaryAmount price) {
-        this.price = price;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setDayMenus(List<DayMenu> dayMenus) {
-        this.dayMenus = dayMenus;
-    }
-
     // TODO Is this really necessary? shouldn't dayMenu.add(item) be enough?
     public void addDayMenu(DayMenu dayMenu) {
         dayMenus.add(dayMenu);
-    }
-
-    public void setQuantityPerProduct(Double quantityPerProduct) {
-        this.quantityPerProduct = quantityPerProduct;
     }
 
     // TODO Is this really necessary? Shouldn't dayMenu.remove(item) be enough?
