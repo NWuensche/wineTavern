@@ -1,13 +1,10 @@
 package winetavern.model.menu;
 
-import org.springframework.data.repository.Repository;
-
-import java.util.List;
+import org.salespointframework.core.SalespointRepository;
 
 /**
- * Created by Michel on 11/3/2016.
+ * @author Michel
  */
-public interface MenuItemRepository extends Repository<DayMenuItem, Long> {
-    List<DayMenuItem> findById(Long id);
-    List<DayMenuItem> findAll();
+
+public interface MenuItemRepository extends SalespointRepository<DayMenuItem, Long> {
 }

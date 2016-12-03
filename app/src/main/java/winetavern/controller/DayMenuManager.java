@@ -56,7 +56,7 @@ public class DayMenuManager {
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public ModelAndView removeMenu(@RequestParam("daymenuid") Long dayMenuId, ModelAndView modelAndView) {
-        DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
+        DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         if(dayMenu != null) {
             dayMenuRepository.delete(dayMenu);
         }
@@ -65,7 +65,7 @@ public class DayMenuManager {
 
     @RequestMapping("/admin/menu/edit/{pid}")
     public String editMenu(@PathVariable("pid") Long id, Model model) {
-        DayMenu dayMenu = dayMenuRepository.findById(id);
+        DayMenu dayMenu = dayMenuRepository.findOne(id).get();
         model.addAttribute("daymenu", dayMenu);
         model.addAttribute("stock", stock);
         model.addAttribute("frommenuitemid", id);
