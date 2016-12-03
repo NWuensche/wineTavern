@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 
 import static org.junit.Assert.*;
@@ -46,12 +45,12 @@ public class DayMenuTests {
 
     @Test
     public void storeDayMenusRight() {
-        storeItemsInDayMenu();
+        addItemsToDayMenu();
 
         assertThat(dayMenu.getDayMenuItems().size(), is(2));
     }
 
-    private DayMenuItem storeItemsInDayMenu() {
+    private DayMenuItem addItemsToDayMenu() {
         DayMenuItem mockedItem1 = mock(DayMenuItem.class);
         DayMenuItem mockedItem2 = mock(DayMenuItem.class);
 
@@ -63,7 +62,7 @@ public class DayMenuTests {
 
     @Test
     public void removeItemRight() {
-        DayMenuItem mockedItem = storeItemsInDayMenu();
+        DayMenuItem mockedItem = addItemsToDayMenu();
 
         dayMenu.removeMenuItem(mockedItem);
 
