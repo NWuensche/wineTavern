@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 /**
@@ -30,9 +31,9 @@ public class DayMenu {
         }
     }
 
-    public DayMenu() {}
-
     public DayMenu(Calendar day) {
+        dayMenuItems = new ArrayList<>();
+
         this.day = day;
     }
 
