@@ -129,4 +129,14 @@ public class TimeIntervalTests {
         assertThat(timeInterval.timeInInterval(after), is(false));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void throwWhenSetEndBeforeStart() {
+        timeInterval.setEnd(start.minusHours(1));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void throwWhenSetStartAfterEnd() {
+        timeInterval.setStart(end.plusHours(1));
+    }
+
 }

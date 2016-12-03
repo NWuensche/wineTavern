@@ -21,6 +21,7 @@ public class Event extends Product{
     @Deprecated
     protected Event() {}
 
+    // TODO Empty Description should not be allowed
     public Event(String name, MonetaryAmount price, TimeInterval interval, String description) {
         super(name, price, Metric.UNIT);
         if (interval == null) throw new NullPointerException("the interval must not be null");
@@ -42,6 +43,7 @@ public class Event extends Product{
         return description;
     }
 
+    // TODO Empty Description should not be allowed
     public void setDescription(String description) {
         if (description == null) throw new NullPointerException("the description must not be null");
         this.description = description;
