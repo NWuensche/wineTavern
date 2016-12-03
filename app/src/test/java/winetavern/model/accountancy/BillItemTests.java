@@ -18,11 +18,13 @@ import winetavern.model.menu.DayMenuItem;
 public class BillItemTests {
 
     private DayMenuItem mockedDayMenuItem;
-    private int quantity = 6;
+    private int quantity;
     private BillItem billItem;
 
     @Before
     public void setup() {
+        quantity = 6;
+
         mockedDayMenuItem = mock(DayMenuItem.class);
         when(mockedDayMenuItem.getPrice()).thenReturn(Money.of(3.56, EURO));
         when(mockedDayMenuItem.getName()).thenReturn("Schinken");

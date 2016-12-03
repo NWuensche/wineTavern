@@ -26,14 +26,13 @@ public class ExpenseTests {
 
     @Before
     public void before() {
+        description = "Description";
+
         mockedEmployee = mock(Employee.class);
         mockedExpenseGroup = mock(ExpenseGroup.class);
-        description = "Text";
-
         when(mockedExpenseGroup.getName()).thenReturn("Name");
 
         expense = new Expense(Money.of(3, EURO), description, mockedEmployee, mockedExpenseGroup);
-
     }
 
     @Test(expected = NullPointerException.class)
@@ -76,17 +75,16 @@ public class ExpenseTests {
     }
 
     private Expense setUpExpensesToCompare(String lastName1, String lastName2) {
-        UserAccount mockedUserAccount = mock(UserAccount.class);
+        UserAccount mockedUserAccount1 = mock(UserAccount.class);
         UserAccount mockedUserAccount2 = mock(UserAccount.class);
-
-        when(mockedUserAccount.getLastname()).thenReturn(lastName1);
+        when(mockedUserAccount1.getLastname()).thenReturn(lastName1);
         when(mockedUserAccount2.getLastname()).thenReturn(lastName2);
 
         Employee mockedEmployee2 = mock(Employee.class);
-        Expense expense2 = new Expense(Money.of(3, EURO), "Abrechnung", mockedEmployee2, mockedExpenseGroup);
-
-        when(mockedEmployee.getUserAccount()).thenReturn(mockedUserAccount);
+        when(mockedEmployee.getUserAccount()).thenReturn(mockedUserAccount1);
         when(mockedEmployee2.getUserAccount()).thenReturn(mockedUserAccount2);
+
+        Expense expense2 = new Expense(Money.of(3, EURO), "Abrechnung", mockedEmployee2, mockedExpenseGroup);
 
         return expense2;
     }

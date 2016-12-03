@@ -9,46 +9,56 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.time.BusinessTime;
-import winetavern.AbstractIntegrationTests;
 import winetavern.model.menu.DayMenuItem;
 
 import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
 
 /**
- * @author Louis
+ * @author Louis, Niklas
  */
 
-public class BillTests extends AbstractIntegrationTests {
+public class BillTests {
 
-
-    private Bill bill = new Bill("B1", null);
-    private DayMenuItem dayMenuItem1 = new DayMenuItem("Stuff", Money.of(4, EURO));
-    private DayMenuItem dayMenuItem2 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
-    private BillItem billItem1 = new BillItem(dayMenuItem1);
-    private BillItem billItem2 = new BillItem(dayMenuItem2);
+    private Bill bill;
+    private BillItem mockedBillItem1;
+    private BillItem mockedBillItem2;
+    private LocalDateTime time;
 
     @Before
     public void setup() {
-        bill.changeItem(billItem1, 1);
-        bill.changeItem(billItem2, 1);
+        time = LocalDateTime.of(2016, 11, 11, 11, 11, 11);
+        bill = new Bill("B1", null);
+
+        mockedBillItem1 = mock(BillItem.class);
+        mockedBillItem2 = mock(BillItem.class);
+        when(mockedBillItem1.getPrice()).thenReturn(Money.of(1, EURO));
+        when(mockedBillItem2.getPrice()).thenReturn(Money.of(2, EURO));
+
+        bill.changeItem(mockedBillItem1, 1);
+        bill.changeItem(mockedBillItem2, 1);
     }
 
     @Test
     public void getCorrectPrice() {
-        MonetaryAmount addedPrices = Money.from(dayMenuItem1.getPrice());
-        addedPrices.add(dayMenuItem2.getPrice());
-        assertEquals(addedPrices, bill.getPrice());
+        MonetaryAmount addedPrices = Money.from(mockedBillItem1.getPrice()).add(mockedBillItem2.getPrice());
+
+        assertThat(bill.getPrice(), is(addedPrices));
     }
 
     @Test(expected = IllegalStateException.class)
     public void throwOnChangeIfClosed() {
-        LocalDateTime time = LocalDateTime.of(2016, 11, 11, 11, 11, 11);
+        BusinessTime mockedBusinessTime = getMockedBusinessTime();
+        bill.close(mockedBusinessTime);
+
+        bill.changeItem(mockedBillItem1, 3);
+    }
+
+    private BusinessTime getMockedBusinessTime() {
         BusinessTime mockedBusinessTime = mock(BusinessTime.class);
         when(mockedBusinessTime.getTime()).thenReturn(time);
 
-        bill.close(mockedBusinessTime);
-        bill.changeItem(billItem1, 3);
+        return mockedBusinessTime;
     }
 
     @Test(expected = NullPointerException.class)
@@ -58,8 +68,8 @@ public class BillTests extends AbstractIntegrationTests {
 
     @Test
     public void removeItem() {
-        bill.changeItem(billItem1, 0);
-        assertThat(bill.getItems().contains(billItem1), is(false));
+        bill.changeItem(mockedBillItem1, 0);
+        assertThat(bill.getItems().contains(mockedBillItem1), is(false));
     }
 
     @Test
@@ -74,18 +84,15 @@ public class BillTests extends AbstractIntegrationTests {
 
     @Test
     public void dontAddEmptyNewItem() {
-        DayMenuItem dayMenuItem4 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
-        BillItem billItem4 = new BillItem(dayMenuItem4);
-        bill.changeItem(billItem4, 0);
+        BillItem dontAdd = mock(BillItem.class);
+        bill.changeItem(dontAdd, 0);
 
-        assertThat(bill.getItems().contains(billItem4), is(false));
+        assertThat(bill.getItems().contains(dontAdd), is(false));
     }
 
     @Test
     public void rightCloseTime() {
-        LocalDateTime time = LocalDateTime.of(2016, 11, 11, 11, 11, 11);
-        BusinessTime mockedBusinessTime = mock(BusinessTime.class);
-        when(mockedBusinessTime.getTime()).thenReturn(time);
+        BusinessTime mockedBusinessTime = getMockedBusinessTime();
         bill.close(mockedBusinessTime);
 
         assertThat(bill.getCloseTime(), is(time));
