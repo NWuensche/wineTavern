@@ -121,6 +121,7 @@ public class DayMenuItem {
         return dayMenus;
     }
 
+    // TODO Is this really necessary? shouldn't dayMenu.add(item) be enough?
     public void addDayMenu(DayMenu dayMenu) {
         dayMenus.add(dayMenu);
     }
@@ -133,6 +134,7 @@ public class DayMenuItem {
         this.quantityPerProduct = quantityPerProduct;
     }
 
+    // TODO Is this really necessary? Shouldn't dayMenu.remove(item) be enough?
     public void removeDayMenu(DayMenu dayMenu) {
         this.dayMenus.remove(dayMenu);
     }

@@ -3,6 +3,7 @@ package winetavern.model.menu;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -37,7 +38,10 @@ public class DayMenuTests {
 
     @Test
     public void getReadableDayRight() {
-        assertThat(dayMenu.getReadableDay(), is(LocalDate.now().toString()));
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        String formatedDate = format.format(dayMenu.getDay().getTime());
+
+        assertThat(dayMenu.getReadableDay(), is(formatedDate));
     }
 
     @Test
