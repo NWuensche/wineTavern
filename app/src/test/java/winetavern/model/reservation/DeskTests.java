@@ -16,23 +16,15 @@ import java.time.LocalDateTime;
 public class DeskTests {
 
     private Desk desk;
-    private Reservation reservation;
-    private TimeInterval interval;
 
     @Before
     public void before() {
-        LocalDateTime start = LocalDateTime.of(2016, 11, 23, 20, 40);
-        LocalDateTime end = start.plusHours(3);
-        interval = new TimeInterval(start, end);
-
         desk = new Desk("Tisch 1", 4);
-
-        reservation = new Reservation("Gast 1", 3, desk, interval);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void DeskConstructorNegativeCapacityTest() {
-        Desk wrongDesk = new Desk("1", -2);
+        new Desk("1", -2);
     }
 
     @Test
