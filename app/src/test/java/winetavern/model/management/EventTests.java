@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 
 public class EventTests {
 
-    private TimeInterval timeInterval;
+    private TimeInterval mockedTimeInterval;
     private Money money;
     private String description;
 
     @Before
     public void before() {
-        timeInterval = mock(TimeInterval.class);
+        mockedTimeInterval = mock(TimeInterval.class);
 
         money = Money.of(7, EURO);
         description = "description";
@@ -33,7 +33,7 @@ public class EventTests {
 
     @Test
     public void createEvent() {
-        new Event("Event", money, timeInterval, description);
+        new Event("Event", money, mockedTimeInterval, description);
     }
 
     @Test(expected = NullPointerException.class)
@@ -43,29 +43,29 @@ public class EventTests {
 
     @Test(expected = NullPointerException.class)
     public void throwWhenNullDescription() {
-        new Event("Event", money, timeInterval, null);
+        new Event("Event", money, mockedTimeInterval, null);
     }
 
     @Test(expected = IllegalStateException.class)
     public void throwWhenEmptyDescription() {
-        new Event("Event", money, timeInterval, "");
+        new Event("Event", money, mockedTimeInterval, "");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenSetEmptyDescription() {
-        new Event("Event", money, timeInterval, description).setDescription("");
+        new Event("Event", money, mockedTimeInterval, description).setDescription("");
     }
 
     @Test
     public void compareRight() {
-        TimeInterval early = mock(TimeInterval.class);
-        TimeInterval later = mock(TimeInterval.class);
+        TimeInterval mockedEarly = mock(TimeInterval.class);
+        TimeInterval mockedLater = mock(TimeInterval.class);
 
-        when(early.getStart()).thenReturn(LocalDateTime.now());
-        when(later.getStart()).thenReturn(LocalDateTime.now().plusHours(3));
+        when(mockedEarly.getStart()).thenReturn(LocalDateTime.now());
+        when(mockedLater.getStart()).thenReturn(LocalDateTime.now().plusHours(3));
 
-        Event event = new Event("Event", money, early, description);
-        Event laterEvent = new Event("Event", money, later, description);
+        Event event = new Event("Event", money, mockedEarly, description);
+        Event laterEvent = new Event("Event", money, mockedLater, description);
 
         assertThat(event.compareTo(laterEvent), is(lessThan(0)));
     }

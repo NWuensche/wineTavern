@@ -11,17 +11,12 @@ import winetavern.model.user.Employee;
 
 import java.time.LocalDateTime;
 
-
-
-
 /**
  * @author Niklas Wünsche
  */
 
 public class ShiftTests {
 
-    private Shift earlyShift;
-    private Shift lateShift;
     private TimeInterval mockedEarlyTimeInterval;
     private TimeInterval mockedLateTimeInterval;
     private Employee mockedEmployee;
@@ -48,11 +43,10 @@ public class ShiftTests {
         when(mockedEarlyTimeInterval.getStart()).thenReturn(LocalDateTime.now());
         when(mockedLateTimeInterval.getStart()).thenReturn(LocalDateTime.now().plusHours(3));
 
-        earlyShift = new Shift(mockedEarlyTimeInterval, mockedEmployee);
-        lateShift = new Shift(mockedLateTimeInterval, mockedEmployee);
+        Shift earlyShift = new Shift(mockedEarlyTimeInterval, mockedEmployee);
+        Shift lateShift = new Shift(mockedLateTimeInterval, mockedEmployee);
 
         assertThat(earlyShift.compareTo(lateShift), is(lessThan(0)));
     }
-
 
 }

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
  * @author Louis
  */
 public class TimeIntervalTests {
+
     private TimeInterval timeInterval;
     private LocalDateTime start;
     private LocalDateTime end;
@@ -26,27 +27,19 @@ public class TimeIntervalTests {
         timeInterval = new TimeInterval(start, end);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void throwWhenStartIsNull() {
+        new TimeInterval(start, null);
+    }
 
     @Test(expected = NullPointerException.class)
-    public void throwWhenNullTime() {
+    public void throwWhenEndIsNull() {
         new TimeInterval(start, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenNegativeDuration() {
         new TimeInterval(end, start);
-    }
-
-    @Test
-    public void intersectionTest(){
-        TimeInterval first = new TimeInterval(start,end);
-        TimeInterval second = new TimeInterval(start.plusHours(1),start.plusHours(4));
-        TimeInterval third = new TimeInterval(end.plusHours(2),end.plusHours(5));
-
-        assertThat(first.intersects(second), is(true));
-        assertThat(second.intersects(first), is(true));
-        assertThat(first.intersects(third), is(false));
-        assertThat(third.intersects(first), is(false));
     }
 
     @Test
