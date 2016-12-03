@@ -1,6 +1,5 @@
 package winetavern.model.reservation;
 
-import com.mysql.cj.core.exceptions.NumberOutOfRange;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
