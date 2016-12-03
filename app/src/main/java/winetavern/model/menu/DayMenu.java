@@ -1,5 +1,8 @@
 package winetavern.model.menu;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -10,11 +13,12 @@ import java.util.List;
 
 
 @Entity
+@Getter
 public class DayMenu {
 
     @Id @GeneratedValue Long id;
 
-    private Calendar day;
+    @Setter private Calendar day;
 
     @ManyToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, mappedBy = "dayMenus")
     private List<DayMenuItem> dayMenuItems;
@@ -32,29 +36,9 @@ public class DayMenu {
         this.day = day;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDay(Calendar day) {
-        this.day = day;
-    }
-
-    public Calendar getDay() {
-        return day;
-    }
-
     public String getReadableDay() {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         return format.format(day.getTime());
-    }
-
-    public List<DayMenuItem> getDayMenuItems() {
-        return dayMenuItems;
     }
 
     public void addMenuItem(DayMenuItem dayMenuItem) {
