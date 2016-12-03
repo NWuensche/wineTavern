@@ -55,4 +55,13 @@ public class ReservationIntegrationTests extends AbstractIntegrationTests{
         assertThat(deskList.contains(reservation2), is(true));
     }
 
+    @Test
+    public void oldDeskDeleted() {
+        Desk desk2 = new Desk("Tisch 2", 4);
+        deskRepository.save(desk2);
+        reservation.setDesk(desk2);
+        assertThat(reservationRepository.findByDesk(desk2).isEmpty(), is(false));
+        assertThat(reservationRepository.findByDesk(desk).isEmpty(), is(true));
+    }
+
 }

@@ -59,7 +59,7 @@ public class Reservation {
 
     public void setDesk(Desk desk) {
         this.desk = desk;
-        // TODO Old Desk will not be deleted
+        // TODO Old Desk might not be deleted, is this necessary?
         desk.addReservation(this);
     }
 
