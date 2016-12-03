@@ -6,13 +6,12 @@ import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-/**
- * Created by Michel on 11/3/2016.
- */
 
+import java.util.List;
+
+/**
+ * @author Michel
+ */
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))

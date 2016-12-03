@@ -3,7 +3,10 @@ package winetavern.model.menu;
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 
@@ -15,7 +18,9 @@ import java.util.List;
  */
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 @Getter
+@Setter
 public class DayMenuItem {
 
     @Id @GeneratedValue private Long id;
@@ -26,10 +31,12 @@ public class DayMenuItem {
     private Product product;
     private String name;
     private String description;
+
     /**
      * Amount of this DayMenuItem you get out of one Product.
      */
     private Double quantityPerProduct;
+
     private boolean enabled;
 
     @ManyToMany(fetch=FetchType.EAGER, targetEntity = DayMenu.class, cascade = CascadeType.ALL)
@@ -37,16 +44,6 @@ public class DayMenuItem {
             inverseJoinColumns = {@JoinColumn(name = "day_menu_item_id")}
     )
     private List<DayMenu> dayMenus;
-
-    public DayMenuItem() {
-        this.dayMenus = new LinkedList<DayMenu>();
-    };
-
-    public DayMenuItem(String name, Money price) {
-        this.name = name;
-        this.price = price;
-        this.dayMenus = new LinkedList<DayMenu>();
-    }
 
     public DayMenuItem(String name, String description, Money price, Double quantityPerProduct) {
         this.name = name;

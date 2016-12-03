@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
@@ -111,14 +112,14 @@ public class DayMenuItemManager {
     @RequestMapping(value = "/admin/menuitem/add", method = RequestMethod.POST)
     public ModelAndView addMenuItemPost(@RequestParam("product") Product product,
                                         @RequestParam("name") String name,
-                                        @RequestParam("price") MonetaryAmount price,
+                                        @RequestParam("price") Money price,
                                         @RequestParam("description") String description,
                                         @RequestParam("quantityPerProduct") Double quantityPerProduct,
                                         @RequestParam("enabled") Boolean enabled,
                                         @RequestParam("dayMenu") Long dayMenu,
                                         ModelAndView modelAndView) {
 
-        DayMenuItem dayMenuItem = new DayMenuItem();
+        DayMenuItem dayMenuItem = new DayMenuItem(name, description, price, quantityPerProduct);
         dayMenuItem.setProduct(product);
         dayMenuItem.setName(name);
         dayMenuItem.setPrice(price);
