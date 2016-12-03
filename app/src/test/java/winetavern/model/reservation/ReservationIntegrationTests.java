@@ -44,7 +44,7 @@ public class ReservationIntegrationTests extends AbstractIntegrationTests{
 
         desk = new Desk("Tisch 1", 4);
         deskRepository.save(desk);
-        desk2 = new Desk("Tisch 2", 6);
+        desk2 = new Desk("Tisch 2", 5);
         deskRepository.save(desk2);
 
         reservation = new Reservation("Gast 1", 3, desk, interval);
@@ -52,8 +52,6 @@ public class ReservationIntegrationTests extends AbstractIntegrationTests{
         reservation2 = new Reservation("Arnold", 4, desk2, interval2);
         reservationRepository.save(reservation2);
     }
-
-
 
     @Test
     public void addReservationCorrect() {
@@ -82,6 +80,24 @@ public class ReservationIntegrationTests extends AbstractIntegrationTests{
     @Test
     public void findAllByOrderByGuestNameWorks() {
         assertArrayEquals(reservationRepository.findAllByOrderByGuestName().toArray(), new Reservation[]{reservation2, reservation});
+    }
+
+    @Test
+    public void findByCapacityWorks() {
+        Desk bigDesk = new Desk("Tisch 3", 6);
+
+        deskRepository.save(bigDesk);
+
+        List<Desk> foundDesk = deskRepository.findByCapacityGreaterThanEqualOrderByCapacity(5);
+        assertArrayEquals(foundDesk.toArray(), new Desk[]{desk2, bigDesk});
+    }
+
+    @Test
+    public void findByNameWorks() {
+        Desk desk4 = new Desk("Tisch 4", 4);
+        deskRepository.save(desk4);
+
+        assertThat(deskRepository.findByName("Tisch 4"), is(desk4));
     }
 
 }
