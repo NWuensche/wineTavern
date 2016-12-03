@@ -2,33 +2,22 @@ package winetavern.model.reservation;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import winetavern.AbstractIntegrationTests;
-import winetavern.AbstractWebIntegrationTests;
 import winetavern.model.management.TimeInterval;
-
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
- * @author Sev
+ * @author Sev, Niklas
  */
 
-@Transactional
-public class DeskTests extends AbstractIntegrationTests {
-
-    @Autowired private DeskRepository deskRepository;
-    @Autowired private ReservationRepository reservationRepository;
+public class DeskTests {
 
     private Desk desk;
-    private Desk desk2;
     private Reservation reservation;
     private TimeInterval interval;
-
 
     @Before
     public void before() {
@@ -37,14 +26,8 @@ public class DeskTests extends AbstractIntegrationTests {
         interval = new TimeInterval(start, end);
 
         desk = new Desk("Tisch 1", 4);
-        deskRepository.save(desk);
 
         reservation = new Reservation("Gast 1", 3, desk, interval);
-        reservationRepository.save(reservation);
-
-
-        desk2 = new Desk("Tisch 2", 6);
-        deskRepository.save(desk2);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -54,12 +37,10 @@ public class DeskTests extends AbstractIntegrationTests {
 
     @Test
     public void addReservationCorrect() {
-        Reservation reservation2 = new Reservation("Peter Mueller", 3, desk2, interval);
-        reservationRepository.save(reservation2);
-        desk2.addReservation(reservation2);
+        Reservation reservation = mock(Reservation.class);
+        desk.addReservation(reservation);
 
-        List<Reservation> deskList = reservationRepository.findByDesk(desk2);
-        assertThat(deskList.contains(reservation2), is(true));
+        assertThat(desk.getReservationList().contains(reservation), is(true));
     }
 
 }
