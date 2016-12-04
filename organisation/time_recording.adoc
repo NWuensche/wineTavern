@@ -93,6 +93,9 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 22.11.2016 | 11:00 | 15:00 | ExpenseController
 | 23.11.2016 | 15:30 | 17:00 | Expense search functions
 | 24.11.2016 | 15:00 | 18:30 | Finished Expense Template - Controller
+| 25.11.2016 | 15:00 | 16:30 | Fixed Expense bug, made daily accounting work
+| 29.11.2016 | 11:00 | 14:00 | Made single Expense select / payoff possible
+| 04.12.2016 | 15:00 | 16:30 | Fixed Timeinterval, polished Event
 |===
 
 == Niklas
