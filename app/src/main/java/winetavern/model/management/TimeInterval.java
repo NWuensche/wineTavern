@@ -1,52 +1,45 @@
 package winetavern.model.management;
 
+import lombok.Getter;
+import lombok.NonNull;
 import org.salespointframework.time.Interval;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 /**
- * @author Louis, Michel
+ * @author Louis
  */
 
 @Entity
 public class TimeInterval {
-    @Id @GeneratedValue private long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    @Getter @Id @GeneratedValue private long id;
+    @Getter @NonNull private LocalDateTime start;
+    @Getter @NonNull private LocalDateTime end;
 
-    @Deprecated
-    protected TimeInterval() {}
+    @Deprecated protected TimeInterval() {}
 
-    public TimeInterval(LocalDateTime start, LocalDateTime end) throws IllegalArgumentException {
-        if(start.compareTo(end) == 1) {
+    public TimeInterval(LocalDateTime start, LocalDateTime end) {
+        if(end.isBefore(start))
             throw new IllegalArgumentException("End should not be before start");
-        }
-
         this.start = start;
         this.end = end;
-    }
 
-    public long getId() {
-        return id;
-    }
-
-    public LocalDateTime getStart() {
-        return start;
     }
 
     public void setStart(LocalDateTime start) {
+        if(end.isBefore(start))
+            throw new IllegalArgumentException("End should not be before start");
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
     public void setEnd(LocalDateTime end) {
+        if(end.isBefore(start))
+            throw new IllegalArgumentException("End should not be before start");
         this.end = end;
     }
 
@@ -59,19 +52,14 @@ public class TimeInterval {
     }
 
     public TimeInterval moveIntervalByMinutes(int minutes) {
-        if (minutes < 0) {
-            this.start = start.minusMinutes(minutes);
-            this.end = end.minusMinutes(minutes);
-        } else {
-            this.start = start.plusMinutes(minutes);
-            this.end = end.plusMinutes(minutes);
-        }
+        this.start = start.plusMinutes(minutes);
+        this.end = end.plusMinutes(minutes);
         return this;
     }
 
     public boolean intersects(TimeInterval other) {
-        return (timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
-                this.getStart().isEqual(other.getStart()) || this.getEnd().isEqual(other.getEnd()));
+        return timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
+                (start.compareTo(other.getStart()) != -1 && end.compareTo(other.getEnd()) != 1);
     }
 
     public boolean timeInInterval(LocalDateTime time) {

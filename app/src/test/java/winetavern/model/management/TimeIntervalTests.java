@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
  * Test class for {@link TimeInterval}
  * @author Louis
  */
-@Transactional
-public class TimeIntervalTests extends AbstractWebIntegrationTests {
+
+public class TimeIntervalTests {
     private LocalDateTime start = LocalDateTime.now();
     private LocalDateTime end = start.plusHours(3);
 
