@@ -106,6 +106,7 @@ public class BillController {
     @RequestMapping("/service/bills/details/{billid}/split")
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
+        // TODO Wie ist dieser Query aufgebaut?
         if(query.isPresent()) {
             Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
             bills.save(newBill);
