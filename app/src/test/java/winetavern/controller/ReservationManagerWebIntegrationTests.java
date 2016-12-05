@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.is;
  * @author Sev, Michel Kunkler
  */
 @Transactional
-public class ReservationManagerTests extends AbstractWebIntegrationTests {
+public class ReservationManagerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired ReservationRepository reservationRepository;
     @Autowired ReservationManager reservationManager;

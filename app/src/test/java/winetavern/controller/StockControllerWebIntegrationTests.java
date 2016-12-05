@@ -22,7 +22,7 @@ import winetavern.model.stock.ProductCatalog;
  */
 
 @Transactional
-public class StockControllerTests extends AbstractWebIntegrationTests {
+public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTests {
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ProductCatalog products;
     private Product product;

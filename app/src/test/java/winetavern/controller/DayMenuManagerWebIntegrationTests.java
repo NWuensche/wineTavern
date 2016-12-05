@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
  * Created by michel on 13.11.16.
  */
 @Transactional
-public class DayMenuManagerTests extends AbstractWebIntegrationTests {
+public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTests {
     @Autowired DayMenuManager dayMenuManager;
     @Autowired DayMenuRepository dayMenuRepository;
 
