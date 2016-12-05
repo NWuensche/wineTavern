@@ -74,8 +74,8 @@ public class BillTests {
 
     @Test
     public void addItem() {
-        DayMenuItem dayMenuItem3 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
-        BillItem billItem3 = new BillItem(dayMenuItem3);
+        DayMenuItem mockedItem = mock(DayMenuItem.class);
+        BillItem billItem3 = new BillItem(mockedItem);
 
         bill.changeItem(billItem3, 4);
 

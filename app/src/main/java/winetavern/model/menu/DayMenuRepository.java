@@ -1,18 +1,12 @@
 package winetavern.model.menu;
 
-
-import org.springframework.data.repository.CrudRepository;
-import java.util.Calendar;
+import org.salespointframework.core.SalespointRepository;
+import java.time.LocalDate;
 
 
 /**
- * Created by Michel on 11/5/2016.
+ * @author Michel
  */
-public interface DayMenuRepository extends CrudRepository<DayMenu, Long> {
-    DayMenu findById(Long id);
-
-    /**
-     * @implNote can cause problems, be careful
-     */
-    DayMenu findByDay(Calendar day);
+public interface DayMenuRepository extends SalespointRepository<DayMenu, Long> {
+    DayMenu findByDay(LocalDate day);
 }

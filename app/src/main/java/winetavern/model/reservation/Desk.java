@@ -1,30 +1,32 @@
 package winetavern.model.reservation;
 
+import lombok.*;
+import org.junit.Assert;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.Matchers.greaterThan;
 
 /**
  * @author Sev
  */
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
+@Getter
 public class Desk {
 
     @Id @GeneratedValue private long id;
+
     @OneToMany(targetEntity=Reservation.class, mappedBy="desk", fetch = FetchType.EAGER)
     List<Reservation> reservationList;
 
+    @Setter private String name;
     private int capacity;
-    private String name;
-
-    @Deprecated
-    protected Desk(){
-        this.reservationList = new ArrayList<>();
-    }
 
     public Desk(String name, int capacity) throws IllegalArgumentException {
-
         if(capacity <= 0) {
             throw new IllegalArgumentException ("No Desk should have capacity <= 0");
         }
@@ -34,36 +36,13 @@ public class Desk {
         this.reservationList = new ArrayList<>();
     }
 
-    public  long getId() {
-        return id;
-    }
-
-    public String getNumber() {
-        return name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
     public void setCapacity(int capacity) {
+        Assert.assertThat(capacity, greaterThan(0));
         this.capacity = capacity;
     }
 
     public void addReservation(Reservation reservation) {
         this.reservationList.add(reservation);
-    }
-
-    public List<Reservation> getReservationList() {
-        return reservationList;
     }
 
 }

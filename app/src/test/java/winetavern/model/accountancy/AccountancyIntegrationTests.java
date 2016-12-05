@@ -25,8 +25,8 @@ public class AccountancyIntegrationTests extends AbstractIntegrationTests {
     @Autowired private BillItemRepository billItems;
 
     private Bill bill = new Bill("B1", null);
-    private DayMenuItem dayMenuItem1 = new DayMenuItem("Stuff", Money.of(4, EURO));
-    private DayMenuItem dayMenuItem2 = new DayMenuItem("Tasty bacon", Money.of(5, EURO));
+    private DayMenuItem dayMenuItem1 = new DayMenuItem("Stuff", "So Stuffy!", Money.of(2, EURO), 3.0);
+    private DayMenuItem dayMenuItem2 = new DayMenuItem("Bacon", "So Tasty!", Money.of(5, EURO), 5.0);
     private BillItem billItem1 = new BillItem(dayMenuItem1);
     private BillItem billItem2 = new BillItem(dayMenuItem2);
 

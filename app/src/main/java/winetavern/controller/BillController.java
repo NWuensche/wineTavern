@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import winetavern.Helper;
 import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
@@ -84,7 +85,7 @@ public class BillController {
             return "redirect:/service/bills/details/" + billid;
         } else {
             model.addAttribute("bill", bill);
-            List<DayMenuItem> menuItems = dayMenuItems.findAll();
+            List<DayMenuItem> menuItems = Helper.convertToList(dayMenuItems.findAll());
             bill.getItems().forEach(it -> menuItems.remove(it.getItem()));
             model.addAttribute("menuitems", menuItems); //TODO show only items of the day
             return "billdetails";

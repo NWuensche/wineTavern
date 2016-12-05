@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
@@ -42,13 +43,13 @@ public class DayMenuItemManager {
 
     /**
      * Initially called for adding a menu item.
-     * Data gets processed in  {@link #addMenuItemPost(Product, String, MonetaryAmount, String, Double, Boolean, Long, ModelAndView)}
+     * Data gets processed in  {@link #addMenuItemPost(Product, String, Money, String, Double, Boolean, Long, ModelAndView)}
      */
     @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findAll(),
-                dayMenuRepository.findById(cameFrom)));
-        model.addAttribute("dayMenu", dayMenuRepository.findById(cameFrom));
+                dayMenuRepository.findOne(cameFrom).get()));
+        model.addAttribute("dayMenu", dayMenuRepository.findOne(cameFrom).get());
         model.addAttribute("stock", stock);
         return "addmenuitem";
     }
@@ -82,7 +83,7 @@ public class DayMenuItemManager {
             }
             @Override
             public void setAsText(String text) {
-                DayMenu dayMenu = dayMenuRepository.findById(Long.parseLong(text));
+                DayMenu dayMenu = dayMenuRepository.findOne(Long.parseLong(text)).get();
                 setValue(dayMenu);
             }
         });
@@ -111,21 +112,21 @@ public class DayMenuItemManager {
     @RequestMapping(value = "/admin/menuitem/add", method = RequestMethod.POST)
     public ModelAndView addMenuItemPost(@RequestParam("product") Product product,
                                         @RequestParam("name") String name,
-                                        @RequestParam("price") MonetaryAmount price,
+                                        @RequestParam("price") Money price,
                                         @RequestParam("description") String description,
                                         @RequestParam("quantityPerProduct") Double quantityPerProduct,
                                         @RequestParam("enabled") Boolean enabled,
                                         @RequestParam("dayMenu") Long dayMenu,
                                         ModelAndView modelAndView) {
 
-        DayMenuItem dayMenuItem = new DayMenuItem();
+        DayMenuItem dayMenuItem = new DayMenuItem(name, description, price, quantityPerProduct);
         dayMenuItem.setProduct(product);
         dayMenuItem.setName(name);
         dayMenuItem.setPrice(price);
         dayMenuItem.setDescription(description);
         dayMenuItem.setQuantityPerProduct(quantityPerProduct);
         dayMenuItem.setEnabled(enabled);
-        dayMenuItem.addDayMenu(dayMenuRepository.findById(dayMenu));
+        dayMenuItem.addDayMenu(dayMenuRepository.findOne(dayMenu).get());
         dayMenuItemRepository.save(dayMenuItem);
 
         modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenu));
@@ -137,7 +138,7 @@ public class DayMenuItemManager {
                                                 @RequestParam("dayMenu") Long dayMenuId,
                                                 ModelAndView modelAndView) {
         DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId).get();
-        DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
+        DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         dayMenuItem.addDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);
 
@@ -150,7 +151,7 @@ public class DayMenuItemManager {
                                                      @RequestParam("dayMenu") Long dayMenuId,
                                                      ModelAndView modelAndView) {
         DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId).get();
-        DayMenu dayMenu = dayMenuRepository.findById(dayMenuId);
+        DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         dayMenuItem.removeDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);
 
