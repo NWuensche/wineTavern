@@ -1,6 +1,7 @@
 package winetavern.model.management;
 
 import lombok.NonNull;
+import org.assertj.core.util.Strings;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Metric;
@@ -45,7 +46,7 @@ public class Event extends Product{
     }
 
     public void setDescription(String description) {
-        if (description == null) throw new NullPointerException("the description must not be null");
+        if (Strings.isNullOrEmpty(description)) throw new NullPointerException("the description must not be null");
         this.description = description;
     }
 }

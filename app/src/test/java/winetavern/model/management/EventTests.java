@@ -46,28 +46,14 @@ public class EventTests {
         new Event("Event", money, mockedTimeInterval, null);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void throwWhenEmptyDescription() {
         new Event("Event", money, mockedTimeInterval, "");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void throwWhenSetEmptyDescription() {
         new Event("Event", money, mockedTimeInterval, description).setDescription("");
-    }
-
-    @Test
-    public void compareRight() {
-        TimeInterval mockedEarly = mock(TimeInterval.class);
-        TimeInterval mockedLater = mock(TimeInterval.class);
-
-        when(mockedEarly.getStart()).thenReturn(LocalDateTime.now());
-        when(mockedLater.getStart()).thenReturn(LocalDateTime.now().plusHours(3));
-
-        Event event = new Event("Event", money, mockedEarly, description);
-        Event laterEvent = new Event("Event", money, mockedLater, description);
-
-        assertThat(event.compareTo(laterEvent), is(lessThan(0)));
     }
 
 }
