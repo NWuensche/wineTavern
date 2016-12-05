@@ -124,11 +124,13 @@ public class TimeIntervalTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenSetEndBeforeStart() {
+        timeInterval.setEnd(end);
         timeInterval.setEnd(start.minusHours(1));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenSetStartAfterEnd() {
+        timeInterval.setStart(start);
         timeInterval.setStart(end.plusHours(1));
     }
 
