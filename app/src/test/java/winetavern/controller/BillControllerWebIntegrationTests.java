@@ -19,6 +19,8 @@ import winetavern.model.user.Roles;
 import javax.transaction.Transactional;
 
 
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.salespointframework.core.Currencies.EURO;
@@ -43,19 +45,19 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private EmployeeManager employeeManager;
     @Autowired private UserAccountManager userAccountManager;
 
-    private BillItem billItem;
+    private BillItem fries;
     private Bill bill;
 
     @Before
     public void before() {
-        DayMenuItem dayMenuItem = new DayMenuItem("Product", "Description", Money.of(3, EURO), 3.0);
+        DayMenuItem dayMenuItem = new DayMenuItem("Pommes", "Description", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(dayMenuItem);
-        billItem = new BillItem(dayMenuItem);
-        billItemRepository.save(billItem);
+        fries = new BillItem(dayMenuItem);
+        billItemRepository.save(fries);
         bill = new Bill("Table 1",
                 employeeManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get());
 
-        bill.changeItem(billItem, 5);
+        bill.changeItem(fries, 5);
         billRepository.save(bill);
     }
 
@@ -101,22 +103,60 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     }
 
     @Test
-    public void showDetailsRight() throws Exception {
-        DayMenuItem dayMenuItem2 = new DayMenuItem("New Procut", "Desc", Money.of(5, EURO), 3.5);
+    public void addBillItemRight() throws Exception {
+        DayMenuItem dayMenuItem2 = new DayMenuItem("New Produtt", "Desc", Money.of(5, EURO), 3.5);
         dayMenuItemRepository.save(dayMenuItem2);
-        BillItem billItem2 = new BillItem(dayMenuItem2);
-        billItemRepository.save(billItem2);
 
+        RequestBuilder request = post("/service/bills/details/" + bill.getId() + "/add")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("itemid", "" + dayMenuItem2.getId())
+                .param("quantity", "" + 4);
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(bill.getItems().size(), is(2));
+
+        BillItem secondBillItem = Helper.convertToList(bill.getItems()).get(1);
+        assertThat(secondBillItem.getQuantity(), is(4));
+        assertThat(secondBillItem.getItem(), is(dayMenuItem2));
+    }
+
+    @Test
+    public void printBillRight() throws Exception {
+        assertThat(bill.isClosed(), is(false));
+
+        RequestBuilder request = post("/service/bills/details/" + bill.getId() + "/print")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(request)
+                .andExpect(model().attributeExists("bill"))
+                .andExpect(view().name("printbill"));
+
+        assertThat(bill.isClosed(), is(true));
+    }
+
+
+    @Test
+    public void dontAddAnythingInDetails() throws Exception {
         RequestBuilder noQueryRequest = get("/service/bills/details/" + bill.getId())
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
         mvc.perform(noQueryRequest)
                 .andExpect(model().attributeExists("menuitems"))
                 .andExpect(view().name("billdetails"));
+    }
+
+    @Test
+    public void showDetailsRight() throws Exception {
+        DayMenuItem dayMenuItem2 = new DayMenuItem("New Product", "Desc", Money.of(5, EURO), 3.5);
+        dayMenuItemRepository.save(dayMenuItem2);
+        BillItem billItem2 = new BillItem(dayMenuItem2);
+        billItemRepository.save(billItem2);
 
         RequestBuilder queryRequest = get("/service/bills/details/" + bill.getId())
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("save", billItem.getId() + ",7|" + billItem2.getId() + ",3|");
+                .param("save", fries.getId() + ",7|" + billItem2.getId() + ",3|");
 
         mvc.perform(queryRequest)
                 .andExpect(status().is3xxRedirection());
@@ -124,11 +164,11 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         assertThat(bill.getItems().size(), is(2));
         assertThat(Helper.getFirstItem(bill.getItems()).getQuantity(), is(7));
         assertThat(bill.getItems().contains(billItem2), is(true));
-
     }
 
+
     @Test
-    public void splitBillRight() throws Exception {
+    public void dontSplitBill() throws Exception {
         RequestBuilder noSplitRequest = post("/service/bills/details/" + bill.getId() + "/split")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
@@ -137,9 +177,23 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
                 .andExpect(model().attributeExists("bill"))
                 .andExpect(view().name("splitbill"));
 
+        assertThat(Helper.convertToList(billRepository.findAll()).size(), is(1));
+    }
+
+    @Test
+    public void splitBillRight() throws Exception {
+        DayMenuItem wineItem = new DayMenuItem("Wein", "Desc", Money.of(5, EURO), 3.5);
+        dayMenuItemRepository.save(wineItem);
+        BillItem wine = new BillItem(wineItem);
+        billItemRepository.save(wine);
+
+        bill.changeItem(wine, 4);
+
+        billRepository.save(bill);
+
         RequestBuilder splitRequest = post("/service/bills/details/" + bill.getId() + "/split")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("query", billItem.getId() + ",3|");
+                .param("query", fries.getId() + ",3|");
 
         mvc.perform(splitRequest)
                 .andExpect(model().attributeExists("leftbill"))
@@ -147,12 +201,18 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
 
         Bill secondBill = Helper.convertToList(billRepository.findAll()).get(1);
-        BillItem secondBillItem = Helper.getFirstItem(secondBill.getItems());
 
-        assertThat(Helper.getFirstItem(bill.getItems()).getQuantity(), is(3));
+        List<BillItem> secondBillItems = Helper.convertToList(secondBill.getItems());
+        BillItem wineOnSecondBill = secondBillItems.get(0);
+        BillItem friesOnSecondBill = secondBillItems.get(1);
 
-        assertThat(secondBillItem.getItem(), is(billItem.getItem()));
-        assertThat(secondBillItem.getQuantity(), is(2));
+        assertThat(bill.getItems().size(), is(1));
+        assertThat(fries.getQuantity(), is(3));
+        assertThat(bill.getItems().contains(wine), is(false));
+
+        assertThat(friesOnSecondBill.getItem(), is(fries.getItem()));
+        assertThat(wineOnSecondBill.getQuantity(), is(4));
+        assertThat(friesOnSecondBill.getQuantity(), is(2));
     }
 
 }
