@@ -44,9 +44,21 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private EmployeeManager employeeManager;
     @Autowired private UserAccountManager userAccountManager;
 
+    BillItem billItem;
+    Bill bill;
+
     @Before
     public void before() {
+        DayMenuItem dayMenuItem = new DayMenuItem("Product", "Description", Money.of(3, EURO), 3.0);
+        dayMenuItemRepository.save(dayMenuItem);
+        billItem = new BillItem(dayMenuItem);
+        //billItemRepository.save(new BillItem(dayMenuItem));
+        billItemRepository.save(billItem);
+        bill = new Bill("Table 1",
+                employeeManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get());
 
+        bill.changeItem(billItem, 5);
+        billRepository.save(bill);
     }
 
     @Test
@@ -92,29 +104,20 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void splitBillRight() throws Exception {
-        // TODO Was passiert, wenn es BillItem bereits gibt?
-        DayMenuItem dayMenuItem = new DayMenuItem("Product", "Description", Money.of(3, EURO), 3.0);
-        dayMenuItemRepository.save(dayMenuItem);
-        BillItem billItem = new BillItem(dayMenuItem);
-        //billItemRepository.save(new BillItem(dayMenuItem));
-        billItemRepository.save(billItem);
-        Bill bill = new Bill("Table 1",
-                employeeManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get());
-
-        bill.changeItem(billItem, 3);
-        billRepository.save(bill);
-
         RequestBuilder request = post("/service/bills/details/" + bill.getId() + "/split")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("query", "1,2|");
+                .param("query", billItem.getId() + ",3|");
 
         mvc.perform(request)
                 .andExpect(model().attributeExists("leftbill"))
                 .andExpect(view().name("splitbill"));
 
-        assertThat(Helper.getFirstItem(bill.getItems()).getQuantity(), is(1));
-        Bill secondBill = Helper.convertToArray(billRepository.findAll())[1];
+
+        Bill secondBill = Helper.convertToList(billRepository.findAll()).get(1);
         BillItem secondBillItem = Helper.getFirstItem(secondBill.getItems());
+
+        assertThat(Helper.getFirstItem(bill.getItems()).getQuantity(), is(3));
+
         assertThat(secondBillItem.getItem(), is(billItem.getItem()));
         assertThat(secondBillItem.getQuantity(), is(2));
     }
