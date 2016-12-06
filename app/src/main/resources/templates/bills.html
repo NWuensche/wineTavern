@@ -94,7 +94,7 @@
                         <div class="form-group">
                             <label for="table">Tisch-Nummer:</label>
                             <select id="table" name="table" class="form-control">
-                                <option th:each="table:${tables}" th:text="${table.number}">1</option>
+                                <option th:each="table:${tables}" th:text="${table.name}">1</option>
                             </select>
                         </div>
                     </form>

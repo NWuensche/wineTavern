@@ -73,6 +73,9 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
+    /**
+     * @param query Format: billItemID,newNumberOfItems|billItemId,...
+     */
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
@@ -103,6 +106,9 @@ public class BillController {
         return "printbill";
     }
 
+    /**
+     * @param query Format: billItemID,numberOfRemainingItems|billItemId,...
+     */
     @RequestMapping("/service/bills/details/{billid}/split")
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
