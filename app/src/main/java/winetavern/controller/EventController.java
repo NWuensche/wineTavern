@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 
+import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.TreeSet;
@@ -40,9 +42,20 @@ public class EventController {
         return "events";
     }
 
-    @RequestMapping(value="/admin/events/add", method = RequestMethod.POST)
-    public String addEvent(@ModelAttribute(value = "event") Event event) {
-        eventCatalog.save(event);
+    @RequestMapping("/admin/events/add")
+    public String showAddEventTemplate(){
+        return "addevent";
+    }
+
+    @PostMapping("/admin/events/add")
+    public String addEvent(@ModelAttribute String name, @ModelAttribute String desc, @ModelAttribute String date,
+                           @ModelAttribute String price) {
+        //TODO parse start and end, given in the form: "dd.MM.YYYY HH:mm - dd.MM.YYYY HH:mm"
+        LocalDateTime start = LocalDateTime.of(1,1,1,1,1);
+        LocalDateTime end = LocalDateTime.of(9,9,9,9,9);
+        TimeInterval interval = new TimeInterval(start,end);
+
+        eventCatalog.save(new Event(name, Money.of((Float.valueOf(price)),EURO),interval,desc));
         return "redirect:/admin/events";
     }
 

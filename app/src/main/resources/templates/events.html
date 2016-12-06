@@ -7,8 +7,18 @@
 </head>
 <body th:fragment="content">
 <div class="container__wrap">
-    <div class="container__head">
-        <h1>&nbsp;<span class="fa fa-calendar"></span> Events (<span th:text="${eventAmount}"></span> Events)</h1>
+    <div class="heading">
+        <div class="row">
+
+            <div class="col-xs-8">
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Events (<span th:text="${eventAmount}"></span> Events)</h1>
+            </div>
+            <div class="col-xs-4 text-xs-right">
+                <a th:href="@{/admin/events/add}">
+                    <button type="button" class="btn btn-primary">+ Event</button>
+                </a>
+            </div>
+        </div>
     </div>
     <table class="table table-striped">
         <thead>
