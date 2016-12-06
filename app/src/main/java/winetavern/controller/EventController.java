@@ -5,16 +5,13 @@ import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 
-import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -48,14 +45,19 @@ public class EventController {
     }
 
     @PostMapping("/admin/events/add")
-    public String addEvent(@ModelAttribute String name, @ModelAttribute String desc, @ModelAttribute String date,
-                           @ModelAttribute String price) {
-        //TODO parse start and end, given in the form: "dd.MM.YYYY HH:mm - dd.MM.YYYY HH:mm"
-        LocalDateTime start = LocalDateTime.of(1,1,1,1,1);
-        LocalDateTime end = LocalDateTime.of(9,9,9,9,9);
-        TimeInterval interval = new TimeInterval(start,end);
+    public String addEvent(@RequestParam String name, @RequestParam String desc, @RequestParam String date,
+                           @RequestParam String price) {
+        if (!date.isEmpty()) {
+            DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+            String[] splittedDate = date.split("\\s-\\s");
+            if (splittedDate.length == 2) {
+                LocalDateTime start = LocalDateTime.parse(splittedDate[0], parser);
+                LocalDateTime end = LocalDateTime.parse(splittedDate[1], parser);
 
-        eventCatalog.save(new Event(name, Money.of((Float.valueOf(price)),EURO),interval,desc));
+                eventCatalog.save(new Event(name, Money.of((Float.valueOf(price)), EURO),
+                                  new TimeInterval(start, end), desc));
+            }
+        }
         return "redirect:/admin/events";
     }
 
