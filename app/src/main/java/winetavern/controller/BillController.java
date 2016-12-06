@@ -73,6 +73,9 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
+    /**
+     * @param query Format: billItemID,newNumberOfItems|billItemId,...
+     */
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();

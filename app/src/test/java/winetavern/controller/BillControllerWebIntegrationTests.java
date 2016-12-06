@@ -16,16 +16,15 @@ import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
-
 import javax.transaction.Transactional;
 
-import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,15 +43,14 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private EmployeeManager employeeManager;
     @Autowired private UserAccountManager userAccountManager;
 
-    BillItem billItem;
-    Bill bill;
+    private BillItem billItem;
+    private Bill bill;
 
     @Before
     public void before() {
         DayMenuItem dayMenuItem = new DayMenuItem("Product", "Description", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(dayMenuItem);
         billItem = new BillItem(dayMenuItem);
-        //billItemRepository.save(new BillItem(dayMenuItem));
         billItemRepository.save(billItem);
         bill = new Bill("Table 1",
                 employeeManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get());
@@ -103,12 +101,47 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     }
 
     @Test
+    public void showDetailsRight() throws Exception {
+        DayMenuItem dayMenuItem2 = new DayMenuItem("New Procut", "Desc", Money.of(5, EURO), 3.5);
+        dayMenuItemRepository.save(dayMenuItem2);
+        BillItem billItem2 = new BillItem(dayMenuItem2);
+        billItemRepository.save(billItem2);
+
+        RequestBuilder noQueryRequest = get("/service/bills/details/" + bill.getId())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(noQueryRequest)
+                .andExpect(model().attributeExists("menuitems"))
+                .andExpect(view().name("billdetails"));
+
+        RequestBuilder queryRequest = get("/service/bills/details/" + bill.getId())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("save", billItem.getId() + ",7|" + billItem2.getId() + ",3|");
+
+        mvc.perform(queryRequest)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(bill.getItems().size(), is(2));
+        assertThat(Helper.getFirstItem(bill.getItems()).getQuantity(), is(7));
+        assertThat(bill.getItems().contains(billItem2), is(true));
+
+    }
+
+    @Test
     public void splitBillRight() throws Exception {
-        RequestBuilder request = post("/service/bills/details/" + bill.getId() + "/split")
+        RequestBuilder noSplitRequest = post("/service/bills/details/" + bill.getId() + "/split")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(noSplitRequest)
+                .andExpect(model().attributeDoesNotExist("leftbill"))
+                .andExpect(model().attributeExists("bill"))
+                .andExpect(view().name("splitbill"));
+
+        RequestBuilder splitRequest = post("/service/bills/details/" + bill.getId() + "/split")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("query", billItem.getId() + ",3|");
 
-        mvc.perform(request)
+        mvc.perform(splitRequest)
                 .andExpect(model().attributeExists("leftbill"))
                 .andExpect(view().name("splitbill"));
 
