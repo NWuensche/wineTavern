@@ -65,7 +65,7 @@ public class DayMenuItemManagerWebItegrationTests extends AbstractWebIntegration
     public void getNotAddedDayMenuItemsRight() {
         DayMenuItem notInMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
 
-        dayMenu.addMenuItem(dayMenuItem);
+        dayMenuItem.addDayMenu(dayMenu);
 
         Iterable<DayMenuItem> dayMenuItems = Arrays.asList(dayMenuItem, notInMenu);
 
@@ -73,6 +73,21 @@ public class DayMenuItemManagerWebItegrationTests extends AbstractWebIntegration
 
         assertArrayEquals(notAdded.toArray(), Arrays.asList(notInMenu).toArray());
     }
+
+//    @Test
+    // TODO Should work too
+//    public void getNotAddedDayMenuItemsRight() {
+//        DayMenuItem notInMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
+//
+//        dayMenu.addMenuItem(dayMenuItem);
+//
+//        Iterable<DayMenuItem> dayMenuItems = Arrays.asList(dayMenuItem, notInMenu);
+//
+//        List<DayMenuItem> notAdded = dayMenuItemManager.getNotAddedDayMenuItems(dayMenuItems, dayMenu);
+//
+//        assertThat(dayMenuItem.getDayMenus().contains(dayMenu))
+//        assertArrayEquals(notAdded.toArray(), Arrays.asList(notInMenu).toArray());
+//    }
 
     @Test
     public void addNewItemRight() throws Exception {
@@ -105,5 +120,20 @@ public class DayMenuItemManagerWebItegrationTests extends AbstractWebIntegration
         assertThat(storedDayMenuItems.get(1).getName(), is(nameOfMenuItem));
     }
 
+    @Test
+    public void addExistingRight() throws Exception {
+        DayMenuItem newItem = new DayMenuItem("new", "new", Money.of(3, EURO), 3.0);
+        dayMenuItemRepository.save(newItem);
+
+        RequestBuilder request = post("/admin/menuitem/addExisting")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("daymenuitem", newItem.getId().toString())
+                .param("dayMenu", dayMenu.getId().toString());
+
+        mvc.perform(request);
+
+        assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
+      //  assertThat(dayMenuRepository.findOne(dayMenu.getId()).get().getDayMenuItems().contains(newItem), is(true));
+    }
 
 }
