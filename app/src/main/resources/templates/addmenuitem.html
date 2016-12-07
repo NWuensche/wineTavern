@@ -35,7 +35,7 @@
             <th scope="row">-</th>
             <td th:text="${item.name}"></td>
             <td th:text="${item.price}"></td>
-            <td th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
+            <td th:if="${stock.findByProduct(item.product).isPresent()}" th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
             <td>
                 <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary">
                     <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>

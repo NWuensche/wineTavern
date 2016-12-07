@@ -12,6 +12,7 @@ import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
+import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
@@ -33,11 +34,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Niklas Wünsche
  */
 
-public class DayMenuItemManagerWebItegrationTests extends AbstractWebIntegrationTests {
+public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private DayMenuItemManager dayMenuItemManager;
     @Autowired private DayMenuRepository dayMenuRepository;
+    @Autowired private ProductCatalog productCatalog;
     private DayMenuItem dayMenuItem;
     private DayMenu dayMenu;
 
@@ -53,8 +55,12 @@ public class DayMenuItemManagerWebItegrationTests extends AbstractWebIntegration
 
     @Test
     public void addModelAttributesRight() throws Exception {
+        Product product = new Product("Product", Money.of(3, EURO));
+        productCatalog.save(product);
+        dayMenuItem.setProduct(product);
+
         RequestBuilder request = get("/admin/menuitem/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("camefrom", "" + dayMenuItem.getId());
+                .param("frommenuitemid", "" + dayMenu.getId());
 
         mvc.perform(request)
             .andExpect(model().attributeExists("daymenuitems"))

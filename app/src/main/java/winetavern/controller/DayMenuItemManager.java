@@ -45,7 +45,7 @@ public class DayMenuItemManager {
      * Initially called for adding a menu item.
      * Data gets processed in  {@link #addMenuItemPost(Product, String, Money, String, Double, Boolean, Long, ModelAndView)}
      */
-    // TODO How to call this one?
+    // TODO Should the Param be called frommenuid?
     @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findAll(),
@@ -76,6 +76,7 @@ public class DayMenuItemManager {
     /**
      * Custom Initbinder makes DayMenu and Product usable with form
      */
+    // TODO remove initBinder?
     @InitBinder
     protected void initBinder(WebDataBinder binder) throws Exception {
         binder.registerCustomEditor(DayMenu.class, "dayMenu", new PropertyEditorSupport() {
