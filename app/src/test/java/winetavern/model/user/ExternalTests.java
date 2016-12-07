@@ -33,13 +33,13 @@ public class ExternalTests {
         timeInterval = new TimeInterval(start, end);
 
         wage = Money.of(300, EURO);
-        event = new Event("testEvent", Money.of(10, EURO), timeInterval, "new testEvent");
-        external = new External(event, "name", wage);
+        external = new External("name", wage);
+        event = new Event("testEvent", Money.of(10, EURO), timeInterval, "new testEvent", external);
+
     }
 
     @Test
     public void standardFunctionsRight() {
-        assertThat(external.getEvent(), is(event));
         assertThat(external.getName(), is("name"));
         assertThat(external.getWage(), is(wage));
         assertThat(external.toString(), is("name"));

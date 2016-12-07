@@ -1,52 +1,34 @@
 package winetavern.model.management;
 
-import lombok.NonNull;
-import org.assertj.core.util.Strings;
-import org.hibernate.validator.constraints.NotEmpty;
+import lombok.*;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Metric;
+import winetavern.model.user.External;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 /**
  * @author Louis
  */
 
 @Entity
+@Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class Event extends Product{
-    @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
-    private String description;
+    @NonNull @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
+    @NonNull @ManyToOne(cascade = {CascadeType.ALL}) private External external;
+    @NonNull private String description;
 
-    @Deprecated
-    protected Event() {}
-
-    public Event(String name, MonetaryAmount price, @NonNull TimeInterval interval, @NonNull String description) {
+    public Event(String name, MonetaryAmount price, TimeInterval interval, String description, External external) {
         super(name, price, Metric.UNIT);
         if (description.equals(""))
             throw new IllegalArgumentException("The description must not be empty");
-        setInterval(interval);
-        setDescription(description);
-    }
-
-    public TimeInterval getInterval() {
-        return interval;
-    }
-
-    public void setInterval(TimeInterval interval) {
-        if (interval == null) throw new NullPointerException("the interval must not be null");
         this.interval = interval;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        if (Strings.isNullOrEmpty(description)) throw new NullPointerException("the description must not be null");
         this.description = description;
+        this.external = external;
     }
 }

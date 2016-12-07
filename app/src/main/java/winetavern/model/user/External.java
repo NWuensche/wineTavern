@@ -1,13 +1,11 @@
 package winetavern.model.user;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import winetavern.model.management.Event;
+import lombok.NoArgsConstructor;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
  * Entity for all (Groups of) Persons, that don't need a login to the Website (like artists)
@@ -16,16 +14,12 @@ import javax.persistence.OneToOne;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class External extends Person {
-    @OneToOne private Event event;
     private String name;
     private MonetaryAmount wage;
 
-    @Deprecated
-    protected External() {}
-
-    public External(Event event, String name, MonetaryAmount wage) {
-        this.event = event;
+    public External(String name, MonetaryAmount wage) {
         this.name = name;
         this.wage = wage;
     }

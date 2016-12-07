@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.user.External;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +47,8 @@ public class EventController {
 
     @PostMapping("/admin/events/add")
     public String addEvent(@RequestParam String name, @RequestParam String desc, @RequestParam String date,
-                           @RequestParam String price) {
+                           @RequestParam String price) { //TODO @RequestParam String externalId (== 0 if new External)
+                                                         //TODO @RequestParam String name, wage
         if (!date.isEmpty()) {
             DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
             String[] splittedDate = date.split("\\s-\\s");
@@ -55,7 +57,7 @@ public class EventController {
                 LocalDateTime end = LocalDateTime.parse(splittedDate[1], parser);
 
                 eventCatalog.save(new Event(name, Money.of((Float.valueOf(price)), EURO),
-                                  new TimeInterval(start, end), desc));
+                                  new TimeInterval(start, end), desc, new External("der Neue", Money.of(180, EURO))));
             }
         }
         return "redirect:/admin/events";
