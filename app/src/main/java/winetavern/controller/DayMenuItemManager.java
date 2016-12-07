@@ -45,6 +45,7 @@ public class DayMenuItemManager {
      * Initially called for adding a menu item.
      * Data gets processed in  {@link #addMenuItemPost(Product, String, Money, String, Double, Boolean, Long, ModelAndView)}
      */
+    // TODO How to call this one?
     @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findAll(),
@@ -60,8 +61,10 @@ public class DayMenuItemManager {
      * @param dayMenu
      * @return
      */
+
+    // TODO Shouldn't this be a method of DayMenu?
     public List<DayMenuItem> getNotAddedDayMenuItems(Iterable<DayMenuItem> dayMenuItems, DayMenu dayMenu) {
-        List<DayMenuItem> resultSet = new ArrayList<>();
+        List<DayMenuItem> resultSet = new ArrayList<>(); // TODO Dont name a list resultSet
         dayMenuItems.forEach(dayMenuItem -> {
             if(!dayMenuItem.getDayMenus().contains(dayMenu))
                 resultSet.add(dayMenuItem);
