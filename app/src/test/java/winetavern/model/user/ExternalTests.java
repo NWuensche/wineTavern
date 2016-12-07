@@ -45,17 +45,4 @@ public class ExternalTests {
         assertThat(external.toString(), is("name"));
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void throwWhenPay2Times() {
-        external.pay();
-        external.pay();
-    }
-
-    @Test
-    public void externalWasPayed() {
-        assertThat(external.isPayed(), is(false));
-        external.pay();
-        assertThat(external.isPayed(), is(true));
-    }
-
 }

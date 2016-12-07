@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 @Getter
-public class Employee implements Person {
-
-    @Id @GeneratedValue private Long id;
+public class Employee extends Person {
     @OneToOne private UserAccount userAccount;
 
     @Setter private String address;

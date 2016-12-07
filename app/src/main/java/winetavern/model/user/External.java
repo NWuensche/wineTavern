@@ -16,13 +16,10 @@ import javax.persistence.OneToOne;
 
 @Entity
 @Getter
-public class External implements Person {
-
-    @Id @GeneratedValue private Long id;
+public class External extends Person {
     @OneToOne private Event event;
     private String name;
     private MonetaryAmount wage;
-    private boolean payed;
 
     @Deprecated
     protected External() {}
@@ -31,20 +28,10 @@ public class External implements Person {
         this.event = event;
         this.name = name;
         this.wage = wage;
-        payed = false;
-    }
-
-    public void pay() throws IllegalStateException{
-        if(isPayed()) {
-            throw new IllegalStateException("External was already payed!");
-        }
-
-        payed = true;
     }
 
     @Override
     public String toString() {
         return name;
     }
-
 }

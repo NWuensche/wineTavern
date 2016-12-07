@@ -4,8 +4,6 @@ import lombok.NonNull;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
-import org.salespointframework.accountancy.AccountancyEntryIdentifier;
-import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.AuthenticationManager;
@@ -21,10 +19,10 @@ import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
+import winetavern.model.user.ExternalManager;
 import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,18 +39,19 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Controller
 public class ExpenseController {
-    @NotNull @Autowired private Accountancy accountancy;
-    @NotNull @Autowired private ExpenseGroupRepository expenseGroups;
-    @NotNull @Autowired private EmployeeManager employees;
-    @NotNull @Autowired private BusinessTime bt;
-    @NotNull @Autowired private AuthenticationManager am;
+    @NonNull @Autowired private Accountancy accountancy;
+    @NonNull @Autowired private ExpenseGroupRepository expenseGroups;
+    @NonNull @Autowired private EmployeeManager employees;
+    @NonNull @Autowired private ExternalManager externals;
+    @NonNull @Autowired private BusinessTime bt;
+    @NonNull @Autowired private AuthenticationManager am;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
                                @ModelAttribute("date") String date,
                                @ModelAttribute("cover") Optional<String> cover, Model model) {
-        if (cover.isPresent()) { //RLY SALESPOIN?! NO STRING -> ID????
+        if (cover.isPresent()) { //RLY SALESPOINT?! NO STRING -> ID????
             Expense expense = null;
             MonetaryAmount sum = Money.of(0, EURO);
 
@@ -70,7 +69,7 @@ public class ExpenseController {
             Expense payoff = new Expense(sum,
                     "Abrechnung " + bt.getTime().format(formatter) + " durch " +
                             employees.findByUserAccount(am.getCurrentUser().get()).get(),
-                    expense.getEmployee(),
+                    expense.getPerson(),
                     expenseGroups.findByName("Abrechnung").get());
             accountancy.add(payoff);
             return "redirect:/accountancy/expenses";
@@ -123,7 +122,7 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
     public String coverExpensesForPerson(@PathVariable("pid") String personId) {
-        Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
+        Set<Expense> expenses = filter("" + expenseGroups.findByName("Bestellung").get().getId(),
                 personId, false, "");
         MonetaryAmount sum = Money.of(0, EURO);
         for(Expense expense : expenses){
@@ -139,7 +138,7 @@ public class ExpenseController {
         return "redirect:/accountancy/expenses/payoff";
     }
 
-    private Set<Expense> filter(String typeId, String employeeId, boolean covered, String date) {
+    private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
         Set<Expense> res = new TreeSet<>();
 
         if (date.equals("today")) { //Interval filter: today
@@ -160,9 +159,16 @@ public class ExpenseController {
             res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
         }
 
-        if (!employeeId.equals("0")) { //Employee filter: must contain employee
-            Employee employee = employees.findOne(Long.parseLong(employeeId)).get();
-            res.removeIf(expense -> expense.getEmployee() != employee);
+        if (!personId.equals("0")) { //Person filter: must contain person
+            long parsedPersonId = Long.parseLong(personId);
+            Person person;
+            Optional<Employee> optEmployee = employees.findOne(parsedPersonId);
+            if (optEmployee.isPresent()) {
+                person = optEmployee.get();
+            } else {
+                person = externals.findOne(parsedPersonId).get();
+            }
+            res.removeIf(expense -> expense.getPerson().getId() != person.getId());
         }
 
         //isCovered filter: true -> returns only paid expenses
