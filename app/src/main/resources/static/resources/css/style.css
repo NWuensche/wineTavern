@@ -473,6 +473,11 @@ body .list-group-item-action .fa-circle-o{
     box-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
 
+fieldset {
+    border:1px solid #243648;
+    padding:10px 20px;
+}
+
 /* Users */
 
 .icon__button.btn-primary {

@@ -38,6 +38,25 @@
                 <label for="price">Preis:</label>
                 <input type="number" id="price" name="price" class="form-control" min="0" step="0.1" value="7" required="true"/>
             </div>
+            <div class="form-group">
+                <label for="person">Person:</label>
+                <select id="person" name="person" class="form-control" onchange="showperson(this.value);">
+                    <option th:each="person:${externals}" th:text="${person}" th:value="${person}"></option>
+                    <option value="0">Neue Person anlegen</option>
+                </select>
+            </div>
+            <fieldset id="persondata" style="display:none;">
+                <legend>&nbsp;Personen - Daten </legend>
+                <div class="form-group">
+                    <label for="personname">Name:</label>
+                    <input type="text" id="personname" name="personname" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="personwage">Lohn:</label>
+                    <input type="number" id="personwage" name="personwage" class="form-control" min="0"/>
+                </div>
+            </fieldset>
+
             <hr/>
             <div class="text-xs-center">
                 <button class="btn btn-primary">Anlegen</button>
@@ -82,6 +101,20 @@
             'Morgen': [new Date(businessTime.getTime() + 86400000), new Date(businessTime.getTime() + 86400000)]
         }
     });
+
+
+
+    function showperson(value){
+        if(value == "0"){
+            if(document.getElementById("persondata").style.display == "none"){
+                $("#persondata").toggle("1000");
+            }
+        } else {
+            if(document.getElementById("persondata").style.display != "none") {
+                $("#persondata").toggle("1000");
+            }
+        }
+    }
 
     /*]]>*/
 </script>
