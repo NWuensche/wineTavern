@@ -133,7 +133,23 @@ public class DayMenuItemManagerWebItegrationTests extends AbstractWebIntegration
         mvc.perform(request);
 
         assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
-      //  assertThat(dayMenuRepository.findOne(dayMenu.getId()).get().getDayMenuItems().contains(newItem), is(true));
+      //  assertThat(dayMenu.contains(newItem), is(true));
+    }
+
+    @Test
+    public void deleteItemRight() throws Exception {
+
+        dayMenuItem.addDayMenu(dayMenu);
+
+        RequestBuilder request = post("/admin/menuitem/removeFromDayMenu")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("daymenuitem", dayMenuItem.getId().toString())
+                .param("dayMenu", dayMenu.getId().toString());
+
+        mvc.perform(request);
+
+        assertThat(dayMenuItem.getDayMenus().contains(dayMenu), is(false));
+        //  assertThat(dayMenu.contains(dayMenuItem), is(false));
     }
 
 }
