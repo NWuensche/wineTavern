@@ -1,12 +1,11 @@
 package winetavern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import winetavern.model.user.EmployeeManager;
-import winetavern.model.user.ExternalManager;
-import winetavern.model.user.Person;
+import winetavern.model.user.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Niklas Wünsche
@@ -34,4 +33,15 @@ public class Helper {
         return res;
     }
 
+    public static Optional<Person> findOnePerson(long personId, EmployeeManager employeeManager, ExternalManager externalManager) {
+        Optional<Employee> optEmpl = employeeManager.findOne(personId);
+        if (!optEmpl.isPresent()) {
+            Optional<External> optExt = externalManager.findOne(personId);
+            if (optExt.isPresent())
+                return Optional.of(optExt.get());
+        } else {
+            return Optional.of(optEmpl.get());
+        }
+        return Optional.empty();
+    }
 }

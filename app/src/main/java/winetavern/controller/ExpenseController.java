@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import winetavern.Helper;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
@@ -81,13 +82,14 @@ public class ExpenseController {
             person = "0";
         Set<Expense> expOpen = filter(type, person, false, date);
         Set<Expense> expCovered = filter(type, person, true, date);
-        model.addAttribute("expenseAmount", expOpen.size());
+        model.addAttribute("expOpenAmount", expOpen.size());
+        model.addAttribute("expCoveredAmount", expCovered.size());
         model.addAttribute("expOpen", expOpen);
         model.addAttribute("expCovered", expCovered);
-        model.addAttribute("persons", employees.findAll());
+        model.addAttribute("persons", Helper.findAllPersons(employees, externals));
         model.addAttribute("groups", expenseGroups.findAll());
         model.addAttribute("selectedType", Long.parseLong(type));
-        model.addAttribute("selectedEmployee", Long.parseLong(person));
+        model.addAttribute("selectedPerson", Long.parseLong(person));
         model.addAttribute("selectedDate", date);
         return "expenses";
     }
@@ -107,7 +109,7 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}")
     public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
-        Person staff = employees.findOne(Long.parseLong(personId)).get();
+        Employee staff = employees.findOne(Long.parseLong(personId)).get();
         Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
                 personId, false, "");
         model.addAttribute("expenses", expenses);
@@ -160,15 +162,8 @@ public class ExpenseController {
         }
 
         if (!personId.equals("0")) { //Person filter: must contain person
-            long parsedPersonId = Long.parseLong(personId);
-            Person person;
-            Optional<Employee> optEmployee = employees.findOne(parsedPersonId);
-            if (optEmployee.isPresent()) {
-                person = optEmployee.get();
-            } else {
-                person = externals.findOne(parsedPersonId).get();
-            }
-            res.removeIf(expense -> expense.getPerson().getId() != person.getId());
+            Person person = Helper.findOnePerson(Long.parseLong(personId), employees, externals).get();
+            res.removeIf(expense -> !expense.getPerson().getId().equals(person.getId()));
         }
 
         //isCovered filter: true -> returns only paid expenses
