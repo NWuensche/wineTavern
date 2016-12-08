@@ -48,13 +48,15 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
         Desk desk2 = new Desk("Table 2", 5);
         deskRepository.save(Arrays.asList(desk1, desk2));
 
-        TimeInterval early = new TimeInterval(LocalDateTime.MIN, LocalDateTime.MIN.plusHours(3));
-        TimeInterval later = new TimeInterval(LocalDateTime.MAX.minusHours(3), LocalDateTime.MAX);
+        LocalDateTime thisYear = LocalDateTime.of(2016, 1, 1, 1, 30);
+        TimeInterval first = new TimeInterval(thisYear, thisYear.plusHours(3));
+        TimeInterval second = new TimeInterval(thisYear.plusYears(1), thisYear.plusYears(1).plusHours(3));
+        TimeInterval third = new TimeInterval(thisYear.plusYears(2), thisYear.plusYears(2).plusHours(3));
 
-        reservation1 = new Reservation("Guest 1", 4, desk1, early);
-        reservation2 = new Reservation("Guest 2", 4, desk1, later);
-        reservation3 = new Reservation("Guest 3", 5, desk2, early);
-        reservation4 = new Reservation("Guest 4", 5, desk2, later);
+        reservation1 = new Reservation("Guest 1", 4, desk1, first);
+        reservation2 = new Reservation("Guest 2", 4, desk1, second);
+        reservation3 = new Reservation("Guest 3", 5, desk2, third);
+        reservation4 = new Reservation("Guest 4", 5, desk2, second);
         reservationRepository.save(Arrays.asList(reservation1, reservation2, reservation3, reservation4));
     }
 
@@ -149,7 +151,6 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
         RequestBuilder request = post("/service/reservation")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
-
         mvc.perform(request)
                 .andExpect(model().attributeExists("reservationTableList"))
                 .andExpect(model().attributeExists("reservations"))
@@ -165,19 +166,16 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
 
         mvc.perform(request)
-                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation1, reservation3, reservation2, reservation1)))
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation4, reservation3)))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
     }
 
     @Test
     public void reservationTimeValidatorRightIfDesk() throws Exception {
-        Desk desk = new Desk("Table 1", 4);
-        deskRepository.save(desk);
-
         RequestBuilder request = post("/service/reservation")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("desk", desk.getName());
+                .param("desk", "Table 1");
 
 
         mvc.perform(request)
