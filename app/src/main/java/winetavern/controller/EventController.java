@@ -52,6 +52,7 @@ public class EventController {
         return "redirect:/admin/events";
     }
 
+    // TODO Can this be removed?
     private Set<Event> getEventsByInterval(TimeInterval i1) {
         Set<Event> res = new TreeSet<>();
         for (Event event : eventCatalog.findAll()) {
