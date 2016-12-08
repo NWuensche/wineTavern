@@ -2,11 +2,13 @@ package winetavern.controller;
 
 import lombok.NonNull;
 import org.javamoney.moneta.Money;
-import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
@@ -83,9 +85,8 @@ public class EventController {
     }
 
     @RequestMapping("/admin/events/change/{eventid}")
-    public String showChangeModal(@PathVariable String eventid, Model model){
-        //TODO give me back the event to the given id
-        //model.addAttribute("event",eventCatalog.findOne(eventid));
+    public String showChangeModal(@PathVariable Event eventid, Model model){
+        model.addAttribute("event",eventid);
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         return "events";
