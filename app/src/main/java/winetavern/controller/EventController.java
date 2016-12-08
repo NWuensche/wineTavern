@@ -93,7 +93,22 @@ public class EventController {
     }
 
     @RequestMapping("/calendar")
-    public String calendar(){
+    public String calendar(Model model) {
+        String calendarString = "[";
+        boolean noComma = true;
+        for (Event event : eventCatalog.findAll()) {
+            if (noComma)
+                noComma = false;
+            else
+                calendarString = calendarString + ",";
+            TimeInterval interval = event.getInterval();
+            calendarString = calendarString +
+                    "{ title: '" + event.getName() +
+                    "', start: '" + interval.getStart() +
+                    "', end: '" + interval.getEnd() + "'}";
+        }
+
+        model.addAttribute("events", calendarString + "]");
         return "calendar";
     }
 
