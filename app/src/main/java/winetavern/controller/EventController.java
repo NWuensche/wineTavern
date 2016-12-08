@@ -31,6 +31,10 @@ public class EventController {
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
+
+        //TODO filter for events in the past
+        //TODO sort by time, next one first
+
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         return "events";
@@ -76,6 +80,15 @@ public class EventController {
             }
         }
         return "redirect:/admin/events";
+    }
+
+    @RequestMapping("/admin/events/change/{eventid}")
+    public String showChangeModal(@PathVariable String eventid, Model model){
+        //TODO give me back the event to the given id
+        //model.addAttribute("event",eventCatalog.findOne(eventid));
+        model.addAttribute("eventAmount", eventCatalog.count());
+        model.addAttribute("events", eventCatalog.findAll());
+        return "events";
     }
 
     private Set<Event> getEventsByInterval(TimeInterval i1) {

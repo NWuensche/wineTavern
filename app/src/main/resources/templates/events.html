@@ -15,7 +15,7 @@
             </div>
             <div class="col-xs-4 text-xs-right">
                 <a th:href="@{/admin/events/add}">
-                    <button type="button" class="btn btn-primary">+ Event</button>
+                    <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Event</button>
                 </a>
             </div>
         </div>
@@ -23,7 +23,6 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>#</th>
             <th>Name</th>
             <th>Preis</th>
             <th>Datum</th>
@@ -33,16 +32,17 @@
         </thead>
         <tbody>
         <tr th:each="event : ${events}">
-            <th scope="row">-</th>
             <td th:text="${event.name}"></td>
-            <td th:text="${event.price}"></td>
+            <td th:text="${event.price.number} + ' €'"></td>
             <td th:text="${event.interval.start.toLocalDate()}"></td>
             <td th:text="${event.interval.start.toLocalTime()}"></td>
             <td><span th:text="${event.interval.duration.toHours()}"></span>h</td>
             <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details"><i
-                        class="fa fa-user-circle" aria-hidden="true"></i>
-                </button>
+                <a th:href="'/admin/events/change/' + ${event.id}">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                    </button>
+                </a>
             </td>
         </tr>
         </tbody>
