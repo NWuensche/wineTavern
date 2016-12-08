@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head th:include="links::links">
+
+    <title>Events</title>
+
+</head>
+<body th:fragment="content">
+
+<div class="container__wrap">
+    <div id="calendar"></div>
+</div>
+
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script th:src="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js}"></script>
+<script th:src="@{http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/locale/de.js}"></script>
+
+<link rel="stylesheet" type="text/css" th:href="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css}" th:media="print"/>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var eventString = /*[[${events}]]*/"";
+    var input = JSON.parse(eventString);
+    $(document).ready(function(){
+        $("#calendar").fullCalendar({
+            locale:"de",
+            header: {
+                left:'prev,next today',
+                center:'title',
+                right:'agendaDay,agendaWeek,month'
+            },
+            defaultDate:'2016-12-08',
+            navLinks:true,
+            eventSources: [
+                {
+                    events:input,
+                    backgroundColor:'lightgrey'
+                }
+            ]
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

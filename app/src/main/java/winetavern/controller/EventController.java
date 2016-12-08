@@ -92,6 +92,28 @@ public class EventController {
         return "events";
     }
 
+    @RequestMapping("/calendar")
+    public String calendar(Model model) {
+        String calendarString = "[";
+        boolean noComma = true;
+
+        for (Event event : eventCatalog.findAll()) {
+            if (noComma)
+                noComma = false;
+            else
+                calendarString = calendarString + ",";
+
+            TimeInterval interval = event.getInterval();
+            calendarString = calendarString +
+                    "{ \"title\": \"" + event.getName() +
+                    "\", \"start\": \"" + interval.getStart() +
+                    "\", \"end\": \"" + interval.getEnd() + "\" }";
+        }
+
+        model.addAttribute("events", calendarString + "]");
+        return "calendar";
+    }
+
     private Set<Event> getEventsByInterval(TimeInterval i1) {
         Set<Event> res = new TreeSet<>();
         for (Event event : eventCatalog.findAll()) {
