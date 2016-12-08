@@ -1,7 +1,8 @@
 package winetavern.controller;
 
-import javafx.util.Pair;
 import lombok.NonNull;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.time.BusinessTime;
@@ -114,7 +115,7 @@ public class ExpenseController {
             sum = sum.add(expense.getValue());
         }
 
-        return new Pair<>(expense, sum);
+        return new ImmutablePair<>(expense, sum);
     }
 
     /**
