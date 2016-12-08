@@ -20,8 +20,8 @@
 <link rel="stylesheet" type="text/css" th:href="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css}" th:media="print"/>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var eventString = /*[[${events}]]*/[];
-    alert(eventString);
+    var eventString = /*[[${events}]]*/"";
+    var input = JSON.parse(eventString);
     $(document).ready(function(){
         $("#calendar").fullCalendar({
             locale:"de",
@@ -32,7 +32,12 @@
             },
             defaultDate:'2016-12-08',
             navLinks:true,
-            eventSources: eventString
+            eventSources: [
+                {
+                    events:input,
+                    backgroundColor:'lightgrey'
+                }
+            ]
         });
     });
     /*]]>*/
