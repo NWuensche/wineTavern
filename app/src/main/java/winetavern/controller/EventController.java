@@ -92,6 +92,11 @@ public class EventController {
         return "events";
     }
 
+    @RequestMapping("/calendar")
+    public String calendar(){
+        return "calendar";
+    }
+
     private Set<Event> getEventsByInterval(TimeInterval i1) {
         Set<Event> res = new TreeSet<>();
         for (Event event : eventCatalog.findAll()) {
