@@ -166,6 +166,7 @@ public class ReservationManager {
             reservationIterator = reservations.findAllByOrderByPersons();
             reservationIterator.forEach(reservationList::add);
         } else {
+            // TODO Combine with sort.isPresent()
             reservationIterator = reservations.findAll();
             reservationIterator.forEach(reservationList::add);
         }
@@ -184,8 +185,5 @@ public class ReservationManager {
 
         return res;
     }
-
-
-
 
 }

@@ -55,7 +55,7 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
         reservation1 = new Reservation("Guest 1", 4, desk1, first);
         reservation2 = new Reservation("Guest 2", 4, desk1, second);
-        reservation3 = new Reservation("Guest 3", 5, desk2, third);
+        reservation3 = new Reservation("Guest 3", 3, desk2, third);
         reservation4 = new Reservation("Guest 4", 5, desk2, second);
         reservationRepository.save(Arrays.asList(reservation1, reservation2, reservation3, reservation4));
     }
@@ -158,20 +158,6 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
     }
 
     @Test
-    public void reservationTimeValidatorRightIfReservationTime() throws Exception {
-        RequestBuilder request = post("/service/reservation")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("reservationtime", "2016/11/11 11:11") // LocalDateTime.MIN wird rausgefilltert
-                .param("sort", "date");
-
-
-        mvc.perform(request)
-                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation4, reservation3)))
-                .andExpect(model().attributeExists("reservations"))
-                .andExpect(view().name("reservation"));
-    }
-
-    @Test
     public void reservationTimeValidatorRightIfDesk() throws Exception {
         RequestBuilder request = post("/service/reservation")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
@@ -182,6 +168,72 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
                 .andExpect(model().attributeExists("reservationTableList"))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(model().attributeExists("deskReservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void sortReservationTimeValidatorByDateRightIfReservationTime() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "date");
+
+
+        mvc.perform(request)
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation4, reservation3)))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void sortReservationTimeValidatorByNameRightIfReservationTime() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "name");
+
+        mvc.perform(request)
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void sortReservationTimeValidatorByPersonsRightIfReservationTime() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "persons");
+
+        mvc.perform(request)
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation3, reservation2, reservation4)))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void ReservationTimeValidatorRightIfReservationTime() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11");
+
+        mvc.perform(request)
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void sortReservationTimeValidatorByTrashRightIfReservationTime() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "trash"); // Is a non-existing parameter
+
+
+        mvc.perform(request)
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))
+                .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
     }
 
