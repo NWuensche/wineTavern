@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import lombok.NonNull;
 import org.javamoney.moneta.Money;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,8 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Controller
 public class EventController {
-    private final EventCatalog eventCatalog;
-    private final ExternalManager externals;
-    private final BusinessTime time;
-
-    @Autowired
-    public EventController(EventCatalog eventCatalog, ExternalManager externals, BusinessTime time) {
-        this.eventCatalog = eventCatalog;
-        this.externals = externals;
-        this.time = time;
-    }
+    @NonNull @Autowired private EventCatalog eventCatalog;
+    @NonNull @Autowired private ExternalManager externals;
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
@@ -49,12 +42,21 @@ public class EventController {
         return "addevent";
     }
 
+    /**
+    @param name         the name of the event
+    @param desc         the description of the event
+    @param date         the start and end time of the event. Format: 'dd.MM.yyyy HH:mm - dd.MM.yyyy HH:mm'
+    @param price        the ticket price for the event (what the customer pays)
+    @param external     the id of the external who is featured at this event (the one who gets payed)
+                        '0' if a new external will be created
+    @param externalName optional - the name of the external to create
+    @param externalWage optional - the wage of the external to create
+     */
     @PostMapping("/admin/events/add")
     public String addEvent(@RequestParam String name, @RequestParam String desc, @RequestParam String date,
-                           @RequestParam String price, @RequestParam String person, @RequestParam String personname,
-                           @RequestParam String
-                                       personwage) {
-                                                         //TODO stimmt das alles so?
+                           @RequestParam String price, @RequestParam String external, @RequestParam String externalName,
+                           @RequestParam String externalWage) {
+
         if (!date.isEmpty()) {
             DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
             String[] splittedDate = date.split("\\s-\\s");
@@ -63,25 +65,16 @@ public class EventController {
                 LocalDateTime end = LocalDateTime.parse(splittedDate[1], parser);
 
                 External externalPerson;
-                if(person.equals("0")){
-                    externalPerson = new External(personname,Money.of(Float.valueOf(personwage),EURO)); // das mit
-                    // dem float geht nicht wieso auch immer?!
-
-                } else {
-                    externalPerson = externals.findByName(person).get();
+                if(external.equals("0")) { //external == '0' => create new external
+                    externalPerson = new External(externalName, Money.of(Float.parseFloat(externalWage), EURO));
+                } else { //external already exists
+                    externalPerson = externals.findOne(Long.parseLong(external)).get();
                 }
 
-
-                eventCatalog.save(new Event(name, Money.of((Float.valueOf(price)), EURO),
+                eventCatalog.save(new Event(name, Money.of((Float.parseFloat(price)), EURO),
                                   new TimeInterval(start, end), desc, externalPerson));
             }
         }
-        return "redirect:/admin/events";
-    }
-
-    @RequestMapping(value="/admin/events/remove", method = RequestMethod.POST)
-    public String removeEvent(@ModelAttribute(value = "event") Event event) {
-        eventCatalog.delete(event);
         return "redirect:/admin/events";
     }
 
