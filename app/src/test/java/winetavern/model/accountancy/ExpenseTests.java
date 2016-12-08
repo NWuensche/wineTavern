@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
+import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.useraccount.UserAccount;
 import winetavern.model.user.Employee;
 
@@ -75,16 +76,13 @@ public class ExpenseTests {
     }
 
     private Expense setUpExpensesToCompare(String lastName1, String lastName2) {
-        UserAccount mockedUserAccount1 = mock(UserAccount.class);
-        UserAccount mockedUserAccount2 = mock(UserAccount.class);
-        when(mockedUserAccount1.getLastname()).thenReturn(lastName1);
-        when(mockedUserAccount2.getLastname()).thenReturn(lastName2);
+        ExpenseGroup mockedExpenseGroup = mock(ExpenseGroup.class);
+        ExpenseGroup mockedExpenseGroup2 = mock(ExpenseGroup.class);
+        when(mockedExpenseGroup.getId()).thenReturn(0l);
+        when(mockedExpenseGroup2.getId()).thenReturn(1l);
+        when(mockedExpenseGroup2.getName()).thenReturn("");
 
-        Employee mockedEmployee2 = mock(Employee.class);
-        when(mockedEmployee.getUserAccount()).thenReturn(mockedUserAccount1);
-        when(mockedEmployee2.getUserAccount()).thenReturn(mockedUserAccount2);
-
-        Expense expense2 = new Expense(Money.of(3, EURO), "Abrechnung", mockedEmployee2, mockedExpenseGroup);
+        Expense expense2 = new Expense(Money.of(3, EURO), "Abrechnung", mockedEmployee, mockedExpenseGroup2);
 
         return expense2;
     }

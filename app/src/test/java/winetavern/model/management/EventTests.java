@@ -54,12 +54,12 @@ public class EventTests {
         new Event("Event", money, mockedTimeInterval, "", external);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void throwWhenEmptyExternal() {
         new Event("Event", money, mockedTimeInterval, "Event", null);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void throwWhenSetEmptyDescription() {
         new Event("Event", money, mockedTimeInterval, description, external).setDescription("");
     }
