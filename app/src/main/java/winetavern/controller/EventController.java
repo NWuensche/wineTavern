@@ -94,8 +94,9 @@ public class EventController {
 
     @RequestMapping("/calendar")
     public String calendar(Model model) {
-        String calendarString = "[";
+        String calendarString = "";
         boolean noComma = true;
+
         for (Event event : eventCatalog.findAll()) {
             if (noComma)
                 noComma = false;
@@ -108,7 +109,7 @@ public class EventController {
                     "', end: '" + interval.getEnd() + "'}";
         }
 
-        model.addAttribute("events", calendarString + "]");
+        model.addAttribute("events", calendarString);
         return "calendar";
     }
 

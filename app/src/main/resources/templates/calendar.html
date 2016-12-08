@@ -6,6 +6,7 @@
 
 </head>
 <body th:fragment="content">
+
 <div class="container__wrap">
     <div id="calendar"></div>
 </div>
@@ -16,35 +17,22 @@
 <script th:src="@{http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/locale/de.js}"></script>
 
 <link rel="stylesheet" type="text/css" th:href="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css}" th:media="print"/>
 <script th:inline="javascript">
     /*<![CDATA[*/
+    var eventString = /*[[${events}]]*/[];
+    alert(eventString);
     $(document).ready(function(){
         $("#calendar").fullCalendar({
             locale:"de",
-            eventSources: [
-                {
-                    events: [
-                        {
-                            title: 'test',
-                            start: '2016-12-08',
-                            allDay: true
-                        },
-                        {
-                            title: 'test2',
-                            start: '2016-12-02',
-                            end: '2016-12-06'
-                        },
-                        {
-                            title: 'event',
-                            start: '2016-12-10T12:30:00',
-                            allDay: false
-                        }
-                    ],
-                    backgroundColor: 'green',
-                    borderColor:'red'
-                }
-            ]
+            header: {
+                left:'prev,next today',
+                center:'title',
+                right:'agendaDay,agendaWeek,month'
+            },
+            defaultDate:'2016-12-08',
+            navLinks:true,
+            eventSources: eventString
         });
     });
     /*]]>*/
