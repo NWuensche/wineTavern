@@ -1,8 +1,10 @@
 package winetavern.controller;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.model.management.TimeInterval;
@@ -10,13 +12,19 @@ import winetavern.model.reservation.DeskRepository;
 import winetavern.model.reservation.Reservation;
 import winetavern.model.reservation.ReservationRepository;
 import winetavern.model.reservation.Desk;
+import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * @author Sev, Michel Kunkler
@@ -27,6 +35,30 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
     @Autowired ReservationRepository reservationRepository;
     @Autowired ReservationManager reservationManager;
     @Autowired DeskRepository deskRepository;
+
+    private Reservation reservation1;
+    private Reservation reservation2;
+    private Reservation reservation3;
+    private Reservation reservation4;
+
+
+    @Before
+    public void before() {
+        Desk desk1 = new Desk("Table 1", 4);
+        Desk desk2 = new Desk("Table 2", 5);
+        deskRepository.save(Arrays.asList(desk1, desk2));
+
+        TimeInterval early = new TimeInterval(LocalDateTime.MIN, LocalDateTime.MIN.plusHours(3));
+        TimeInterval later = new TimeInterval(LocalDateTime.MAX.minusHours(3), LocalDateTime.MAX);
+
+        reservation1 = new Reservation("Guest 1", 4, desk1, early);
+        reservation2 = new Reservation("Guest 2", 4, desk1, later);
+        reservation3 = new Reservation("Guest 3", 5, desk2, early);
+        reservation4 = new Reservation("Guest 4", 5, desk2, later);
+        reservationRepository.save(Arrays.asList(reservation1, reservation2, reservation3, reservation4));
+    }
+
+
 
     @Test(expected = InvalidDataAccessApiUsageException.class)
     public void throwWhenSaveNullReservation() {
@@ -62,10 +94,9 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
     /**
      * Creates a new table (desk), adds a reservation to this table and tests if the table is set as reservated
      * by querying a time in between the reservation interval.
-     * @throws Exception
      */
     @Test
-    public void tableSetReserved() throws Exception{
+    public void tableSetReserved() {
         Reservation reservation = createDeskReserved();
         Desk desk = reservation.getDesk();
 
@@ -79,10 +110,9 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
     /**
      * Creates a new table (desk), adds a reservation to this table and tests if the table is NOT set as reservated
      * by querying a time NOT in between the reservation interval.
-     * @throws Exception
      */
     @Test
-    public void tableSetNotReserved() throws Exception{
+    public void tableSetNotReserved() {
         Reservation reservation = createDeskReserved();
         Desk desk = reservation.getDesk();
 
@@ -92,4 +122,69 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
         );
         assertThat(reservedDesks.contains(desk), is(false));
     }
+
+    @Test
+    public void deskToNameRight() {
+        Desk desk1 = new Desk("Table 1", 4);
+        Desk desk2 = new Desk("Table 2", 4);
+
+        List<String> names = reservationManager.deskToName(Arrays.asList(desk1, desk2));
+
+        assertThat(names, is(Arrays.asList("Table 1", "Table 2")));
+    }
+
+    @Test
+    public void isActiveRight() {
+        Desk desk = new Desk("Table 1", 4);
+        TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
+        Reservation reservation = new Reservation("Guest 1", 3, desk, timeInterval);
+
+        assertThat(reservationManager.isActive(reservation, LocalDateTime.now().plusHours(1)), is(true));
+        assertThat(reservationManager.isActive(reservation, LocalDateTime.now().minusHours(1)), is(true));
+        assertThat(reservationManager.isActive(reservation, LocalDateTime.now().minusHours(3)), is(false));
+    }
+
+    @Test
+    public void reservationTimeValidatorRightIfNoParam() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+
+        mvc.perform(request)
+                .andExpect(model().attributeExists("reservationTableList"))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void reservationTimeValidatorRightIfReservationTime() throws Exception {
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11") // LocalDateTime.MIN wird rausgefilltert
+                .param("sort", "date");
+
+
+        mvc.perform(request)
+                .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation1, reservation3, reservation2, reservation1)))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void reservationTimeValidatorRightIfDesk() throws Exception {
+        Desk desk = new Desk("Table 1", 4);
+        deskRepository.save(desk);
+
+        RequestBuilder request = post("/service/reservation")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("desk", desk.getName());
+
+
+        mvc.perform(request)
+                .andExpect(model().attributeExists("reservationTableList"))
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(model().attributeExists("deskReservations"))
+                .andExpect(view().name("reservation"));
+    }
+
 }
