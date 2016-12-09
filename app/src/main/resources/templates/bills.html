@@ -45,7 +45,7 @@
 
                             <td th:text="${bill.id}"><a ></a></td>
                             <td th:text="${bill.desk}"></td>
-                            <td th:text="${bill.price.number} + '€'"></td>
+                            <td th:text="${bill.price.number.doubleValue()} + '€'"></td>
                             <td><a th:href="@{'/service/bills/details/' + ${bill.id}}">
                                 <button class="btn btn-primary">
                                     <i class="fa fa-cog fa-lg"></i>

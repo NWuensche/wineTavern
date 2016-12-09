@@ -56,7 +56,7 @@
                 </thead>
                 <tbody id="leftbill"  th:if="${bill}">
                     <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
-                        <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number} + '€)'"
+                        <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number.doubleValue()} + '€)'"
                                   class="product-description"></span></td>
                         <td>
                             <div class="input-group">
@@ -86,7 +86,7 @@
                             <b>Alte Rechnung mit #
                                 <span th:text="${leftbill.id}">000</span>
                                 <i class="fa fa-arrow-right"></i>
-                                <span th:text="${leftbill.price.number} + ' €'"></span>
+                                <span th:text="${leftbill.price.number.doubleValue()} + ' €'"></span>
                             </b></td>
                     </tr>
                     <tr th:if="${leftbill}" style="vertical-align:middle;">
@@ -126,7 +126,7 @@
                             <b>Neue Rechnung mit #
                                 <span th:text="${rightbill.id}">000</span>
                                 <i class="fa fa-arrow-right"></i>
-                                <span th:text="${rightbill.price.number} + ' €'"></span>
+                                <span th:text="${rightbill.price.number.doubleValue()} + ' €'"></span>
                             </b>
                         </td>
                     </tr>
