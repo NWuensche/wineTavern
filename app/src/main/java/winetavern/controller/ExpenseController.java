@@ -60,8 +60,9 @@ public class ExpenseController {
      *               format:     'expenseID|expenseId|...|'
      */
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute String type, @ModelAttribute String person, @ModelAttribute String date,
-                               @ModelAttribute Optional<String> cover, Model model) {
+    public String showExpenses(@ModelAttribute(value="type") String type, @ModelAttribute(value="person") String person,
+                               @ModelAttribute(value="date") String date,
+                               @ModelAttribute(value="cover") Optional<String> cover, Model model) {
         if (cover.isPresent()) { //the query of expenses to pay off is not empty
 
             String[] idQuery = cover.get().split("\\|"); //split into multiple ExpenseID's
@@ -74,8 +75,6 @@ public class ExpenseController {
                     expenseGroups.findByName("Abrechnung").get());
 
             accountancy.add(payoff);
-
-            return "redirect:/accountancy/expenses";
         }
 
         if (type.equals("")) //the type will be parsed in long, so it should be a number
