@@ -60,7 +60,7 @@ public class StockController {
     }
 
     @RequestMapping(value = "/admin/stock/changeProduct", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("productid") Product product,
+    public String changeProduct(@ModelAttribute("productid") Product product,
                              @ModelAttribute("productname") String name,
                              @ModelAttribute("productprice") String price,
                              @ModelAttribute("productcategory") String category) {
