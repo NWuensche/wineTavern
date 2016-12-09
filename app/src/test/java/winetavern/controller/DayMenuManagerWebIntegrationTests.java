@@ -120,13 +120,4 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
                 .andExpect(model().attributeExists("stock"));
     }
 
-    @Test
-    public void getDayMenuByDayRight() throws Exception {
-        RequestBuilder request = post("/admin/menu/getDayMenuByDay")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
-                .andExpect(view().name("daymenu"));
-    }
-
 }
