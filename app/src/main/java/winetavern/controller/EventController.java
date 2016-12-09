@@ -15,8 +15,6 @@ import winetavern.model.management.TimeInterval;
 import winetavern.model.user.External;
 import winetavern.model.user.ExternalManager;
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactoryQueryBuilder;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +41,7 @@ public class EventController {
         model.addAttribute("test",event.getPrice().getContext());
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
-        model.addAttribute("calendarString",calendar());
+        model.addAttribute("calendarString", buildCalendarString());
         return "events";
     }
 
@@ -95,7 +93,7 @@ public class EventController {
         model.addAttribute("event",event);
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
-        model.addAttribute("calendarString",calendar());
+        model.addAttribute("calendarString", buildCalendarString());
         return "events";
     }
 
@@ -104,7 +102,6 @@ public class EventController {
                               @RequestParam String price, @RequestParam String external, @RequestParam String externalName,
                               @RequestParam String externalWage){
 
-        System.out.println(externalWage + " " + Float.parseFloat(externalWage));
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String[] splittedDate = date.split("\\s-\\s");
         if (splittedDate.length == 2) {
@@ -130,7 +127,7 @@ public class EventController {
         return "redirect:/admin/events";
     }
 
-    private String calendar() {
+    private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
 
@@ -145,7 +142,9 @@ public class EventController {
                     "{\"title\":\"" + event.getName() +
                     "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
-                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() + "\"}";
+                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
+                    "\",\"description\":\"" + event.getDescription() + "<br/>" + event.getExternal().getName() +
+                    "<br/>" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
         }
 
         return calendarString + "]";

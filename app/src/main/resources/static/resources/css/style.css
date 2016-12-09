@@ -59,6 +59,7 @@ main > .row-eq-height > .col-md-3{
     border-color: #1D997D;
 }
 
+
 /*------------------------------*/
 
 
@@ -432,6 +433,13 @@ body .list-group-item-action .fa-circle-o{
 .calendar {
     padding:10px;
 }
+
+.tooltip-inner, .tooltip.top .tooltip-arrow {
+    background-color: white;
+    border:1px solid black;
+    color: black;
+}
+
 
 /* Form Style */
 

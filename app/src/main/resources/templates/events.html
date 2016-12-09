@@ -86,7 +86,7 @@
                         <label for="price">Preis (in €):</label>
                         <input type="number" id="price" name="price" class="form-control" min="0" step="0.1"
                                value="7" required="true"
-                               th:value="${event.price.number}"/>
+                               th:value="${event.price.number.doubleValue()}"/>
                     </div>
                     <div class="form-group">
                         <label for="external">Person:</label>
@@ -176,6 +176,18 @@
             slotEventOverlap:false,
             buttonText: {
                 listYear:'Jahr'
+            },
+            eventRender: function(event,element,view)
+            {
+                if(view.name === "agendaWeek"){
+                    element.find('.fc-title').html("<b>" + event.title + "</b><br/><em>" + event.description + "</em>");
+                } else {
+                    element.attr('title','<b>' + event.title + '</b><br/>' + event.description);
+                    element.attr('data-toggle','tooltip');
+                    element.attr('data-placement','top');
+                    element.tooltip({html:true});
+                    element.tooltip('show');
+                }
             },
             eventSources: [
                 {
