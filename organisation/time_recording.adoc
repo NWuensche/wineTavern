@@ -25,6 +25,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |18.11.2016 | 09:00 |12:50 | Treffen & Coden
 |25.11.2016 | 09:00 |13:30 | Treffen & Coden
 |02.12.2016 | 09:00 |11:30 | Treffen & Coden
+|02.12.2016 | 09:00 |13:30 | Treffen & Coden
 |===
 
 == Severin
@@ -97,6 +98,12 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 25.11.2016 | 15:00 | 16:30 | Fixed Expense bug, made daily accounting work
 | 29.11.2016 | 11:00 | 14:00 | Made single Expense select / payoff possible
 | 04.12.2016 | 15:00 | 16:30 | Fixed Timeinterval, polished Event
+| 06.12.2016 | 18:00 | 18:45 | add Event is possible
+| 07.12.2016 | 11:00 | 12:30 | implemented Externals
+| 07.12.2016 | 15:00 | 16:30 | Externals in Events
+| 08.12.2016 | 11:00 | 13:30 | code refactor
+| 08.12.2016 | 15:00 | 16:00 | Event calendar
+| 09.12.2016 | 14:00 | 17:00 | Fixed Money bug, event calendar
 |===
 
 == Niklas
