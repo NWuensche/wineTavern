@@ -19,7 +19,6 @@ import winetavern.model.user.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -27,6 +26,7 @@ import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
@@ -43,7 +43,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     @Autowired ExternalManager externalManager;
 
     ExpenseGroup groupArtists;
-    ExpenseGroup groupElse;
+    ExpenseGroup groupOrder;
     Expense artist1;
     Expense artist2;
     Expense employee1;
@@ -62,17 +62,17 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
         externalManager.save(artist);
 
         groupArtists = new ExpenseGroup("Künstler");
-        groupElse = new ExpenseGroup("Anderes");
+        groupOrder = expenseGroupRepository.findByName("Bestellung").get();
         expenseGroupRepository.save(groupArtists);
-        expenseGroupRepository.save(groupElse);
+        expenseGroupRepository.save(groupOrder);
     }
 
     @Test
     public void showExpensesRight() throws Exception {
         artist1 = new Expense(Money.of(3, EURO), "Artist", artist, groupArtists);
         artist2 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupArtists);
-        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupElse);
-        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupElse);
+        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupOrder);
+        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupOrder);
 
         expenseRepository.add(artist1);
         expenseRepository.add(artist2);
@@ -95,8 +95,8 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     public void showExpensesRightWithExpenseGroupAndEmployee() throws Exception {
         artist1 = new Expense(Money.of(3, EURO), "Artist", artist, groupArtists);
         artist2 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupArtists);
-        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupElse);
-        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupElse);
+        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupOrder);
+        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupOrder);
 
         expenseRepository.add(artist1);
         expenseRepository.add(artist2);
@@ -105,7 +105,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
 
         RequestBuilder request = post("/accountancy/expenses")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("type", "" + groupElse.getId())
+                .param("type", "" + groupOrder.getId())
                 .param("person", employee.getId().toString())
                 .param("date", "today");
 
@@ -118,8 +118,8 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     public void showExpensesRightWithExpenseGroupAndEmployeeCloseExpense() throws Exception {
         artist1 = new Expense(Money.of(3, EURO), "Artist", artist, groupArtists);
         artist2 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupArtists);
-        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupElse);
-        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupElse);
+        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupOrder);
+        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupOrder);
 
         expenseRepository.add(artist1);
         expenseRepository.add(artist2);
@@ -128,7 +128,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
 
         RequestBuilder request = post("/accountancy/expenses")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("type", "" + groupElse.getId())
+                .param("type", "" + groupOrder.getId())
                 .param("person", employee.getId().toString())
                 .param("cover", employee1.getId() + "|");
 
@@ -148,6 +148,41 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
         });
 
         assertThat(newAbrechnungExists[0], is(true));
+    }
+
+    @Test
+    public void payoffForEmployeesRight() throws Exception {
+        artist1 = new Expense(Money.of(3, EURO), "Artist", artist, groupArtists);
+        artist2 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupArtists);
+        employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupOrder);
+        employee1.cover();
+        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupOrder);
+
+        expenseRepository.add(artist1);
+        expenseRepository.add(artist2);
+        expenseRepository.add(employee1);
+        expenseRepository.add(employee2);
+
+        RequestBuilder request = post("/accountancy/expenses/payoff/" + employee.getId() + "/pay")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(employee2.isCovered(), is(true));
+
+        boolean[] newAbrechnungExists = {false};
+
+        List<AccountancyEntry> test = Helper.convertToList(expenseRepository.findAll());
+
+        expenseRepository.findAll().forEach(exp -> {
+            if(exp.getDescription().contains("Tagesabrechnung") && exp.getDescription().contains("Hans-Peter Maffay") && exp.getValue().equals(Money.of(200, EURO))) {
+                newAbrechnungExists[0] = true;
+            }
+        });
+
+        assertThat(newAbrechnungExists[0], is(true));
+
     }
 
 }
