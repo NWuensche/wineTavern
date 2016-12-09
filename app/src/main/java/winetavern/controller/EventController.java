@@ -14,7 +14,10 @@ import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.External;
 import winetavern.model.user.ExternalManager;
+import winetavern.model.user.Vintner;
+import winetavern.model.user.VintnerManager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -30,15 +33,18 @@ import static org.salespointframework.core.Currencies.EURO;
 public class EventController {
     @NonNull @Autowired private EventCatalog eventCatalog;
     @NonNull @Autowired private ExternalManager externals;
+    @NonNull @Autowired private VintnerManager vintnerManager;
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
 
         //TODO filter for events in the past
         //TODO sort by time, next one first
-
+        Event event = eventCatalog.findAll().iterator().next();
+        model.addAttribute("test",event.getPrice().getContext());
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
+        model.addAttribute("calendarString", buildCalendarString());
         return "events";
     }
 
@@ -84,16 +90,57 @@ public class EventController {
         return "redirect:/admin/events";
     }
 
-    @RequestMapping("/admin/events/change/{eventid}")
-    public String showChangeModal(@PathVariable Event eventid, Model model){
-        model.addAttribute("event",eventid);
+    @RequestMapping("/admin/events/change/{event}")
+    public String showChangeModal(@PathVariable Event event, Model model){
+        model.addAttribute("externals",externals.findAll());
+        model.addAttribute("event",event);
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
+        model.addAttribute("calendarString", buildCalendarString());
         return "events";
     }
 
-    @RequestMapping("/calendar")
-    public String calendar(Model model) {
+    @PostMapping("/admin/events/change/{event}")
+    public String changeEvent(@PathVariable Event event, @RequestParam String name, @RequestParam String desc, @RequestParam String date,
+                              @RequestParam String price, @RequestParam String external, @RequestParam String externalName,
+                              @RequestParam String externalWage){
+
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String[] splittedDate = date.split("\\s-\\s");
+        if (splittedDate.length == 2) {
+            LocalDateTime start = LocalDateTime.parse(splittedDate[0], parser);
+            LocalDateTime end = LocalDateTime.parse(splittedDate[1], parser);
+
+            External externalPerson;
+            if (external.equals("0")) { //external == '0' => create new external
+                externalPerson = new External(externalName,Money.of(BigDecimal.valueOf(Double.parseDouble(externalWage)),
+                        EURO));
+            } else { //external already exists
+                externalPerson = externals.findOne(Long.parseLong(external)).get();
+            }
+
+            event.setName(name);
+            event.setDescription(desc);
+            event.setInterval(new TimeInterval(start, end));
+            event.setPrice(Money.of(Float.parseFloat(price),EURO));
+            event.setExternal(externalPerson);
+            eventCatalog.save(event);
+        }
+
+        return "redirect:/admin/events";
+    }
+
+    @RequestMapping("/admin/events/vintner")
+    public String showVintner(Model model){
+        model.addAttribute("vintners",vintnerManager.findAll());
+        //vintnerManager.save(new Vintner("Winzer Bodo"));
+        return "vintner";
+    }
+
+    //TODO GetMapping für changeVintner, catch query=Vintnername|Vitnername|..., look if vintner with name exist, if
+    // not create one
+
+    private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
 
@@ -108,11 +155,12 @@ public class EventController {
                     "{\"title\":\"" + event.getName() +
                     "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
-                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() + "\"}";
+                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
+                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getExternal().getName() +
+                    "<br/>" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
         }
 
-        model.addAttribute("events", calendarString + "]");
-        return "calendar";
+        return calendarString + "]";
     }
 
     private Set<Event> getEventsByInterval(TimeInterval i1) {

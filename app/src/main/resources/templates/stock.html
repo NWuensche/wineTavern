@@ -37,7 +37,7 @@
                             <tr th:each="item : ${stockItems}">
                                 <td th:text="${item.product.getCategories().stream().findFirst().get()}"></td>
                                 <td th:text="${item.product.name}"></td>
-                                <td th:text="@{${item.product.price.number} + '€'}"></td>
+                                <td th:text="${item.product.price.number.doubleValue()} + '€'"></td>
                                 <td th:text="${item.quantity}"></td>
                                 <td>
                                     <a th:href="@{'/admin/stock/details/' + ${item.id}}">
@@ -146,7 +146,7 @@
                     <div class="form-group">
                         <label for="productprice">Preis:</label>
                         <input type="text" class="form-control" name="productprice" id="productprice"
-                               th:value="${product.price.number}"/>
+                               th:value="${product.price.number.doubleValue()}"/>
                     </div>
                     <div class="form-group">
                         <label for="productcategory">Kategorie:</label>

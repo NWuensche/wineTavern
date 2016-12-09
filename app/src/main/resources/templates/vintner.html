@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head th:include="links::links">
+
+    <title>Events</title>
+
+</head>
+<body th:fragment="content">
+<div class="container__wrap">
+    <div class="heading">
+        <div class="row">
+            <div class="col-xs-1 text-xs-center" style="vertical-align:bottom;">
+                <a th:href="@{/admin/events}" style="color:#A6B2C5;">
+                    <i class="fa fa-arrow-left fa-3x"></i>
+                </a>
+            </div>
+            <div class="col-xs-11">
+                <h1>Winzer anpassen</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Winzer</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="content" class="vintner__table">
+                    <tr th:each="vintner:${vintners}" onclick="toggleActive(this)">
+                        <td th:text="${vintner.name}"></td>
+                        <td>
+                            <i class="fa fa-times fa-lg text-danger" onclick="remove(this)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" id="vintner" name="vintner" placeholder="Name des Winzers"/>
+                        </td>
+                        <td>
+                            <i class="fa fa-plus fa-lg text-primary" onclick="add()"></i>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="col-xs-2">
+            <a onclick="moveUp()">
+                <i class="fa fa-arrow-up fa-lg"></i>
+            </a>
+            <br/>
+            <a onclick="moveDown()">
+                <i class="fa fa-arrow-down fa-lg"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-primary" onclick="send();">&Auml;ndern</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(document).ready(function(){
+       $('#content tr:first').attr('class','active');
+    });
+
+    function toggleActive(node){
+        $('.active').attr('class','');
+        $(node).attr('class','active');
+    }
+
+    function moveUp(){
+        var row = $('.active');
+        row.insertBefore(row.prev());
+    }
+
+    function moveDown(){
+        var row = $('.active');
+        row.insertAfter(row.next());
+    }
+
+    function add(){
+        var name = $('#vintner').val();
+        if(!(name.length === 0 || !name.trim())){
+            $('#content').append("<tr onclick='toggleActive(this)'><td>" + name +
+                "</td><td><i class='fa fa-times fa-lg text-danger'></i></td></tr>");
+            document.getElementById('vintner').value = '';
+        }
+    }
+
+    function remove(node){
+        alert($(node).closest('tr').remove());
+    }
+
+    function send(){
+        var query = "";
+        $('#content tr').each(function(){
+            query += $(this).children('td').html() + "|";
+        });
+
+        window.location.href = "/admin/events/vintner?query=" + query;
+    }
+
+    /*]]>*/
+</script>
+
+</body>
+</html>
