@@ -72,11 +72,6 @@ public class DayMenuManager {
         return "editdaymenu";
     }
 
-    @RequestMapping("/admin/menu/getDayMenuByDay")
-    public String getDayMenuByDay() {
-        return "daymenu";
-    }
-
     public ModelAndView showMenuList(ModelAndView modelAndView) {
         Iterable<DayMenu> dayMenuList = dayMenuRepository.findAll();
         modelAndView.addObject("menus", dayMenuList);

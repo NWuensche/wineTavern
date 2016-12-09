@@ -77,36 +77,7 @@ public class DayMenuItemManager {
      * Custom Initbinder makes DayMenu and Product usable with form
      */
     // TODO remove initBinder?
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) throws Exception {
-        binder.registerCustomEditor(DayMenu.class, "dayMenu", new PropertyEditorSupport() {
-            @Override
-            public String getAsText() {
-                DayMenu dayMenu = (DayMenu) getValue();
-                return String.valueOf(dayMenu.getId());
-            }
-            @Override
-            public void setAsText(String text) {
-                DayMenu dayMenu = dayMenuRepository.findOne(Long.parseLong(text)).get();
-                setValue(dayMenu);
-            }
-        });
 
-        binder.registerCustomEditor(Product.class, "product", new PropertyEditorSupport() {
-            @Override
-            public String getAsText() {
-                Product product = (Product) getValue();
-                if(product == null)
-                    return "";
-                return product.getId().toString();
-            }
-            @Override
-            public void setAsText(String text) {
-                Product product = productCatalog.findOne(text);
-                setValue(product);
-            }
-        });
-    }
 
     /**
      * The DayMenuItem adding takes two steps:
