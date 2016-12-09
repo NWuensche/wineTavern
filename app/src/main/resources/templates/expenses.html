@@ -81,7 +81,7 @@
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>
                     <td th:text="${expense.description}" class="expense-desc"></td>
-                    <td th:text="${expense.value.number} + '€'" class="expense-price"></td>
+                    <td th:text="${expense.value.number.doubleValue()} + '€'" class="expense-price"></td>
                     <td><input type="checkbox" class="checkbox__huge" name="singlecheckbox" th:value="${expense.id}"
                                onclick="check();"/>
                     </td>
@@ -144,7 +144,7 @@
                     <td th:text="${expense.person}"></td>
                     <td th:text="${expense.dateString}"></td>
                     <td th:text="${expense.description}"></td>
-                    <td th:text="${expense.value.number} + '€'"></td>
+                    <td th:text="${expense.value} + '€'"></td>
                 </tr>
                 </tbody>
             </table>

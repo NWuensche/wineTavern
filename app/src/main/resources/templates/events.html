@@ -33,7 +33,7 @@
         <tbody>
         <tr th:each="event : ${events}">
             <td th:text="${event.name}"></td>
-            <td th:text="${event.price.number} + ' €'"></td>
+            <td th:text="${event.price.number.doubleValue()} + ' €'"></td>
             <td th:text="${event.interval.start.toLocalDate()}"></td>
             <td th:text="${event.interval.start.toLocalTime()}"></td>
             <td><span th:text="${event.interval.duration.toHours()}"></span>h</td>

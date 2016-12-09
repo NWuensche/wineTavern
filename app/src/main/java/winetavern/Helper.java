@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.user.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,5 +74,10 @@ public class Helper {
             }
         }
         return null;
+    }
+
+    public static String localDateTimeToDateString(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return dateTime.format(formatter);
     }
 }
