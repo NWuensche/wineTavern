@@ -105,9 +105,10 @@ public class EventController {
 
             TimeInterval interval = event.getInterval();
             calendarString = calendarString +
-                    "{ \"title\": \"" + event.getName() +
-                    "\", \"start\": \"" + interval.getStart() +
-                    "\", \"end\": \"" + interval.getEnd() + "\" }";
+                    "{\"title\":\"" + event.getName() +
+                    "\",\"start\":\"" + interval.getStart() +
+                    "\",\"end\":\"" + interval.getEnd() +
+                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() + "\"}";
         }
 
         model.addAttribute("events", calendarString + "]");

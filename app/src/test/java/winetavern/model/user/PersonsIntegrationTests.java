@@ -63,7 +63,8 @@ public class PersonsIntegrationTests extends AbstractIntegrationTests {
 
         Employee employee3 = employeeManager
                 .findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
-        assertArrayEquals(enabled.toArray(), new Employee[]{employee, employee3});
+        Employee[] array = {employee, employee3};
+        assertThat(enabled.toArray(), is(array));
     }
 
     private void disableAllEmployeeFromInitalizer() {
@@ -73,6 +74,8 @@ public class PersonsIntegrationTests extends AbstractIntegrationTests {
     private void saveEmployee() {
         UserAccount acc2 = userAccountManager.create("testAccount2", "1234", Roles.SERVICE.getRole());
         UserAccount acc3 = userAccountManager.create("testAccount3", "1234", Roles.SERVICE.getRole());
+        userAccountManager.save(acc2);
+        userAccountManager.save(acc3);
         employee = new Employee(acc, address, birthday, personTitle);
         Employee employee2 = new Employee(acc2, address, birthday, personTitle);
         Employee employee3 = new Employee(acc3, address, birthday, personTitle);
