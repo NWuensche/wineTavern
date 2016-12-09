@@ -429,6 +429,13 @@ body .list-group-item-action .fa-circle-o{
 }
 
 
+/* EVENTS */
+
+.vintner__table .active {
+    border:3px solid #26AA8C;
+}
+
+
 /* CALENDAR */
 .calendar {
     padding:10px;
@@ -436,6 +443,7 @@ body .list-group-item-action .fa-circle-o{
 
 .tooltip-inner, .tooltip.top .tooltip-arrow {
     background-color: white;
+    box-shadow: 5px -5px 10px rgba(0,0,0,0.5);
     border:1px solid black;
     color: black;
 }

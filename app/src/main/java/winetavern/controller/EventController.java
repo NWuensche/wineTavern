@@ -14,6 +14,8 @@ import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.External;
 import winetavern.model.user.ExternalManager;
+import winetavern.model.user.Vintner;
+import winetavern.model.user.VintnerManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,6 +33,7 @@ import static org.salespointframework.core.Currencies.EURO;
 public class EventController {
     @NonNull @Autowired private EventCatalog eventCatalog;
     @NonNull @Autowired private ExternalManager externals;
+    @NonNull @Autowired private VintnerManager vintnerManager;
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
@@ -127,6 +130,16 @@ public class EventController {
         return "redirect:/admin/events";
     }
 
+    @RequestMapping("/admin/events/vintner")
+    public String showVintner(Model model){
+        model.addAttribute("vintners",vintnerManager.findAll());
+        //vintnerManager.save(new Vintner("Winzer Bodo"));
+        return "vintner";
+    }
+
+    //TODO GetMapping für changeVintner, catch query=Vintnername|Vitnername|..., look if vintner with name exist, if
+    // not create one
+
     private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
@@ -143,7 +156,7 @@ public class EventController {
                     "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
                     "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
-                    "\",\"description\":\"" + event.getDescription() + "<br/>" + event.getExternal().getName() +
+                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getExternal().getName() +
                     "<br/>" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
         }
 
