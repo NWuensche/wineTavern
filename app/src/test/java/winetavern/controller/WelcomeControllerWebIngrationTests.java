@@ -27,6 +27,13 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
+    public void redirectsIfNoAdmin() throws Exception {
+        mvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"));
+    }
+
+    @Test
     public void redirectToLogin() throws Exception {
         mvc.perform(get("/login"))
                 .andExpect(status().isOk())
