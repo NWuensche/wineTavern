@@ -7,6 +7,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
+import winetavern.Helper;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.reservation.Reservation;
@@ -24,6 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
@@ -235,6 +237,55 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
                 .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    public void addReservationRight() throws Exception {
+        String newGuestName = "Alfons";
+
+        RequestBuilder request = post("/service/reservation/add")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("desk", "Table 1")
+                .param("amount", "4")
+                .param("duration", "180")
+                .param("name", newGuestName);
+
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        Iterable<Reservation> allReservations = reservationRepository.findAll();
+
+        Reservation[] newReservationArray = {null};
+
+        allReservations.forEach(res -> {
+            if(res.getGuestName().equals(newGuestName)) {
+                newReservationArray[0] = res;
+            }
+        });
+
+        Reservation newReservation = newReservationArray[0];
+
+        assertThat(newReservation.getGuestName(), is(newGuestName));
+        assertThat(newReservation.getInterval().getEnd(), is(LocalDateTime.of(2016,11,11,14,11)));
+        assertThat(newReservation.getInterval().getDuration().toHours(), is(3l));
+        assertThat(newReservation.getDesk(), is(deskRepository.findByName("Table 1")));
+
+    }
+
+    @Test
+    public void removeReservationRight() throws Exception {
+        assertThat(Helper.convertToList(reservationRepository.findAll()).contains(reservation2), is(true));
+
+        RequestBuilder request = post("/service/reservation/remove")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("reservation", "" + reservation2.getId());
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(Helper.convertToList(reservationRepository.findAll()).contains(reservation2), is(false));
     }
 
 }

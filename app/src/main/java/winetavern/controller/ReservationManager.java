@@ -120,7 +120,7 @@ public class ReservationManager {
     public ModelAndView reservationAdd(@RequestParam("reservationtime") String reservationTimeString,
                                        @RequestParam("desk") String deskName,
                                        @RequestParam("amount") Integer amount,
-                                       @RequestParam("duration") Integer duration,
+                                       @RequestParam("duration") Integer duration, // In Minutes
                                        @RequestParam("name") String name,
                                        ModelAndView modelAndView) {
         LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString, dateTimeFormatter);
