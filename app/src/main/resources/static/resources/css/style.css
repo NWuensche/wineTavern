@@ -427,6 +427,12 @@ body .list-group-item-action .fa-circle-o{
     height:25px;
 }
 
+
+/* CALENDAR */
+.calendar {
+    padding:10px;
+}
+
 /* Form Style */
 
 .form__bg {
