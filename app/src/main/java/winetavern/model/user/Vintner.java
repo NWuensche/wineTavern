@@ -9,21 +9,17 @@ import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 
 /**
- * @author Niklas Wünsche
+ * @author Louis Wilke
  */
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
-public class External extends Person {
+public class Vintner extends Person {
     private String name;
-    private MonetaryAmount wage;
 
-    public External(@NonNull String name, @NonNull MonetaryAmount wage) {
-        if (name.equals(""))
-            throw new IllegalArgumentException("the name of an external must not be empty");
+    public Vintner(@NonNull String name) {
         this.name = name;
-        this.wage = wage;
     }
 
     @Override
