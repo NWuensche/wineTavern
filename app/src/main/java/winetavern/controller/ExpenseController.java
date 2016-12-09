@@ -28,10 +28,7 @@ import javax.money.MonetaryAmount;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.salespointframework.core.Currencies.EURO;
 
