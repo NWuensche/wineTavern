@@ -54,6 +54,13 @@ public class PersonsIntegrationTests extends AbstractIntegrationTests {
     }
 
     @Test
+    public void findByUsername() {
+        Optional<Employee> admin = employeeManager.findByUsername("admin");
+
+        assertThat(admin.isPresent(), is(true));
+    }
+
+    @Test
     public void findEnabled() {
         disableAllEmployeeFromInitalizer();
 
