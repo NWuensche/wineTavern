@@ -4,7 +4,7 @@ import org.salespointframework.core.SalespointRepository;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,7 +16,12 @@ public interface EmployeeManager extends SalespointRepository<Employee, Long> {
     Optional<Employee> findByUserAccount(UserAccount account);
 
     @Query(value = "select * from employee " +
+            "join user_account ON employee.user_account_useraccount_id = user_account.useraccount_id " +
+            "where useraccount_id=?#{[0]} ", nativeQuery = true)
+    Optional<Employee> findByUsername(String Username);
+
+    @Query(value = "select * from employee " +
             "join user_account ON employee.user_account_useraccount_id = user_account.useraccount_id where enabled=1 ",
             nativeQuery = true)
-    ArrayList<Employee> findEnabled();
+    List<Employee> findEnabled();
 }
