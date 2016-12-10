@@ -10,12 +10,10 @@ import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import winetavern.model.user.Roles;
 
-
 /**
  * Web integration tests for the {@link WelcomeController}
  * @author Niklas Wünsche
  */
-
 public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTests {
 
     @Test

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.AbstractIntegrationTests;
 import winetavern.model.management.TimeInterval;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,8 +16,6 @@ import static org.junit.Assert.assertThat;
 /**
  * @author Niklas Wünsche
  */
-
-@Transactional
 public class ReservationIntegrationTests extends AbstractIntegrationTests{
 
     @Autowired private ReservationRepository reservationRepository;

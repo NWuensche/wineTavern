@@ -10,11 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import winetavern.model.menu.DayMenuItem;
 
-
 /**
  * @author Louis
  */
-
 public class BillItemTests {
 
     private DayMenuItem mockedDayMenuItem;

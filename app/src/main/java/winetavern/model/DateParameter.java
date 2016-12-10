@@ -8,7 +8,6 @@ import java.time.LocalDate;
 /**
  * @author Michel
  */
-
 @Getter
 @Setter
 public class DateParameter {

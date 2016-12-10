@@ -35,8 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Niklas Wünsche
  */
-
-@Transactional
 public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired private BillRepository billRepository;
@@ -54,9 +52,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         dayMenuItemRepository.save(dayMenuItem);
         fries = new BillItem(dayMenuItem);
         billItemRepository.save(fries);
-        bill = new Bill("Table 1",
-                employeeManager.findByUserAccount(userAccountManager.findByUsername("admin").get()).get());
-
+        bill = new Bill("Table 1", employeeManager.findByUsername("admin").get());
         bill.changeItem(fries, 5);
         billRepository.save(bill);
     }

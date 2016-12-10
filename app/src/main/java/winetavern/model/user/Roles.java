@@ -10,7 +10,6 @@ import java.util.stream.Stream;
  * Enum of all Roles that a {@link Employee} can have. Used for controlling visible sites on the website.
  * @author Niklas Wünsche
  */
-
 public enum Roles {
 
     ADMIN ("Administrator"),

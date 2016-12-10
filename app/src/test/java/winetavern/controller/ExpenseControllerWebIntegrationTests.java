@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Niklas Wünsche
  */
-
 public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Test

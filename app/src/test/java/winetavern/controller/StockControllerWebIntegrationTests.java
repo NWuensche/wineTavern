@@ -28,8 +28,6 @@ import winetavern.model.user.Roles;
 /**
  * @author Louis
  */
-
-@Transactional
 public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTests {
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ProductCatalog products;

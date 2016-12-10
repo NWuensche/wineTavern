@@ -9,7 +9,6 @@ import org.junit.Test;
  * Tests for Data initialization and login behavior
  * @author Niklas Wünsche
  */
-
 public class ApplicationTests extends AbstractWebIntegrationTests {
 
     @Test

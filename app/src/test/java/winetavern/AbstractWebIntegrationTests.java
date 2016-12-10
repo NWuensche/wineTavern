@@ -15,10 +15,8 @@ import javax.transaction.Transactional;
 
 /**
  * Base class, which connects tests to {@link Application} and adds web layer in tests e.g. simulating HTTP requests.
- *
  * @author Niklas Wünsche
  */
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = Application.class)

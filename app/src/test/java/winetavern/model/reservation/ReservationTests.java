@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 /**
  * @author Niklas Wünsche
  */
-
 public class ReservationTests {
 
     private Reservation reservation;

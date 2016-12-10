@@ -1,6 +1,5 @@
 package winetavern.controller;
 
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
@@ -10,28 +9,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.Before;
-import org.springframework.validation.BindException;
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
-import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Optional;
 
 /**
- * Created by michel on 13.11.16.
+ * @author Michel, Niklas
  */
-@Transactional
 public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTests {
+
     @Autowired private DayMenuManager dayMenuManager;
     @Autowired private DayMenuRepository dayMenuRepository;
 

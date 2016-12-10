@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Niklas Wünsche
  */
-
 public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired EventCatalog eventCatalog;

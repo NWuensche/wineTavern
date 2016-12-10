@@ -90,7 +90,7 @@ public class PersonsIntegrationTests extends AbstractIntegrationTests {
     }
 
     private void disableOneEmployee() {
-        Employee disableEmployee2 = employeeManager.findByUserAccount(userAccountManager.findByUsername("testAccount2").get()).get();
+        Employee disableEmployee2 = employeeManager.findByUsername("testAccount2").get();
         disableEmployee2.getUserAccount().setEnabled(false);
     }
 

@@ -15,7 +15,6 @@ import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.model.user.Employee;
@@ -29,12 +28,9 @@ import java.util.Optional;
  * Test class für {@link EmployeeManagerController}
  * @author Niklas Wünsche
  */
-
-@Transactional
 public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
-    @Autowired
-    EmployeeManager employeeManager;
+    @Autowired EmployeeManager employeeManager;
     @Autowired UserAccountManager userAccountManager;
 
     private String userName;
@@ -120,13 +116,12 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
                 .param("address", "Best House")
                 .param("role", Roles.SERVICE.getNameOfRoleWithPrefix()));
 
-        Employee changedEmployee = employeeManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
+        Employee changedEmployee = employeeManager.findByUsername(userName).get();
 
         assertThat(changedEmployee.getUserAccount().getFirstname(), is("Hans"));
         assertThat(changedEmployee.getUserAccount().getLastname(), is("Schwab"));
         assertThat(changedEmployee.getAddress(), is("Best House"));
         assertThat(changedEmployee.getUserAccount().getRoles().stream().findFirst().get(), is(Roles.SERVICE.getRole()));
-
     }
 
     private void saveNewEmployee() throws Exception{
@@ -135,7 +130,7 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
     }
 
     private String getEmployeeId() {
-        return employeeManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get().getId().toString();
+        return employeeManager.findByUsername(userName).get().getId().toString();
     }
 
     @Test
@@ -145,11 +140,10 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
 
         mvc.perform(get("/admin/management/users/disable/" + employeeId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
 
-        Employee deletedEmployee = employeeManager.findByUserAccount(userAccountManager.findByUsername(userName).get()).get();
+        Employee deletedEmployee = employeeManager.findByUsername(userName).get();
 
         assertThat(deletedEmployee.isEnabled(), is(false));
         assertThat(deletedEmployee.getUserAccount().isEnabled(), is(false));
-
     }
 
 }

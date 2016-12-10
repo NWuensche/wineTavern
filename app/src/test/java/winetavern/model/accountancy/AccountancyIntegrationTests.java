@@ -3,7 +3,6 @@ package winetavern.model.accountancy;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
-import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.AbstractIntegrationTests;
 import winetavern.Helper;
@@ -18,7 +17,6 @@ import static org.salespointframework.core.Currencies.EURO;
 /**
  * @author Niklas Wünsche
  */
-
 public class AccountancyIntegrationTests extends AbstractIntegrationTests {
 
     @Autowired private BillRepository bills;

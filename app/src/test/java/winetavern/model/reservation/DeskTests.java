@@ -10,7 +10,6 @@ import org.junit.Test;
 /**
  * @author Sev, Niklas
  */
-
 public class DeskTests {
 
     private Desk desk;

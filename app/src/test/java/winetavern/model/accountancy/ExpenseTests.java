@@ -12,11 +12,9 @@ import org.junit.Test;
 import org.salespointframework.useraccount.UserAccount;
 import winetavern.model.user.Employee;
 
-
 /**
  * @author Niklas Wünsche
  */
-
 public class ExpenseTests {
 
     private Expense expense;

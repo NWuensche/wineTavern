@@ -9,6 +9,7 @@ import org.salespointframework.time.Interval;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+
 /**
  * Test class for {@link TimeInterval}
  * @author Louis

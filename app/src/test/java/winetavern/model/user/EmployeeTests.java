@@ -15,8 +15,8 @@ import java.util.NoSuchElementException;
 
 /**
  * Test class for {@link Employee}
+ * @author Niklas Wünsche
  */
-
 public class EmployeeTests {
 
     private Employee employee;

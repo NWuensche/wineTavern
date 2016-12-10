@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.Helper;
 import winetavern.model.management.TimeInterval;
@@ -18,7 +17,6 @@ import winetavern.model.user.Roles;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -31,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Sev, Michel Kunkler
  */
-@Transactional
 public class ReservationManagerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired ReservationRepository reservationRepository;
@@ -271,7 +268,6 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
         assertThat(newReservation.getInterval().getEnd(), is(LocalDateTime.of(2016,11,11,14,11)));
         assertThat(newReservation.getInterval().getDuration().toHours(), is(3l));
         assertThat(newReservation.getDesk(), is(deskRepository.findByName("Table 1")));
-
     }
 
     @Test

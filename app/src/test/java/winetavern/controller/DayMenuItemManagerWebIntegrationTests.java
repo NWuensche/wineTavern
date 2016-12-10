@@ -33,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Niklas Wünsche
  */
-
 public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired private DayMenuItemRepository dayMenuItemRepository;

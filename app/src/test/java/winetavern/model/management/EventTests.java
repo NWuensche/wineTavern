@@ -2,21 +2,15 @@ package winetavern.model.management;
 
 import static org.mockito.Mockito.*;
 import static org.salespointframework.core.Currencies.EURO;
-import static org.junit.Assert.*;
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.Matchers.lessThan;
 
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
-
 /**
  * Test class for {@link Event}
  * @author Louis, Niklas
  */
-
 public class EventTests {
 
     private TimeInterval mockedTimeInterval;

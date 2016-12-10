@@ -11,14 +11,11 @@ import winetavern.model.management.Event;
 import winetavern.model.management.TimeInterval;
 
 import javax.money.MonetaryAmount;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 /**
  * @author Niklas Wünsche
  */
-
-@Transactional
 public class ExternalTests {
 
     private Event event;

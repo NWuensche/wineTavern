@@ -5,9 +5,8 @@ import static org.hamcrest.core.Is.*;
 
 import org.junit.Test;
 
-
 /**
- * Created by nwuensche on 14.11.16.
+ * @author Niklas Wünsche
  */
 public class CategoryTests {
 

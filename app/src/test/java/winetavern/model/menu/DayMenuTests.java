@@ -12,7 +12,6 @@ import java.time.LocalDate;
 /**
  * @author Niklas Wünsche
  */
-
 public class DayMenuTests {
 
     // TODO PreRemove?

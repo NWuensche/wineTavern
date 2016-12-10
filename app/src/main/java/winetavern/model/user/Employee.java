@@ -5,7 +5,6 @@ import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
  * @author Niklas Wünsche
  * @implNote The UserAccount has to have exactly 1 Role
  */
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 @Getter

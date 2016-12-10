@@ -8,15 +8,12 @@ import org.salespointframework.quantity.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.AbstractIntegrationTests;
 
-import javax.validation.constraints.NotNull;
-
 import static org.salespointframework.core.Currencies.EURO;
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by nwuensche on 29.11.16.
+ * @author Niklas Wünsche
  */
 public class ProductCatalogTests extends AbstractIntegrationTests {
 

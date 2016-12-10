@@ -10,8 +10,8 @@ import java.util.NoSuchElementException;
 
 /**
  * Tests for {@link Roles}
+ * @author Niklas Wünsche
  */
-
 public class RolesTests {
 
     @Test

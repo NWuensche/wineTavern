@@ -13,7 +13,6 @@ import static org.salespointframework.core.Currencies.EURO;
 /**
  * @author Niklas Wünsche
  */
-
 public class DayMenuItemTests {
 
     private DayMenuItem dayMenuItem;

@@ -2,21 +2,14 @@ package winetavern;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import org.assertj.core.internal.Lists;
-import org.assertj.core.internal.cglib.core.CollectionUtils;
-import org.javamoney.moneta.Money;
 import org.junit.Test;
-import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
-import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.Shift;
@@ -24,7 +17,6 @@ import winetavern.model.management.ShiftRepository;
 import winetavern.model.user.ExternalManager;
 import winetavern.model.user.Roles;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +25,6 @@ import java.util.Optional;
  * Tests for data initialization
  * @author Niklas Wünsche
  */
-
-@Transactional
 public class WineTavernDataInitializerTests extends AbstractWebIntegrationTests{
 
     @Autowired private UserAccountManager userAccountManager;

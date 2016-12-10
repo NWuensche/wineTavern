@@ -7,10 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Base class, which connects tests to {@link Application}.
- *
  * @author Niklas Wünsche
  */
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @Transactional

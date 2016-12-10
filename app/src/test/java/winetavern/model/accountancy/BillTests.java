@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 /**
  * @author Louis, Niklas
  */
-
 public class BillTests {
 
     private Bill bill;

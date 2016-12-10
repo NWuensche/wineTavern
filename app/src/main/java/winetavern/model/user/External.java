@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
  * Entity for all (Groups of) Persons, that don't need a login to the Website (like artists)
  * @author Niklas Wünsche
  */
-
 @Entity
 @Getter
 public class External implements Person {
