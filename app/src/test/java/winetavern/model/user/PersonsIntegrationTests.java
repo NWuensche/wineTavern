@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
@@ -59,7 +60,7 @@ public class PersonsIntegrationTests extends AbstractIntegrationTests {
         saveEmployee();
         disableOneEmployee();
 
-        ArrayList<Employee> enabled = employeeManager.findEnabled();
+        List<Employee> enabled = employeeManager.findEnabled();
 
         Employee employee3 = employeeManager
                 .findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
