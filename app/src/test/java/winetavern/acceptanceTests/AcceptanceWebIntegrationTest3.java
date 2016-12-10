@@ -55,17 +55,14 @@ public class AcceptanceWebIntegrationTest3 extends AbstractWebIntegrationTests {
         assertThat(employeeManager.findEnabled().contains(service1), is(false));
         assertThat(employeeManager.findEnabled().contains(service2), is(false));
 
-        assertThat(employeeManager.findByUserAccount(userAccountManager.findByUsername("Neuer Kellner").get())
-                        .isPresent(), is(true));
+        assertThat(employeeManager.findByUsername("Neuer Kellner").isPresent(), is(true));
     }
 
     private void testIf2ServiceMemberInRepo() {
         // TODO Remove Data Init Serivce Member
         assertThat(employeeManager.count(), is(3l + 1l)); // Admin + 2 Service Member + 1 Data Init Serivce Member
-        assertThat(employeeManager.findByUserAccount(userAccountManager.findByUsername("Kellner 1").get())
-                .isPresent(), is(true));
-        assertThat(employeeManager.findByUserAccount(userAccountManager.findByUsername("Kellner 2").get())
-                .isPresent(), is(true));
+        assertThat(employeeManager.findByUsername("Kellner 1").isPresent(), is(true));
+        assertThat(employeeManager.findByUsername("Kellner 2").isPresent(), is(true));
     }
 
     private void disable2ServiceMember() {
