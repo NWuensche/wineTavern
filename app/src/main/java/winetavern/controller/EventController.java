@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
@@ -42,7 +43,6 @@ public class EventController {
         //TODO filter for events in the past
         //TODO sort by time, next one first
         checkVintnerDays();
-        Event event = eventCatalog.findAll().iterator().next();
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         model.addAttribute("calendarString", buildCalendarString());
@@ -126,7 +126,24 @@ public class EventController {
         String calendarString = "[";
         boolean noComma = true;
 
-        for (Event event : eventCatalog.findAll()) {
+        Set<Event> events = eventCatalog.findAll(); //all existing events
+
+        LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
+        if (!vintnerSequence.isEmpty()) { //add virtual events
+
+            LinkedList<Event> vintnerDays = eventCatalog.findByVintnerDayTrue(); //all vintner days
+            vintnerDays.sort(Comparator.comparing(o -> o.getInterval().getStart()));
+            Event lastVintnerDay = vintnerDays.getLast(); //get the last vintner day which is actually in the calendar
+
+            while (lastVintnerDay.getInterval().getStart().isBefore(businessTime.getTime().plusYears(5))) {
+                lastVintnerDay = createVintnerDay(getNextVintner(vintnerSequence, (Vintner) lastVintnerDay.getPerson()),
+                        getNextVintnerDayDate(lastVintnerDay.getInterval().getStart().toLocalDate()));
+
+                events.add(lastVintnerDay);
+            }
+        }
+
+        for (Event event : events) { //add all events
             if (noComma)
                 noComma = false;
             else
@@ -135,12 +152,18 @@ public class EventController {
             TimeInterval interval = event.getInterval();
             calendarString = calendarString +
                     "{\"title\":\"" + event.getName() +
-                    "\",\"allDay\":\"" + event.isVintnerDay() +
-                    "\",\"start\":\"" + interval.getStart() +
-                    "\",\"end\":\"" + interval.getEnd() +
-                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
+                    "\",\"allDay\":" + event.isVintnerDay() +
+                    ",\"start\":\"" + interval.getStart() +
+                    "\",\"end\":\"" + interval.getEnd();
+
+            if (!event.isVintnerDay()) {
+                calendarString = calendarString +
+                        "\",\"url\":\"" + "/admin/events/change/" + event.getId();
+            }
+
+            calendarString = calendarString +
                     "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson() +
-                    "<br/>Eintritt:" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
+                    "<br/>Eintritt: " + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
         }
 
         return calendarString + "]";
@@ -148,12 +171,7 @@ public class EventController {
 
     @RequestMapping("/admin/events/add")
     public String showAddEventTemplate(Model model){
-        Iterable<External> externals =  externalManager.findAll();
-        Iterable<Vintner> vintners = vintnerManager.findAll();
-        Set<Person> persons = new HashSet<>();
-        externals.forEach(it -> persons.add(it));
-        vintners.forEach(it -> persons.add(it));
-        model.addAttribute("externals",persons);
+        model.addAttribute("externals", externalManager.findAll());
         return "addevent";
     }
 
@@ -195,13 +213,10 @@ public class EventController {
 
     @RequestMapping("/admin/events/change/{event}")
     public String showChangeModal(@PathVariable Event event, Model model){
-        Set<Person> persons = new HashSet<>();
-        vintnerManager.findAll().forEach(it -> persons.add(it));
-        if(!event.isVintnerDay())
-            externalManager.findAll().forEach(it -> persons.add(it));
-
-        model.addAttribute("externals",persons);
-        model.addAttribute("event",event);
+        model.addAttribute("interval", Helper.localDateTimeToDateTimeString(event.getInterval().getStart())
+                           + " - " + Helper.localDateTimeToDateTimeString(event.getInterval().getEnd()));
+        model.addAttribute("externals", externalManager.findAll());
+        model.addAttribute("event", event);
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         model.addAttribute("calendarString", buildCalendarString());

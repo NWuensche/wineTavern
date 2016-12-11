@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -56,6 +57,16 @@ public class Helper {
 
     public static String localDateTimeToDateString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return dateTime.format(formatter);
+    }
+
+    public static String localDateTimeToDateTimeString(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return dateTime.format(formatter);
+    }
+
+    public static String localDateTimeToJavascriptDateString(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss").withLocale(new Locale("en"));
         return dateTime.format(formatter);
     }
 }
