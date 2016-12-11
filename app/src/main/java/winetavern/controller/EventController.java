@@ -2,6 +2,7 @@ package winetavern.controller;
 
 import lombok.NonNull;
 import org.javamoney.moneta.Money;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import winetavern.model.user.Vintner;
 import winetavern.model.user.VintnerManager;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -33,18 +36,99 @@ public class EventController {
     @NonNull @Autowired private EventCatalog eventCatalog;
     @NonNull @Autowired private ExternalManager externals;
     @NonNull @Autowired private VintnerManager vintnerManager;
+    @NonNull @Autowired private BusinessTime businessTime;
+    private static final LocalDate dateToCreateVintnerDay = LocalDate.of(2014, 1, 3); //first friday in uneven months
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
 
         //TODO filter for events in the past
         //TODO sort by time, next one first
+        checkVintnerDays();
         Event event = eventCatalog.findAll().iterator().next();
         model.addAttribute("test",event.getPrice().getContext());
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         model.addAttribute("calendarString", buildCalendarString());
         return "events";
+    }
+
+    private void checkVintnerDays() {
+        LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
+        if (vintnerSequence.isEmpty())
+            return;
+
+        LinkedList<Event> vintnerDays = eventCatalog.findByVintnerDayTrue(); //all vintner days
+        Event lastVintnerDay;
+
+        if (vintnerDays.isEmpty()) { //no vintner day yet, begin to save it from 2016 on
+            lastVintnerDay = createVintnerDay(vintnerSequence.getFirst(), dateToCreateVintnerDay);
+            eventCatalog.save(lastVintnerDay);
+            vintnerDays.add(lastVintnerDay);
+        } else {
+            vintnerDays.sort(Comparator.comparing(o -> o.getInterval().getStart()));
+            lastVintnerDay = vintnerDays.getLast(); //get the last vintner day which is actually in the calendar
+        }
+
+        while (lastVintnerDay.getInterval().getStart().isBefore(businessTime.getTime())) {
+            lastVintnerDay = createVintnerDay(getNextVintner(vintnerSequence, (Vintner) lastVintnerDay.getPerson()),
+                    getNextVintnerDayDate(lastVintnerDay.getInterval().getStart().toLocalDate()));
+
+            eventCatalog.save(lastVintnerDay);
+        }
+    }
+
+    private Vintner getNextVintner(List<Vintner> vintners,Vintner lastVintner) {
+        return vintners.get((vintners.indexOf(lastVintner) + 1) % vintners.size());
+    }
+
+    private LocalDate getNextVintnerDayDate(LocalDate lastDate) {
+        LocalDate nextDate = lastDate.plusMonths(2).withDayOfMonth(1).with(dateToCreateVintnerDay.getDayOfWeek());
+        if (nextDate.getMonthValue() % 2 == 0) //date slipped in last month => add one week to get first DayOfWeek in month
+            nextDate = nextDate.plusWeeks(1);
+        return nextDate;
+    }
+
+    /**
+     *
+     * @param vintner
+     * @param date
+     * @return
+     */
+    private Event createVintnerDay(Vintner vintner, LocalDate date) {
+        Event vintnerDay = new Event("Weinprobe: " + vintner, Money.of(0, EURO),
+                new TimeInterval(date.atStartOfDay(), date.atStartOfDay()),
+                "Weinprobe mit Weinen von " + vintner + ". Alle Weine zum halben Preis!", vintner);
+        vintnerDay.setVintnerDay(true);
+        return vintnerDay;
+    }
+
+    /**
+     * compiles all events into a String which can be parsed into an Object by JSON (javascript) and then put into the calendar
+     * @return JSON parsable String
+     */
+    private String buildCalendarString() {
+        String calendarString = "[";
+        boolean noComma = true;
+
+        for (Event event : eventCatalog.findAll()) {
+            if (noComma)
+                noComma = false;
+            else
+                calendarString = calendarString + ",";
+
+            TimeInterval interval = event.getInterval();
+            calendarString = calendarString +
+                    "{\"title\":\"" + event.getName() +
+                    "\",\"allDay\":\"" + event.isVintnerDay() +
+                    "\",\"start\":\"" + interval.getStart() +
+                    "\",\"end\":\"" + interval.getEnd() +
+                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
+                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson() +
+                    "<br/>" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
+        }
+
+        return calendarString + "]";
     }
 
     @RequestMapping("/admin/events/add")
@@ -122,7 +206,7 @@ public class EventController {
             event.setDescription(desc);
             event.setInterval(new TimeInterval(start, end));
             event.setPrice(Money.of(Float.parseFloat(price),EURO));
-            event.setExternal(externalPerson);
+            event.setPerson(externalPerson);
             eventCatalog.save(event);
         }
 
@@ -135,7 +219,7 @@ public class EventController {
             setVintnerSequence(query.get());
         }
 
-        model.addAttribute("vintners", vintnerManager.findAllByOrderByPosition());
+        model.addAttribute("vintners", vintnerManager.findByActiveTrueOrderByPosition());
         return "vintner";
     }
 
@@ -147,54 +231,25 @@ public class EventController {
      */
     private void setVintnerSequence(String query) {
         String[] vintnerNames = query.split("\\|"); //format: vintnerName|vintnerName|...|
-        List<Vintner> vintnersToRemove = vintnerManager.findAll();
+        List<Vintner> vintnersToRemove = vintnerManager.findByActiveTrue();
 
         for (int i = 0; i < vintnerNames.length; i++) { //iterate through all vintners in the query
             Optional<Vintner> vintnerOptional = vintnerManager.findByName(vintnerNames[i]);
 
             if (vintnerOptional.isPresent()) { //the vintner already exists in the DB
-                vintnerOptional.get().setPosition(i); //set vintners position in the vintner evening sequence
-                vintnerManager.save(vintnerOptional.get());
-                vintnersToRemove.remove(vintnerOptional.get());
+                Vintner vintner = vintnerOptional.get();
+                vintner.setPosition(i); //set vintners position in the vintner evening sequence
+                vintner.setActive(true);
+                vintnerManager.save(vintner);
+                vintnersToRemove.remove(vintner);
             } else {
                 vintnerManager.save(new Vintner(vintnerNames[i], i));
             }
         }
 
-        vintnersToRemove.forEach(it -> vintnerManager.delete(it)); //delete all unused vintners
-    }
-
-    private String buildCalendarString() {
-        String calendarString = "[";
-        boolean noComma = true;
-
-        for (Event event : eventCatalog.findAll()) {
-            if (noComma)
-                noComma = false;
-            else
-                calendarString = calendarString + ",";
-
-            TimeInterval interval = event.getInterval();
-            calendarString = calendarString +
-                    "{\"title\":\"" + event.getName() +
-                    "\",\"start\":\"" + interval.getStart() +
-                    "\",\"end\":\"" + interval.getEnd() +
-                    "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
-                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getExternal().getName() +
-                    "<br/>" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
+        for (Vintner vintnerToRemove : vintnersToRemove) { //hide all unused vintners - keep for events in the past
+            vintnerToRemove.setActive(false);
+            vintnerManager.save(vintnerToRemove);
         }
-
-        return calendarString + "]";
-    }
-
-    private Set<Event> getEventsByInterval(TimeInterval i1) {
-        Set<Event> res = new TreeSet<>();
-        for (Event event : eventCatalog.findAll()) {
-            TimeInterval i2 = event.getInterval();
-            if (i2.getStart().compareTo(i1.getStart()) == 1 || //if a part of the event lies in the interval i1
-                    i2.getEnd().compareTo(i1.getEnd()) == -1)
-                res.add(event);
-        }
-        return res;
     }
 }

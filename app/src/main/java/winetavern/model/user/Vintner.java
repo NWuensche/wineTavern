@@ -15,12 +15,14 @@ import javax.persistence.Entity;
 public class Vintner extends Person {
     private String name;
     private int position; //the position in the vintner evening sequence
+    @Setter private boolean active;
 
     public Vintner(@NonNull String name, int position) {
         this.name = name;
         if (position < 0) //maybe lombok?
             throw new IllegalArgumentException("the position in the vintner evening sequence must not be negative");
         this.position = position;
+        this.active = true;
     }
 
     public void setPosition(int position) {

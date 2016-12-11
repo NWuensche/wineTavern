@@ -2,7 +2,8 @@ package winetavern.model.user;
 
 import org.salespointframework.core.SalespointRepository;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Optional;
 
 /**
@@ -11,7 +12,8 @@ import java.util.Optional;
  */
 
 public interface VintnerManager extends SalespointRepository<Vintner, Long> {
-    List<Vintner> findAllByOrderByPosition();
+    LinkedList<Vintner> findByActiveTrueOrderByPosition();
     Optional<Vintner> findByName(String name);
-    List<Vintner> findAll();
+    ArrayList<Vintner> findByActiveTrue();
+    ArrayList<Vintner> findAll();
 }
