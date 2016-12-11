@@ -19,10 +19,7 @@ import winetavern.Helper;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
-import winetavern.model.user.Employee;
-import winetavern.model.user.EmployeeManager;
-import winetavern.model.user.ExternalManager;
-import winetavern.model.user.Person;
+import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
 import java.time.LocalDate;
@@ -42,6 +39,7 @@ public class ExpenseController {
     @NonNull @Autowired private ExpenseGroupRepository expenseGroups;
     @NonNull @Autowired private EmployeeManager employees;
     @NonNull @Autowired private ExternalManager externals;
+    @NonNull @Autowired private PersonManager persons;
     @NonNull @Autowired private BusinessTime bt;
     @NonNull @Autowired private AuthenticationManager am;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -148,7 +146,7 @@ public class ExpenseController {
         }
 
         if (!personId.equals("0")) { //Person filter: must contain person
-            Person person = Helper.findOnePerson(Long.parseLong(personId), employees, externals).get();
+            Person person = persons.findOne(Long.parseLong(personId)).get();
             res.removeIf(expense -> !expense.getPerson().getId().equals(person.getId()));
         }
 
