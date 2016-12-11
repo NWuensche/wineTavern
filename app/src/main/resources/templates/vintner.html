@@ -39,7 +39,9 @@
                 <tbody>
                     <tr>
                         <td>
-                            <input type="text" id="vintner" name="vintner" placeholder="Name des Winzers"/>
+                            <select id="vintner" name="vintner" placeholder="Name des Winzers">
+                                <option th:each="vintner : ${vintners}" th:text="${vintner.name}"></option>
+                            </select>
                         </td>
                         <td>
                             <i class="fa fa-plus fa-lg text-primary" onclick="add()"></i>
