@@ -20,8 +20,7 @@ import winetavern.model.user.VintnerManager;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -131,14 +130,39 @@ public class EventController {
     }
 
     @RequestMapping("/admin/events/vintner")
-    public String showVintner(Model model){
-        model.addAttribute("vintners",vintnerManager.findAll());
-        //vintnerManager.save(new Vintner("Winzer Bodo"));
+    public String showVintner(@RequestParam Optional<String> query, Model model){
+        if (query.isPresent()) {
+            setVintnerSequence(query.get());
+        }
+
+        model.addAttribute("vintners", vintnerManager.findAllByOrderByPosition());
         return "vintner";
     }
 
-    //TODO GetMapping für changeVintner, catch query=Vintnername|Vitnername|..., look if vintner with name exist, if
-    // not create one
+    /**
+     * splits the query String and saves all vintners in the exact same order by setting the position attribute
+     * @see Vintner with attribut (int position), the position in the vintner evening sequence
+     * @param query the String which contains all vintners to keep in the system (in that order)
+     *              format: vintnerName|vintnerName|...|
+     */
+    private void setVintnerSequence(String query) {
+        String[] vintnerNames = query.split("\\|"); //format: vintnerName|vintnerName|...|
+        List<Vintner> vintnersToRemove = vintnerManager.findAll();
+
+        for (int i = 0; i < vintnerNames.length; i++) { //iterate through all vintners in the query
+            Optional<Vintner> vintnerOptional = vintnerManager.findByName(vintnerNames[i]);
+
+            if (vintnerOptional.isPresent()) { //the vintner already exists in the DB
+                vintnerOptional.get().setPosition(i); //set vintners position in the vintner evening sequence
+                vintnerManager.save(vintnerOptional.get());
+                vintnersToRemove.remove(vintnerOptional.get());
+            } else {
+                vintnerManager.save(new Vintner(vintnerNames[i], i));
+            }
+        }
+
+        vintnersToRemove.forEach(it -> vintnerManager.delete(it)); //delete all unused vintners
+    }
 
     private String buildCalendarString() {
         String calendarString = "[";
