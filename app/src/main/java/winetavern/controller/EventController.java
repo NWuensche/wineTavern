@@ -35,13 +35,9 @@ public class EventController {
     @NonNull @Autowired private VintnerManager vintnerManager;
     @NonNull @Autowired private PersonManager personManager;
     @NonNull @Autowired private BusinessTime businessTime;
-    private static final LocalDate dateToCreateVintnerDay = LocalDate.of(2014, 1, 3); //first friday in uneven months
 
     @RequestMapping("/admin/events")
     public String manageEvents(Model model) {
-
-        //TODO filter for events in the past
-        //TODO sort by time, next one first
         checkVintnerDays();
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
@@ -60,8 +56,8 @@ public class EventController {
         LinkedList<Event> vintnerDays = eventCatalog.findByVintnerDayTrue(); //all vintner days
         Event lastVintnerDay;
 
-        if (vintnerDays.isEmpty()) { //no vintner day yet, begin to save it from 2016 on
-            lastVintnerDay = createVintnerDay(vintnerSequence.getFirst(), dateToCreateVintnerDay);
+        if (vintnerDays.isEmpty()) { //no vintner day yet, begin to save it at Fridays from 2014 on
+            lastVintnerDay = createVintnerDay(vintnerSequence.getFirst(), LocalDate.of(2014, 1, 3));
             eventCatalog.save(lastVintnerDay);
             vintnerDays.add(lastVintnerDay);
         } else {
@@ -96,7 +92,7 @@ public class EventController {
      * @return LocalDate nextDate - the next date (last date plus 2 months) to create a vintner day on
      */
     private LocalDate getNextVintnerDayDate(LocalDate lastDate) {
-        LocalDate nextDate = lastDate.plusMonths(2).withDayOfMonth(1).with(dateToCreateVintnerDay.getDayOfWeek());
+        LocalDate nextDate = lastDate.plusMonths(2).withDayOfMonth(1).with(lastDate.getDayOfWeek());
         if (nextDate.getMonthValue() % 2 == 0) //date slipped in last month => add one week to get first DayOfWeek in month
             nextDate = nextDate.plusWeeks(1);
         return nextDate;
@@ -119,7 +115,8 @@ public class EventController {
     }
 
     /**
-     * compiles all events into a String which can be parsed into an Object by JSON (javascript) and then put into the calendar
+     * compiles all events into a String which can be parsed into an Object by JSON (javascript) and then put into the
+     * calendar. Also add virtual events to the future. These are the estimated vine evening events.
      * @return JSON parsable String
      */
     private String buildCalendarString() {
