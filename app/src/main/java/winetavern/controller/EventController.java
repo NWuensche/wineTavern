@@ -19,11 +19,13 @@ import winetavern.model.user.Vintner;
 import winetavern.model.user.VintnerManager;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -53,6 +55,9 @@ public class EventController {
         return "events";
     }
 
+    /**
+     * automatically creates Events for the vintner days till the present day and the next one
+     */
     private void checkVintnerDays() {
         LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
         if (vintnerSequence.isEmpty())
@@ -78,10 +83,24 @@ public class EventController {
         }
     }
 
-    private Vintner getNextVintner(List<Vintner> vintners,Vintner lastVintner) {
+    /**
+     * returns the next vintner in the given sequence. If it reaches the end, the circle starts from the beginning.
+     * WARNING: The last vintner might not be on the sequence anymore. The circle will take its index anyway!
+     * @see Vintner
+     * @param vintners the sequence
+     * @param lastVintner the vin
+     * @return Vintner nextVintner - the vintner who is next in the sequence
+     */
+    private Vintner getNextVintner(List<Vintner> vintners, Vintner lastVintner) {
         return vintners.get((vintners.indexOf(lastVintner) + 1) % vintners.size());
     }
 
+    /**
+     * finds the next date to create a vintner day on. Created with the given constant 'dateToCreateVintnerDay'. The
+     * next date will be on the same 'DayOfWeek' as the sample date 'dateToCreateVintnerDay'.
+     * @param lastDate the LocalDate of the last vintner event
+     * @return LocalDate nextDate - the next date (last date plus 2 months) to create a vintner day on
+     */
     private LocalDate getNextVintnerDayDate(LocalDate lastDate) {
         LocalDate nextDate = lastDate.plusMonths(2).withDayOfMonth(1).with(dateToCreateVintnerDay.getDayOfWeek());
         if (nextDate.getMonthValue() % 2 == 0) //date slipped in last month => add one week to get first DayOfWeek in month
@@ -90,10 +109,12 @@ public class EventController {
     }
 
     /**
-     *
-     * @param vintner
-     * @param date
-     * @return
+     * creates an event with a given vintner as person and a date
+     * @see Event
+     * @param vintner Vintner extends Person
+     * @param date the date which will be converted into LocalDateTime for the interval. The interval will be empty,
+     *             because the event is 'allDay' anyway ('allDay' is an calendar attribute).
+     * @return Event vintnerDAy - the created event
      */
     private Event createVintnerDay(Vintner vintner, LocalDate date) {
         Event vintnerDay = new Event("Weinprobe: " + vintner, Money.of(0, EURO),
