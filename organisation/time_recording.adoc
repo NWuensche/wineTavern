@@ -104,6 +104,8 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 08.12.2016 | 11:00 | 13:30 | code refactor
 | 08.12.2016 | 15:00 | 16:00 | Event calendar
 | 09.12.2016 | 14:00 | 17:00 | Fixed Money bug, event calendar
+| 11.12.2016 | 09:00 | 10:45 | added Vintners
+| 11.12.2016 | 14:00 | 18:30 | added automatic event creation
 |===
 
 == Niklas
