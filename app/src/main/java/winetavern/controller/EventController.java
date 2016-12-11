@@ -32,6 +32,7 @@ public class EventController {
     @NonNull @Autowired private EventCatalog eventCatalog;
     @NonNull @Autowired private ExternalManager externalManager;
     @NonNull @Autowired private VintnerManager vintnerManager;
+    @NonNull @Autowired private PersonManager personManager;
     @NonNull @Autowired private BusinessTime businessTime;
     private static final LocalDate dateToCreateVintnerDay = LocalDate.of(2014, 1, 3); //first friday in uneven months
 
@@ -178,11 +179,11 @@ public class EventController {
                 LocalDateTime start = LocalDateTime.parse(splittedDate[0], parser);
                 LocalDateTime end = LocalDateTime.parse(splittedDate[1], parser);
 
-                External externalPerson;
+                Person externalPerson;
                 if(external.equals("0")) { //external == '0' => create new external
                     externalPerson = new External(externalName, Money.of(Float.parseFloat(externalWage), EURO));
                 } else { //external already exists
-                    externalPerson = externalManager.findOne(Long.parseLong(external)).get();
+                    externalPerson = personManager.findOne(Long.parseLong(external)).get();
                 }
 
                 eventCatalog.save(new Event(name, Money.of((Float.parseFloat(price)), EURO),
@@ -218,12 +219,12 @@ public class EventController {
             LocalDateTime start = LocalDateTime.parse(splittedDate[0], parser);
             LocalDateTime end = LocalDateTime.parse(splittedDate[1], parser);
 
-            External externalPerson;
+            Person externalPerson;
             if (external.equals("0")) { //external == '0' => create new external
                 externalPerson = new External(externalName,Money.of(BigDecimal.valueOf(Double.parseDouble(externalWage)),
                         EURO));
             } else { //external already exists
-                externalPerson = externalManager.findOne(Long.parseLong(external)).get();
+                externalPerson = personManager.findOne(Long.parseLong(external)).get();
             }
 
             event.setName(name);

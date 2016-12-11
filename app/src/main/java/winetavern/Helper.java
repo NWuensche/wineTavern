@@ -39,28 +39,6 @@ public class Helper {
     }
 
     /**
-     * combines findOne() of the classes External and Employee (extends Person)
-     * @see Person
-     * @see External
-     * @see Employee
-     * @param personId          the id belonging to the person to find
-     * @param employeeManager   the repository of the employees
-     * @param externalManager   the repository of the externals
-     * @return Optional<Person> present if there was a person with the given id
-     */
-    public static Optional<Person> findOnePerson(long personId, EmployeeManager employeeManager, ExternalManager externalManager) {
-        Optional<Employee> optEmpl = employeeManager.findOne(personId);
-        if (!optEmpl.isPresent()) {
-            Optional<External> optExt = externalManager.findOne(personId);
-            if (optExt.isPresent())
-                return Optional.of(optExt.get());
-        } else {
-            return Optional.of(optEmpl.get());
-        }
-        return Optional.empty();
-    }
-
-    /**
      * returns an expense given by its id as a String (because Salespoint does not support that)
      * @see Expense extends AccountancyEntry
      * @param id          the AccountancyEntryIdentifier given as a String
