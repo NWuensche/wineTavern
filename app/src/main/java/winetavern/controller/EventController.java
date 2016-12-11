@@ -13,19 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.user.External;
-import winetavern.model.user.ExternalManager;
-import winetavern.model.user.Vintner;
-import winetavern.model.user.VintnerManager;
+import winetavern.model.user.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -36,7 +30,7 @@ import static org.salespointframework.core.Currencies.EURO;
 @Controller
 public class EventController {
     @NonNull @Autowired private EventCatalog eventCatalog;
-    @NonNull @Autowired private ExternalManager externals;
+    @NonNull @Autowired private ExternalManager externalManager;
     @NonNull @Autowired private VintnerManager vintnerManager;
     @NonNull @Autowired private BusinessTime businessTime;
     private static final LocalDate dateToCreateVintnerDay = LocalDate.of(2014, 1, 3); //first friday in uneven months
@@ -48,7 +42,6 @@ public class EventController {
         //TODO sort by time, next one first
         checkVintnerDays();
         Event event = eventCatalog.findAll().iterator().next();
-        model.addAttribute("test",event.getPrice().getContext());
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
         model.addAttribute("calendarString", buildCalendarString());
@@ -146,7 +139,7 @@ public class EventController {
                     "\",\"end\":\"" + interval.getEnd() +
                     "\",\"url\":\"" + "/admin/events/change/" + event.getId() +
                     "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson() +
-                    "<br/>" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
+                    "<br/>Eintritt:" + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
         }
 
         return calendarString + "]";
@@ -154,7 +147,12 @@ public class EventController {
 
     @RequestMapping("/admin/events/add")
     public String showAddEventTemplate(Model model){
-        model.addAttribute("externals",externals.findAll());
+        Iterable<External> externals =  externalManager.findAll();
+        Iterable<Vintner> vintners = vintnerManager.findAll();
+        Set<Person> persons = new HashSet<>();
+        externals.forEach(it -> persons.add(it));
+        vintners.forEach(it -> persons.add(it));
+        model.addAttribute("externals",persons);
         return "addevent";
     }
 
@@ -184,7 +182,7 @@ public class EventController {
                 if(external.equals("0")) { //external == '0' => create new external
                     externalPerson = new External(externalName, Money.of(Float.parseFloat(externalWage), EURO));
                 } else { //external already exists
-                    externalPerson = externals.findOne(Long.parseLong(external)).get();
+                    externalPerson = externalManager.findOne(Long.parseLong(external)).get();
                 }
 
                 eventCatalog.save(new Event(name, Money.of((Float.parseFloat(price)), EURO),
@@ -196,7 +194,12 @@ public class EventController {
 
     @RequestMapping("/admin/events/change/{event}")
     public String showChangeModal(@PathVariable Event event, Model model){
-        model.addAttribute("externals",externals.findAll());
+        Set<Person> persons = new HashSet<>();
+        vintnerManager.findAll().forEach(it -> persons.add(it));
+        if(!event.isVintnerDay())
+            externalManager.findAll().forEach(it -> persons.add(it));
+
+        model.addAttribute("externals",persons);
         model.addAttribute("event",event);
         model.addAttribute("eventAmount", eventCatalog.count());
         model.addAttribute("events", eventCatalog.findAll());
@@ -220,7 +223,7 @@ public class EventController {
                 externalPerson = new External(externalName,Money.of(BigDecimal.valueOf(Double.parseDouble(externalWage)),
                         EURO));
             } else { //external already exists
-                externalPerson = externals.findOne(Long.parseLong(external)).get();
+                externalPerson = externalManager.findOne(Long.parseLong(external)).get();
             }
 
             event.setName(name);
@@ -238,6 +241,7 @@ public class EventController {
     public String showVintner(@RequestParam Optional<String> query, Model model){
         if (query.isPresent()) {
             setVintnerSequence(query.get());
+            return "redirect:/admin/events";
         }
 
         model.addAttribute("vintners", vintnerManager.findByActiveTrueOrderByPosition());

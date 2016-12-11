@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label for="external">Person:</label>
                         <select id="external" name="external" class="form-control" onchange="showperson(this.value);">
-                            <option th:each="external:${externals}"  th:selected="${external.id == event.external.id}"
+                            <option th:each="external:${externals}"  th:selected="${external.id == event.person.id}"
                                     th:text="${external}" th:value="${external.id}"></option>
                             <option value="0">Neue Person anlegen</option>
                         </select>
