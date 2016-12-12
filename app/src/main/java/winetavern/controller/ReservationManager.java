@@ -38,22 +38,17 @@ public class ReservationManager {
      * ToDo: Currently iterating through nearly all reservations. Make MySQL do the job.
      */
     public List<Desk> getReservatedTablesByTime(LocalDateTime localDateTime) {
-        Iterable<Desk> allDesks = desks.findAll();
         List<Desk> reservedDesks = new ArrayList<Desk>();
-        for(Iterator<Desk> deskIterator = allDesks.iterator(); deskIterator.hasNext(); ) {
-            Desk currentDesk = deskIterator.next();
-            List<Reservation> reservationsOnCurrentDesk = currentDesk.getReservationList();
 
-
-            for( Iterator<Reservation> reservationsIterator = reservationsOnCurrentDesk.iterator();
-                    reservationsIterator.hasNext(); ) {
-                Reservation currentReservation = reservationsIterator.next();
-                if( isActive(currentReservation, localDateTime) ) {
-                    reservedDesks.add(currentDesk);
+        for(Desk desk : desks.findAll()) {
+            for(Reservation reservation : desk.getReservationList()) {
+                if(isActive(reservation, localDateTime)) {
+                    reservedDesks.add(desk);
                     break;
                 }
             }
         }
+
         return reservedDesks;
     }
 
@@ -62,10 +57,9 @@ public class ReservationManager {
      */
     public List<String> deskToName(List<Desk> deskList) {
         List<String> nameList = new ArrayList<String>();
-        for(Iterator<Desk> deskIterator = deskList.iterator(); deskIterator.hasNext(); ) {
-            Desk currentDesk = deskIterator.next();
-            nameList.add(currentDesk.getName());
-        }
+
+        deskList.forEach(desk -> nameList.add(desk.getName()));
+
         return nameList;
     }
 
@@ -92,20 +86,12 @@ public class ReservationManager {
             modelAndView.addObject("deskcapacity", desk.getCapacity());
         }
 
-        if(reservationTimeString.isPresent()) {
-            LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter);
-            //get data for the table view
-            reservationTableData(sort, reservationTime, modelAndView);
-            return reservationTime(reservationTime, modelAndView);
-        } else {
-            //get data for the table view
-            reservationTableData(sort, businessTime.getTime(), modelAndView);
-            return reservationCurrentTime(modelAndView);
-        }
-    }
+        LocalDateTime reservationTime = reservationTimeString.isPresent() ?
+                LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter) :
+                businessTime.getTime();
 
-    public ModelAndView reservationCurrentTime(ModelAndView modelAndView) {
-        return reservationTime(businessTime.getTime(), modelAndView);
+        reservationTableData(sort, reservationTime, modelAndView);
+        return reservationTime(reservationTime, modelAndView);
     }
 
     public ModelAndView reservationTime(LocalDateTime localDateTime, ModelAndView modelAndView) {
@@ -148,7 +134,7 @@ public class ReservationManager {
     public ModelAndView reservationTableData(Optional<String> sort,
                                              LocalDateTime time,
                                              ModelAndView modelAndView) {
-        Map<String, SortStrategy> sortStrategyMap = getSortMap();
+        Map<String, SortStrategy> sortStrategyMap = createSortMap();
         String sortBy = sort.orElse("nothing");
         List<Reservation> reservationList = sortStrategyMap.get(sortBy).sort(reservations.findAll());
 
@@ -158,7 +144,7 @@ public class ReservationManager {
         return modelAndView;
     }
 
-    private Map<String, SortStrategy> getSortMap() {
+    private Map<String, SortStrategy> createSortMap() {
         Map<String, SortStrategy> strategyMap = new HashMap<>();
         strategyMap.put("nothing", new DontSortStrategy());
         strategyMap.put("date", new DateSortStrategy());
