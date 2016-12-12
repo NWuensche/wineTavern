@@ -134,7 +134,7 @@ public class ReservationManager {
     public ModelAndView reservationTableData(Optional<String> sort,
                                              LocalDateTime time,
                                              ModelAndView modelAndView) {
-        Map<String, SortStrategy> sortStrategyMap = getSortMap();
+        Map<String, SortStrategy> sortStrategyMap = createSortMap();
         String sortBy = sort.orElse("nothing");
         List<Reservation> reservationList = sortStrategyMap.get(sortBy).sort(reservations.findAll());
 
@@ -144,7 +144,7 @@ public class ReservationManager {
         return modelAndView;
     }
 
-    private Map<String, SortStrategy> getSortMap() {
+    private Map<String, SortStrategy> createSortMap() {
         Map<String, SortStrategy> strategyMap = new HashMap<>();
         strategyMap.put("nothing", new DontSortStrategy());
         strategyMap.put("date", new DateSortStrategy());
