@@ -256,6 +256,7 @@ main .container__wrap{
 main .container__wrap .heading {
     background: #243648;
     color: #A6B2C5;
+    padding: 0.5rem;
 }
 main .container__wrap h1{
     background-color: #243648;
@@ -382,7 +383,14 @@ body .list-group-item-action .fa-circle-o{
     margin: 1rem 2rem -1rem 2rem;
     background:lightgrey;
 }
-
+.bill__container .nav-tabs .nav-item {
+    line-height: 3;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.bill__container .nav-item+.nav-item{
+    margin-left: 0;
+}
 .nav-tabs > li.nav-item > a.nav-link.active {
     background:#243648;
     color:#A6B2C5;
@@ -392,6 +400,7 @@ body .list-group-item-action .fa-circle-o{
 .nav-tabs > li > a.nav-link {
     background:darkgrey;
     color:white;
+    padding: 0 2rem;
 }
 
 .nav-tabs > li > a.nav-link:hover, .nav-tabs > li > a.nav-link.active:hover {
