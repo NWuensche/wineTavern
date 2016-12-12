@@ -280,7 +280,7 @@ public class EventController {
                 vintner.setActive(true);
                 vintnerManager.save(vintner);
                 vintnersToRemove.remove(vintner);
-            } else {
+            } else if(!vintnerNames[i].replace(" ", "").equals("")) {
                 vintnerManager.save(new Vintner(vintnerNames[i], i));
             }
         }
