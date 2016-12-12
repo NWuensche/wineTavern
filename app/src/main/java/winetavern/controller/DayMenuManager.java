@@ -56,6 +56,7 @@ public class DayMenuManager {
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public ModelAndView removeMenu(@RequestParam("daymenuid") Long dayMenuId, ModelAndView modelAndView) {
+        // TODO This would give a NullPointerException and would not return null;
         DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         if(dayMenu != null) {
             dayMenuRepository.delete(dayMenu);
@@ -72,6 +73,7 @@ public class DayMenuManager {
         return "editdaymenu";
     }
 
+    // TODO Should this really be public?
     public ModelAndView showMenuList(ModelAndView modelAndView) {
         Iterable<DayMenu> dayMenuList = dayMenuRepository.findAll();
         modelAndView.addObject("menus", dayMenuList);
