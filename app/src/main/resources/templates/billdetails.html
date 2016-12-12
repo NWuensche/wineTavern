@@ -21,9 +21,11 @@
                 <h1>Rechnung (<span th:text="${bill.price.number + '€'}"></span>)</h1>
             </div>
             <div class="col-xs-4">
+                <p>
                 Tisch <span th:text="${bill.desk}"></span><br/>
                 <span th:text="${bill.staff.userAccount.firstname}"></span>
                 <span th:text="${bill.staff.userAccount.lastname}"></span>
+                </p>
             </div>
             <div class="col-xs-4 text-xs-right">
                 <a th:href="@{'/service/bills/details/' + ${bill.id} + '/split'}">
@@ -83,9 +85,10 @@
 </div>
 <br/>
 <div class="container__wrap">
-    <h1>+ Produkte</h1>
-    <div class="card-columns card__daymenuitems">
-
+    <div class="heading">
+        <h2><i class="fa fa-plus fa-fw"></i>Produkte</h2>
+    </div>
+    <div class=" card-columns card__daymenuitems">
         <div class="card" th:each="product:${menuitems}">
             <a th:onclick="@{'showModal(' + ${product.id} + ',\'' + ${product.name} + '\');'}">
                 <div class="card-block">
@@ -93,7 +96,10 @@
                     <p class="card-text" th:text="${product.price}">Preis</p>
                 </div>
             </a>
+            <div class="bill-plus"><i class="fa fa-plus fa-4x" aria-hidden="true"></i>
+            </div>
         </div>
+
     </div>
 </div>
 
