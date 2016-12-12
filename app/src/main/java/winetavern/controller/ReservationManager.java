@@ -86,20 +86,12 @@ public class ReservationManager {
             modelAndView.addObject("deskcapacity", desk.getCapacity());
         }
 
-        if(reservationTimeString.isPresent()) {
-            LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter);
-            //get data for the table view
-            reservationTableData(sort, reservationTime, modelAndView);
-            return reservationTime(reservationTime, modelAndView);
-        } else {
-            //get data for the table view
-            reservationTableData(sort, businessTime.getTime(), modelAndView);
-            return reservationCurrentTime(modelAndView);
-        }
-    }
+        LocalDateTime reservationTime = reservationTimeString.isPresent() ?
+                LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter) :
+                businessTime.getTime();
 
-    public ModelAndView reservationCurrentTime(ModelAndView modelAndView) {
-        return reservationTime(businessTime.getTime(), modelAndView);
+        reservationTableData(sort, reservationTime, modelAndView);
+        return reservationTime(reservationTime, modelAndView);
     }
 
     public ModelAndView reservationTime(LocalDateTime localDateTime, ModelAndView modelAndView) {
