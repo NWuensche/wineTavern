@@ -10,7 +10,6 @@ import javax.persistence.*;
 
 @Entity
 public class Shift implements Comparable<Shift> {
-    //@Transient @Autowired private EmployeeManager employeeManager;
 
     @Id @GeneratedValue private long id;
     @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;

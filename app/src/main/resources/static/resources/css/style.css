@@ -441,12 +441,19 @@ body .list-group-item-action .fa-circle-o{
     padding:10px;
 }
 
+.fc-event-time, .fc-event-title {
+    padding: 0 1px;
+    white-space: nowrap;
+}
+
 .tooltip-inner, .tooltip.top .tooltip-arrow {
     background-color: white;
     box-shadow: 5px -5px 10px rgba(0,0,0,0.5);
     border:1px solid black;
     color: black;
 }
+
+
 
 
 /* Form Style */

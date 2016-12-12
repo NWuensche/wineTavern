@@ -14,9 +14,11 @@
                 <h1>&nbsp;<span class="fa fa-calendar"></span> Events (<span th:text="${eventAmount}"></span> Events)</h1>
             </div>
             <div class="col-xs-4 text-xs-right">
+                <!-- button to toggle the list view, deprecated
                 <button type="button" class="btn btn-primary" id="toggleView">
                     <i class="fa fa-th-large"></i>
                 </button>
+                -->
                 <a th:href="@{/admin/events/add}">
                     <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Event</button>
                 </a>
@@ -25,6 +27,7 @@
     </div>
 
     <div id="calendar" class="calendar"></div>
+    <!-- deprecated
     <div id="tableView" style="display:none">
         <table class="table table-striped">
             <thead>
@@ -54,6 +57,7 @@
             </tbody>
         </table>
     </div>
+    -->
 </div>
 <div class="modal fade" id="changeEvent" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
      aria-hidden="true" th:if="${event}">
@@ -110,10 +114,18 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    <i class="fa fa-times"></i>
-                </button>
-                <button type="submit" form="changeEventForm" class="btn btn-primary">Speichern</button>
+                <div class="row">
+                    <div class="col-xs-6 text-xs-left">
+                        <a th:href="@{'/admin/events/remove/' + ${event.id}}">
+                            <button type="button" class="btn btn-outline-danger">
+                                Löschen
+                            </button>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 text-xs-right">
+                        <button type="submit" form="changeEventForm" class="btn btn-primary">Speichern</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -171,14 +183,14 @@
             navLinks:true,
             weekNumbers:true,
             defaultView:'agendaWeek',
-            allDaySlot:false,
+            allDaySlot:true,
             slotEventOverlap:false,
             buttonText: {
                 listYear:'Jahr'
             },
             eventRender: function(event,element,view)
             {
-                if(view.name === "agendaWeek"){
+                if(view.name === ""){
                     element.find('.fc-title').html("<b>" + event.title + "</b><br/><em>" + event.description + "</em>");
                 } else {
                     element.attr('title','<b>' + event.title + '</b><br/>' + event.description);
@@ -194,6 +206,7 @@
                     overlap:true,
                     backgroundColor:"#2F3F52",
                     borderColor:"#243648",
+                    textColor:'white'
                 }
             ]
         });

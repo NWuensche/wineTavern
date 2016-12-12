@@ -159,8 +159,12 @@ public class EventController {
             }
 
             calendarString = calendarString +
-                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson() +
-                    "<br/>Eintritt: " + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
+                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson();
+
+            if(event.getPrice().getNumber().doubleValue() == 0)
+                calendarString += "<br/>Freier Eintritt!\"}";
+            else
+                calendarString += "<br/>Eintritt: " + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
         }
 
         return calendarString + "]";
@@ -247,6 +251,12 @@ public class EventController {
             eventCatalog.save(event);
         }
 
+        return "redirect:/admin/events";
+    }
+
+    @RequestMapping("/admin/events/remove/{event}")
+    public String removeEvent(@PathVariable Event event,Model model){
+        eventCatalog.delete(event);
         return "redirect:/admin/events";
     }
 

@@ -76,12 +76,12 @@
     /*<![CDATA[*/
 
     $(document).ready(function(){
-       $('#content tr:first').attr('class','active');
+       $('#content tr:first').attr('class','active text-xs-center');
     });
 
     function toggleActive(node){
-        $('.active').attr('class','');
-        $(node).attr('class','active');
+        $('.active').attr('class','text-xs-center');
+        $(node).attr('class','active text-xs-center');
     }
 
     function moveUp(){
