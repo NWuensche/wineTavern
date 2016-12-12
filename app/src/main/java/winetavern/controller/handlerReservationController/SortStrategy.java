@@ -8,6 +8,6 @@ import java.util.List;
  * @author Niklas Wünsche
  */
 
-public interface Handler {
-    public List<Reservation> handle();
+public interface SortStrategy {
+    public List<Reservation> sort(Iterable<Reservation> allReservations);
 }
