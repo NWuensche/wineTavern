@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javamoney.moneta.Money;
+import org.mockito.internal.stubbing.answers.ClonesArguments;
 import org.salespointframework.catalog.Product;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,10 +19,9 @@ import java.util.List;
  */
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 @Getter
 @Setter
-public class DayMenuItem {
+public class DayMenuItem implements Cloneable {
 
     @Setter(value = AccessLevel.NONE) @Id @GeneratedValue private Long id;
 
@@ -44,13 +46,17 @@ public class DayMenuItem {
     private boolean enabled;
 
     public DayMenuItem(String name, String description, Money price, Double quantityPerProduct) {
-        this.dayMenus = new LinkedList<DayMenu>();
+        this.dayMenus = new ArrayList<>();
 
         this.name = name;
         this.price = price;
         this.description = description;
         this.quantityPerProduct = quantityPerProduct;
         this.enabled = true;
+    }
+
+    public DayMenuItem() {
+        dayMenus = new ArrayList<>();
     }
 
     // TODO Is this really necessary? shouldn't dayMenu.add(item) be enough?
@@ -61,6 +67,18 @@ public class DayMenuItem {
     // TODO Is this really necessary? Shouldn't dayMenu.remove(item) be enough?
     public void removeDayMenu(DayMenu dayMenu) {
         dayMenus.remove(dayMenu);
+    }
+
+    public DayMenuItem clone(DayMenu dayMenu)  {
+        DayMenuItem newDayMenuItem = new DayMenuItem();
+        newDayMenuItem.addDayMenu(dayMenu);
+        newDayMenuItem.setEnabled(enabled);
+        newDayMenuItem.setDescription(description);
+        newDayMenuItem.setName(name);
+        newDayMenuItem.setPrice(price);
+        newDayMenuItem.setProduct(product);
+        newDayMenuItem.setQuantityPerProduct(quantityPerProduct);
+        return newDayMenuItem;
     }
 
 }

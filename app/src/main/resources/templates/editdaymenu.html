@@ -34,14 +34,13 @@ th:include="backend-temp :: page">
         </div>
     </div>
     <table class="table table-striped">
-        <form th:action="@{'/admin/menuitem/removeFromDayMenu'}" method="POST">
-            <input type="hidden" name="dayMenu" th:value="${daymenu.id}" />
         <thead>
         <tr>
             <th>#</th>
             <th>Produkt</th>
             <th>Preis</th>
             <th>Menge auf Lager</th>
+            <th>Bearbeiten</th>
             <th>Löschen</th>
         </tr>
         </thead>
@@ -52,14 +51,32 @@ th:include="backend-temp :: page">
             <td th:text="${item.price}"></td>
             <td th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
             <td>
-                <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary">
+                <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary editBtn">
                     <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
+                </button>
+            </td>
+            <td>
+                <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary deleteBtn">
+                    <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
                 </button>
             </td>
         </tr>
         </tbody>
-        </form>
     </table>
 </div>
+
+<script type="application/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var daymenuid = [[${daymenu.id}]];
+    /*]]>*/
+    $(document).ready(function () {
+        $(".editBtn").click(function (event) {
+            window.location.href = "/admin/menuitem/edit/"+daymenuid+"/"+$(this).attr('value');
+        });
+        $(".deleteBtn").click(function (event) {
+            window.location.href = "/admin/menuitem/remove/"+daymenuid+"/"+$(this).attr('value');
+        });
+    });
+</script>
 </body>
 </html>

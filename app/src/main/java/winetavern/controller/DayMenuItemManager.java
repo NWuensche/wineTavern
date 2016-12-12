@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
@@ -23,6 +20,7 @@ import javax.money.MonetaryAmount;
 import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Controller responsible for DayMenuItem's creation and managing.
@@ -45,7 +43,6 @@ public class DayMenuItemManager {
      * Initially called for adding a menu item.
      * Data gets processed in  {@link #addMenuItemPost(Product, String, Money, String, Double, Boolean, Long, ModelAndView)}
      */
-    // TODO Should the Param be called frommenuid?
     @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
         model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findAll(),
@@ -56,15 +53,13 @@ public class DayMenuItemManager {
     }
 
     /**
-     * Returns a List of DayMenuItem's that are not in the givven DayMenu already
+     * Returns a List of DayMenuItem's that are not in the given DayMenu already
      * @param dayMenuItems
      * @param dayMenu
      * @return
      */
-
-    // TODO Shouldn't this be a method of DayMenu?
     public List<DayMenuItem> getNotAddedDayMenuItems(Iterable<DayMenuItem> dayMenuItems, DayMenu dayMenu) {
-        List<DayMenuItem> resultSet = new ArrayList<>(); // TODO Dont name a list resultSet
+        List<DayMenuItem> resultSet = new ArrayList<>();
         dayMenuItems.forEach(dayMenuItem -> {
             if(!dayMenuItem.getDayMenus().contains(dayMenu))
                 resultSet.add(dayMenuItem);
@@ -72,12 +67,70 @@ public class DayMenuItemManager {
         return resultSet;
     }
 
+    private Boolean pathVariablesValid(Long dayMenuId, Long dayMenuItemId) {
+        Optional<DayMenuItem> optionalDayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId);
+        Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
+
+        if(optionalDayMenuItem.isPresent() == false || optionalDayMenu.isPresent() == false) {
+            return false;
+        }
+        return true;
+    }
 
     /**
-     * Custom Initbinder makes DayMenu and Product usable with form
+     *
      */
-    // TODO remove initBinder?
+    @RequestMapping("/admin/menuitem/edit/{daymenuid}/{itemid}")
+    public String editMenuItem(@PathVariable("daymenuid") Long dayMenuId,
+                               @PathVariable("itemid") Long itemId,
+                               Model model) {
+        if (pathVariablesValid(dayMenuId, itemId) == false) {
+            return "error";
+        }
+        model.addAttribute("menuitem", dayMenuItemRepository.findOne(itemId).get());
+        model.addAttribute("menu", dayMenuRepository.findOne(dayMenuId).get());
+        model.addAttribute("stock", stock);
+        return "editmenuitem";
+    }
 
+    @RequestMapping(value = "/admin/menuitem/edit/{daymenuid}/{itemid}", method = RequestMethod.POST)
+    public ModelAndView editMenuItemPost(@PathVariable("daymenuid") Long dayMenuId,
+                                         @PathVariable("itemid") Long itemId,
+                                         @RequestParam("product") Product product,
+                                         @RequestParam("name") String name,
+                                         @RequestParam("price") Money price,
+                                         @RequestParam("description") String description,
+                                         @RequestParam("quantityPerProduct") Double quantityPerProduct,
+                                         @RequestParam("enabled") Boolean enabled,
+                                         ModelAndView mvc) {
+        Optional<DayMenuItem> optionalDayMenuItem = dayMenuItemRepository.findOne(itemId);
+        Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
+        if (pathVariablesValid(dayMenuId, itemId) == false) {
+            mvc.setViewName("error");
+        }
+
+        DayMenuItem dayMenuItem = optionalDayMenuItem.get();
+        DayMenu dayMenu = optionalDayMenu.get();
+        if(dayMenuItem.getDayMenus().size() > 1) {
+            // remove connection from old daymenuitem to daymenu
+            dayMenuItem.removeDayMenu(dayMenu);
+
+            // clone dayMenuItem
+            dayMenuItem = dayMenuItem.clone(dayMenu);
+        }
+
+        // change attributes
+        dayMenuItem.setProduct(product);
+        dayMenuItem.setName(name);
+        dayMenuItem.setDescription(description);
+        dayMenuItem.setPrice(price);
+        dayMenuItem.setQuantityPerProduct(quantityPerProduct);
+        dayMenuItem.setEnabled(enabled);
+        dayMenuItemRepository.save(dayMenuItem);
+
+        mvc.setViewName("redirect:/admin/menu/edit/"+dayMenu.getId());
+        return mvc;
+    }
 
     /**
      * The DayMenuItem adding takes two steps:
@@ -121,11 +174,11 @@ public class DayMenuItemManager {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/admin/menuitem/removeFromDayMenu", method = RequestMethod.POST)
-    public ModelAndView removeDayMenuItemFromDayMenu(@RequestParam("daymenuitem") Long dayMenuItemId,
-                                                     @RequestParam("dayMenu") Long dayMenuId,
+    @RequestMapping("/admin/menuitem/remove/{daymenuid}/{itemid}")
+    public ModelAndView removeDayMenuItemFromDayMenu(@PathVariable("daymenuid") Long dayMenuId,
+                                                     @PathVariable("itemid") Long itemId,
                                                      ModelAndView modelAndView) {
-        DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId).get();
+        DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(itemId).get();
         DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         dayMenuItem.removeDayMenu(dayMenu);
         dayMenuItemRepository.save(dayMenuItem);

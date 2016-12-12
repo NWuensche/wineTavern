@@ -1,6 +1,8 @@
 package winetavern.model.menu;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,21 +14,23 @@ import java.util.List;
  */
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 @Getter
 public class DayMenu {
-
     @Id @GeneratedValue Long id;
 
     @Setter @NonNull private LocalDate day;
 
     @ManyToMany(fetch= FetchType.EAGER, targetEntity=DayMenuItem.class, mappedBy = "dayMenus")
-    private List<DayMenuItem> dayMenuItems;
+    @Setter private List<DayMenuItem> dayMenuItems;
 
     public DayMenu(@NonNull LocalDate day) {
         dayMenuItems = new ArrayList<>();
 
         this.day = day;
+    }
+
+    public DayMenu() {
+        dayMenuItems = new ArrayList<>();
     }
 
     public String getReadableDay() {
