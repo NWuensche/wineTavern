@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody id="content" class="vintner__table">
-                    <tr th:each="vintner:${vintners}" onclick="toggleActive(this)">
+                    <tr th:each="vintner:${vintners}" onclick="toggleActive(this)" class="text-xs-center">
                         <td th:text="${vintner.name}"></td>
                         <td>
                             <i class="fa fa-times fa-lg text-danger" onclick="remove(this)"></i>
@@ -39,9 +39,11 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select id="vintner" name="vintner" placeholder="Name des Winzers">
-                                <option th:each="vintner : ${vintners}" th:text="${vintner.name}"></option>
-                            </select>
+                            <input type="search" id="vintner" name="vintner" placeholder="Name des Winzers"
+                                   list="vintnerList" class="form-control"/>
+                            <datalist id="vintnerList">
+                                <option th:each="vintner : ${missing}" th:value="${vintner.name}"></option>
+                            </datalist>
                         </td>
                         <td>
                             <i class="fa fa-plus fa-lg text-primary" onclick="add()"></i>
@@ -95,14 +97,18 @@
     function add(){
         var name = $('#vintner').val();
         if(!(name.length === 0 || !name.trim())){
-            $('#content').append("<tr onclick='toggleActive(this)'><td>" + name +
-                "</td><td><i class='fa fa-times fa-lg text-danger'></i></td></tr>");
+            $('#content').append("<tr onclick='toggleActive(this)' class='text-xs-center'><td>" + name +
+                "</td><td><i class='fa fa-times fa-lg text-danger' onclick='remove(this)'></i></td></tr>");
             document.getElementById('vintner').value = '';
+
+            $('#vintnerList option[value="'+name+'"]').remove();
         }
+
     }
 
     function remove(node){
         $(node).closest('tr').remove();
+        $('#vintnerList').append('<option value="' + $(node).closest('tr').children('td:first').html() + '"/>');
     }
 
     function send(){

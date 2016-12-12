@@ -15,5 +15,6 @@ public interface VintnerManager extends SalespointRepository<Vintner, Long> {
     LinkedList<Vintner> findByActiveTrueOrderByPosition();
     Optional<Vintner> findByName(String name);
     ArrayList<Vintner> findByActiveTrue();
+    ArrayList<Vintner> findByActiveFalse();
     ArrayList<Vintner> findAll();
 }

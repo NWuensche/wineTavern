@@ -256,7 +256,7 @@ public class EventController {
             setVintnerSequence(query.get());
             return "redirect:/admin/events";
         }
-
+        model.addAttribute("missing",vintnerManager.findByActiveFalse());
         model.addAttribute("vintners", vintnerManager.findByActiveTrueOrderByPosition());
         return "vintner";
     }
