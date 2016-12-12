@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import lombok.NonNull;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,11 @@ import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.EmployeeManager;
+import winetavern.model.user.PersonManager;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
@@ -24,9 +28,10 @@ import java.util.*;
 
 @Controller
 public class ShiftController {
-    @Autowired private ShiftRepository shifts;
-    @Autowired private EmployeeManager employees;
-    @Autowired private BusinessTime time;
+    @NonNull @Autowired private ShiftRepository shifts;
+    @NonNull @Autowired private EmployeeManager employees;
+    @NonNull @Autowired private BusinessTime time;
+    @NonNull @Autowired private PersonManager persons;
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
@@ -34,9 +39,37 @@ public class ShiftController {
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         List<Shift> shiftsOfWeek = getShiftsOfWeek(week);    //get all shifts in this interval
 
-        model.addAttribute("shifts", shiftsOfWeek); //TODO give me the calendar string
+        model.addAttribute("shifts", shiftsOfWeek);
+        model.addAttribute("calendarString", buildCalendarString());
 
         return "shifts";
+    }
+
+    /**
+     * compiles all shifts into a String which can be parsed into an Object by JSON (javascript) and then put into the
+     * calendar.
+     * @return JSON parsable String
+     */
+    private String buildCalendarString() {
+        String calendarString = "[";
+        boolean noComma = true;
+
+        for (Shift shift : shifts.findAll()) { //add all shifts
+            if (noComma)
+                noComma = false;
+            else
+                calendarString = calendarString + ",";
+
+            TimeInterval interval = shift.getInterval();
+            calendarString = calendarString +
+                    "{\"title\":\"" + shift.getEmployee() +
+                    ",\"start\":\"" + interval.getStart() +
+                    "\",\"end\":\"" + interval.getEnd() +
+                    "\",\"url\":\"" + "/admin/management/shifts/change/" + shift.getId() +
+                    "\",\"description\":\"" + shift.getEmployee().getDisplayNameOfRole() + "\"}";
+        }
+
+        return calendarString + "]";
     }
 
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
@@ -48,10 +81,21 @@ public class ShiftController {
     }
 
     @PostMapping("/admin/management/shifts/change/{shiftid}")
-    public String changeShift(@PathVariable Long shiftid, @RequestParam("employee") Long personid, @RequestParam String
-            date,
-                              @RequestParam String start, @RequestParam String end, Model model){
-        //TODO change shift data
+    public String changeShift(@PathVariable Long shiftid, @RequestParam("employee") Long employeeId,
+                              @RequestParam("date") String dateString, @RequestParam("start") String startString,
+                              @RequestParam("end") String endString){
+
+        Shift shift = shifts.findOne(shiftid).get();
+
+        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalTime start = LocalTime.parse(startString, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime end = LocalTime.parse(endString, DateTimeFormatter.ofPattern("HH:mm"));
+
+        shift.setEmployee(employees.findOne(employeeId).get());
+        shift.setInterval(new TimeInterval(date.atTime(start), date.atTime(end)));
+
+        shifts.save(shift);
+
         return "redirect:/admin/management/shifts";
     }
 
