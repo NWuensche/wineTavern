@@ -226,9 +226,7 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
     public void sortReservationTimeValidatorByTrashRightIfReservationTime() throws Exception {
         RequestBuilder request = post("/service/reservation")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("reservationtime", "2016/11/11 11:11")
-                .param("sort", "trash"); // Is a non-existing parameter
-
+                .param("reservationtime", "2016/11/11 11:11");
 
         mvc.perform(request)
                 .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))

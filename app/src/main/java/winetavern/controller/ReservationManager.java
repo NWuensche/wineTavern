@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import winetavern.controller.handlerReservationController.*;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.reservation.Desk;
 import winetavern.model.reservation.DeskRepository;
@@ -22,8 +23,7 @@ import java.util.*;
 @Controller
 public class ReservationManager {
 
-    @Autowired
-    DeskRepository desks;
+    @Autowired DeskRepository desks;
     @Autowired ReservationRepository reservations;
     @Autowired BusinessTime businessTime;
     DateTimeFormatter dateTimeFormatter;
@@ -148,33 +148,24 @@ public class ReservationManager {
     public ModelAndView reservationTableData(Optional<String> sort,
                                              LocalDateTime time,
                                              ModelAndView modelAndView) {
-
-        Iterable<Reservation> reservationIterator;
-        List<Reservation> reservationList = new LinkedList<>();
-
-        if(!sort.isPresent()) {
-            reservationIterator = reservations.findAll();
-            reservationIterator.forEach(reservationList::add);
-        } else if(sort.get().equals("date")) {
-            reservationIterator = reservations.findAll();
-            reservationIterator.forEach(reservationList::add);
-            Collections.sort(reservationList, (o1, o2) -> o1.getInterval().getStart().compareTo(o2.getInterval().getStart()));
-        } else if(sort.get().equals("name")) {
-            reservationIterator = reservations.findAllByOrderByGuestName();
-            reservationIterator.forEach(reservationList::add);
-        } else if(sort.get().equals("persons")) {
-            reservationIterator = reservations.findAllByOrderByPersons();
-            reservationIterator.forEach(reservationList::add);
-        } else {
-            // TODO Combine with sort.isPresent()
-            reservationIterator = reservations.findAll();
-            reservationIterator.forEach(reservationList::add);
-        }
+        Map<String, SortStrategy> sortStrategyMap = getSortMap();
+        String sortBy = sort.orElse("nothing");
+        List<Reservation> reservationList = sortStrategyMap.get(sortBy).sort(reservations.findAll());
 
         reservationList = pickLater(time, reservationList);
-        //modelAndView.addObject("reservationAmount", reservationList.size());
+
         modelAndView.addObject("reservationTableList", reservationList);
         return modelAndView;
+    }
+
+    private Map<String, SortStrategy> getSortMap() {
+        Map<String, SortStrategy> strategyMap = new HashMap<>();
+        strategyMap.put("nothing", new DontSortStrategy());
+        strategyMap.put("date", new DateSortStrategy());
+        strategyMap.put("name", new NameSortStrategy());
+        strategyMap.put("persons", new PersonSortStrategy());
+
+        return  strategyMap;
     }
 
     private List<Reservation> pickLater(LocalDateTime time, List<Reservation> list) {
