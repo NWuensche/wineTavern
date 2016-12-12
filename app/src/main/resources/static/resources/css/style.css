@@ -403,12 +403,15 @@ body .list-group-item-action .fa-circle-o{
     background:#243648;
     color:#A6B2C5;
     border:1px solid #243648;
+    box-shadow: none;
 }
 
 .nav-tabs > li > a.nav-link {
     background:darkgrey;
     color:white;
     padding: 0 2rem;
+    box-shadow: inset 1px -1px 2px rgba(0,0,0,0.2);
+
 }
 
 .nav-tabs > li > a.nav-link:hover, .nav-tabs > li > a.nav-link.active:hover {
