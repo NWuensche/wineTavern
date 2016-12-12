@@ -38,22 +38,17 @@ public class ReservationManager {
      * ToDo: Currently iterating through nearly all reservations. Make MySQL do the job.
      */
     public List<Desk> getReservatedTablesByTime(LocalDateTime localDateTime) {
-        Iterable<Desk> allDesks = desks.findAll();
         List<Desk> reservedDesks = new ArrayList<Desk>();
-        for(Iterator<Desk> deskIterator = allDesks.iterator(); deskIterator.hasNext(); ) {
-            Desk currentDesk = deskIterator.next();
-            List<Reservation> reservationsOnCurrentDesk = currentDesk.getReservationList();
 
-
-            for( Iterator<Reservation> reservationsIterator = reservationsOnCurrentDesk.iterator();
-                    reservationsIterator.hasNext(); ) {
-                Reservation currentReservation = reservationsIterator.next();
-                if( isActive(currentReservation, localDateTime) ) {
-                    reservedDesks.add(currentDesk);
+        for(Desk desk : desks.findAll()) {
+            for(Reservation reservation : desk.getReservationList()) {
+                if(isActive(reservation, localDateTime)) {
+                    reservedDesks.add(desk);
                     break;
                 }
             }
         }
+
         return reservedDesks;
     }
 
