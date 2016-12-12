@@ -57,10 +57,9 @@ public class ReservationManager {
      */
     public List<String> deskToName(List<Desk> deskList) {
         List<String> nameList = new ArrayList<String>();
-        for(Iterator<Desk> deskIterator = deskList.iterator(); deskIterator.hasNext(); ) {
-            Desk currentDesk = deskIterator.next();
-            nameList.add(currentDesk.getName());
-        }
+
+        deskList.forEach(desk -> nameList.add(desk.getName()));
+
         return nameList;
     }
 
