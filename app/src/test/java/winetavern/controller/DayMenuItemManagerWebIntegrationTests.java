@@ -146,10 +146,10 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
 
         dayMenuItem.addDayMenu(dayMenu);
 
-        RequestBuilder request = post("/admin/menuitem/removeFromDayMenu")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("daymenuitem", dayMenuItem.getId().toString())
-                .param("dayMenu", dayMenu.getId().toString());
+        RequestBuilder request = post("/admin/menuitem/remove/"+
+                dayMenu.getId().toString() + "/" +
+                dayMenuItem.getId().toString())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
         mvc.perform(request);
 
