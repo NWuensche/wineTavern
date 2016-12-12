@@ -1,7 +1,9 @@
 package winetavern.controller;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
+import winetavern.model.menu.DayMenuItem;
+import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+
 
 /**
  * Created by Michel on 11/4/2016.
@@ -23,12 +29,18 @@ import java.util.Calendar;
 public class DayMenuManager {
 
     private DayMenuRepository dayMenuRepository;
+    private DayMenuItemRepository dayMenuItemRepository;
     private final Inventory<InventoryItem> stock;
+    private BusinessTime businessTime;
 
     @Autowired
-    public DayMenuManager(Inventory<InventoryItem> stock, DayMenuRepository dayMenuRepository) {
+    public DayMenuManager(Inventory<InventoryItem> stock, DayMenuRepository dayMenuRepository,
+                          DayMenuItemRepository dayMenuItemRepository,
+                          BusinessTime businessTime) {
+        this.businessTime = businessTime;
         this.stock = stock;
         this.dayMenuRepository = dayMenuRepository;
+        this.dayMenuItemRepository = dayMenuItemRepository;
     }
 
     @RequestMapping("/admin/menu/show")
@@ -48,7 +60,10 @@ public class DayMenuManager {
                                     ModelAndView modelAndView) {
         dateParameter.setMonth(dateParameter.getMonth());
         LocalDate creationDate = dateParameter.getDate();
-        DayMenu dayMenu = new DayMenu(creationDate);
+        DayMenu dayMenu = copyPreDayMenu(creationDate);
+        if(dayMenu == null) {
+            dayMenu = new DayMenu(creationDate);
+        }
         dayMenuRepository.save(dayMenu);
 
         return showMenuList(modelAndView);
@@ -79,6 +94,19 @@ public class DayMenuManager {
         modelAndView.addObject("menus", dayMenuList);
         modelAndView.setViewName("daymenulist");
         return modelAndView;
+    }
+
+    public DayMenu copyPreDayMenu(LocalDate today) {
+        LocalDate yesterday = today.minusDays(1);
+        DayMenu preDayMenu = dayMenuRepository.findByDay(yesterday);
+        if (preDayMenu == null)
+            return null;
+        DayMenu newDayMenu = new DayMenu(today); //preDayMenu.clone(dayMenuItemRepository);
+        dayMenuRepository.save(newDayMenu);
+        for(DayMenuItem dayMenuItem : preDayMenu.getDayMenuItems()) {
+            dayMenuItem.addDayMenu(newDayMenu);
+        }
+        return newDayMenu;
     }
 
 }
