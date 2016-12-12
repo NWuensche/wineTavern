@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
@@ -43,6 +45,14 @@ public class ShiftController {
         model.addAttribute("time",getTimes());
         model.addAttribute("employees",employees.findAll());
         return "shifts";
+    }
+
+    @PostMapping("/admin/management/shifts/change/{shiftid}")
+    public String changeShift(@PathVariable Long shiftid, @RequestParam("employee") Long personid, @RequestParam String
+            date,
+                              @RequestParam String start, @RequestParam String end, Model model){
+        //TODO change shift data
+        return "redirect:/admin/management/shifts";
     }
 
     private TimeInterval getWeekInterval(LocalDateTime date) {

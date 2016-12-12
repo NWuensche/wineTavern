@@ -25,23 +25,23 @@
 
 </div>
 <div class="modal fade" id="changeShift" tabindex="-1" role="dialog" aria-labelledby="shiftModalLabel"
-     aria-hidden="true" th:if="${shiftdata}">
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="shiftModalLabel">Schicht &auml;ndern</h4>
+                <h4 class="modal-title" id="shiftModalLabel">Schicht hinzuf&uuml;gen/&auml;ndern</h4>
             </div>
             <div class="modal-body">
                 <form id="changeShiftForm" method="post">
                     <div class="form-group">
-                        <label for="external">Person:</label>
-                        <select id="external" name="external" class="form-control" onchange="showperson(this.value);">
+                        <label for="employee">Person:</label>
+                        <select id="employee" name="employee" class="form-control" onchange="showperson(this.value);">
                             <option th:each="employee:${employees}"
                                     th:selected="${employee.id == shiftdata.employee.id}"
-                                    th:text="${employee}"></option>
+                                    th:text="${employee}" th:value="${employee.id}"></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -53,7 +53,8 @@
                             <div class="col-xs-6 text-xs-center">
                                 <label for="start">Start:</label>
                                 <select id="start" name="start" class="form-control" placeholder="Start" required="true">
-                                    <option th:each="t:${time}" th:text="${t}" th:selected="${t} == '10:00'"></option>
+                                    <option th:each="t:${time}" th:text="${t}"
+                                            th:selected="${t} == '10:00'"></option>
                                 </select>
                             </div>
                             <div class="col-xs-6 text-xs-center">
