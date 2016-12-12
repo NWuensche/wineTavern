@@ -1,4 +1,4 @@
-package winetavern.controller.handlerReservationController;
+package winetavern.controller.sortStrategyReservationController;
 
 import winetavern.model.reservation.Reservation;
 

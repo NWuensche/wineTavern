@@ -1,8 +1,6 @@
-package winetavern.controller.handlerReservationController;
+package winetavern.controller.sortStrategyReservationController;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.reservation.Reservation;
-import winetavern.model.reservation.ReservationRepository;
 
 import java.util.Collections;
 import java.util.LinkedList;
