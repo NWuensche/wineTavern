@@ -104,13 +104,20 @@ public class ShiftController {
     }
 
     @PostMapping("/admin/management/shifts/add")
-    public String addShift(){
-        //TODO catch data and create a new shift
+    public String addShift(@RequestParam("employee") Long employeeId,
+                           @RequestParam("date") String dateString, @RequestParam("start") String startString,
+                           @RequestParam("end") String endString) {
+
+        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalTime start = LocalTime.parse(startString, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime end = LocalTime.parse(endString, DateTimeFormatter.ofPattern("HH:mm"));
+
+        shifts.save(new Shift(new TimeInterval(date.atTime(start), date.atTime(end)), employees.findOne(employeeId).get()));
         return "redirect:/admin/management/shifts";
     }
 
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
-    public String changeShiftData(@PathVariable Long shiftid, Model model) {
+    public String changeShift(@PathVariable Long shiftid, Model model) {
         Shift shift = shifts.findOne(shiftid).get();
         model.addAttribute("shiftdata",shift);
         model.addAttribute("date", Helper.localDateTimeToDateString(shift.getInterval().getStart()));
