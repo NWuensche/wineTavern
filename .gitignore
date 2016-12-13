@@ -12,6 +12,8 @@ target/
 *.iml
 *.iws
 
+out/
+
 # Mac
 .DS_Store
 
