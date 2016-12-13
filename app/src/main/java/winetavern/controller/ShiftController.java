@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import winetavern.Helper;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
@@ -74,13 +75,30 @@ public class ShiftController {
         return calendarString + "]";
     }
 
+    @RequestMapping("/admin/management/shifts/add")
+    public String addShiftData(Model model){
+        model.addAttribute("calendarString", buildCalendarString());
+        model.addAttribute("employees",employees.findAll());
+        model.addAttribute("time",getTimes());
+        return "shifts";
+    }
+
+    @PostMapping("/admin/management/shifts/add")
+    public String addShift(){
+        //TODO catch data and create a new shift
+        return "redirect:/admin/management/shifts";
+    }
+
 
 
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
     public String changeShiftData(@PathVariable Long shiftid, Model model) {
-        model.addAttribute("shiftdata",shifts.findOne(shiftid).get());
+        Shift shift = shifts.findOne(shiftid).get();
+        model.addAttribute("shiftdata",shift);
+        model.addAttribute("date", Helper.localDateTimeToDateString(shift.getInterval().getStart()));
         model.addAttribute("time",getTimes());
         model.addAttribute("employees",employees.findAll());
+        model.addAttribute("calendarString", buildCalendarString());
         return "shifts";
     }
 
