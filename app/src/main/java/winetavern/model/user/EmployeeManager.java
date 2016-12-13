@@ -14,9 +14,9 @@ import java.util.Optional;
 public interface EmployeeManager extends SalespointRepository<Employee, Long> {
     Optional<Employee> findByUserAccount(UserAccount account);
 
-    @Query(value = "select * from employee " +
-            "join user_account ON employee.user_account_useraccount_id = user_account.useraccount_id " +
-            "where useraccount_id=?#{[0]} ", nativeQuery = true)
+    @Query(value = "select * from person " +
+            "join user_account ON person.user_account_useraccount_id = user_account.useraccount_id " +
+            "where useraccount_id=?#{[0]} and dtype='Employee'", nativeQuery = true)
     Optional<Employee> findByUsername(String Username);
 
     @Query(value = "select * from person " +
