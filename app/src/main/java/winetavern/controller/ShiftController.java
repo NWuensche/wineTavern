@@ -60,7 +60,7 @@ public class ShiftController {
     private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
-        Map<Employee, Color> colorMap = getColorMap();
+        Map<Employee, String> colorMap = getColorMap();
 
         for (Shift shift : shifts.findAll()) { //add all shifts
             if (noComma)
@@ -74,9 +74,7 @@ public class ShiftController {
                                       shift.getEmployee().getUserAccount().getLastname().substring(0, 1) +
                     "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
-                    "\",\"color\":\"" + "rgb(" + colorMap.get(shift.getEmployee()).getRed() + "," +
-                                                 colorMap.get(shift.getEmployee()).getGreen() + "," +
-                                                 colorMap.get(shift.getEmployee()).getBlue() + ")" +
+                    "\",\"color\":\"" + colorMap.get(shift.getEmployee()) +
                     "\",\"url\":\"" + "/admin/management/shifts/change/" + shift.getId() +
                     "\",\"description\":\"" + shift.getEmployee() + "<br/>" +
                                               shift.getEmployee().getDisplayNameOfRole() + "\"}";
@@ -85,17 +83,15 @@ public class ShiftController {
         return calendarString + "]";
     }
 
-    private Map<Employee, Color> getColorMap() {
-        Random random = new Random();
+    private Map<Employee, String> getColorMap() {
         List<Employee> employeeList = Helper.convertToList(employees.findAll());
-        Map<Employee, Color> res = new HashMap<>();
-        int a = 0;
-        for(float i = 0; i < 360; i += 360 / employees.count()) {
-            final float saturation = 90 + random.nextFloat() * 10;
-            final float luminance = 50 + random.nextFloat() * 10;
-            res.put(employeeList.get(a), Color.getHSBColor(i, saturation, luminance));
-            a++;
+        Map<Employee, String> res = new HashMap<>();
+
+        for (int i = 0; i < employeeList.size(); i++) {
+            Color c = Color.getHSBColor((float) i / employeeList.size(), 1, 1);
+            res.put(employeeList.get(i), "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")");
         }
+
         return res;
     }
 
