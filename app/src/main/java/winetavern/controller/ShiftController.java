@@ -37,11 +37,6 @@ public class ShiftController {
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
         List<Employee> list = Helper.convertToList(employees.findAll());
-        for (int i = 0; i < 8; i++) {
-            Shift shift = new Shift(new TimeInterval(time.getTime().plusHours(i*5), time.getTime().plusHours(i*5+2)),
-                    list.get(i % list.size()));
-            shifts.save(shift);
-        }
 
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         List<Shift> shiftsOfWeek = getShiftsOfWeek(week);    //get all shifts in this interval
