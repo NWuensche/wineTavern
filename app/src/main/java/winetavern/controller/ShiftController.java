@@ -36,8 +36,6 @@ public class ShiftController {
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
-        List<Employee> list = Helper.convertToList(employees.findAll());
-
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         List<Shift> shiftsOfWeek = getShiftsOfWeek(week);    //get all shifts in this interval
 
@@ -78,6 +76,10 @@ public class ShiftController {
         return calendarString + "]";
     }
 
+    /**
+     * attaches one color to every employee, so it can be displayed in the calendar
+     * @return String color - format: "rgb(r, g, b)"
+     */
     private Map<Employee, String> getColorMap() {
         List<Employee> employeeList = Helper.convertToList(employees.findAll());
         Map<Employee, String> res = new HashMap<>();
