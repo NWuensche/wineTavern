@@ -43,7 +43,7 @@
                         <label for="employee">Person:</label>
                         <select id="employee" name="employee" class="form-control" onchange="showperson(this.value);">
                             <option th:each="employee:${employees}"
-                                    th:selected="${shiftdata}? employee.id == shiftdata.employee.id : false"
+                                    th:selected="${shiftdata}? (${employee.id} == ${shiftdata.employee.id}) : (false)"
                                     th:text="${employee}" th:value="${employee.id}"></option>
                         </select>
                     </div>
@@ -132,22 +132,23 @@
             header: {
                 left:'prev,next today',
                 center:'title',
-                right:'listMonth,agendaWeek,month,listYear'
+                right:'listWeek,agendaDay,agendaWeek,month'
             },
             defaultDate:now.getFullYear() + "-" + checkTime(now.getMonth()+1) + "-" + checkTime(now.getDate()),
             now:new Date(businessTime),
+            businessHours: {dow:[0,2,3,4,5,6,7],start:'10:00',end:'24:00'},
             navLinks:true,
             weekNumbers:true,
-            defaultView:'agendaWeek',
-            allDaySlot:true,
-            slotEventOverlap:false,
+            defaultView:'agendaDay',
+            allDaySlot:false,
+            slotEventOverlap:true,
             buttonText: {
                 listYear:'Jahr'
             },
             eventRender: function(event,element,view)
             {
-                if(view.name === ""){
-                    element.find('.fc-title').html("<b>" + event.title + "</b><br/><em>" + event.description + "</em>");
+                if(view.name === "listWeek"){
+                    element.find('.fc-list-item-title').html("<b>" + event.description + "</b>");
                 } else {
                     element.attr('title','<b>' + event.title + '</b><br/>' + event.description);
                     element.attr('data-toggle','tooltip');

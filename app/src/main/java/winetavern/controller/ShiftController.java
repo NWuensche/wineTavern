@@ -69,8 +69,7 @@ public class ShiftController {
                     "\",\"end\":\"" + interval.getEnd() +
                     "\",\"color\":\"" + colorMap.get(shift.getEmployee()) +
                     "\",\"url\":\"" + "/admin/management/shifts/change/" + shift.getId() +
-                    "\",\"description\":\"" + shift.getEmployee() + "<br/>" +
-                                              shift.getEmployee().getDisplayNameOfRole() + "\"}";
+                    "\",\"description\":\"" + shift.getEmployee() + "\"}";
         }
 
         return calendarString + "]";
