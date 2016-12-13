@@ -31,7 +31,6 @@ public class ShiftController {
     @NonNull @Autowired private ShiftRepository shifts;
     @NonNull @Autowired private EmployeeManager employees;
     @NonNull @Autowired private BusinessTime time;
-    @NonNull @Autowired private PersonManager persons;
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
