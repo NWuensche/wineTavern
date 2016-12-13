@@ -9,18 +9,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import winetavern.Helper;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
-import winetavern.model.user.PersonManager;
-
+import java.util.Random;
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author Louis
@@ -34,6 +37,12 @@ public class ShiftController {
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
+        List<Employee> list = Helper.convertToList(employees.findAll());
+        for (int i = 0; i < 8; i++) {
+            Shift shift = new Shift(new TimeInterval(time.getTime().plusHours(i*5), time.getTime().plusHours(i*5+2)),
+                    list.get(i % list.size()));
+            shifts.save(shift);
+        }
 
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         List<Shift> shiftsOfWeek = getShiftsOfWeek(week);    //get all shifts in this interval
@@ -52,6 +61,7 @@ public class ShiftController {
     private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
+        Map<Employee, Color> colorMap = getColorMap();
 
         for (Shift shift : shifts.findAll()) { //add all shifts
             if (noComma)
@@ -65,7 +75,9 @@ public class ShiftController {
                                       shift.getEmployee().getUserAccount().getLastname().substring(0, 1) +
                     "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
-                    "\",\"color\":\"" + "blue" +
+                    "\",\"color\":\"" + "rgb(" + colorMap.get(shift.getEmployee()).getRed() + "," +
+                                                 colorMap.get(shift.getEmployee()).getGreen() + "," +
+                                                 colorMap.get(shift.getEmployee()).getBlue() + ")" +
                     "\",\"url\":\"" + "/admin/management/shifts/change/" + shift.getId() +
                     "\",\"description\":\"" + shift.getEmployee() + "<br/>" +
                                               shift.getEmployee().getDisplayNameOfRole() + "\"}";
@@ -74,7 +86,19 @@ public class ShiftController {
         return calendarString + "]";
     }
 
-
+    private Map<Employee, Color> getColorMap() {
+        Random random = new Random();
+        List<Employee> employeeList = Helper.convertToList(employees.findAll());
+        Map<Employee, Color> res = new HashMap<>();
+        int a = 0;
+        for(float i = 0; i < 360; i += 360 / employees.count()) {
+            final float saturation = 90 + random.nextFloat() * 10;
+            final float luminance = 50 + random.nextFloat() * 10;
+            res.put(employeeList.get(a), Color.getHSBColor(i, saturation, luminance));
+            a++;
+        }
+        return res;
+    }
 
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
     public String changeShiftData(@PathVariable Long shiftid, Model model) {
