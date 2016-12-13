@@ -59,6 +59,7 @@ main > .row-eq-height > .col-md-3{
     border-color: #1D997D;
 }
 
+
 /*------------------------------*/
 
 
@@ -475,6 +476,34 @@ body .list-group-item-action .fa-circle-o{
     height:25px;
 }
 
+
+/* EVENTS */
+
+.vintner__table .active {
+    border:3px solid #26AA8C;
+}
+
+
+/* CALENDAR */
+.calendar {
+    padding:10px;
+}
+
+.fc-event-time, .fc-event-title {
+    padding: 0 1px;
+    white-space: nowrap;
+}
+
+.tooltip-inner, .tooltip.top .tooltip-arrow {
+    background-color: white;
+    box-shadow: 5px -5px 10px rgba(0,0,0,0.5);
+    border:1px solid black;
+    color: black;
+}
+
+
+
+
 /* Form Style */
 
 .form__bg {
@@ -519,6 +548,11 @@ body .list-group-item-action .fa-circle-o{
 
 .addMenu input:focus {
     box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+
+fieldset {
+    border:1px solid #243648;
+    padding:10px 20px;
 }
 
 /* Users */

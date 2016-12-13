@@ -96,11 +96,11 @@ public class WineTavernDataInitializer implements DataInitializer{
     private void initializeEvents() {
         eventCatalog.save(new Event("Go hard or go home - Ü80 Party", Money.of(7, EURO),
                 new TimeInterval(LocalDateTime.of(2016, 9, 11, 21, 30), LocalDateTime.of(2016, 9, 11, 23, 30)),
-                "SW4G ist ein muss!"));
+                "SW4G ist ein muss!", new External("der Neue", Money.of(180, EURO))));
 
         eventCatalog.save(new Event("Grillabend mit Musik von Barny dem Barden", Money.of(7, EURO),
                 new TimeInterval(LocalDateTime.of(2016, 11, 11, 19, 30), LocalDateTime.of(2016, 11, 11, 23, 30)),
-                "Es wird gegrillt und überteuerter Wein verkauft."));
+                "Es wird gegrillt und überteuerter Wein verkauft.", new External("der Neue", Money.of(180, EURO))));
     }
 
     private void initializeStock() {
@@ -178,8 +178,7 @@ public class WineTavernDataInitializer implements DataInitializer{
 
     public void initializeExterns() {
         MonetaryAmount wage = Money.of(300, EURO);
-        Event event = Helper.getFirstItem(eventCatalog.findByName("Go hard or go home - Ü80 Party"));
-        External external = new External(event, "DJ Cool", wage);
+        External external = new External("DJ Cool", wage);
 
         externalManager.save(external);
     }

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
 <head>
 
-    <title>Lager</title>
+    <title>Rechnungen</title>
 
 </head>
 <body th:fragment="content" class="bills">
@@ -47,7 +47,7 @@
 
                             <td th:text="${bill.id}"><a ></a></td>
                             <td th:text="${bill.desk}"></td>
-                            <td th:text="${bill.price.number} + '€'"></td>
+                            <td th:text="${bill.price.number.doubleValue()} + '€'"></td>
                             <td><a th:href="@{'/service/bills/details/' + ${bill.id}}">
                                 <button class="btn btn-primary">
                                     <i class="fa fa-cog fa-fw"></i>

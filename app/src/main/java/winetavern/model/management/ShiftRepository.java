@@ -7,4 +7,5 @@ import org.salespointframework.core.SalespointRepository;
  */
 
 public interface ShiftRepository extends SalespointRepository<Shift, Long> {
+
 }

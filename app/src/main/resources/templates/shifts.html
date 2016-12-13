@@ -7,53 +7,166 @@
 </head>
 <body th:fragment="content">
 <div class="container__wrap">
+    <div class="heading">
+        <div class="row">
 
-    <div class="container__head">
-        <h1>&nbsp;<span class="fa fa-calendar"></span> Schichten (<span th:text="@{${shiftAmount} + ' Schichten vom ' + ${weekStart} + ' - ' + ${weekEnd} + ')'}"></span></h1>
+            <div class="col-xs-8">
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Schichten</h1>
+            </div>
+            <div class="col-xs-4 text-xs-right">
+                <a th:href="@{'/admin/management/shift/add'}">
+                    <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Schicht</button>
+                </a>
+            </div>
+        </div>
     </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Angestellter</th>
-            <th>Job</th>
-            <th>am</th>
-            <th>von</th>
-            <th>bis</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="shift : ${shifts}">
-            <th scope="row">-</th>
-            <td th:text="@{${shift.employee.userAccount.firstname} + ' ' + ${shift.employee.userAccount.lastname}}"></td>
-            <td th:text="${shift.employee.displayNameOfRole}"></td>
-            <td th:text="${shift.interval.start.toLocalDate()}"></td>
-            <td th:text="${shift.interval.start.toLocalTime()}"></td>
-            <td th:text="${shift.interval.end.toLocalTime()}"></td>
-            <td><button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#details"><i class="fa fa-user-circle" aria-hidden="true"></i>
-            </button></td>
-        </tr>
-        </tbody>
-    </table>
+
+    <div id="calendar" class="calendar"></div>
+
 </div>
-<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="changeShift" tabindex="-1" role="dialog" aria-labelledby="shiftModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="shiftModalLabel">Schicht hinzuf&uuml;gen/&auml;ndern</h4>
             </div>
             <div class="modal-body">
-                ...
+                <form id="changeShiftForm" method="post">
+                    <div class="form-group">
+                        <label for="employee">Person:</label>
+                        <select id="employee" name="employee" class="form-control" onchange="showperson(this.value);">
+                            <option th:each="employee:${employees}"
+                                    th:selected="${employee.id == shiftdata.employee.id}"
+                                    th:text="${employee}" th:value="${employee.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Datum:</label>
+                        <input type="text" id="date" name="date" class="form-control" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6 text-xs-center">
+                                <label for="start">Start:</label>
+                                <select id="start" name="start" class="form-control" placeholder="Start" required="true">
+                                    <option th:each="t:${time}" th:text="${t}"
+                                            th:selected="${t} == '10:00'"></option>
+                                </select>
+                            </div>
+                            <div class="col-xs-6 text-xs-center">
+                                <label for="end">Ende:</label>
+                                <select id="end" name="end" class="form-control" placeholder="Ende" required="true">
+                                    <option th:each="t:${time}" th:text="${t}"  th:selected="${t} == '18:00'"></option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="row">
+                    <div class="col-xs-6 text-xs-left">
+                        <a th:href="@{'/admin/management/shifts/remove/'}">
+                            <button type="button" class="btn btn-outline-danger">
+                                Löschen
+                            </button>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 text-xs-right">
+                        <button type="submit" form="changeShiftForm" class="btn btn-primary">Speichern</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // show change modal
+    $("#changeShift").modal("show");
+
+    // add calendar plugin to date input
+    var firstDayOfYear = new Date(businessTime);
+    firstDayOfYear.setMonth(0);
+    firstDayOfYear.setDate(1);
+    $('input[name="date"]').daterangepicker({
+        singleDatePicker:true,
+        linkedCalendars:false,
+        showISOWeekNumbers:true,
+        opens:"right",
+        buttonClasses:"btn",
+        applyClass:"btn-primary",
+        locale: {
+            format:"DD.MM.YYYY",
+            applyLabel:"&#10004;",
+            cancelLabel:"&#128473;",
+            customRangeLabel:"Benutzerdefiniert",
+            daysOfWeek:["So","Mo","Di","Mi","Do","Fr","Sa"],
+            monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+            firstDay:1
+        },
+    });
+
+
+    // load calendar plugin
+    var now = new Date(businessTime);
+    var eventString = /*[[${calendarString}]]*/"";
+    var input = JSON.parse(eventString);
+    $(document).ready(function(){
+        $("#calendar").fullCalendar({
+            locale:"de",
+            header: {
+                left:'prev,next today',
+                center:'title',
+                right:'listMonth,agendaWeek,month,listYear'
+            },
+            defaultDate:now.getFullYear() + "-" + checkTime(now.getMonth()+1) + "-" + checkTime(now.getDate()),
+            now:new Date(businessTime),
+            navLinks:true,
+            weekNumbers:true,
+            defaultView:'agendaWeek',
+            allDaySlot:true,
+            slotEventOverlap:false,
+            buttonText: {
+                listYear:'Jahr'
+            },
+            eventRender: function(event,element,view)
+            {
+                if(view.name === ""){
+                    element.find('.fc-title').html("<b>" + event.title + "</b><br/><em>" + event.description + "</em>");
+                } else {
+                    element.attr('title','<b>' + event.title + '</b><br/>' + event.description);
+                    element.attr('data-toggle','tooltip');
+                    element.attr('data-placement','top');
+                    element.tooltip({html:true});
+                    element.tooltip('show');
+                }
+            },
+            eventSources: [
+                {
+                    events:input,
+                    overlap:true,
+                    backgroundColor:"#2F3F52",
+                    borderColor:"#243648",
+                    textColor:'white'
+                }
+            ]
+        });
+    });
+
+
+
+
+    /*]]>*/
+</script>
+
 </body>
 </html>

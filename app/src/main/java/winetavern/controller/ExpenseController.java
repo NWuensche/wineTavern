@@ -1,11 +1,10 @@
 package winetavern.controller;
 
 import lombok.NonNull;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
-import org.salespointframework.accountancy.AccountancyEntry;
-import org.salespointframework.accountancy.AccountancyEntryIdentifier;
-import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.AuthenticationManager;
@@ -16,22 +15,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import winetavern.Helper;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
-import winetavern.model.user.Employee;
-import winetavern.model.user.EmployeeManager;
-import winetavern.model.user.Person;
+import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -41,56 +35,125 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Controller
 public class ExpenseController {
-    @NotNull @Autowired private Accountancy accountancy;
-    @NotNull @Autowired private ExpenseGroupRepository expenseGroups;
-    @NotNull @Autowired private EmployeeManager employees;
-    @NotNull @Autowired private BusinessTime bt;
-    @NotNull @Autowired private AuthenticationManager am;
+    @NonNull @Autowired private Accountancy accountancy;
+    @NonNull @Autowired private ExpenseGroupRepository expenseGroups;
+    @NonNull @Autowired private EmployeeManager employees;
+    @NonNull @Autowired private ExternalManager externals;
+    @NonNull @Autowired private PersonManager persons;
+    @NonNull @Autowired private BusinessTime bt;
+    @NonNull @Autowired private AuthenticationManager am;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    /**
+     * @param type   the ExpenseGroup (long id) to filter with (only remain expenses with this group)
+     * @see          ExpenseGroup
+     * @param person the Person (long id) to filter with
+     * @see          Person
+     * @param date   the interval in which the expense must lay in
+     *               format: 'dd.MM.yyyy - dd.MM.yyyy'
+     * @param cover  if present: cover multiple open expenses (the user checked the checkbox of at least one expense)
+     *               format:     'expenseID|expenseId|...|'
+     */
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute("type") String type, @ModelAttribute("person") String person,
-                               @ModelAttribute("date") String date,
-                               @ModelAttribute("cover") Optional<String> cover, Model model) {
-        if (cover.isPresent()) { //RLY SALESPOIN?! NO STRING -> ID????
-            Expense expense = null;
-            MonetaryAmount sum = Money.of(0, EURO);
+    public String showExpenses(@ModelAttribute(value="type") String type, @ModelAttribute(value="person") String person,
+                               @ModelAttribute(value="date") String date,
+                               @ModelAttribute(value="cover") Optional<String> cover, Model model) {
+        if (cover.isPresent()) { //the query of expenses to pay off is not empty
 
             String[] idQuery = cover.get().split("\\|"); //split into multiple ExpenseID's
-            for (AccountancyEntry exp : accountancy.findAll()) {
-                for (String expenseId : idQuery) {
-                    if (expenseId.equals(exp.getId().toString())) {
-                        expense = ((Expense) exp);
-                        expense.cover();
-                        accountancy.add(expense);
-                        sum = sum.add(expense.getValue());
-                    }
-                }
-            }
-            Expense payoff = new Expense(sum,
+            Pair<Expense, MonetaryAmount> result = coverExpenses(idQuery); //the last expense and sum (@see method)
+
+            Expense payoff = new Expense(result.getValue(),
                     "Abrechnung " + bt.getTime().format(formatter) + " durch " +
                             employees.findByUserAccount(am.getCurrentUser().get()).get(),
-                    expense.getEmployee(),
+                    result.getKey().getPerson(),
                     expenseGroups.findByName("Abrechnung").get());
+
             accountancy.add(payoff);
-            return "redirect:/accountancy/expenses";
         }
 
-        if (type.equals(""))
+        if (type.equals("")) //the type will be parsed in long, so it should be a number
             type = "0";
         if (person.equals(""))
             person = "0";
-        Set<Expense> expOpen = filter(type, person, false, date);
-        Set<Expense> expCovered = filter(type, person, true, date);
-        model.addAttribute("expenseAmount", expOpen.size());
+
+        Set<Expense> expOpen = filter(type, person, false, date); //all open expenses with the given filter
+        Set<Expense> expCovered = filter(type, person, true, date); //all covered expenses with the given filter
+
+        model.addAttribute("expOpenAmount", expOpen.size());
+        model.addAttribute("expCoveredAmount", expCovered.size());
         model.addAttribute("expOpen", expOpen);
         model.addAttribute("expCovered", expCovered);
-        model.addAttribute("persons", employees.findAll());
+        model.addAttribute("persons", Helper.findAllPersons(employees, externals)); //all employees and externals
         model.addAttribute("groups", expenseGroups.findAll());
         model.addAttribute("selectedType", Long.parseLong(type));
-        model.addAttribute("selectedEmployee", Long.parseLong(person));
+        model.addAttribute("selectedPerson", Long.parseLong(person));
         model.addAttribute("selectedDate", date);
         return "expenses";
+    }
+
+    /**
+     * @param expensesToCover the array with expenses to cover given by each String expenseId
+     * @return a pair <k, v> with:
+     *         Expense k: the expense which was covered last or null if the array was empty
+     *         MonetaryAmount v: the sum of all values from the expenses
+     */
+    private Pair<Expense, MonetaryAmount> coverExpenses(String[] expensesToCover) {
+        Expense expense = null;
+        MonetaryAmount sum = Money.of(0, EURO);
+
+        for (String expenseId : expensesToCover) {
+            expense = Helper.findOne(expenseId, accountancy);
+            expense.cover();
+            accountancy.add(expense);
+            sum = sum.add(expense.getValue());
+        }
+
+        return new ImmutablePair<>(expense, sum);
+    }
+
+    /**
+     * @see Expense
+     * @param typeId   the ExpenseGroup (long id) to filter with (only remain expenses with this group)
+     * @see            ExpenseGroup
+     * @param personId the Person (long id) to filter with
+     * @see            Person
+     * @param covered  true: only return expenses which are covered
+     *                 false: only return open expenses
+     * @param date     the interval in which the expense must lay in
+     *                 format: 'dd.MM.yyyy - dd.MM.yyyy'
+     * @return Set<Expense> the set filled with all expense that 'passed' the filter criteria
+     */
+    private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
+        Set<Expense> res = new TreeSet<>();
+
+        if (date.equals("today")) { //Interval filter: today
+            date = bt.getTime().format(formatter);
+            date += " - " + date;
+        }
+        if (!date.equals("")) { //Interval filter: start - end
+            String[] interval = date.split("(\\s-\\s)");
+            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withNano(1);
+            LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
+            accountancy.find(Interval.from(start).to(end)).forEach(it -> res.add(((Expense) it)));
+        } else { //no filter
+            accountancy.findAll().forEach(it -> res.add(((Expense) it)));
+        }
+
+        if (!typeId.equals("0")) { //ExpenseGroup filter: must contain expenseGroup
+            ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
+            res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
+        }
+
+        if (!personId.equals("0")) { //Person filter: must contain person
+            Person person = persons.findOne(Long.parseLong(personId)).get();
+            res.removeIf(expense -> !expense.getPerson().getId().equals(person.getId()));
+        }
+
+        //isCovered filter: true -> returns only paid expenses
+        res.removeIf(expense -> expense.isCovered() != covered);
+
+        return res;
     }
 
     @RequestMapping("/accountancy/expenses/payoff")
@@ -108,7 +171,7 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}")
     public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
-        Person staff = employees.findOne(Long.parseLong(personId)).get();
+        Employee staff = employees.findOne(Long.parseLong(personId)).get();
         Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
                 personId, false, "");
         model.addAttribute("expenses", expenses);
@@ -123,7 +186,7 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
     public String coverExpensesForPerson(@PathVariable("pid") String personId) {
-        Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
+        Set<Expense> expenses = filter("" + expenseGroups.findByName("Bestellung").get().getId(),
                 personId, false, "");
         MonetaryAmount sum = Money.of(0, EURO);
         for(Expense expense : expenses){
@@ -137,37 +200,5 @@ public class ExpenseController {
                 employees.findOne(Long.parseLong(personId)).get(),
                 expenseGroups.findByName("Abrechnung").get()));
         return "redirect:/accountancy/expenses/payoff";
-    }
-
-    private Set<Expense> filter(String typeId, String employeeId, boolean covered, String date) {
-        Set<Expense> res = new TreeSet<>();
-
-        if (date.equals("today")) { //Interval filter: today
-            date = bt.getTime().format(formatter);
-            date += " - " + date;
-        }
-        if (!date.equals("")) { //Interval filter: start - end
-            String[] interval = date.split("(\\s-\\s)");
-            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withNano(1);
-            LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
-            accountancy.find(Interval.from(start).to(end)).forEach(it -> res.add(((Expense) it)));
-        } else {
-            accountancy.findAll().forEach(it -> res.add(((Expense) it)));
-        }
-
-        if (!typeId.equals("0")) { //ExpenseGroup filter: must contain expenseGroup
-            ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
-            res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
-        }
-
-        if (!employeeId.equals("0")) { //Employee filter: must contain employee
-            Employee employee = employees.findOne(Long.parseLong(employeeId)).get();
-            res.removeIf(expense -> expense.getEmployee() != employee);
-        }
-
-        //isCovered filter: true -> returns only paid expenses
-        res.removeIf(expense -> expense.isCovered() != covered);
-
-        return res;
     }
 }

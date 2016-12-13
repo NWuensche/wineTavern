@@ -1,5 +1,10 @@
 package winetavern.model.accountancy;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,27 +14,17 @@ import javax.persistence.Id;
  */
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class ExpenseGroup {
     @GeneratedValue @Id private long id;
-    private String name;
-
-    @Deprecated
-    protected ExpenseGroup() {}
+    @NonNull private String name;
 
     public ExpenseGroup(String name) {
         setName(name);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        if (name == null) throw new NullPointerException();
+    public void setName(@NonNull String name) {
         if (name.equals("")) throw new IllegalArgumentException("The name must not be empty");
         this.name = name;
     }

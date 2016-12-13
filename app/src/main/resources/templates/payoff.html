@@ -55,11 +55,11 @@
         <tbody>
             <tr th:each="expense:${expenses}">
                 <td th:text="${expense.description}">TEST</td>
-                <td th:text="${expense.value.number} +' €'">5€</td>
+                <td th:text="${expense.value.number.doubleValue()} +' €'">5€</td>
             </tr>
             <tr>
                 <td colspan="2" class="text-xs-center">
-                    <h2><b><span th:text="${price.number} + ' €'"></span></b></h2>
+                    <h2><b><span th:text="${price.number.doubleValue()} + ' €'"></span></b></h2>
                 </td>
             </tr>
         </tbody>

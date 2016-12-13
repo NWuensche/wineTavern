@@ -7,55 +7,230 @@
 </head>
 <body th:fragment="content">
 <div class="container__wrap">
-    <div class="container__head">
-        <h1>&nbsp;<span class="fa fa-calendar"></span> Events (<span th:text="${eventAmount}"></span> Events)</h1>
-    </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Preis</th>
-            <th>Datum</th>
-            <th>Beginn</th>
-            <th>Dauer</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="event : ${events}">
-            <th scope="row">-</th>
-            <td th:text="${event.name}"></td>
-            <td th:text="${event.price}"></td>
-            <td th:text="${event.interval.start.toLocalDate()}"></td>
-            <td th:text="${event.interval.start.toLocalTime()}"></td>
-            <td><span th:text="${event.interval.duration.toHours()}"></span>h</td>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details"><i
-                        class="fa fa-user-circle" aria-hidden="true"></i>
+    <div class="heading">
+        <div class="row">
+
+            <div class="col-xs-8">
+                <h1>&nbsp;<span class="fa fa-calendar"></span> Events (<span th:text="${eventAmount}"></span> Events)</h1>
+            </div>
+            <div class="col-xs-4 text-xs-right">
+                <!-- button to toggle the list view, deprecated
+                <button type="button" class="btn btn-primary" id="toggleView">
+                    <i class="fa fa-th-large"></i>
                 </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                -->
+                <a th:href="@{/admin/events/add}">
+                    <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Event</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="calendar" class="calendar"></div>
+    <!-- deprecated
+    <div id="tableView" style="display:none">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Preis</th>
+                <th>Datum</th>
+                <th>Beginn</th>
+                <th>Dauer</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event : ${events}">
+                <td th:text="${event.name}"></td>
+                <td th:text="${event.price.number.doubleValue()} + ' €'"></td>
+                <td th:text="${event.interval.start.toLocalDate()}"></td>
+                <td th:text="${event.interval.start.toLocalTime()}"></td>
+                <td><span th:text="${event.interval.duration.toHours()}"></span>h</td>
+                <td>
+                    <a th:href="'/admin/events/change/' + ${event.id}">
+                        <button type="button" class="btn btn-primary">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    -->
 </div>
-<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="changeEvent" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+     aria-hidden="true" th:if="${event}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="eventModalLabel">Event &auml;ndern</h4>
             </div>
             <div class="modal-body">
-                ...
+                <form id="changeEventForm" method="post">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required="true"
+                               th:value="${event.name}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="desc">Beschreibung:</label>
+                        <textarea type="text" id="desc" name="desc" class="form-control" required="true"
+                                  th:text="${event.description}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Zeitraum:</label>
+                        <input type="text" id="date" name="date" class="form-control" required="true"
+                               th:value="${interval}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Preis (in €):</label>
+                        <input type="number" id="price" name="price" class="form-control" min="0" step="0.1"
+                               value="7" required="true"
+                               th:value="${event.price.number.doubleValue()}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="external">Person:</label>
+                        <select id="external" name="external" class="form-control" onchange="showperson(this.value);">
+                            <option th:each="external:${externals}"  th:selected="${external.id == event.person.id}"
+                                    th:text="${external}" th:value="${external.id}"></option>
+                            <option value="0">Neue Person anlegen</option>
+                        </select>
+                    </div>
+                    <fieldset id="persondata" style="display:none;">
+                        <legend>&nbsp;Personen - Daten </legend>
+                        <div class="form-group">
+                            <label for="externalName">Name:</label>
+                            <input type="text" id="externalName" name="externalName" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="externalWage">Lohn (in €):</label>
+                            <input type="number" id="externalWage" name="externalWage" class="form-control" min="0" value="0"/>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="row">
+                    <div class="col-xs-6 text-xs-left">
+                        <a th:href="@{'/admin/events/remove/' + ${event.id}}">
+                            <button type="button" class="btn btn-outline-danger">
+                                Löschen
+                            </button>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 text-xs-right">
+                        <button type="submit" form="changeEventForm" class="btn btn-primary">Speichern</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // show change modal
+    $("#changeEvent").modal("show");
+
+    // add calendar plugin to date input
+    var firstDayOfYear = new Date(businessTime);
+    firstDayOfYear.setMonth(0);
+    firstDayOfYear.setDate(1);
+    $('input[name="date"]').daterangepicker({
+        timePicker:true,
+        timePicker24Hour:true,
+        timePickerIncrement:15,
+        linkedCalendars:false,
+        showISOWeekNumbers:true,
+        opens:"left",
+        buttonClasses:"btn",
+        applyClass:"btn-primary",
+        locale: {
+            format:"DD.MM.YYYY HH:mm",
+            applyLabel:"&#10004;",
+            cancelLabel:"&#128473;",
+            customRangeLabel:"Benutzerdefiniert",
+            daysOfWeek:["So","Mo","Di","Mi","Do","Fr","Sa"],
+            monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+            firstDay:1
+        },
+        ranges: {
+            'Heute': [businessTime, businessTime],
+            'Morgen': [new Date(businessTime.getTime() + 86400000), new Date(businessTime.getTime() + 86400000)]
+        }
+    });
+
+
+    // load calendar plugin
+    var now = new Date(businessTime);
+    var eventString = /*[[${calendarString}]]*/"";
+    var input = JSON.parse(eventString);
+    $(document).ready(function(){
+        $("#calendar").fullCalendar({
+            locale:"de",
+            header: {
+                left:'prev,next today',
+                center:'title',
+                right:'listMonth,agendaWeek,month,listYear'
+            },
+            defaultDate:now.getFullYear() + "-" + checkTime(now.getMonth()+1) + "-" + checkTime(now.getDate()),
+            now:new Date(businessTime),
+            navLinks:true,
+            weekNumbers:true,
+            defaultView:'agendaWeek',
+            allDaySlot:true,
+            slotEventOverlap:false,
+            buttonText: {
+                listYear:'Jahr'
+            },
+            eventRender: function(event,element,view)
+            {
+                if(view.name === ""){
+                    element.find('.fc-title').html("<b>" + event.title + "</b><br/><em>" + event.description + "</em>");
+                } else {
+                    element.attr('title','<b>' + event.title + '</b><br/>' + event.description);
+                    element.attr('data-toggle','tooltip');
+                    element.attr('data-placement','top');
+                    element.tooltip({html:true});
+                    element.tooltip('show');
+                }
+            },
+            eventSources: [
+                {
+                    events:input,
+                    overlap:true,
+                    backgroundColor:"#2F3F52",
+                    borderColor:"#243648",
+                    textColor:'white'
+                }
+            ]
+        });
+
+        // switch table and calendar view
+        $('#toggleView').on('click', function(e){
+            $('#calendar , #tableView').toggle();
+        });
+    });
+
+
+    // show person data input fields to create new external
+    function showperson(value){
+        if(value == "0"){
+            $("#persondata").show("1000");
+        } else {
+            $("#persondata").hide("1000");
+        }
+    }
+
+
+
+    /*]]>*/
+</script>
+
 </body>
 </html>

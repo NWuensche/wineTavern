@@ -1,49 +1,32 @@
 package winetavern.model.user;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import winetavern.model.management.Event;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
- * Entity for all (Groups of) Persons, that don't need a login to the Website (like artists)
  * @author Niklas Wünsche
  */
 @Entity
 @Getter
-public class External implements Person {
-
-    @Id @GeneratedValue private Long id;
-    @OneToOne private Event event;
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
+public class External extends Person {
     private String name;
     private MonetaryAmount wage;
-    private boolean payed;
 
-    @Deprecated
-    protected External() {}
-
-    public External(Event event, String name, MonetaryAmount wage) {
-        this.event = event;
+    public External(@NonNull String name, @NonNull MonetaryAmount wage) {
+        if (name.equals(""))
+            throw new IllegalArgumentException("the name of an external must not be empty");
         this.name = name;
         this.wage = wage;
-        payed = false;
-    }
-
-    public void pay() throws IllegalStateException{
-        if(isPayed()) {
-            throw new IllegalStateException("External was already payed!");
-        }
-
-        payed = true;
     }
 
     @Override
     public String toString() {
         return name;
     }
-
 }

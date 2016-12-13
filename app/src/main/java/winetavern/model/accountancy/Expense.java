@@ -1,53 +1,47 @@
 package winetavern.model.accountancy;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.salespointframework.accountancy.AccountancyEntry;
-import winetavern.model.user.Employee;
+import winetavern.model.user.Person;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Louis
  */
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class Expense extends AccountancyEntry implements Comparable<Expense> {
-    private boolean isCovered = false;
-    @ManyToOne private Employee employee;
-    @ManyToOne private ExpenseGroup expenseGroup;
+    @Getter private boolean covered = false;
+    @Getter @ManyToOne private Person person;
+    @Getter @ManyToOne private ExpenseGroup expenseGroup;
 
-    @Deprecated
-    protected Expense() {}
-
-    public Expense(MonetaryAmount value, String description, Employee employee, ExpenseGroup expenseGroup) {
+    public Expense(MonetaryAmount value, String description, @NonNull Person person, @NonNull ExpenseGroup expenseGroup) {
         super(value, description);
-        if (employee == null || expenseGroup == null) throw new NullPointerException("no null parameter accepted here");
         this.expenseGroup = expenseGroup;
-        this.employee = employee;
-        if (expenseGroup.getName().equals("Abrechnung")) isCovered = true;
+        this.person = person;
+        if (expenseGroup.getName().equals("Abrechnung")) covered = true;
     }
 
-    public ExpenseGroup getExpenseGroup() {
-        return expenseGroup;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public boolean isCovered() {
-        return isCovered;
+    public String getDateString() {
+        return super.getDate().get().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 
     public void cover() {
-        if (isCovered) throw new IllegalStateException("Expense is already covered");
-        this.isCovered = true;
+        if (covered) throw new IllegalStateException("Expense is already covered");
+        this.covered = true;
     }
 
     @Override
     public int compareTo(Expense o) {
         if (super.hasDate() && o.hasDate()) return -super.getDate().get().compareTo(o.getDate().get());
-        return getEmployee().getUserAccount().getLastname().compareTo(o.getEmployee().getUserAccount().getLastname());
+        return Long.compare(expenseGroup.getId(), o.getExpenseGroup().getId());
     }
 }

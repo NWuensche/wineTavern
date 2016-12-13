@@ -11,6 +11,8 @@ import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.user.External;
+import winetavern.model.user.Person;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
@@ -36,8 +38,9 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     @Before
     public void before() {
         numberOfEventsInDataInit = 2;
+        Person external = new External("DJ Cool", Money.of(50, EURO));
         TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
-        event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion");
+        event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", external);
     }
 
     @Test
