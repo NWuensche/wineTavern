@@ -255,7 +255,7 @@ public class EventController {
     }
 
     @RequestMapping("/admin/events/remove/{event}")
-    public String removeEvent(@PathVariable Event event,Model model){
+    public String removeEvent(@PathVariable Event event){
         eventCatalog.delete(event);
         return "redirect:/admin/events";
     }

@@ -6,12 +6,14 @@ import org.junit.Test;
 import org.salespointframework.quantity.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.External;
+import winetavern.model.user.ExternalManager;
 import winetavern.model.user.Person;
 import winetavern.model.user.Roles;
 
@@ -22,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -32,13 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired EventCatalog eventCatalog;
+    @Autowired ExternalManager externalManager;
     private Event event;
     private long numberOfEventsInDataInit;
 
     @Before
     public void before() {
         numberOfEventsInDataInit = 2;
-        Person external = new External("DJ Cool", Money.of(50, EURO));
+        Person external = Helper.getFirstItem(externalManager.findAll());
         TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
         event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", external);
     }
@@ -52,5 +56,44 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
                 .andExpect(model().attributeExists("eventAmount"))
                 .andExpect(view().name("events"));
     }
+
+    @Test
+    public void addEventRight() throws Exception {
+        RequestBuilder request = post("/admin/events/add")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("name", event.getName())
+                .param("desc", event.getDescription())
+                .param("date", Helper.localDateTimeToDateTimeString(event.getInterval().getStart()) + " - " +
+                               Helper.localDateTimeToDateTimeString(event.getInterval().getEnd()))
+                .param("price", event.getPrice().getNumber().doubleValue() + "")
+                .param("external", event.getPerson().getId() + "")
+                .param("externalName", "")
+                .param("externalWage", "");
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.count(), is(numberOfEventsInDataInit + 1));
+
+        Event storedEvent = Helper.getFirstItem(eventCatalog.findByName(event.getName()));
+
+        assertThat(storedEvent.compareTo(event), is(0));
+    }
+
+    /*
+    @Test
+    public void removeEventRight() throws Exception {
+        eventCatalog.save(event);
+        System.out.println("id: "+event.getId());
+
+        RequestBuilder request = get("/admin/events/remove/" + event.getId())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.count(), is(numberOfEventsInDataInit + 0));
+    }
+    */
 
 }
