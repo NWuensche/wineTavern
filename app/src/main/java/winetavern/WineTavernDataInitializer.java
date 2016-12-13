@@ -171,7 +171,7 @@ public class WineTavernDataInitializer implements DataInitializer{
      * Should be deleted in the final program
      */
     private void initializeShift() {
-        LocalDateTime start = LocalDateTime.of(2016, 11, 11, 11, 11);
+        LocalDateTime start = LocalDateTime.of(2016, 12, 14, 10, 30);
         shifts.save(new Shift(new TimeInterval(start, start.plusHours(3)),
                 Helper.getFirstItem(employeeManager.findAll())));
     }

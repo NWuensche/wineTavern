@@ -14,7 +14,7 @@
                 <h1>&nbsp;<span class="fa fa-calendar"></span> Schichten</h1>
             </div>
             <div class="col-xs-4 text-xs-right">
-                <a th:href="@{'/admin/management/shift/add'}">
+                <a th:href="@{'/admin/management/shifts/add'}">
                     <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Schicht</button>
                 </a>
             </div>
@@ -32,21 +32,25 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="shiftModalLabel">Schicht hinzuf&uuml;gen/&auml;ndern</h4>
+                <h4 class="modal-title" id="shiftModalLabel">Schicht
+                    <span th:if="${shiftdata}"> &auml;ndern</span>
+                </h4>
             </div>
             <div class="modal-body">
-                <form id="changeShiftForm" method="post">
+                <form id="changeShiftForm" method="post"
+                      th:action="${shiftdata}? ('/admin/management/shifts/change/' + ${shiftdata.id}) : ('/admin/management/shifts/add')">
                     <div class="form-group">
                         <label for="employee">Person:</label>
                         <select id="employee" name="employee" class="form-control" onchange="showperson(this.value);">
                             <option th:each="employee:${employees}"
-                                    th:selected="${employee.id == shiftdata.employee.id}"
+                                    th:selected="${shiftdata}? employee.id == shiftdata.employee.id : false"
                                     th:text="${employee}" th:value="${employee.id}"></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="date">Datum:</label>
-                        <input type="text" id="date" name="date" class="form-control" required="true"/>
+                        <input type="text" id="date" name="date" class="form-control" required="true"
+                               th:value="${shiftdata}? ${date} : ''"/>
                     </div>
                     <div class="form-group">
                         <div class="row">
@@ -54,13 +58,14 @@
                                 <label for="start">Start:</label>
                                 <select id="start" name="start" class="form-control" placeholder="Start" required="true">
                                     <option th:each="t:${time}" th:text="${t}"
-                                            th:selected="${t} == '10:00'"></option>
+                                            th:selected="${shiftdata}? (${t} == ${shiftdata.interval.start.toLocalTime().toString()}) : (${t} == '10:00')"></option>
                                 </select>
                             </div>
                             <div class="col-xs-6 text-xs-center">
                                 <label for="end">Ende:</label>
                                 <select id="end" name="end" class="form-control" placeholder="Ende" required="true">
-                                    <option th:each="t:${time}" th:text="${t}"  th:selected="${t} == '18:00'"></option>
+                                    <option th:each="t:${time}" th:text="${t}"
+                                            th:selected="${shiftdata}? (${t} == ${shiftdata.interval.end.toLocalTime().toString()}) : (${t} == '18:00')"></option>
                                 </select>
                             </div>
                         </div>
@@ -72,7 +77,7 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-xs-6 text-xs-left">
-                        <a th:href="@{'/admin/management/shifts/remove/'}">
+                        <a th:if="${shiftdata}" th:href="@{'/admin/management/shifts/remove/'}">
                             <button type="button" class="btn btn-outline-danger">
                                 Löschen
                             </button>
@@ -91,7 +96,8 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     // show change modal
-    $("#changeShift").modal("show");
+    if(window.location.href.toString().includes("add") || window.location.href.toString().includes("change"))
+        $("#changeShift").modal("show");
 
     // add calendar plugin to date input
     var firstDayOfYear = new Date(businessTime);
