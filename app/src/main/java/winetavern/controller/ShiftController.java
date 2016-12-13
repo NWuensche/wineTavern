@@ -85,7 +85,7 @@ public class ShiftController {
         Map<Employee, String> res = new HashMap<>();
 
         for (int i = 0; i < employeeList.size(); i++) {
-            Color c = Color.getHSBColor((float) i / employeeList.size(), 1, 1);
+            Color c = Color.getHSBColor((float) i / employeeList.size(), 0.75f, 0.85f);
             res.put(employeeList.get(i), "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")");
         }
 
