@@ -61,15 +61,20 @@ public class ShiftController {
 
             TimeInterval interval = shift.getInterval();
             calendarString = calendarString +
-                    "{\"title\":\"" + shift.getEmployee() +
-                    ",\"start\":\"" + interval.getStart() +
+                    "{\"title\":\"" + shift.getEmployee().getUserAccount().getFirstname().substring(0, 1) +
+                                      shift.getEmployee().getUserAccount().getLastname().substring(0, 1) +
+                    "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
+                    "\",\"color\":\"" + "blue" +
                     "\",\"url\":\"" + "/admin/management/shifts/change/" + shift.getId() +
-                    "\",\"description\":\"" + shift.getEmployee().getDisplayNameOfRole() + "\"}";
+                    "\",\"description\":\"" + shift.getEmployee() + "<br/>" +
+                                              shift.getEmployee().getDisplayNameOfRole() + "\"}";
         }
 
         return calendarString + "]";
     }
+
+
 
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
     public String changeShiftData(@PathVariable Long shiftid, Model model) {
