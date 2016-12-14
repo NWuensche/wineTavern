@@ -112,6 +112,13 @@ public class ShiftController {
         return "redirect:/admin/management/shifts";
     }
 
+    @RequestMapping("/admin/management/shifts/remove/{shiftid}")
+    public String changeShift(@PathVariable Long shiftid) {
+        Shift shift = shifts.findOne(shiftid).get();
+        shifts.delete(shift);
+        return "redirect:/admin/management/shifts";
+    }
+
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
     public String changeShift(@PathVariable Long shiftid, Model model) {
         Shift shift = shifts.findOne(shiftid).get();
