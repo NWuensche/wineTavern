@@ -56,6 +56,14 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 21.11.2016 | 13:00 | 15:00 | Überarbeitung splitbill template
 | 23.11.2016 | 16:00 | 18:00 | Template fixes bill, splitbill ...
 | 24.11.2016 | 13:00 | 15:00 | Neuer DateRangePicker für Expenses
+| 28.11.2016 | 11:00 | 14:00 | Expense
+| 08.12.2016 | 13:00 | 15:00 | Calendar
+| 09.12.2016 | 14:00 | 19:00 | Event, Winzer
+| 11.12.2016 | 15:00 | 17:00 | Event
+| 12.12.2016 | 11:00 | 15:00 | Shift
+| 13.12.2016 | 13:00 | 16:00 | Shift
+| 14.12.2016 | 11:00 | 12:00 | Shift
+
 |===
 
 == Louis
