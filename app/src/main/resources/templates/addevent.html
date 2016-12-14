@@ -77,6 +77,13 @@
     var firstDayOfYear = new Date(businessTime);
     firstDayOfYear.setMonth(0);
     firstDayOfYear.setDate(1);
+    var start = new Date(businessTime.getTime());
+    start.setHours(16);
+    start.setMinutes(0);
+    start.setSeconds(0);
+    start.setMilliseconds(0);
+    var end = new Date(start.getTime());
+    end.setHours(22);
     $('input[name="date"]').daterangepicker({
         timePicker:true,
         timePicker24Hour:true,
@@ -84,7 +91,8 @@
         linkedCalendars:false,
         showISOWeekNumbers:true,
         opens:"left",
-        startDate: businessTime,
+        startDate: start,
+        endDate: end,
         buttonClasses:"btn",
         applyClass:"btn-primary",
         locale: {

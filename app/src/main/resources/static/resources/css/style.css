@@ -281,6 +281,7 @@ main .container__wrap h2{
     font-size: 1.4rem;
     padding-left: 1.5rem;
 }
+
 main .container__wrap .heading button {
     margin:10px;
 }
@@ -500,6 +501,18 @@ body .list-group-item-action .fa-circle-o{
     border:1px solid black;
     color: black;
 }
+
+#calendar h2 {
+    background-color: white;
+    color: black;
+    line-height:2;
+    text-align: center;
+    margin-bottom: auto;
+    font-size: 1.4rem;
+    padding-left: auto;
+}
+
+
 
 
 
