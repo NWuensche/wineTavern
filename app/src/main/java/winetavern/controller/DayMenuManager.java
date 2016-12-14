@@ -156,7 +156,7 @@ public class DayMenuManager {
                     PdfPCell cellName = new PdfPCell(new Paragraph(item.getName()));
                     cellName.setHorizontalAlignment(Element.ALIGN_LEFT);
                     cellName.setBorderWidth(0);
-                    PdfPCell cellPrice = new PdfPCell(new Paragraph(item.getPrice().getNumber().doubleValue() + "€"));
+                    PdfPCell cellPrice = new PdfPCell(new Paragraph(Helper.moneyToEuroString(item.getPrice())));
                     cellPrice.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     cellPrice.setBorderWidth(0);
                     menuItems.addCell(cellName);
