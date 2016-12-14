@@ -127,7 +127,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private boolean isServiceInDB() {
-        return userAccountManager.findByUsername("sabine_weber").isPresent();
+        return userAccountManager.findByUsername("weber").isPresent();
     }
 
     private void initializeEvents() {
