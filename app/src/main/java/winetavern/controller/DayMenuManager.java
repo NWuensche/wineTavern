@@ -1,6 +1,8 @@
 package winetavern.controller;
 
-import org.apache.commons.lang3.SerializationUtils;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.time.BusinessTime;
@@ -9,15 +11,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import winetavern.Helper;
 import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -107,6 +114,68 @@ public class DayMenuManager {
             dayMenuItem.addDayMenu(newDayMenu);
         }
         return newDayMenu;
+    }
+
+    @RequestMapping("/admin/menu/print/{pid}")
+    public String printMenu(@PathVariable("pid") Long id) {
+        DayMenu dayMenu = dayMenuRepository.findOne(id).get();
+
+        Document document = new Document();
+        Font boldFont = new Font();
+        boldFont.setStyle(Font.BOLD);
+        Font catFont = new Font();
+        catFont.setStyle(Font.BOLD);
+        catFont.setSize(18);
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("src\\main\\resources\\daymenu\\daymenu.pdf"));
+            document.open();
+
+            Paragraph title = new Paragraph("Zur fröhlichen Reblaus\n\n", catFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            Map<String, List<DayMenuItem>> sortedItems = new HashMap<>();
+
+            for (DayMenuItem item : dayMenu.getDayMenuItems()) {
+                String category = Helper.getFirstItem(item.getProduct().getCategories());
+                if (!sortedItems.containsKey(category))
+                    sortedItems.put(category, new LinkedList<>());
+
+                sortedItems.get(category).add(item);
+            }
+
+            for (String category : sortedItems.keySet()) {
+                List<DayMenuItem> itemList = sortedItems.get(category);
+                itemList.sort(Comparator.comparing(DayMenuItem::getName));
+
+                PdfPTable menuItems = new PdfPTable(2);
+                menuItems.setWidthPercentage(100);
+
+                for (DayMenuItem item : itemList) {
+                    PdfPCell cellName = new PdfPCell(new Paragraph(item.getName()));
+                    cellName.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cellName.setBorderWidth(0);
+                    PdfPCell cellPrice = new PdfPCell(new Paragraph(item.getPrice().getNumber().doubleValue() + "€"));
+                    cellPrice.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    cellPrice.setBorderWidth(0);
+                    menuItems.addCell(cellName);
+                    menuItems.addCell(cellPrice);
+                }
+
+                Paragraph categoryTitle = new Paragraph("\n" + category, boldFont);
+                categoryTitle.setSpacingAfter(5);
+                document.add(categoryTitle);
+                document.add(menuItems);
+            }
+
+            document.close();
+            writer.close();
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return "daymenupdf";
     }
 
 }
