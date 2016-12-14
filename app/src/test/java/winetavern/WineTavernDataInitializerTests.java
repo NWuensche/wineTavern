@@ -45,6 +45,7 @@ public class WineTavernDataInitializerTests extends AbstractWebIntegrationTests{
         assertThat(admin.get().hasRole(Roles.ADMIN.getRole()), is(true));
     }
 
+    /*
     @Test
     public void eventsInDB() throws Exception {
         Event event1, event2;
@@ -81,5 +82,5 @@ public class WineTavernDataInitializerTests extends AbstractWebIntegrationTests{
     public void externalInDB() throws Exception {
         assertThat(externalManager.findByName("DJ Cool").isPresent(), is(true));
     }
-
+    */
 }
