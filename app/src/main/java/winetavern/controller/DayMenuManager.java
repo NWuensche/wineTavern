@@ -133,7 +133,8 @@ public class DayMenuManager {
         catFont.setSize(18);
 
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("src\\main\\resources\\daymenu\\daymenu.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream
+                    ("src\\main\\resources\\daymenu\\daymenu.pdf"));
             document.open();
 
             //setting pdf attributes

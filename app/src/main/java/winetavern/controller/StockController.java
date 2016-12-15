@@ -63,13 +63,16 @@ public class StockController {
     public String changeProduct(@ModelAttribute("productid") Product product,
                              @ModelAttribute("productname") String name,
                              @ModelAttribute("productprice") String price,
-                             @ModelAttribute("productcategory") String category) {
+                             @ModelAttribute("productcategory") String category,
+                             @ModelAttribute("productvintner") String vintner) {
         product.setName(name);
 
         product.setPrice(Money.of(Float.parseFloat(price), EURO));
 
         product = removeAllCategories(product);
         product.addCategory(category);
+
+        //TODO catch vintner
 
         products.save(product);
 
