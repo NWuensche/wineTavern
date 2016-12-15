@@ -19,3 +19,4 @@ target/
 # Maven
 log/
 target/
+app/src\\main\\resources\\daymenu\\daymenu.pdf
