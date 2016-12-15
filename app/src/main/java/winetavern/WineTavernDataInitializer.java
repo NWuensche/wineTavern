@@ -70,6 +70,8 @@ public class WineTavernDataInitializer implements DataInitializer{
     public void initialize() {
         if(!isAdminInDB(adminName)) {
             initializeAdmin();
+            initializeExpenseGroups();
+            initializeTables();
         }
 
         if (initializeSamples && !isServiceInDB()) {
@@ -77,8 +79,6 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeEvents();
             initializeStock();
             initializeShift();
-            initializeExpenseGroups();
-            initializeTables();
             initializeDayMenuWithItems();
             initializeExternals();
             initializeVintners();
