@@ -56,14 +56,14 @@
                 <td>
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" onclick="down(this)">
+                            <button class="btn btn-primary" onclick="down(this,true)">
                                 <i class="fa fa-minus fa-lg"></i>
                             </button>
                         </span>
                         <input type="number" th:id="${product.id}" value="0" size="2" th:min="'-' + ${product.quantity}"
                                max="99" class="form-control text-xs-center" readonly="true"/>
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary" onclick="up(this)">
+                            <button type="button" class="btn btn-primary" onclick="up(this,true)">
                                 <i class="fa fa-plus fa-lg"></i>
                             </button>
                         </span>
@@ -127,14 +127,14 @@
                         <label for="quantity">Anzahl:</label>
                         <div class="input-group">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary" onclick="down(this)">
+                            <button type="button" class="btn btn-primary" onclick="down(this,false)">
                                 <i class="fa fa-minus fa-lg"></i>
                             </button>
                         </span>
                             <input type="number" value="1" min="1" max="99" class="form-control text-xs-center"
                                    readonly="true" id="quantity" name="quantity"/>
                             <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary" onclick="up(this)">
+                            <button type="button" class="btn btn-primary" onclick="up(this,false)">
                                 <i class="fa fa-plus fa-lg"></i>
                             </button>
                         </span>
@@ -155,18 +155,20 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
 
-    function down(node){
+    function down(node,show){
         var input = node.parentNode.parentNode.getElementsByTagName('input')[0];
         if(parseInt(input.value) > parseInt(input.min)) {
             input.value = parseInt(input.value) - 1;
-            document.getElementById("submitbutton").style.visibility = "visible";
+            if(show)
+                document.getElementById("submitbutton").style.visibility = "visible";
         }
     }
 
-    function up(node){
+    function up(node,show){
         var input = node.parentNode.parentNode.getElementsByTagName('input')[0];
         input.value = parseInt(input.value) + 1;
-        document.getElementById("submitbutton").style.visibility = "visible";
+        if(show)
+            document.getElementById("submitbutton").style.visibility = "visible";
     }
 
     function save(){
