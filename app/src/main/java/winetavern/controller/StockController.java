@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
+import winetavern.model.user.Vintner;
 import winetavern.model.user.VintnerManager;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -51,11 +52,23 @@ public class StockController {
 
     @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price,
-                             @ModelAttribute("category") String category, @ModelAttribute("vintner") String vintner) {
+                             @ModelAttribute("category") String category, @ModelAttribute("vintner") Long vintnerId) {
+
         Product newProduct = new Product(name, Money.of(Float.parseFloat(price), EURO));
         newProduct.addCategory(category);
-        //TODO catch "wein" in category, if so, put this product into vintner set (with name)
         stock.save(new InventoryItem(newProduct, Quantity.of(1)));
+
+        if (category.contains("wein")) { //every wine must be specified with a vintner
+            for (Vintner vintner : vintnerManager.findAll()) {
+                if (vintner.getId().equals(vintnerId)) { //add wine to the selected vintner
+                    vintner.addWine(newProduct);
+                    vintnerManager.save(vintner);
+                } else if (vintner.removeWine(newProduct)) { //remove wine from all other vintners
+                    vintnerManager.save(vintner); //only need to save if vintner was changed
+                }
+            }
+        }
+
         return "redirect:/admin/stock";
     }
 

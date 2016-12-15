@@ -86,7 +86,7 @@
                             <legend>&nbsp;Winzer</legend>
                             <label for="vintner">Name:</label>
                             <select class="form-control" id="vintner" name="vintner">
-                                <option th:each="vintner:${vintners}" th:text="${vintner.name}"></option>
+                                <option th:each="vintner:${vintners}" th:text="${vintner.name}" th:value="${vintner.id}"></option>
                             </select>
                         </fieldset>
                     </form>
