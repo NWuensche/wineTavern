@@ -16,7 +16,7 @@ public class VintnerTests {
         new Vintner(null, 1);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void throwWhenVintnerWithEmptyName() {
         new Vintner("", 1);
     }
