@@ -1,6 +1,5 @@
 package winetavern;
 
-import org.apache.tomcat.jni.Local;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
@@ -25,10 +24,8 @@ import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.*;
 
-import javax.money.MonetaryAmount;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,11 +74,10 @@ public class WineTavernDataInitializer implements DataInitializer{
         if (initializeSamples && !isServiceInDB()) {
             initializeService();
             initializeEvents();
-            initializeStock();
+            initializeStockWithVintners();
             initializeShift();
             initializeDayMenuWithItems();
             initializeExternals();
-            initializeVintners();
         }
     }
 
@@ -142,7 +138,7 @@ public class WineTavernDataInitializer implements DataInitializer{
                 new External("Poetry Slam CLub Dresden", Money.of(50, EURO))));
     }
 
-    private void initializeStock() {
+    private void initializeStockWithVintners() {
         Product white = new Product(nameWhiteWine, Money.of(10, EURO));
         white.addCategory(Category.WHITE_WINE+"");
 
@@ -167,6 +163,17 @@ public class WineTavernDataInitializer implements DataInitializer{
         stock.save(new InventoryItem(cola, Quantity.of(93)));
         stock.save(new InventoryItem(snack, Quantity.of(28)));
         stock.save(new InventoryItem(menu, Quantity.of(17)));
+
+        Vintner vintner1 = new Vintner("Remstalkellerei Weinstadt", 1);
+        Vintner vintner2 = new Vintner("Daniels Weine", 2);
+        Vintner vintner3 = new Vintner("Traubenwunder Berlin", 3);
+
+        vintner1.addWine(red);
+        vintner2.addWine(white);
+
+        vintnerManager.save(vintner1);
+        vintnerManager.save(vintner2);
+        vintnerManager.save(vintner3);
     }
 
     private void initializeExpenseGroups() {
@@ -279,16 +286,6 @@ public class WineTavernDataInitializer implements DataInitializer{
                 shifts.save(shift);
             }
         }
-    }
-
-    private void initializeVintners() {
-        Vintner vintner;
-        vintner = new Vintner("Remstalkellerei Weinstadt", 1);
-        vintnerManager.save(vintner);
-        vintner = new Vintner("Daniels Weine", 2);
-        vintnerManager.save(vintner);
-        vintner = new Vintner("Traubenwunder Berlin", 3);
-        vintnerManager.save(vintner);
     }
 
     private void initializeExternals() {
