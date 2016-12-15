@@ -1,5 +1,6 @@
 package winetavern;
 
+import org.apache.tomcat.jni.Local;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
@@ -25,10 +26,13 @@ import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -39,7 +43,6 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Component
 public class WineTavernDataInitializer implements DataInitializer{
-
     @Autowired private UserAccountManager userAccountManager;
     @Autowired private EmployeeManager employeeManager;
     @Autowired private EventCatalog eventCatalog;
@@ -51,13 +54,25 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private ProductCatalog productCatalog;
     @Autowired private ExternalManager externalManager;
+    @Autowired private VintnerManager vintnerManager;
 
-    private String adminName = "admin";
+    private final String adminName = "admin";
+    private final boolean initializeSamples = true; //set to true to create samples for all entities
+
+    private final String nameRedWine = "Riesling trocken";
+    private final String nameWhiteWine = "Chateau Providence";
+    private final String nameLiquor = "Williams Christ Birnenbrand";
+    private final String nameSoftDrink = "Coca Cola";
+    private final String nameSnack = "Salzstangen";
+    private final String nameMenu = "Käseplatte";
 
     @Override
     public void initialize() {
         if(!isAdminInDB(adminName)) {
             initializeAdmin();
+        }
+
+        if (initializeSamples && !isServiceInDB()) {
             initializeService();
             initializeEvents();
             initializeStock();
@@ -65,53 +80,93 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeExpenseGroups();
             initializeTables();
             initializeDayMenuWithItems();
-            initializeExterns();
+            initializeExternals();
+            initializeVintners();
         }
     }
 
     private void initializeAdmin() {
         UserAccount admin = userAccountManager.create(adminName, "1234", Role.of("ROLE_ADMIN"));
         admin.setFirstname("Hans-Peter");
-        admin.setLastname("Maffay");
-        admin.setEmail("peter.maffay@t-online.de");
+        admin.setLastname("Roch");
+        admin.setEmail("peter.roch@t-online.de");
         userAccountManager.save(admin);
         String birthday = "1979/07/15";
         employeeManager.save(new Employee(admin, "Wundtstraße 7, 01217 Dresden", birthday, PersonTitle.MISTER.getGerman()));
     }
 
     private void initializeService() {
-        UserAccount service = userAccountManager.create("service1", "1234", Role.of("ROLE_SERVICE"));
+        String birthday;
+        UserAccount service = userAccountManager.create("weber", "1234", Role.of("ROLE_SERVICE"));
         service.setFirstname("Sabine");
         service.setLastname("Weber");
         service.setEmail("sabine.weber@coolmail.com");
         userAccountManager.save(service);
-        String birthday = "1998/05/12";
+        birthday = "1998/05/12";
         employeeManager.save(new Employee(service, "Engelweg 5, 66666 Downtown", birthday, PersonTitle.MISSES.getGerman()));
+
+        UserAccount cook = userAccountManager.create("gauck", "1234", Role.of("ROLE_COOK"));
+        cook.setFirstname("Martin");
+        cook.setLastname("Gauck");
+        cook.setEmail("martin.gauck@mymail.com");
+        userAccountManager.save(cook);
+        birthday = "1966/09/14";
+        employeeManager.save(new Employee(cook, "Sägeweg 51, 12425 Michelshausen", birthday, PersonTitle.MISTER.getGerman()));
+
+        UserAccount accountant = userAccountManager.create("ostertag", "1234", Role.of("ROLE_COOK"));
+        accountant.setFirstname("Alexandra");
+        accountant.setLastname("Ostertag");
+        accountant.setEmail("a.ostertag@web.com");
+        userAccountManager.save(accountant);
+        birthday = "1983/05/01";
+        employeeManager.save(new Employee(accountant, "Fichtengasse 9, 07485 Dettau", birthday, PersonTitle.MISSES.getGerman()));
     }
 
     private boolean isAdminInDB(String adminName) {
         return userAccountManager.findByUsername(adminName).isPresent();
     }
 
-    private void initializeEvents() {
-        eventCatalog.save(new Event("Go hard or go home - Ü80 Party", Money.of(7, EURO),
-                new TimeInterval(LocalDateTime.of(2016, 9, 11, 21, 30), LocalDateTime.of(2016, 9, 11, 23, 30)),
-                "SW4G ist ein muss!", new External("der Neue", Money.of(180, EURO))));
+    private boolean isServiceInDB() {
+        return userAccountManager.findByUsername("weber").isPresent();
+    }
 
-        eventCatalog.save(new Event("Grillabend mit Musik von Barny dem Barden", Money.of(7, EURO),
-                new TimeInterval(LocalDateTime.of(2016, 11, 11, 19, 30), LocalDateTime.of(2016, 11, 11, 23, 30)),
-                "Es wird gegrillt und überteuerter Wein verkauft.", new External("der Neue", Money.of(180, EURO))));
+    private void initializeEvents() {
+        eventCatalog.save(new Event("Buchvorstellung: Harry Potter - The Cursed Child", Money.of(7, EURO),
+                new TimeInterval(LocalDate.now().atTime(19, 30), LocalDate.now().atTime(21, 0)),
+                "Eine liebevolle Vorschau des neuen Harry Potter Buches. Dazu gibt es köstlichen Wein und Kaminfeuer.",
+                new External("Maria Sanfler", Money.of(180, EURO))));
+
+        eventCatalog.save(new Event("Poetry Slam", Money.of(7, EURO),
+                new TimeInterval(LocalDate.now().atTime(16, 0), LocalDate.now().atTime(19, 0)),
+                "Moderne Poesie gibt es nicht? - Falsch! Studenten der TU Dresden zeigen ihr Können.",
+                new External("Poetry Slam CLub Dresden", Money.of(50, EURO))));
     }
 
     private void initializeStock() {
-        Product vodka = new Product("Vodka", Money.of(12.50, EURO));
-        vodka.addCategory(Category.LIQUOR.toString());
+        Product white = new Product(nameWhiteWine, Money.of(10, EURO));
+        white.addCategory(Category.WHITE_WINE+"");
 
-        Product brandstifter = new Product("Berliner Brandstifter", Money.of(33.99, EURO));
-        brandstifter.addCategory(Category.LIQUOR.toString());
+        Product red = new Product(nameRedWine, Money.of(35, EURO));
+        red.addCategory(Category.RED_WINE+"");
 
-        stock.save(new InventoryItem(vodka, Quantity.of(15)));
-        stock.save(new InventoryItem(brandstifter, Quantity.of(93)));
+        Product liquor = new Product(nameLiquor, Money.of(14.5, EURO));
+        liquor.addCategory(Category.LIQUOR+"");
+
+        Product cola = new Product(nameSoftDrink, Money.of(1.5, EURO));
+        cola.addCategory(Category.SOFT_DRINK+"");
+
+        Product snack = new Product(nameSnack, Money.of(3, EURO));
+        snack.addCategory(Category.SNACK+"");
+
+        Product menu = new Product(nameMenu, Money.of(10, EURO));
+        menu.addCategory(Category.MENU+"");
+
+        stock.save(new InventoryItem(white, Quantity.of(13)));
+        stock.save(new InventoryItem(red, Quantity.of(24)));
+        stock.save(new InventoryItem(liquor, Quantity.of(8)));
+        stock.save(new InventoryItem(cola, Quantity.of(93)));
+        stock.save(new InventoryItem(snack, Quantity.of(28)));
+        stock.save(new InventoryItem(menu, Quantity.of(17)));
     }
 
     private void initializeExpenseGroups() {
@@ -142,45 +197,102 @@ public class WineTavernDataInitializer implements DataInitializer{
     }
 
     private void initializeDayMenuWithItems() {
-        LocalDate day = LocalDate.of(2013, 10, 30);
-        DayMenu dayMenu = new DayMenu(day);
+        DayMenu dayMenu = new DayMenu(LocalDate.now());
         dayMenuRepository.save(dayMenu);
 
-        DayMenuItem vodka = new DayMenuItem("Vodka 2cl vom Fass", "really good", Money.of(2, "EUR"), 35.0);
-        vodka.setProduct(Helper.getFirstItem(productCatalog.findByName("Vodka")));
-        vodka.addDayMenu(dayMenu);
-        dayMenuItemRepository.save(vodka);
+        DayMenuItem smallWhiteWine = new DayMenuItem(nameWhiteWine + " 0,2l", nameWhiteWine + ": Glas",
+                Money.of(4.75, EURO), 0.75/0.2);
+        smallWhiteWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameWhiteWine)));
+        smallWhiteWine.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(smallWhiteWine);
 
-        DayMenuItem vodka2cl = new DayMenuItem("Vodka 2cl", "Kleiner Vodka für zwischendurch", Money.of(1.80, "EUR"), 35.0);
-        vodka2cl.setProduct(Helper.getFirstItem(productCatalog.findByName("Vodka")));
-        vodka2cl.addDayMenu(dayMenu);
-        dayMenuItemRepository.save(vodka2cl);
+        DayMenuItem bigWhiteWine = new DayMenuItem(nameWhiteWine + " 0.75l", nameWhiteWine + ": Flasche",
+                Money.of(17, EURO), 1.0);
+        bigWhiteWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameWhiteWine)));
+        bigWhiteWine.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(bigWhiteWine);
 
-        DayMenuItem vodka4cl = new DayMenuItem("Vodka 4cl", "Großer Vodka für coole Leute", Money.of(2.50, "EUR"), 12.0);
-        vodka4cl.setProduct(Helper.getFirstItem(productCatalog.findByName("Vodka")));
-        vodka4cl.addDayMenu(dayMenu);
-        dayMenuItemRepository.save(vodka4cl);
+        DayMenuItem smallRedWine = new DayMenuItem(nameRedWine + " 0,2l", nameRedWine + ": Glas",
+                Money.of(12.99, EURO), 0.75/0.2);
+        smallRedWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameRedWine)));
+        smallRedWine.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(smallRedWine);
 
-        DayMenuItem berlinerBrandstifter = new DayMenuItem("Berliner Brandstifter", "der beste", Money.of(1.99, "EUR"), 12.0);
-        berlinerBrandstifter.setProduct(Helper.getFirstItem(productCatalog.findByName("Berliner Brandstifter")));
-        berlinerBrandstifter.addDayMenu(dayMenu);
-        dayMenuItemRepository.save(berlinerBrandstifter);
+        DayMenuItem bigRedWine = new DayMenuItem(nameRedWine + " 0,75l", nameRedWine + ": Flasche",
+                Money.of(45, EURO), 1.0);
+        bigRedWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameRedWine)));
+        bigRedWine.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(bigRedWine);
+
+        DayMenuItem smallLiquor = new DayMenuItem(nameLiquor + " 2cl", nameLiquor + ": Kurzer",
+                Money.of(2.99, EURO), 0.75/0.02);
+        smallLiquor.setProduct(Helper.getFirstItem(productCatalog.findByName(nameLiquor)));
+        smallLiquor.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(smallLiquor);
+
+        DayMenuItem bigLiquor = new DayMenuItem(nameLiquor + " 4cl", nameLiquor + ": Doppelter",
+                Money.of(4.99, EURO), 0.75/0.04);
+        bigLiquor.setProduct(Helper.getFirstItem(productCatalog.findByName(nameLiquor)));
+        bigLiquor.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(bigLiquor);
+
+        DayMenuItem smallSoftDrink = new DayMenuItem(nameSoftDrink + " 0,2l", nameSoftDrink + ": klein",
+                Money.of(2.99, EURO), 1/0.2);
+        smallSoftDrink.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSoftDrink)));
+        smallSoftDrink.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(smallSoftDrink);
+
+        DayMenuItem mediumSoftDrink = new DayMenuItem(nameSoftDrink + " 0,4l", nameSoftDrink + ": mittel",
+                Money.of(4.29, EURO), 1/0.4);
+        mediumSoftDrink.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSoftDrink)));
+        mediumSoftDrink.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(mediumSoftDrink);
+
+        DayMenuItem bigSoftDrink = new DayMenuItem(nameSoftDrink + " 0,8l", nameSoftDrink + ": groß",
+                Money.of(5.99, EURO), 1/0.8);
+        bigSoftDrink.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSoftDrink)));
+        bigSoftDrink.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(bigSoftDrink);
+
+        DayMenuItem snack = new DayMenuItem(nameSnack, nameSnack,
+                Money.of(1.99, EURO), 1/8.0);
+        snack.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSnack)));
+        snack.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(snack);
+
+        DayMenuItem menu = new DayMenuItem(nameMenu, nameMenu,
+                Money.of(5.99, EURO), 1.0);
+        menu.setProduct(Helper.getFirstItem(productCatalog.findByName(nameMenu)));
+        menu.addDayMenu(dayMenu);
+        dayMenuItemRepository.save(menu);
     }
 
-    /**
-     * Should be deleted in the final program
-     */
     private void initializeShift() {
-        LocalDateTime start = LocalDateTime.of(2016, 11, 11, 11, 11);
-        shifts.save(new Shift(new TimeInterval(start, start.plusHours(3)),
-                Helper.getFirstItem(employeeManager.findAll())));
+        Random random = new Random();
+        LocalDate start = LocalDate.now().with(DayOfWeek.TUESDAY);
+        LocalTime openingTime = LocalTime.of(10, 0);
+        LocalTime closingTime = LocalTime.of(23, 0);
+        for (int i = 0; i < 6; i++) {
+            for (Employee employee : employeeManager.findAll()) {
+                Shift shift = new Shift(new TimeInterval(start.plusDays(i).atTime(openingTime).plusMinutes(15 * random.nextInt(16)),
+                        start.plusDays(i).atTime(closingTime.minusMinutes(15 * random.nextInt(16)))), employee);
+                shifts.save(shift);
+            }
+        }
     }
 
-    public void initializeExterns() {
-        MonetaryAmount wage = Money.of(300, EURO);
-        External external = new External("DJ Cool", wage);
+    private void initializeVintners() {
+        Vintner vintner;
+        vintner = new Vintner("Remstalkellerei Weinstadt", 1);
+        vintnerManager.save(vintner);
+        vintner = new Vintner("Daniels Weine", 2);
+        vintnerManager.save(vintner);
+        vintner = new Vintner("Traubenwunder Berlin", 3);
+        vintnerManager.save(vintner);
+    }
 
-        externalManager.save(external);
+    private void initializeExternals() {
+        externalManager.save(new External("Posaunenchor Dresden", Money.of(300, EURO)));
     }
 
 }

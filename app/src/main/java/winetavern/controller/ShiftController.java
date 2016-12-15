@@ -9,18 +9,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import winetavern.Helper;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
-import winetavern.model.user.PersonManager;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author Louis
@@ -31,11 +33,9 @@ public class ShiftController {
     @NonNull @Autowired private ShiftRepository shifts;
     @NonNull @Autowired private EmployeeManager employees;
     @NonNull @Autowired private BusinessTime time;
-    @NonNull @Autowired private PersonManager persons;
 
     @RequestMapping("/admin/management/shifts")
     public String showShifts(Model model) {
-
         TimeInterval week = getWeekInterval(time.getTime()); //get the week interval out of businessTime
         List<Shift> shiftsOfWeek = getShiftsOfWeek(week);    //get all shifts in this interval
 
@@ -53,6 +53,7 @@ public class ShiftController {
     private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
+        Map<Employee, String> colorMap = getColorMap();
 
         for (Shift shift : shifts.findAll()) { //add all shifts
             if (noComma)
@@ -62,21 +63,70 @@ public class ShiftController {
 
             TimeInterval interval = shift.getInterval();
             calendarString = calendarString +
-                    "{\"title\":\"" + shift.getEmployee() +
-                    ",\"start\":\"" + interval.getStart() +
+                    "{\"title\":\"" + shift.getEmployee().getUserAccount().getFirstname().substring(0, 1) +
+                                      shift.getEmployee().getUserAccount().getLastname().substring(0, 1) +
+                    "\",\"start\":\"" + interval.getStart() +
                     "\",\"end\":\"" + interval.getEnd() +
+                    "\",\"color\":\"" + colorMap.get(shift.getEmployee()) +
                     "\",\"url\":\"" + "/admin/management/shifts/change/" + shift.getId() +
-                    "\",\"description\":\"" + shift.getEmployee().getDisplayNameOfRole() + "\"}";
+                    "\",\"description\":\"" + shift.getEmployee() + "\"}";
         }
 
         return calendarString + "]";
     }
 
+    /**
+     * attaches one color to every employee, so it can be displayed in the calendar
+     * @return String color - format: "rgb(r, g, b)"
+     */
+    private Map<Employee, String> getColorMap() {
+        List<Employee> employeeList = Helper.convertToList(employees.findAll());
+        Map<Employee, String> res = new HashMap<>();
+
+        for (int i = 0; i < employeeList.size(); i++) {
+            Color c = Color.getHSBColor((float) i / employeeList.size(), 0.75f, 0.85f);
+            res.put(employeeList.get(i), "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")");
+        }
+
+        return res;
+    }
+
+    @RequestMapping("/admin/management/shifts/add")
+    public String addShiftData(Model model){
+        model.addAttribute("calendarString", buildCalendarString());
+        model.addAttribute("employees",employees.findAll());
+        model.addAttribute("time",getTimes());
+        return "shifts";
+    }
+
+    @PostMapping("/admin/management/shifts/add")
+    public String addShift(@RequestParam("employee") Long employeeId,
+                           @RequestParam("date") String dateString, @RequestParam("start") String startString,
+                           @RequestParam("end") String endString) {
+
+        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalTime start = LocalTime.parse(startString, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime end = LocalTime.parse(endString, DateTimeFormatter.ofPattern("HH:mm"));
+
+        shifts.save(new Shift(new TimeInterval(date.atTime(start), date.atTime(end)), employees.findOne(employeeId).get()));
+        return "redirect:/admin/management/shifts";
+    }
+
+    @RequestMapping("/admin/management/shifts/remove/{shiftid}")
+    public String changeShift(@PathVariable Long shiftid) {
+        Shift shift = shifts.findOne(shiftid).get();
+        shifts.delete(shift);
+        return "redirect:/admin/management/shifts";
+    }
+
     @RequestMapping("/admin/management/shifts/change/{shiftid}")
-    public String changeShiftData(@PathVariable Long shiftid, Model model) {
-        model.addAttribute("shiftdata",shifts.findOne(shiftid).get());
+    public String changeShift(@PathVariable Long shiftid, Model model) {
+        Shift shift = shifts.findOne(shiftid).get();
+        model.addAttribute("shiftdata",shift);
+        model.addAttribute("date", Helper.localDateTimeToDateString(shift.getInterval().getStart()));
         model.addAttribute("time",getTimes());
         model.addAttribute("employees",employees.findAll());
+        model.addAttribute("calendarString", buildCalendarString());
         return "shifts";
     }
 

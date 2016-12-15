@@ -29,5 +29,6 @@ public class GlobalAttributesController {
         model.addAttribute("businessTime", Helper.localDateTimeToJavascriptDateString(businessTime.getTime()));
         model.addAttribute("minutes",businessTime.getTime().getMinute());
         model.addAttribute("hours",businessTime.getTime().getHour());
+        model.addAttribute("helper", Helper.class);
     }
 }

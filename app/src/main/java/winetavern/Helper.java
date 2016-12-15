@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.user.*;
 
+import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -68,5 +69,15 @@ public class Helper {
     public static String localDateTimeToJavascriptDateString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss").withLocale(new Locale("en"));
         return dateTime.format(formatter);
+    }
+
+    public static String moneyToEuroString(MonetaryAmount money) {
+        String res = Math.round(money.getNumber().doubleValue() * 100) / 100.0 + "";
+        String[] splittetValue = res.split("\\.");
+
+        if (splittetValue[1].length() == 1)
+            return res + "0€";
+
+        return res + "€";
     }
 }
