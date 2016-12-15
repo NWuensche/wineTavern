@@ -2,11 +2,13 @@ package winetavern.model.menu;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.IsNot.*;
 import static org.mockito.Mockito.*;
 
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
+import winetavern.Helper;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -45,6 +47,14 @@ public class DayMenuItemTests {
 
         assertThat(dayMenuItem.getDayMenus().size(), is(1));
         assertThat(dayMenuItem.getDayMenus().contains(mockedDayMenu), is(false));
+    }
+
+    @Test
+    public void cloneRight() {
+        DayMenu mockedDayMenu = mock(DayMenu.class);
+        DayMenuItem clonedItem = dayMenuItem.clone(mockedDayMenu);
+        assertThat(clonedItem, is(not(dayMenuItem)));
+        assertThat(Helper.getFirstItem(clonedItem.getDayMenus()), is(mockedDayMenu));
     }
 
 }
