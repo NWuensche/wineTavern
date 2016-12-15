@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import lombok.NonNull;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import winetavern.model.stock.ProductCatalog;
+import winetavern.model.user.VintnerManager;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -22,19 +24,15 @@ import static org.salespointframework.core.Currencies.EURO;
 
 @Controller
 public class StockController {
-    private final Inventory<InventoryItem> stock;
-    private final ProductCatalog products;
-
-    @Autowired
-    public StockController(Inventory<InventoryItem> stock, ProductCatalog products) {
-        this.stock = stock;
-        this.products = products;
-    }
+    @NonNull @Autowired private VintnerManager vintnerManager;
+    @NonNull @Autowired private Inventory<InventoryItem> stock;
+    @NonNull @Autowired private ProductCatalog products;
 
     @RequestMapping("/admin/stock")
     public String manageStock(Model model) {
         model.addAttribute("productAmount", stock.count());
         model.addAttribute("stockItems", stock.findAll());
+        model.addAttribute("vintners",vintnerManager.findAll());
         return "stock";
     }
 
@@ -52,9 +50,11 @@ public class StockController {
     }
 
     @RequestMapping(value = "/admin/stock/addProduct", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price, @ModelAttribute("category") String category) {
+    public String addProduct(@ModelAttribute("name") String name, @ModelAttribute("price") String price,
+                             @ModelAttribute("category") String category, @ModelAttribute("vintner") String vintner) {
         Product newProduct = new Product(name, Money.of(Float.parseFloat(price), EURO));
         newProduct.addCategory(category);
+        //TODO catch "wein" in category, if so, put this product into vintner set (with name)
         stock.save(new InventoryItem(newProduct, Quantity.of(1)));
         return "redirect:/admin/stock";
     }
