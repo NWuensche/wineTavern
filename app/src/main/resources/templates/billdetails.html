@@ -18,7 +18,7 @@
     <div class="heading">
         <div class="row">
             <div class="col-xs-4">
-                <h1>Rechnung (<span th:text="${bill.price.number + '€'}"></span>)</h1>
+                <h1>Rechnung (<span th:text="${helper.moneyToEuroString(bill.price)}"></span>)</h1>
             </div>
             <div class="col-xs-4">
                 <p>
@@ -47,7 +47,7 @@
         </thead>
         <tbody>
             <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
-                <td><span th:utext="${product.item.name} + ' (' + ${product.item.price.number.doubleValue()} + '€)'"></span></td>
+                <td><span th:utext="${product.item.name} + ' (' + ${helper.moneyToEuroString(product.item.price)}"></span></td>
                 <td>
                     <div style="font-size:1.8rem;">
                         <b><span th:text="${product.quantity}" class="product-quantity"></span></b>
@@ -93,7 +93,7 @@
             <a th:onclick="@{'showModal(' + ${product.id} + ',\'' + ${product.name} + '\');'}">
                 <div class="card-block">
                     <h3 class="card-title" th:text="${product.name}">Name</h3>
-                    <p class="card-text" th:text="${product.price}">Preis</p>
+                    <p class="card-text" th:text="${helper.moneyToEuroString(product.price)}">Preis</p>
                 </div>
             </a>
             <div class="bill-plus"><i class="fa fa-plus fa-4x" aria-hidden="true"></i>

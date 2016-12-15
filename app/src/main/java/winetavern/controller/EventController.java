@@ -164,7 +164,7 @@ public class EventController {
             if(event.getPrice().getNumber().doubleValue() == 0)
                 calendarString += "<br/>Freier Eintritt!\"}";
             else
-                calendarString += "<br/>Eintritt: " + event.getPrice().getNumber().doubleValue() + "€" + "\"}";
+                calendarString += "<br/>Eintritt: " + Helper.moneyToEuroString(event.getPrice())+ "\"}";
         }
 
         return calendarString + "]";
