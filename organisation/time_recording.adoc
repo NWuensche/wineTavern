@@ -114,6 +114,13 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 09.12.2016 | 14:00 | 17:00 | Fixed Money bug, event calendar
 | 11.12.2016 | 09:00 | 10:45 | added Vintners
 | 11.12.2016 | 14:00 | 18:30 | added automatic event creation
+| 13.12.2016 | 11:00 | 14:00 | Schichten
+| 13.12.2016 | 15:30 | 18:00 | Schichten
+| 14.12.2016 | 11:00 | 12:00 | Merge, Schichten, DataInitialzer für die Präsentation
+| 14.12.2016 | 16:00 | 17:00 | Merge, Schichten, DataInitialzer für die Präsentation
+| 14.12.2016 | 21:00 | 23:30 | Automatisches PDF als Tageskarte
+| 15.12.2016 | 10:00 | 14:30 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen
+| 15.12.2016 | 17:00 | 19:00 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen, Präsentation vorbereiten
 |===
 
 == Niklas
