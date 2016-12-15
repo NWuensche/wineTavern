@@ -3,6 +3,7 @@ package winetavern.controller;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.time.BusinessTime;
@@ -20,9 +21,8 @@ import winetavern.model.menu.DayMenuRepository;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import com.itextpdf.text.pdf.PdfWriter;
-
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -116,10 +116,15 @@ public class DayMenuManager {
         return newDayMenu;
     }
 
+    /**
+     * prints all daymenu items in a pdf file.
+     * @param id the daymenu id
+     */
     @RequestMapping("/admin/menu/print/{pid}")
     public String printMenu(@PathVariable("pid") Long id) {
         DayMenu dayMenu = dayMenuRepository.findOne(id).get();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         Document document = new Document();
         Font boldFont = new Font();
         boldFont.setStyle(Font.BOLD);
@@ -131,13 +136,18 @@ public class DayMenuManager {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("src\\main\\resources\\daymenu\\daymenu.pdf"));
             document.open();
 
-            Paragraph title = new Paragraph("Zur fröhlichen Reblaus\n\n", catFont);
+            //setting pdf attributes
+            document.addAuthor("Zur Frölichen Reblaus");
+            document.addCreator("WinetavernSystem");
+            document.addTitle("Tageskarte " + dayMenu.getDay().format(formatter));
+
+            Paragraph title = new Paragraph("Zur Fröhlichen Reblaus\n\n", catFont); //title
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
             Map<String, List<DayMenuItem>> sortedItems = new HashMap<>();
 
-            for (DayMenuItem item : dayMenu.getDayMenuItems()) {
+            for (DayMenuItem item : dayMenu.getDayMenuItems()) { //map every item to its category
                 String category = Helper.getFirstItem(item.getProduct().getCategories());
                 if (!sortedItems.containsKey(category))
                     sortedItems.put(category, new LinkedList<>());
@@ -145,14 +155,14 @@ public class DayMenuManager {
                 sortedItems.get(category).add(item);
             }
 
-            for (String category : sortedItems.keySet()) {
+            for (String category : sortedItems.keySet()) { //for each category
                 List<DayMenuItem> itemList = sortedItems.get(category);
-                itemList.sort(Comparator.comparing(DayMenuItem::getName));
+                itemList.sort(Comparator.comparing(DayMenuItem::getName)); //sort items alphabetically
 
-                PdfPTable menuItems = new PdfPTable(2);
-                menuItems.setWidthPercentage(100);
+                PdfPTable menuItems = new PdfPTable(2); //invisible table for daymenuItem|price
+                menuItems.setWidthPercentage(80);
 
-                for (DayMenuItem item : itemList) {
+                for (DayMenuItem item : itemList) { //for each item in this category
                     PdfPCell cellName = new PdfPCell(new Paragraph(item.getName()));
                     cellName.setHorizontalAlignment(Element.ALIGN_LEFT);
                     cellName.setBorderWidth(0);
@@ -163,9 +173,12 @@ public class DayMenuManager {
                     menuItems.addCell(cellPrice);
                 }
 
-                Paragraph categoryTitle = new Paragraph("\n" + category, boldFont);
-                categoryTitle.setSpacingAfter(5);
-                document.add(categoryTitle);
+                if (itemList.size() > 0) { //only print category if it contains items
+                    Paragraph categoryTitle = new Paragraph("\n" + category, boldFont);
+                    categoryTitle.setSpacingAfter(5);
+                    categoryTitle.setIndentationLeft(40);
+                    document.add(categoryTitle); //add the category title
+                }
                 document.add(menuItems);
             }
 
