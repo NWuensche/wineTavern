@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="page">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:include="links::links">
 
-    <title>Dashbord</title>
+    <title>Weinstube</title>
 
 </head>
-<body>
-    Wilkommen du gammliger Besucher :)
-    <a href="/login">Zum login</a>
+<body class="frontend">
+<header>
+    <nav class="navbar navbar-light navbar-fixed-top">
+        <div class="row ">
+            <div class=" offset-xs-1 col-xs-10">
+                <div class="nav navbar-nav float-xs-right">
+                    <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="#">Features</a>
+                    <a class="nav-item nav-link" href="#">Pricing</a>
+                    <a class="nav-item nav-link" href="#">About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="main container-fluid">
+    <div class="row">
+        <div class="col-xs-12 no-gutter">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <img src="/resources/img/wein.png" alt="First slide"/>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/resources/img/landschaft.png" alt="Second slide"/>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/resources/img/weinflasche.png" alt="Second slide"/>
+                    </div>
+                </div>
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="icon-prev" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="icon-next" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <section class=""
+</main>
+
+<footer>
+
+</footer>
 </body>
 </html>
