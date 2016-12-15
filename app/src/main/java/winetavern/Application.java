@@ -43,7 +43,7 @@ public class Application {
             http.csrf().disable();
 
             http.authorizeRequests().
-                    antMatchers("/accountancy/**").hasAnyRole("ADMIN, ACCOUNTANCY").
+                    antMatchers("/accountancy/**").hasAnyRole("ADMIN, ACCOUNTANT").
                     antMatchers("/service/**").hasAnyRole("ADMIN, SERVICE").
                     antMatchers("/kitchen/**").hasAnyRole("ADMIN, COOK").
                     antMatchers("/admin/**").hasRole("ADMIN").

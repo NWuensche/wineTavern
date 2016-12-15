@@ -113,7 +113,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         birthday = "1966/09/14";
         employeeManager.save(new Employee(cook, "Sägeweg 51, 12425 Michelshausen", birthday, PersonTitle.MISTER.getGerman()));
 
-        UserAccount accountant = userAccountManager.create("ostertag", "1234", Role.of("ROLE_COOK"));
+        UserAccount accountant = userAccountManager.create("ostertag", "1234", Role.of("ROLE_ACCOUNTANT"));
         accountant.setFirstname("Alexandra");
         accountant.setLastname("Ostertag");
         accountant.setEmail("a.ostertag@web.com");
