@@ -255,7 +255,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         dayMenuItemRepository.save(bigSoftDrink);
 
         DayMenuItem snack = new DayMenuItem(nameSnack, nameSnack,
-                Money.of(1.99, EURO), 1/8.0);
+                Money.of(1.99, EURO), 8.0);
         snack.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSnack)));
         snack.addDayMenu(dayMenu);
         dayMenuItemRepository.save(snack);
