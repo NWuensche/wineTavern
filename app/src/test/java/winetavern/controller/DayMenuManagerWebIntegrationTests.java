@@ -13,6 +13,9 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.salespointframework.catalog.Catalog;
 import org.salespointframework.catalog.Product;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,7 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private ProductCatalog productCatalog;
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private DayMenuRepository dayMenuRepository;
+    @Autowired private Inventory<InventoryItem> stock;
 
     private DayMenu dayMenu;
     private DayMenuItem dayMenuItem;
@@ -45,6 +49,9 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
         Product prod = new Product("Prod", Money.of(3, EURO));
         prod.addCategory(Category.MENU.toString());
         productCatalog.save(prod);
+
+        InventoryItem iItem = new InventoryItem(prod, Quantity.of(3.0));
+        stock.save(iItem);
 
         dayMenuItem = new DayMenuItem("Name", "Desc", Money.of(3, EURO), 4.0);
         dayMenuItem.setProduct(prod);
