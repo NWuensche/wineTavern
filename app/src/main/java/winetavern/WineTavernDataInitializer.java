@@ -70,6 +70,8 @@ public class WineTavernDataInitializer implements DataInitializer{
     public void initialize() {
         if(!isAdminInDB(adminName)) {
             initializeAdmin();
+            initializeExpenseGroups();
+            initializeTables();
         }
 
         if (initializeSamples && !isServiceInDB()) {
@@ -77,8 +79,6 @@ public class WineTavernDataInitializer implements DataInitializer{
             initializeEvents();
             initializeStock();
             initializeShift();
-            initializeExpenseGroups();
-            initializeTables();
             initializeDayMenuWithItems();
             initializeExternals();
             initializeVintners();
@@ -255,7 +255,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         dayMenuItemRepository.save(bigSoftDrink);
 
         DayMenuItem snack = new DayMenuItem(nameSnack, nameSnack,
-                Money.of(1.99, EURO), 1/8.0);
+                Money.of(1.99, EURO), 8.0);
         snack.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSnack)));
         snack.addDayMenu(dayMenu);
         dayMenuItemRepository.save(snack);
