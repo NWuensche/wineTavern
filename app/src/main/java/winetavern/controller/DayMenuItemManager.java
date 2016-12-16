@@ -107,6 +107,7 @@ public class DayMenuItemManager {
         Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
         if (pathVariablesValid(dayMenuId, itemId) == false) {
             mvc.setViewName("error");
+            return mvc;
         }
 
         DayMenuItem dayMenuItem = optionalDayMenuItem.get();
