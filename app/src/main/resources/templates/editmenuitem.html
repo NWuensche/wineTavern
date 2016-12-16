@@ -19,39 +19,39 @@
 
     <h2>Oder neu erstellen:</h2>
     <div class="col-xs-8 offset-xs-2">
-        <form th:action="@{'/admin/menuitem/edit/' + ${menu.id} + '/' + ${menuitem.id}}" th:object="${menuitem}" method="post"> 
+        <form th:action="@{'/admin/menuitem/edit/' + ${menu.id} + '/' + ${menuitem.id}}" th:object="${menuitem}" method="post">
             <div class="form__bg">
                 <div class="dark__bg">
                     <h2>Schritt 1: Produkt auswählen</h2>
                 </div>
 
-                <div class="form-group"> 
-                    <label for="menuItem">Example select</label> 
-                    <select class="form-control" id="menuItem" th:name="product"> 
-                        <option th:each="onestock : ${stock.findAll()}" th:value="${onestock.product.getId()}" th:text="${onestock.product.name}"> </option>
-                    </select> 
+                <div class="form-group">
+                    <label for="menuItem">Example select</label>
+                    <select class="form-control" id="menuItem" th:name="product">
+                        <option th:each="onestock : ${stock.findAll()}" th:value="${onestock.product.getId()}" th:text="${onestock.product.name}"></option>
+                    </select>
                 </div>
 
-                 <div class="dark__bg">
+                <div class="dark__bg">
                     <h2>Schritt 2: Details angeben</h2>
                 </div>
-                <div class="form-group"> 
-                    <label for="formGroupExampleInput">Name</label> 
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Name</label>
                     <input type="text" class="form-control" id="formGroupExampleInput" th:value="${menuitem.name}"
-                           th:name="name"/> 
+                           th:name="name"/>
                 </div>
-                <div class="form-group"> 
-                    <label for="price">Preis</label> 
+                <div class="form-group">
+                    <label for="price">Preis</label>
                     <input type="text" class="form-control" id="price" th:value="${menuitem.price.getNumber()}"
-                           th:name="price"/> 
+                           th:name="price"/>
                 </div>
-                <div class="form-group"> 
-                    <label for="exampleTextarea">Beschreibung</label> 
+                <div class="form-group">
+                    <label for="exampleTextarea">Beschreibung</label>
                     <textarea class="form-control" id="exampleTextarea" rows="3" th:text="${menuitem.description}"
-                              th:name="description"></textarea> 
+                              th:name="description"></textarea>
                 </div>
-                <div class="form-group"> 
-                    <label for="exampleTextarea">Anzahl aus einem Produkt</label> 
+                <div class="form-group">
+                    <label for="exampleTextarea">Anzahl aus einem Produkt</label>
                     <input type="text" class="form-control" id="formGroupExampleInput"
                            th:value="${menuitem.quantityPerProduct}"
                            th:name="quantityPerProduct"

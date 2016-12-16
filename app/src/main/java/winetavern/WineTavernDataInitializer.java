@@ -194,11 +194,7 @@ public class WineTavernDataInitializer implements DataInitializer{
         deskList.add(new Desk("7", 4));
         deskList.add(new Desk("8", 3));
         deskList.add(new Desk("9", 4));
-
-
-        //Bar
-        //for(int i = 1; i <= 7; i++)
-        //    deskList.add(new Desk("B" + String.valueOf(i), 1));
+        deskList.add(new Desk("Bar", 7));
 
         deskRepository.save(deskList);
     }
