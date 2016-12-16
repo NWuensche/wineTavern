@@ -1,5 +1,6 @@
 package winetavern.controller;
 
+import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
@@ -8,13 +9,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.javamoney.moneta.Money;
 import org.junit.Before;
+import org.salespointframework.catalog.Catalog;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.model.menu.DayMenu;
+import winetavern.model.menu.DayMenuItem;
+import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
+import winetavern.model.stock.Category;
+import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
@@ -25,14 +36,29 @@ import java.util.Optional;
  */
 public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTests {
 
-    @Autowired private DayMenuManager dayMenuManager;
+    @Autowired private ProductCatalog productCatalog;
+    @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private DayMenuRepository dayMenuRepository;
+    @Autowired private Inventory<InventoryItem> stock;
 
     private DayMenu dayMenu;
+    private DayMenuItem dayMenuItem;
 
     @Before
     public void before() {
+        Product prod = new Product("Prod", Money.of(3, EURO));
+        prod.addCategory(Category.MENU.toString());
+        productCatalog.save(prod);
+
+        InventoryItem iItem = new InventoryItem(prod, Quantity.of(3.0));
+        stock.save(iItem);
+
+        dayMenuItem = new DayMenuItem("Name", "Desc", Money.of(3, EURO), 4.0);
+        dayMenuItem.setProduct(prod);
+        dayMenuItemRepository.save(dayMenuItem);
+
         dayMenu = new DayMenu(LocalDate.of(2016,11,11));
+        dayMenu.addMenuItem(dayMenuItem);
         dayMenuRepository.save(dayMenu);
     }
 
@@ -111,6 +137,15 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
                 .andExpect(view().name("editdaymenu"))
                 .andExpect(model().attribute("daymenu", dayMenu))
                 .andExpect(model().attributeExists("stock"));
+    }
+
+    @Test
+    public void pdfRight() throws Exception {
+        RequestBuilder request = post("/admin/menu/print/" + dayMenu.getId())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(request)
+                .andExpect(view().name("daymenupdf"));
     }
 
 }

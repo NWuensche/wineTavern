@@ -143,7 +143,6 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void deleteItemRight() throws Exception {
-
         dayMenuItem.addDayMenu(dayMenu);
 
         RequestBuilder request = post("/admin/menuitem/remove/"+
@@ -155,6 +154,74 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
 
         assertThat(dayMenuItem.getDayMenus().contains(dayMenu), is(false));
         //  assertThat(dayMenu.contains(dayMenuItem), is(false));
+    }
+
+    @Test
+    public void editMenuItemRightPost() throws Exception{
+        dayMenu.addMenuItem(dayMenuItem);
+        Product newProduct = new Product("product", Money.of(4,EURO));
+
+        RequestBuilder request = post("/admin/menuitem/edit/"+
+                dayMenu.getId().toString() + "/" +
+                dayMenuItem.getId().toString())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("product", newProduct.toString())
+                .param("name", "Neu")
+                .param("price", Money.of(5, EURO).toString())
+                .param("description", "New Desc")
+                .param("quantityPerProduct", "" + 10)
+                .param("enabled", new Boolean(true).toString());
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(dayMenuItemRepository.findOne(dayMenuItem.getId()).isPresent(), is(true));
+        assertThat(dayMenuItemRepository.findOne(dayMenuItem.getId()).get().getName(), is("Neu"));
+    }
+
+    @Test
+    public void editMenuItemRightGet() throws Exception{
+        dayMenu.addMenuItem(dayMenuItem);
+
+        RequestBuilder request = get("/admin/menuitem/edit/"+
+                dayMenu.getId().toString() + "/" +
+                dayMenuItem.getId().toString())
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(request)
+                .andExpect(view().name("editmenuitem"))
+                .andExpect(model().attributeExists("menuitem"));
+    }
+
+    @Test
+    public void throwEditMenuItemRightWithoutIdGet() throws Exception{
+        dayMenu.addMenuItem(dayMenuItem);
+
+        RequestBuilder request = get("/admin/menuitem/edit/"+
+                dayMenu.getId().toString() + "/" + "89023423091283")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        mvc.perform(request)
+                .andExpect(view().name("error")); // TODO Cant find error.html
+    }
+
+    @Test
+    public void throwWhenEditWithoutId() throws Exception{
+        dayMenu.addMenuItem(dayMenuItem);
+        Product newProduct = new Product("product", Money.of(4,EURO));
+
+        RequestBuilder request = post("/admin/menuitem/edit/"+
+                dayMenu.getId().toString() + "/829304829340" )
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("product", newProduct.toString())
+                .param("name", "Neu")
+                .param("price", Money.of(5, EURO).toString())
+                .param("description", "New Desc")
+                .param("quantityPerProduct", "" + 10)
+                .param("enabled", new Boolean(true).toString());
+
+        mvc.perform(request)
+                .andExpect(view().name("error")); // TODO Cant find error.html
     }
 
 }
