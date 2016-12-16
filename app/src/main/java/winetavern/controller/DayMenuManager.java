@@ -63,8 +63,10 @@ public class DayMenuManager {
     }
 
     @RequestMapping(value = "/admin/menu/add", method = RequestMethod.POST)
-    public ModelAndView addMenuPost(@ModelAttribute(value = "date") DateParameter dateParameter,
-                                    ModelAndView modelAndView) {
+    public String addMenuPost(@ModelAttribute("date") String date,Model model) {
+        return "";
+
+        /*
         dateParameter.setMonth(dateParameter.getMonth());
         LocalDate creationDate = dateParameter.getDate();
         DayMenu dayMenu = copyPreDayMenu(creationDate);
@@ -72,8 +74,8 @@ public class DayMenuManager {
             dayMenu = new DayMenu(creationDate);
         }
         dayMenuRepository.save(dayMenu);
+        */
 
-        return showMenuList(modelAndView);
     }
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
