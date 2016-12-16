@@ -281,6 +281,7 @@ main .container__wrap h2{
     font-size: 1.4rem;
     padding-left: 1.5rem;
 }
+
 main .container__wrap .heading button {
     margin:10px;
 }
@@ -501,6 +502,18 @@ body .list-group-item-action .fa-circle-o{
     color: black;
 }
 
+#calendar h2 {
+    background-color: white;
+    color: black;
+    line-height:2;
+    text-align: center;
+    margin-bottom: auto;
+    font-size: 1.4rem;
+    padding-left: auto;
+}
+
+
+
 
 
 
@@ -632,4 +645,20 @@ fieldset {
 
 #disablePerson {
     background-color: tomato;
+}
+
+/* INDEX */
+
+.frontend .navbar{
+    padding: 0 0;
+}
+.frontend nav{
+    background-color: rgba(0,0,0,0.25);
+}
+.frontend .nav .nav-link{
+    color: #fff;
+    line-height: 3;
+}
+.frontend .nav-link:hover , .frontend .nav-link.active{
+    box-shadow: inset 0 5px 0 0 #26AA8C;
 }

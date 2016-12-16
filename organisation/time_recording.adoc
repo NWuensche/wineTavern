@@ -56,6 +56,14 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 21.11.2016 | 13:00 | 15:00 | Überarbeitung splitbill template
 | 23.11.2016 | 16:00 | 18:00 | Template fixes bill, splitbill ...
 | 24.11.2016 | 13:00 | 15:00 | Neuer DateRangePicker für Expenses
+| 28.11.2016 | 11:00 | 14:00 | Expense
+| 08.12.2016 | 13:00 | 15:00 | Calendar
+| 09.12.2016 | 14:00 | 19:00 | Event, Winzer
+| 11.12.2016 | 15:00 | 17:00 | Event
+| 12.12.2016 | 11:00 | 15:00 | Shift
+| 13.12.2016 | 13:00 | 16:00 | Shift
+| 14.12.2016 | 11:00 | 12:00 | Shift
+
 |===
 
 == Louis
@@ -106,6 +114,13 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 09.12.2016 | 14:00 | 17:00 | Fixed Money bug, event calendar
 | 11.12.2016 | 09:00 | 10:45 | added Vintners
 | 11.12.2016 | 14:00 | 18:30 | added automatic event creation
+| 13.12.2016 | 11:00 | 14:00 | Schichten
+| 13.12.2016 | 15:30 | 18:00 | Schichten
+| 14.12.2016 | 11:00 | 12:00 | Merge, Schichten, DataInitialzer für die Präsentation
+| 14.12.2016 | 16:00 | 17:00 | Merge, Schichten, DataInitialzer für die Präsentation
+| 14.12.2016 | 21:00 | 23:30 | Automatisches PDF als Tageskarte
+| 15.12.2016 | 10:00 | 14:30 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen
+| 15.12.2016 | 17:00 | 19:00 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen, Präsentation vorbereiten
 |===
 
 == Niklas

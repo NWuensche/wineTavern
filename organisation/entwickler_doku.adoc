@@ -49,8 +49,9 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 * Benenne Table in Desk um
 ** Da wir große Schwierigkeiten bekommen haben, die Tables von WineTavern, HTML und MySQL auseinander zu halten, haben wir uns beschlossen, die WineTavern Tables in Desks umzubennenen.
 
-* Benenne Person in Employee um
-** Zuerst sollten alle externen und internen Personen ein Person-Objekt bekommen. Dieses ist allerdings fest mit einem UserAccount verbunden. Da sich externe (Künstler) allerdings nicht in das System einloggen müssen, haben wir die externen Personen zu "External" gemacht, während Interne nun "Employee" sind. 
+* Mache Personen abstrakt und erstelle Vintner, External und Employee
+** Zuerst sollten alle externen und internen Personen ein Person-Objekt bekommen. Dieses ist allerdings fest mit einem UserAccount verbunden. Da sich externe (Künstler) allerdings nicht in das System einloggen müssen, haben wir die externen Personen zu "External" gemacht, während Interne nun "Employee" sind.
+** Die Klasse `Vintner` repräsentiert Winzer und wird benötigt um Weinproben zu erstellen und den automatischen Rabatt auf Weine umzusetzen. Ein `Vintner` hat neben einem Namen noch eine Nummer, welche ihn in die Reihenfolge der Weinproben einordnet. So bekommt jeder Winzer der Reihe nach eine Weinprobe. Winzer kann man nur deaktivieren und nicht löschen, damit dessen Weinproben in der Vergangenheit nicht mit gelöscht werden müssen.
 
 * Ziehe Integration- und Unittests auseinander
 ** Als erstes wollten wir alle Tests, die zu einer Klasse gehören, in eine Klasse packen. Da so aber die Unittests sehr lange zum ausführen brauchten (Da im Hintergrund alles Nötige für die Integrationtests auch geladen wurde), haben wir uns entscheiden, diese in unterschiedliche Klassen zu stecken.

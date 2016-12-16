@@ -6,177 +6,170 @@
 
 </head>
 <body th:fragment="content">
-                <div class="container__wrap">
-                    <div class="heading">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <h1>
-                                    <span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)
-                                </h1>
-                            </div>
-                            <div class="col-xs-6 text-xs-right">
-                                <button type="button" class="btn btn-primary " data-toggle="modal"
-                                        data-target="#addProduct">
-                                    <i class="fa fa-plus fa-fw"></i>
-                                    Produkt
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Kategorie</th>
-                                <th>Produkt</th>
-                                <th>Preis</th>
-                                <th>Menge</th>
-                                <th>&Auml;ndern</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="item : ${stockItems}">
-                                <td th:text="${item.product.getCategories().stream().findFirst().get()}"></td>
-                                <td th:text="${item.product.name}"></td>
-                                <td th:text="${item.product.price.number.doubleValue()} + '€'"></td>
-                                <td th:text="${item.quantity}"></td>
-                                <td>
-                                    <a th:href="@{'/admin/stock/details/' + ${item.id}}">
-                                        <button type="button"  class="btn btn-primary">
-                                            <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="container__wrap">
+        <div class="heading">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h1>
+                        <span class="fa fa-balance-scale"></span> Lager (<span th:text="${productAmount}"></span> Produkte)
+                    </h1>
                 </div>
+                <div class="col-xs-6 text-xs-right">
+                    <button type="button" class="btn btn-primary " data-toggle="modal"
+                            data-target="#addProduct">
+                        <i class="fa fa-plus fa-fw"></i>
+                        Produkt
+                    </button>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kategorie</th>
+                    <th>Produkt</th>
+                    <th>Preis</th>
+                    <th>Menge</th>
+                    <th>&Auml;ndern</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${stockItems}">
+                    <td th:text="${item.product.getCategories().stream().findFirst().get()}"></td>
+                    <td th:text="${item.product.name}"></td>
+                    <td th:text="${helper.moneyToEuroString(item.product.price)}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td>
+                        <a th:href="@{'/admin/stock/details/' + ${item.id}}">
+                            <button type="button"  class="btn btn-primary">
+                                <i class="fa fa-cog fa-fw fa-spin" aria-hidden="true"></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-<!-- add Product Modal -->
-<div class="modal" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="addProductLabel">Produkt hinzufügen</h4>
-            </div>
-            <div class="modal-body">
-                <form id="productData" th:action="@{/admin/stock/addProduct}" method="post">
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Apfel" />
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Preis:</label>
-                        <input type="number" class="form-control" name="price" id="price" placeholder="1,23"
-                               min="0.01" step="0.01" max="10000"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Kategorie:</label>
-                        <select type="text" class="form-control" name="category" id="category">
-                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
-                                    th:value="${category}"></option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button form="productData" type="reset" class="btn btn-secondary">
-                    <i class="fa fa-times fa-lg"></i>
-                </button>
-                <button form="productData" type="submit" class="btn btn-primary">Produkt hinzufügen</button>
+    <!-- add Product Modal -->
+    <div class="modal" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="addProductLabel">Produkt hinzufügen</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="productData" th:action="@{/admin/stock/addProduct}" method="post">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Apfel"
+                                   required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Preis:</label>
+                            <input type="number" class="form-control" name="price" id="price" placeholder="1,23"
+                                   min="0.01" step="0.01" max="10000" required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Kategorie:</label>
+                            <select class="form-control" name="category" id="category"
+                                    onchange="wine(this,'vintnerfield');" required="true">
+                                <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
+                                        th:value="${category}"></option>
+                            </select>
+                        </div>
+                        <hr/>
+                        <fieldset id="vintnerfield">
+                            <legend>&nbsp;Winzer</legend>
+                            <label for="vintner">Name:</label>
+                            <select class="form-control" id="vintner" name="vintner">
+                                <option th:each="vintner:${vintners}" th:text="${vintner.name}" th:value="${vintner.id}"></option>
+                            </select>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button form="productData" type="reset" class="btn btn-secondary">
+                        <i class="fa fa-times fa-lg"></i>
+                    </button>
+                    <button form="productData" type="submit" class="btn btn-primary">Produkt hinzufügen</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- addCategory Modal -->
-<div class="modal" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="addCategoryLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="addCategoryLabel">Kategorie hinzufügen</h4>
-            </div>
-            <div class="modal-body">
-                <form id="categoryData" th:action="@{/admin/stock/addCategory}" method="post">
-                    <div class="form-group">
-                        <label for="categoryName">Name:</label>
-                        <input type="text" class="form-control" name="categoryName" id="categoryName"
-                               placeholder="Rotwein" />
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button form="categoryData" type="reset" class="btn btn-secondary">
-                    <i class="fa fa-times fa-lg"></i>
-                </button>
-                <button form="categoryData" type="submit" class="btn btn-primary">Kategorie hinzufügen</button>
+    <!-- show product details -->
+    <div class="modal" id="productDetails" tabindex="-1" role="dialog" aria-labelledby="productDetailsLabel"
+         aria-hidden="false" th:if="${product}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="productDetailsLabel">Produktdetails &auml;ndern</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post">
+                        <div class="form-group" hidden = "true">
+                            <label for="productid">Produkt</label>
+                            <input type="text" class="form-control" name="productid" id="productid" readonly="true"
+                                   th:value="${product.id}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="productname">Name</label>
+                            <input type="text" class="form-control" name="productname" id="productname"
+                                   th:value="${product.name}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="productprice">Preis:</label>
+                            <input type="text" class="form-control" name="productprice" id="productprice"
+                                   th:value="${product.price.number.doubleValue()}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="productcategory">Kategorie:</label>
+                            <select type="text" class="form-control" name="productcategory" id="productcategory"
+                                    onchange="wine(this,'changeVintnerfield')">
+                                <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
+                                        th:value="${category}"
+                                        th:selected="${productCategory.toString().equals(category.toString())}"></option>
+                            </select>
+                        </div>
+                        <fieldset id="changeVintnerfield"
+                                  th:style="((${productCategory} != 'Rotwein') and (${productCategory} != 'Weißwein'))? ('display:none') : ''">
+                            <legend>&nbsp;Winzer</legend>
+                            <label for="productvintner">Name:</label>
+                            <select class="form-control" id="productvintner" name="productvintner">
+                                <option th:each="vintner:${vintners}" th:text="${vintner.name}" th:value="${vintner.id}"></option>
+                            </select>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button form="productDetailsForm" type="submit" class="btn btn-primary">&Auml;nderungen
+                        speichern</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- show product details -->
-<div class="modal" id="productDetails" tabindex="-1" role="dialog" aria-labelledby="productDetailsLabel"
-     aria-hidden="false" th:if="${product}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="productDetailsLabel">Produktdetails &auml;ndern</h4>
-            </div>
-            <div class="modal-body">
-                <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post">
-                    <div class="form-group" hidden = "true">
-                        <label for="productid">Produkt</label>
-                        <input type="text" class="form-control" name="productid" id="productid" readonly="true"
-                               th:value="${product.id}"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="productname">Name</label>
-                        <input type="text" class="form-control" name="productname" id="productname"
-                               th:value="${product.name}"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="productprice">Preis:</label>
-                        <input type="text" class="form-control" name="productprice" id="productprice"
-                               th:value="${product.price.number.doubleValue()}"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="productcategory">Kategorie:</label>
-                        <select type="text" class="form-control" name="productcategory" id="productcategory" >
-                            <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
-                                    th:value="${category}"
-                                    th:selected="${productCategory.toString().equals(category.toString())}"></option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button form="productDetailsForm" type="submit" class="btn btn-primary">&Auml;nderungen
-                    speichern</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script th:inline="javascript">
+    /*<![CDATA[*/
+
     $('#productDetails').modal('show');
 
-    /*<![CDATA[*/
-        var minutes = [[${minutes}]];
-        var hours = [[${hours}]];
-    /*]]>*/
-    var now = new Date();
-    var offsetMinutes = minutes - now.getMinutes();
-    var offsetHours = hours - now.getHours()%24;
+    function wine(node,name){
+        var category = $(node).val();
+        if(category.includes('wein'))
+            $('#' + name).show("1000");
+        else
+            $('#' + name).hide("1000");
+    }
 
+    /*]]>*/
 </script>
 
 </body>

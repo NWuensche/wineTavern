@@ -1,6 +1,9 @@
 package winetavern.controller;
 
-import org.apache.commons.lang3.SerializationUtils;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.time.BusinessTime;
@@ -9,15 +12,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import winetavern.Helper;
 import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -107,6 +114,82 @@ public class DayMenuManager {
             dayMenuItem.addDayMenu(newDayMenu);
         }
         return newDayMenu;
+    }
+
+    /**
+     * prints all daymenu items in a pdf file.
+     * @param id the daymenu id
+     */
+    @RequestMapping("/admin/menu/print/{pid}")
+    public String printMenu(@PathVariable("pid") Long id) {
+        DayMenu dayMenu = dayMenuRepository.findOne(id).get();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        Document document = new Document();
+        Font boldFont = new Font();
+        boldFont.setStyle(Font.BOLD);
+        Font catFont = new Font();
+        catFont.setStyle(Font.BOLD);
+        catFont.setSize(18);
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream
+                    ("src\\main\\resources\\daymenu\\daymenu.pdf"));
+            document.open();
+
+            //setting pdf attributes
+            document.addAuthor("Zur Frölichen Reblaus");
+            document.addCreator("WinetavernSystem");
+            document.addTitle("Tageskarte " + dayMenu.getDay().format(formatter));
+
+            Paragraph title = new Paragraph("Zur Fröhlichen Reblaus\n\n", catFont); //title
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            Map<String, List<DayMenuItem>> sortedItems = new HashMap<>();
+
+            for (DayMenuItem item : dayMenu.getDayMenuItems()) { //map every item to its category
+                String category = Helper.getFirstItem(item.getProduct().getCategories());
+                if (!sortedItems.containsKey(category))
+                    sortedItems.put(category, new LinkedList<>());
+
+                sortedItems.get(category).add(item);
+            }
+
+            for (String category : sortedItems.keySet()) { //for each category
+                List<DayMenuItem> itemList = sortedItems.get(category);
+                itemList.sort(Comparator.comparing(DayMenuItem::getName)); //sort items alphabetically
+
+                PdfPTable menuItems = new PdfPTable(2); //invisible table for daymenuItem|price
+                menuItems.setWidthPercentage(80);
+
+                for (DayMenuItem item : itemList) { //for each item in this category
+                    PdfPCell cellName = new PdfPCell(new Paragraph(item.getName()));
+                    cellName.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cellName.setBorderWidth(0);
+                    PdfPCell cellPrice = new PdfPCell(new Paragraph(Helper.moneyToEuroString(item.getPrice())));
+                    cellPrice.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    cellPrice.setBorderWidth(0);
+                    menuItems.addCell(cellName);
+                    menuItems.addCell(cellPrice);
+                }
+
+                if (itemList.size() > 0) { //only print category if it contains items
+                    Paragraph categoryTitle = new Paragraph("\n" + category, boldFont);
+                    categoryTitle.setSpacingAfter(5);
+                    categoryTitle.setIndentationLeft(40);
+                    document.add(categoryTitle); //add the category title
+                }
+                document.add(menuItems);
+            }
+
+            document.close();
+            writer.close();
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return "daymenupdf";
     }
 
 }

@@ -40,13 +40,13 @@
             <tr th:each="product:${bill.items}">
                 <td th:text="${product.quantity}"></td>
                 <td th:text="${product.item.name}"></td>
-                <td th:text="${product.item.price.number.doubleValue()} + '€'"></td>
-                <td th:text="${product.price.number.doubleValue()} + '€'"></td>
+                <td th:text="${helper.moneyToEuroString(product.item.price)}"></td>
+                <td th:text="${helper.moneyToEuroString(product.price)}"></td>
             </tr>
         </tbody>
     </table>
     <br/>
-    <h2>Gesamtpreis: <span th:text="${bill.price.number.doubleValue()}"></span> €</h2>
+    <h2>Gesamtpreis: <span th:text="${helper.moneyToEuroString(bill.price)}"></span></h2>
 </div>
 
 </body>
