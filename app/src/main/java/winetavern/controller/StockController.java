@@ -17,6 +17,8 @@ import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Vintner;
 import winetavern.model.user.VintnerManager;
 
+import java.util.Optional;
+
 import static org.salespointframework.core.Currencies.EURO;
 
 /**
@@ -42,7 +44,7 @@ public class StockController {
 
         model.addAttribute("product", stockItem.getProduct());
         model.addAttribute("quantity", stockItem.getQuantity());
-        model.addAttribute("categories", stockItem.getProduct().getCategories()); // TODO Necessary?
+        model.addAttribute("categories", stockItem.getProduct().getCategories());
         model.addAttribute("productCategory", stockItem.getProduct().getCategories().stream().findFirst().get());
 
         manageStock(model);
@@ -59,13 +61,11 @@ public class StockController {
         stock.save(new InventoryItem(newProduct, Quantity.of(1)));
 
         if (category.contains("wein")) { //every wine must be specified with a vintner
-            for (Vintner vintner : vintnerManager.findAll()) {
-                if (vintner.getId().equals(vintnerId)) { //add wine to the selected vintner
-                    vintner.addWine(newProduct);
-                    vintnerManager.save(vintner);
-                } else if (vintner.removeWine(newProduct)) { //remove wine from all other vintners
-                    vintnerManager.save(vintner); //only need to save if vintner was changed
-                }
+            Optional<Vintner> vintnerOptional = vintnerManager.findOne(vintnerId);
+            if (vintnerOptional.isPresent()) {
+                Vintner vintner = vintnerOptional.get();
+                vintner.addWine(newProduct);
+                vintnerManager.save(vintner);
             }
         }
 
@@ -76,13 +76,24 @@ public class StockController {
     public String changeProduct(@ModelAttribute("productid") Product product,
                              @ModelAttribute("productname") String name,
                              @ModelAttribute("productprice") String price,
-                             @ModelAttribute("productcategory") String category) {
+                             @ModelAttribute("productcategory") String category,
+                             @ModelAttribute("productvintner") Long vintnerId) {
+
         product.setName(name);
-
         product.setPrice(Money.of(Float.parseFloat(price), EURO));
-
         product = removeAllCategories(product);
         product.addCategory(category);
+
+        if (category.contains("wein")) { //every wine must be specified with a vintner
+            for (Vintner vintner : vintnerManager.findAll()) {
+                if (vintner.getId().equals(vintnerId)) { //add wine to the selected vintner
+                    vintner.addWine(product);
+                    vintnerManager.save(vintner);
+                } else if (vintner.removeWine(product)) { //remove wine from all other vintners
+                    vintnerManager.save(vintner); //only need to save if vintner was changed
+                }
+            }
+        }
 
         products.save(product);
 
@@ -90,7 +101,7 @@ public class StockController {
     }
 
     private Product removeAllCategories(Product product) {
-        product.getCategories().forEach(cat -> product.removeCategory(cat));
+        product.getCategories().forEach(product::removeCategory);
         return product;
     }
 }

@@ -47,7 +47,8 @@
         </thead>
         <tbody>
             <tr th:each="product : ${bill.items}" style="vertical-align:middle;">
-                <td><span th:utext="${product.item.name} + ' (' + ${helper.moneyToEuroString(product.item.price)}"></span></td>
+                <td><span
+                        th:utext="${product.item.name} + ' (' + ${helper.moneyToEuroString(product.item.price)} + ')'"></span></td>
                 <td>
                     <div style="font-size:1.8rem;">
                         <b><span th:text="${product.quantity}" class="product-quantity"></span></b>

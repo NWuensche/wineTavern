@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <label for="category">Kategorie:</label>
                             <select class="form-control" name="category" id="category"
-                                    onchange="wine();" required="true">
+                                    onchange="wine(this,'vintnerfield');" required="true">
                                 <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
                                         th:value="${category}"></option>
                             </select>
@@ -127,16 +127,25 @@
                         <div class="form-group">
                             <label for="productprice">Preis:</label>
                             <input type="text" class="form-control" name="productprice" id="productprice"
-                                   th:value="${helper.moneyToEuroString(product.price)}"/>
+                                   th:value="${product.price.number.doubleValue()}"/>
                         </div>
                         <div class="form-group">
                             <label for="productcategory">Kategorie:</label>
-                            <select type="text" class="form-control" name="productcategory" id="productcategory" >
+                            <select type="text" class="form-control" name="productcategory" id="productcategory"
+                                    onchange="wine(this,'changeVintnerfield')">
                                 <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
                                         th:value="${category}"
                                         th:selected="${productCategory.toString().equals(category.toString())}"></option>
                             </select>
                         </div>
+                        <fieldset id="changeVintnerfield"
+                                  th:style="((${productCategory} != 'Rotwein') and (${productCategory} != 'Weißwein'))? ('display:none') : ''">
+                            <legend>&nbsp;Winzer</legend>
+                            <label for="productvintner">Name:</label>
+                            <select class="form-control" id="productvintner" name="productvintner">
+                                <option th:each="vintner:${vintners}" th:text="${vintner.name}" th:value="${vintner.id}"></option>
+                            </select>
+                        </fieldset>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -150,14 +159,14 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
 
-    //$('#productDetails').modal('show');
+    $('#productDetails').modal('show');
 
-    function wine(){
-        var category = $('#category').val();
+    function wine(node,name){
+        var category = $(node).val();
         if(category.includes('wein'))
-           $('#vintnerfield').show("1000");
+            $('#' + name).show("1000");
         else
-            $('#vintnerfield').hide("1000");
+            $('#' + name).hide("1000");
     }
 
     /*]]>*/
