@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.Helper;
-import winetavern.model.DateParameter;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
@@ -56,26 +55,21 @@ public class DayMenuManager {
     }
 
     @RequestMapping("/admin/menu/add")
-    public String addMenu(Model model) {
-        DateParameter dateParameter = new DateParameter();
-        model.addAttribute("date", dateParameter);
+    public String addMenu() {
         return "addmenu";
     }
 
     @RequestMapping(value = "/admin/menu/add", method = RequestMethod.POST)
-    public String addMenuPost(@ModelAttribute("date") String date,Model model) {
-        return "";
-
-        /*
-        dateParameter.setMonth(dateParameter.getMonth());
-        LocalDate creationDate = dateParameter.getDate();
+    public String addMenuPost(@ModelAttribute("date") String date) {
+        LocalDate creationDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         DayMenu dayMenu = copyPreDayMenu(creationDate);
+
         if(dayMenu == null) {
             dayMenu = new DayMenu(creationDate);
         }
-        dayMenuRepository.save(dayMenu);
-        */
 
+        dayMenuRepository.save(dayMenu);
+        return "redirect:/admin/menu/edit/" + dayMenu.getId();
     }
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
