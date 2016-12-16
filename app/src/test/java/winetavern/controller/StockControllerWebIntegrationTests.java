@@ -23,7 +23,10 @@ import winetavern.AbstractWebIntegrationTests;
 import winetavern.Helper;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
+import winetavern.model.user.PersonManager;
 import winetavern.model.user.Roles;
+import winetavern.model.user.Vintner;
+import winetavern.model.user.VintnerManager;
 
 /**
  * @author Louis
@@ -31,11 +34,16 @@ import winetavern.model.user.Roles;
 public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTests {
     @Autowired private Inventory<InventoryItem> stock;
     @Autowired private ProductCatalog products;
+    @Autowired private VintnerManager vintnerManager;
     private Product product;
     private InventoryItem inventoryItem;
+    private Vintner vintner;
 
     @Before
     public void before() {
+        vintner = new Vintner("vintner", 3);
+        vintnerManager.save(vintner);
+
         product = new Product("Äpfel", Money.of(1.99, EURO));
         product.addCategory(Category.SNACK.toString());
 
@@ -85,11 +93,13 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void addProductRight() throws Exception {
+
         RequestBuilder request = post("/admin/stock/addProduct/")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("name", "prod")
                 .param("price", "3.4")
-                .param("category", Category.SNACK.toString());
+                .param("category", Category.SNACK.toString())
+                .param("vintner", vintner.getId().toString());
 
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
@@ -104,7 +114,8 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
                 .param("productid", product.getId().toString())
                 .param("productname", "Schnaps")
                 .param("productprice", "10")
-                .param("productcategory", Category.LIQUOR.toString());
+                .param("productcategory", Category.LIQUOR.toString())
+                .param("productvintner", vintner.getId().toString());
 
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
