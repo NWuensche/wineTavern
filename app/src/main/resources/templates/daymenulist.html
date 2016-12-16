@@ -35,7 +35,6 @@
             <form method="POST" th:action="@{'/admin/menu/remove'}">
             <thead>
             <tr>
-                <th>#</th>
                 <th>Datum</th>
                 <th>Bearbeiten</th>
                 <th>Löschen</th>
@@ -43,8 +42,7 @@
             </thead>
             <tbody>
             <tr th:each="menu : ${menus}">
-                <th scope="row">1</th>
-                <td th:text="${menu.getReadableDay()}"></td>
+                <td th:text="${helper.localDateTimeToDateString(menu.day.atStartOfDay())}"></td>
                 <td>
                     <a th:href="${'/admin/menu/edit/' + menu.id}">
                         <button type="button"  class="btn btn-primary">

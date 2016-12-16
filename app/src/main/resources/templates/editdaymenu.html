@@ -9,7 +9,8 @@ th:include="backend-temp :: page">
 <div class="row">
     <div class="col-xs-12">
         <div class="white__bg p">
-            <p>Edit von Daymenü Nr: <span th:text="${daymenu.id}"></span></p>
+            <p>Tageskarte vom <span
+                    th:text="${helper.localDateTimeToDateString(daymenu.day.atStartOfDay())}"></span></p>
         </div>
     </div>
 </div>
@@ -36,7 +37,6 @@ th:include="backend-temp :: page">
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>#</th>
             <th>Produkt</th>
             <th>Preis</th>
             <th>Menge auf Lager</th>
@@ -46,9 +46,8 @@ th:include="backend-temp :: page">
         </thead>
         <tbody>
         <tr th:each="item : ${daymenu.dayMenuItems}">
-            <th scope="row">-</th>
             <td th:text="${item.name}"></td>
-            <td th:text="${item.price}"></td>
+            <td th:text="${helper.moneyToEuroString(item.price)}"></td>
             <td th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
             <td>
                 <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary editBtn">

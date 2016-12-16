@@ -76,8 +76,8 @@ public class Helper {
         String[] splittetValue = res.split("\\.");
 
         if (splittetValue[1].length() == 1)
-            return res + "0€";
+            return res + "0 €";
 
-        return res + "€";
+        return res + " €";
     }
 }
