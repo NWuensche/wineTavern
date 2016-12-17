@@ -26,6 +26,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |25.11.2016 | 09:00 |13:30 | Treffen & Coden
 |02.12.2016 | 09:00 |11:30 | Treffen & Coden
 |09.12.2016 | 09:00 |13:30 | Treffen & Coden
+|16.12.2016 | 09:00 |12:00 | Zwischenpräsentation & Coden
 |===
 
 == Severin
@@ -161,6 +162,11 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 07.12.2016    | 14:00     | 18:00     | Controller Tests
 | 08.12.2016    | 17:00     | 20:00     | Controller Tests
 | 10.12.2016    | 08:00     | 13:00     | Controller Tests + Powerpoint + ATF
+| 12.12.2016    | 08:00     | 11:00     | Strategy Pattern
+| 13.12.2016    | 17:00     | 18:30     | Präsentation
+| 14.12.2016    | 14:00     | 16:00     | Tests für Controller
+| 15.12.2016    | 14:00     | 16:30     | Präsentation
+| 17.12.2016    | 10:00     | 12:00     | Tests + Präsentation
 |===
 
 == Katharina
