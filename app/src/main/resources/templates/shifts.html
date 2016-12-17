@@ -139,7 +139,7 @@
             businessHours: {dow:[0,2,3,4,5,6,7],start:'10:00',end:'24:00'},
             navLinks:true,
             weekNumbers:true,
-            defaultView:'agendaDay',
+            defaultView:window.localStorage.shiftView,
             allDaySlot:false,
             slotEventOverlap:true,
             buttonText: {
@@ -170,7 +170,9 @@
     });
 
 
-
+    window.onbeforeunload = function(){
+        localStorage.setItem("shiftView",$("#calendar").fullCalendar("getView").name);
+    };
 
     /*]]>*/
 </script>
