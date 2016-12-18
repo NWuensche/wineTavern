@@ -67,9 +67,13 @@ public class DayMenuManager {
         if(dayMenu == null) {
             dayMenu = new DayMenu(creationDate);
         }
-
-        dayMenuRepository.save(dayMenu);
-        return "redirect:/admin/menu/edit/" + dayMenu.getId();
+        if(dayMenuRepository.findByDay(dayMenu.getDay()) == null) {
+            dayMenuRepository.save(dayMenu);
+            return "redirect:/admin/menu/edit/" + dayMenu.getId();
+        } else {
+            Long existingId = dayMenuRepository.findByDay(dayMenu.getDay()).getId();
+            return "redirect:/admin/menu/edit/" + existingId.toString();
+        }
     }
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
