@@ -51,7 +51,10 @@ public class DayMenuManager {
 
     @RequestMapping("/admin/menu/show")
     public ModelAndView showMenus(ModelAndView modelAndView) {
-        return showMenuList(modelAndView);
+        Iterable<DayMenu> dayMenuList = dayMenuRepository.findAll();
+        modelAndView.addObject("menus", dayMenuList);
+        modelAndView.setViewName("daymenulist");
+        return modelAndView;
     }
 
     @RequestMapping("/admin/menu/add")
@@ -77,13 +80,16 @@ public class DayMenuManager {
     }
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
-    public ModelAndView removeMenu(@RequestParam("daymenuid") Long dayMenuId, ModelAndView modelAndView) {
-        // TODO This would give a NullPointerException and would not return null;
+    public String removeMenu(@RequestParam("daymenuid") Long dayMenuId) {
         DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
         if(dayMenu != null) {
+            dayMenu.getDayMenuItems().forEach((dayMenuItem) ->
+            {
+                dayMenuItem.removeDayMenu(dayMenu);
+            });
             dayMenuRepository.delete(dayMenu);
         }
-        return showMenuList(modelAndView);
+        return "redirect:/admin/menu/show";
     }
 
     @RequestMapping("/admin/menu/edit/{pid}")
@@ -95,15 +101,8 @@ public class DayMenuManager {
         return "editdaymenu";
     }
 
-    // TODO Should this really be public?
-    public ModelAndView showMenuList(ModelAndView modelAndView) {
-        Iterable<DayMenu> dayMenuList = dayMenuRepository.findAll();
-        modelAndView.addObject("menus", dayMenuList);
-        modelAndView.setViewName("daymenulist");
-        return modelAndView;
-    }
 
-    public DayMenu copyPreDayMenu(LocalDate today) {
+    protected DayMenu copyPreDayMenu(LocalDate today) {
         LocalDate yesterday = today.minusDays(1);
         DayMenu preDayMenu = dayMenuRepository.findByDay(yesterday);
         if (preDayMenu == null)
