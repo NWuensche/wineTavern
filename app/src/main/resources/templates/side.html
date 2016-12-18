@@ -51,20 +51,10 @@
                 <!-- RESERVIERUNG-->
                 <!-- TODO: richtige Rolle für Reservierungen setzen -->
 
-                <a th:href="@{/service/reservation}" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#reservierungen">
-                    <i class="fa fa-clock-o fa-lg" aria-hidden="true"></i>
-                    <span>Reservierung</span>
+                <a th:href="@{/service/reservation}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICE')">
+                    <i class="fa fa-list fa-lg" aria-hidden="true"></i>
+                    <span>Reservierungen</span>
                 </a>
-                <div id="reservierungen" class="collapse">
-                    <a th:href="@{/service/reservation}" class="list-group-item list-group-item-action side__menu side-module__container">
-                        <i class="fa fa-circle-o" aria-hidden="true"></i>
-                        <span>Abfrage</span>
-                    </a>
-                    <a th:href="@{/service/reservation/showall}" class="list-group-item list-group-item-action side__menu side-module__container">
-                        <i class="fa fa-circle-o" aria-hidden="true"></i>
-                        <span>Alle anzeigen</span>
-                    </a>
-                </div>
 
                 <!-- ABRECHNUNG -->
 
