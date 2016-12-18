@@ -57,5 +57,8 @@ public class Reservation {
     public LocalDateTime getReservationStart() {
         return interval.getStart();
     }
+    public LocalDateTime getReservationEnd() {
+        return interval.getEnd();
+    }
 
 }

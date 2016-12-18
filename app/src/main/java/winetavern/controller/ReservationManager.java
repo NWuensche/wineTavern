@@ -78,17 +78,23 @@ public class ReservationManager {
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("desk") Optional<String> deskName,
                                            ModelAndView modelAndView) {
+        LocalDateTime reservationTime = reservationTimeString.isPresent() ?
+                LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter) :
+                businessTime.getTime();
 
         if(deskName.isPresent()) {
             modelAndView.addObject("desk", deskName.get());
             Desk desk = desks.findByName(deskName.get());
-            modelAndView.addObject("deskReservations", desk.getReservationList());
+            //show only future reservations
+            List<Reservation> reservations = desk.getReservationList();
+            List<Reservation> finalReservations = new ArrayList<>();
+            reservations.forEach((reservation) -> {
+                if(!reservation.getReservationEnd().isBefore(reservationTime))
+                    finalReservations.add(reservation);
+            });
+            modelAndView.addObject("deskReservations", finalReservations);
             modelAndView.addObject("deskcapacity", desk.getCapacity());
         }
-
-        LocalDateTime reservationTime = reservationTimeString.isPresent() ?
-                LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter) :
-                businessTime.getTime();
 
         reservationTableData(sort, reservationTime, modelAndView);
         return reservationTime(reservationTime, modelAndView);
