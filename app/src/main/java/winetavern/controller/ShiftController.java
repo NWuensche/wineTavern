@@ -155,10 +155,19 @@ public class ShiftController {
                 date.withHour(23).withMinute(59).withSecond(59).plusDays(7 - day));   //next Sunday
     }
 
-    private List<Shift> getShiftsOfWeek(TimeInterval week) {
+    public List<Shift> getShiftsOfWeek(TimeInterval week) {
         List<Shift> res = new LinkedList<>();
         for (Shift shift : shifts.findAll())
             if (shift.getInterval().intersects(week)) res.add(shift);
+
+        Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
+        return res;
+    }
+
+    public List<Shift> getShiftsOfDay(LocalDate day) {
+        List<Shift> res = new LinkedList<>();
+        for (Shift shift : shifts.findAll())
+            if (shift.getInterval().timeInInterval(day.atStartOfDay())) res.add(shift);
 
         Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
         return res;
