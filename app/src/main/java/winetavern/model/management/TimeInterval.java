@@ -64,6 +64,6 @@ public class TimeInterval {
     }
 
     public boolean timeInInterval(LocalDateTime time) {
-        return (this.start.isBefore(time) && this.end.isAfter(time));
+        return (this.start.isBefore(time) && this.end.isAfter(time)) || this.start.isEqual(time) || this.end.isEqual(time);
     }
 }
