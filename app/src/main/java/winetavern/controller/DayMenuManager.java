@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.time.BusinessTime;
@@ -13,17 +14,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import winetavern.Helper;
+import winetavern.model.management.Event;
+import winetavern.model.management.EventCatalog;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
+import winetavern.model.user.Vintner;
+import winetavern.model.user.VintnerManager;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -38,15 +49,20 @@ public class DayMenuManager {
     private DayMenuItemRepository dayMenuItemRepository;
     private final Inventory<InventoryItem> stock;
     private BusinessTime businessTime;
+    private EventCatalog eventCatalog;
+    private VintnerManager vintnerManager;
 
     @Autowired
     public DayMenuManager(Inventory<InventoryItem> stock, DayMenuRepository dayMenuRepository,
                           DayMenuItemRepository dayMenuItemRepository,
-                          BusinessTime businessTime) {
+                          BusinessTime businessTime, EventCatalog eventCatalog,
+                          VintnerManager vitnerManager) {
         this.businessTime = businessTime;
         this.stock = stock;
         this.dayMenuRepository = dayMenuRepository;
         this.dayMenuItemRepository = dayMenuItemRepository;
+        this.eventCatalog = eventCatalog;
+        this.vintnerManager = vitnerManager;
     }
 
     @RequestMapping("/admin/menu/show")
@@ -65,13 +81,52 @@ public class DayMenuManager {
     @RequestMapping(value = "/admin/menu/add", method = RequestMethod.POST)
     public String addMenuPost(@ModelAttribute("date") String date) {
         LocalDate creationDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalDateTime creationDateTime = LocalDateTime.of(creationDate, LocalTime.MIN);
         DayMenu dayMenu = copyPreDayMenu(creationDate);
 
         if(dayMenu == null) {
             dayMenu = new DayMenu(creationDate);
         }
+
+        //check if daymenu already exists
         if(dayMenuRepository.findByDay(dayMenu.getDay()) == null) {
-            dayMenuRepository.save(dayMenu);
+
+            //check for vintner day
+            Vintner vintner = null;
+            //HashSet<Event> test = eventCatalog.findAll();
+            for( Event event : eventCatalog.findAll() ) {
+                if(event.getInterval().timeInInterval(creationDateTime) && event.isVintnerDay()) {
+                    vintner = (Vintner)event.getPerson();
+                    break;
+                }
+            }
+            if(vintner != null) {
+                // set vintnerday products
+                dayMenu = new DayMenu();
+                dayMenu.setDay(creationDate);
+                for( DayMenuItem dayMenuItem : dayMenuItemRepository.findAll() )  {
+                    if(!dayMenuItem.isEnabled())
+                        continue;
+                    for( Product wine : vintner.getWineSet()) {
+                       if(wine == dayMenuItem.getProduct()) {
+                           DayMenuItem discountedDayMenuItem = new DayMenuItem();
+                           discountedDayMenuItem.setQuantityPerProduct(dayMenuItem.getQuantityPerProduct());
+                           discountedDayMenuItem.setDescription(dayMenuItem.getDescription());
+                           discountedDayMenuItem.setName(dayMenuItem.getName());
+                           discountedDayMenuItem.setProduct(dayMenuItem.getProduct());
+                           discountedDayMenuItem.setPrice(dayMenuItem.getPrice().divide(2.0));
+                           discountedDayMenuItem.addDayMenu(dayMenu);
+                           discountedDayMenuItem.setEnabled(false);
+                           dayMenuItemRepository.save(discountedDayMenuItem);
+                           dayMenu.addMenuItem(discountedDayMenuItem);
+                       }
+                    }
+                }
+                dayMenuRepository.save(dayMenu);
+            } else {
+                // set preday menu
+                dayMenuRepository.save(dayMenu);
+            }
             return "redirect:/admin/menu/edit/" + dayMenu.getId();
         } else {
             Long existingId = dayMenuRepository.findByDay(dayMenu.getDay()).getId();
