@@ -45,7 +45,7 @@ public class DayMenuItemManager {
      */
     @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
-        model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findAll(),
+        model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findByEnabled(true),
                 dayMenuRepository.findOne(cameFrom).get()));
         model.addAttribute("dayMenu", dayMenuRepository.findOne(cameFrom).get());
         model.addAttribute("stock", stock);
