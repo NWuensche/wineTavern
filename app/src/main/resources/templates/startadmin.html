@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head th:include="links::links">
+
+    <title>Dashboard</title>
+
+</head>
+<body th:fragment="content">
+<div class="container__wrap">
+    <h1>Heute, <span th:text="${helper.localDateTimeToDateString(time.getTime())}"></span></h1>
+</div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="container__wrap">
+                <h1>Dienste</h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Zeit</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="shift:${shifts}">
+                            <td th:text="${shift.employee}"></td>
+                            <td
+                                    th:text="${shift.interval.start.toLocalTime()} + ' - ' + ${shift.interval.end.toLocalTime()}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="container__wrap">
+            <h1>Bestellungen</h1>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="container__wrap">
+            <h1>Gerichte</h1>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="toggle" class="btn btn-primary">Wechseln</button>
+    <div id="chart_div" class="chart"></div>
+    <div id="more_div" class="chart" style="display:none;"></div>
+    <div id="line_div"></div>
+
+
+<!--Load the AJAX API-->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#toggle').click(function(){
+            $('.chart').toggle();
+        });
+    });
+
+
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart','bar']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.arrayToDataTable([
+            ['Tag','Ausgaben','Einnahmen'],
+            ['Montag',0,0],
+            ['Dienstag',200,80],
+            ['Mittwoch',100,400],
+            ['Donnerstag',500,140],
+            ['Freitag',200,50],
+            ['Samstag',550,300],
+            ['Sonntag',480,190]
+        ]);
+
+        // Set chart options
+        var options = {
+            width:900,
+            title:'Umsatz der letzten Woche',
+            legend:{position:'right',maxLines:3},
+            isStacked:true,
+            colors:['red','green']
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        var another = new google.visualization.LineChart(document.getElementById('line_div'));
+        var more = new google.visualization.AreaChart(document.getElementById('more_div'));
+        chart.draw(data, options);
+        another.draw(data,options);
+        more.draw(data,options);
+    }
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+
+    /*]]>*/
+</script>
+
+</body>
+</html>
