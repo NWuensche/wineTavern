@@ -6,4 +6,5 @@ import org.salespointframework.core.SalespointRepository;
  * @author Michel
  */
 public interface DayMenuItemRepository extends SalespointRepository<DayMenuItem, Long> {
+    Iterable<DayMenuItem> findByEnabled(Boolean enabled);
 }

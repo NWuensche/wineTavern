@@ -93,7 +93,6 @@ public class DayMenuManager {
 
             //check for vintner day
             Vintner vintner = null;
-            //HashSet<Event> test = eventCatalog.findAll();
             for( Event event : eventCatalog.findAll() ) {
                 if(event.getInterval().timeInInterval(creationDateTime) && event.isVintnerDay()) {
                     vintner = (Vintner)event.getPerson();
