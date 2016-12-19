@@ -88,7 +88,7 @@ public class Helper {
      * @param date
      * @return boolean is vintner day
      */
-    public boolean isWintnerDay(LocalDate date) {
+    public boolean isVintnerDay(LocalDate date) {
         return (date.getDayOfWeek() == DayOfWeek.FRIDAY && (date.getMonthValue() % 2) == 1 && date.getDayOfMonth() < 6);
     }
 
