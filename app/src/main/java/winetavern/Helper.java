@@ -7,6 +7,8 @@ import winetavern.model.accountancy.Expense;
 import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -80,4 +82,14 @@ public class Helper {
 
         return res + " €";
     }
+
+    /**
+     * returns whether the given date is a vintner day or not (first friday every uneven month)
+     * @param date
+     * @return boolean is vintner day
+     */
+    public boolean isWintnerDay(LocalDate date) {
+        return (date.getDayOfWeek() == DayOfWeek.FRIDAY && (date.getMonthValue() % 2) == 1 && date.getDayOfMonth() < 6);
+    }
+
 }
