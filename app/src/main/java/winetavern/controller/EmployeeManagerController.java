@@ -37,6 +37,11 @@ public class EmployeeManagerController {
 
     @RequestMapping("/admin/management/users/add")
     public String addEmployee(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
+        if(usernameExists(registerCredentials.getUsername())) {
+            // TODO Irgendein Feld
+            return "redirect:/admin/management/users";
+        }
+
         UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(),
                 registerCredentials.getPassword(), Role.of(registerCredentials.getRole()));
         newAccount.setFirstname(registerCredentials.getFirstName());
@@ -49,6 +54,10 @@ public class EmployeeManagerController {
         employeeManager.save(newEmployee);
 
         return "redirect:/admin/management/users";
+    }
+
+    private boolean usernameExists(String username) {
+        return userAccountManager.findByUsername(username).isPresent();
     }
 
     @RequestMapping("/admin/management/users/edit/{pid}")
