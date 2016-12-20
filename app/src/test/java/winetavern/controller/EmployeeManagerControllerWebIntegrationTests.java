@@ -146,4 +146,11 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
         assertThat(deletedEmployee.getUserAccount().isEnabled(), is(false));
     }
 
+    @Test
+    public void redirectIfUsernamesIsTaken() throws Exception {
+        RequestBuilder request = createRequestBuilder("admin", "1234");
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+    }
+
 }
