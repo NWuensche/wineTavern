@@ -36,10 +36,11 @@ public class EmployeeManagerController {
     }
 
     @RequestMapping("/admin/management/users/add")
-    public String addEmployee(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials) {
+    public String addEmployee(@ModelAttribute(value="accountcredentials") AccountCredentials registerCredentials,
+                              Model model) {
         if(usernameExists(registerCredentials.getUsername())) {
-            // TODO Irgendein Feld
-            return "redirect:/admin/management/users";
+            model.addAttribute("usernameTaken", true);
+            return usersSite(model);
         }
 
         UserAccount newAccount = userAccountManager.create(registerCredentials.getUsername(),
