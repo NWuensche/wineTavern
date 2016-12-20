@@ -114,7 +114,7 @@ public class DayMenuManager {
                            discountedDayMenuItem.setName(dayMenuItem.getName());
                            discountedDayMenuItem.setProduct(dayMenuItem.getProduct());
                            discountedDayMenuItem.setPrice(dayMenuItem.getPrice().divide(2.0));
-                           discountedDayMenuItem.addDayMenu(dayMenu);
+                           dayMenu.addMenuItem(discountedDayMenuItem);
                            discountedDayMenuItem.setEnabled(false);
                            dayMenuItemRepository.save(discountedDayMenuItem);
                            dayMenu.addMenuItem(discountedDayMenuItem);
@@ -164,7 +164,7 @@ public class DayMenuManager {
         DayMenu newDayMenu = new DayMenu(today); //preDayMenu.clone(dayMenuItemRepository);
         dayMenuRepository.save(newDayMenu);
         for(DayMenuItem dayMenuItem : preDayMenu.getDayMenuItems()) {
-            dayMenuItem.addDayMenu(newDayMenu);
+            newDayMenu.addMenuItem(dayMenuItem);
         }
         return newDayMenu;
     }

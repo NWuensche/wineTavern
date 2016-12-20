@@ -155,7 +155,7 @@ public class DayMenuItemManager {
         dayMenuItem.setDescription(description);
         dayMenuItem.setQuantityPerProduct(quantityPerProduct);
         dayMenuItem.setEnabled(enabled);
-        dayMenuItem.addDayMenu(dayMenuRepository.findOne(dayMenu).get());
+        dayMenuRepository.findOne(dayMenu).get().addMenuItem(dayMenuItem);
         dayMenuItemRepository.save(dayMenuItem);
 
         modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenu));
@@ -168,7 +168,7 @@ public class DayMenuItemManager {
                                                 ModelAndView modelAndView) {
         DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId).get();
         DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
-        dayMenuItem.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(dayMenuItem);
         dayMenuItemRepository.save(dayMenuItem);
 
         modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenuId));

@@ -70,12 +70,15 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
     public void getNotAddedDayMenuItemsRight() {
         DayMenuItem notInMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
 
-        dayMenuItem.addDayMenu(dayMenu);
+        //dayMenuItem.addDayMenu(dayMenu);
 
         Iterable<DayMenuItem> dayMenuItems = Arrays.asList(dayMenuItem, notInMenu);
 
         List<DayMenuItem> notAdded = dayMenuItemManager.getNotAddedDayMenuItems(dayMenuItems, dayMenu);
 
+        assertArrayEquals(notAdded.toArray(), Arrays.asList(notInMenu).toArray());
+
+        assertThat(notInMenu.getDayMenus().contains(dayMenu), is(true));
         assertArrayEquals(notAdded.toArray(), Arrays.asList(notInMenu).toArray());
     }
 
@@ -96,6 +99,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
     }
 
+    //TODO Test Remove alot
     @Test
     public void addNewItemRight() throws Exception {
         Product newProduct = new Product("Prod", Money.of(3, EURO));
@@ -145,7 +149,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void deleteItemRight() throws Exception {
-        dayMenuItem.addDayMenu(dayMenu);
+        //dayMenuItem.addDayMenu(dayMenu);
 
         RequestBuilder request = post("/admin/menuitem/remove/"+
                 dayMenu.getId().toString() + "/" +

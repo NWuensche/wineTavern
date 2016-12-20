@@ -206,67 +206,68 @@ public class WineTavernDataInitializer implements DataInitializer{
         DayMenuItem smallWhiteWine = new DayMenuItem(nameWhiteWine + " 0,2l", nameWhiteWine + ": Glas",
                 Money.of(4.75, EURO), 0.75/0.2);
         smallWhiteWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameWhiteWine)));
-        smallWhiteWine.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(smallWhiteWine);
+        //smallWhiteWine.addDayMenu(dayMenu);
         dayMenuItemRepository.save(smallWhiteWine);
 
         DayMenuItem bigWhiteWine = new DayMenuItem(nameWhiteWine + " 0.75l", nameWhiteWine + ": Flasche",
                 Money.of(17, EURO), 1.0);
         bigWhiteWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameWhiteWine)));
-        bigWhiteWine.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(bigWhiteWine);
         dayMenuItemRepository.save(bigWhiteWine);
 
         DayMenuItem smallRedWine = new DayMenuItem(nameRedWine + " 0,2l", nameRedWine + ": Glas",
                 Money.of(12.99, EURO), 0.75/0.2);
         smallRedWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameRedWine)));
-        smallRedWine.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(smallRedWine);
         dayMenuItemRepository.save(smallRedWine);
 
         DayMenuItem bigRedWine = new DayMenuItem(nameRedWine + " 0,75l", nameRedWine + ": Flasche",
                 Money.of(45, EURO), 1.0);
         bigRedWine.setProduct(Helper.getFirstItem(productCatalog.findByName(nameRedWine)));
-        bigRedWine.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(bigRedWine);
         dayMenuItemRepository.save(bigRedWine);
 
         DayMenuItem smallLiquor = new DayMenuItem(nameLiquor + " 2cl", nameLiquor + ": Kurzer",
                 Money.of(2.99, EURO), 0.75/0.02);
         smallLiquor.setProduct(Helper.getFirstItem(productCatalog.findByName(nameLiquor)));
-        smallLiquor.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(smallLiquor);
         dayMenuItemRepository.save(smallLiquor);
 
         DayMenuItem bigLiquor = new DayMenuItem(nameLiquor + " 4cl", nameLiquor + ": Doppelter",
                 Money.of(4.99, EURO), 0.75/0.04);
         bigLiquor.setProduct(Helper.getFirstItem(productCatalog.findByName(nameLiquor)));
-        bigLiquor.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(bigLiquor);
         dayMenuItemRepository.save(bigLiquor);
 
         DayMenuItem smallSoftDrink = new DayMenuItem(nameSoftDrink + " 0,2l", nameSoftDrink + ": klein",
                 Money.of(2.99, EURO), 1/0.2);
         smallSoftDrink.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSoftDrink)));
-        smallSoftDrink.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(smallSoftDrink);
         dayMenuItemRepository.save(smallSoftDrink);
 
         DayMenuItem mediumSoftDrink = new DayMenuItem(nameSoftDrink + " 0,4l", nameSoftDrink + ": mittel",
                 Money.of(4.29, EURO), 1/0.4);
         mediumSoftDrink.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSoftDrink)));
-        mediumSoftDrink.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(mediumSoftDrink);
         dayMenuItemRepository.save(mediumSoftDrink);
 
         DayMenuItem bigSoftDrink = new DayMenuItem(nameSoftDrink + " 0,8l", nameSoftDrink + ": groß",
                 Money.of(5.99, EURO), 1/0.8);
         bigSoftDrink.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSoftDrink)));
-        bigSoftDrink.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(mediumSoftDrink);
         dayMenuItemRepository.save(bigSoftDrink);
 
         DayMenuItem snack = new DayMenuItem(nameSnack, nameSnack,
                 Money.of(1.99, EURO), 8.0);
         snack.setProduct(Helper.getFirstItem(productCatalog.findByName(nameSnack)));
-        snack.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(snack);
         dayMenuItemRepository.save(snack);
 
         DayMenuItem menu = new DayMenuItem(nameMenu, nameMenu,
                 Money.of(5.99, EURO), 1.0);
         menu.setProduct(Helper.getFirstItem(productCatalog.findByName(nameMenu)));
-        menu.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(menu);
         dayMenuItemRepository.save(menu);
     }
 
