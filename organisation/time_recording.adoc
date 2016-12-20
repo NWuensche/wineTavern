@@ -64,6 +64,12 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 12.12.2016 | 11:00 | 15:00 | Shift
 | 13.12.2016 | 13:00 | 16:00 | Shift
 | 14.12.2016 | 11:00 | 12:00 | Shift
+| 15.12.2016 | 11:00 | 15:00 | finalize Shift
+| 16.12.2016 | 12:00 | 14:00 | calendar view to localStorage
+| 19.12.2016 | 12:00 | 13:00 | introducing charts
+| 19.12.2016 | 16:00 | 18:00 | admin dashboard
+| 20.12.2016 | 11:00 | 13:00 | dashboard reservation chart
+| 20.12.2016 | 18:00 | 20:00 | dashboard income chart
 
 |===
 
