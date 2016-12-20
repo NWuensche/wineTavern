@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -77,14 +78,6 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
         mvc.perform(request);
     }
 
-    @Test(expected = NestedServletException.class)
-    public void throwWhenTwoUsersWithSameName() throws Exception {
-        RequestBuilder request = createRequestBuilder(userName, password);
-
-        mvc.perform(request);
-        mvc.perform(request);
-    }
-
     @Test
     public void savedNewEmployee() throws Exception {
         RequestBuilder request = createRequestBuilder(userName, password);
@@ -150,7 +143,9 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
     public void redirectIfUsernamesIsTaken() throws Exception {
         RequestBuilder request = createRequestBuilder("admin", "1234");
         mvc.perform(request)
-                .andExpect(status().is3xxRedirection());
+                .andExpect(view().name("users"))
+                .andExpect(model().attribute("usernameTaken", true))
+                .andExpect(model().attributeExists("accountcredentials"));
     }
 
 }
