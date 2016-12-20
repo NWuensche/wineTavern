@@ -16,6 +16,7 @@ import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
+import org.springframework.web.util.NestedServletException;
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -78,25 +82,28 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
         mvc.perform(request)
-                .andExpect(model().attributeExists("date"))
                 .andExpect(view().name("addmenu"));
     }
 
     @Test
     public void createDayMenuWithWrongYear() throws Exception {
         RequestBuilder request = post("/admin/menu/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("day", "30")
-                .param("month", "10")
-                .param("year", "as2013");
-        mvc.perform(request).andExpect(status().isBadRequest());
+                .param("date", "30.11.wrong");
+
+        try {
+            mvc.perform(request);
+            fail();
+        }
+        catch (NestedServletException e) {
+            Throwable causedThrow = e.getCause();
+            assertThat(causedThrow.getMessage(), is("Text '30.11.wrong' could not be parsed at index 6"));
+        }
     }
 
     @Test
     public void createDayMenuWithRealDate() throws Exception {
         RequestBuilder request = post("/admin/menu/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("day", "9")
-                .param("month", "11")
-                .param("year", "1918");
+                .param("date", "09.11.1918");
         mvc.perform(request);
 
         LocalDate givenDate = LocalDate.of(1918, 11, 9);
@@ -123,7 +130,7 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
                 .param("daymenuid", willBeDeleted.getId().toString());
 
         mvc.perform(request)
-                .andExpect(view().name("daymenulist"));
+                .andExpect(status().is3xxRedirection());
 
         assertThat(dayMenuRepository.findOne(willBeDeleted.getId()), is(Optional.empty()));
     }
