@@ -79,20 +79,22 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         assertArrayEquals(notAdded.toArray(), Arrays.asList(notInMenu).toArray());
     }
 
-//    @Test
-    // TODO Should work too
-//    public void getNotAddedDayMenuItemsRight() {
-//        DayMenuItem notInMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
-//
-//        dayMenu.addMenuItem(dayMenuItem);
-//
-//        Iterable<DayMenuItem> dayMenuItems = Arrays.asList(dayMenuItem, notInMenu);
-//
-//        List<DayMenuItem> notAdded = dayMenuItemManager.getNotAddedDayMenuItems(dayMenuItems, dayMenu);
-//
-//        assertThat(dayMenuItem.getDayMenus().contains(dayMenu))
-//        assertArrayEquals(notAdded.toArray(), Arrays.asList(notInMenu).toArray());
-//    }
+    @Test
+    public void getNotAddedDayMenusRight() {
+        DayMenuItem newItem = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
+
+        dayMenu.addMenuItem(newItem);
+        dayMenu.addMenuItem(dayMenuItem);
+        //dayMenuItem.addDayMenu(dayMenu);
+
+        Iterable<DayMenuItem> dayMenuItems = Arrays.asList(dayMenuItem, newItem);
+
+        List<DayMenuItem> notAdded = dayMenuItemManager.getNotAddedDayMenuItems(dayMenuItems, dayMenu);
+        // pepse still in
+        assertThat(notAdded.isEmpty(), is(true));
+
+        assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
+    }
 
     @Test
     public void addNewItemRight() throws Exception {
