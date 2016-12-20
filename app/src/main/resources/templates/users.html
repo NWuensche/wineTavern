@@ -38,6 +38,13 @@
 
 <div class="container__wrap">
     <div class="heading">
+        <div class="row" id="usernameError">
+            <div class="col-xs-6" th:if="${usernameTaken}" id="usernameError">
+                <h1 id="usernameError">
+                    <span class="fa"></span> Fehler (Username existiert bereits!)
+                </h1>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-6">
                 <h1>

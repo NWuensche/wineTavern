@@ -647,6 +647,12 @@ fieldset {
     background-color: tomato;
 }
 
+#usernameError {
+    background-color: tomato;
+}
+
+
+
 /* INDEX */
 
 .frontend .navbar{
