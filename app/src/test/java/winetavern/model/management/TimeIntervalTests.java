@@ -68,7 +68,7 @@ public class TimeIntervalTests {
         assertThat(timeInterval.intersects(startsBeforeEndsBefore), is(false));
 
         TimeInterval startsBeforeEndsOnStart = new TimeInterval(start.minusHours(5), start);
-        assertThat(timeInterval.intersects(startsBeforeEndsOnStart), is(false));
+        assertThat(timeInterval.intersects(startsBeforeEndsOnStart), is(true));
 
         TimeInterval startsBeforeEndsIn = new TimeInterval(start.minusHours(5), end.minusHours(1));
         assertThat(timeInterval.intersects(startsBeforeEndsIn), is(true));
@@ -98,26 +98,25 @@ public class TimeIntervalTests {
         assertThat(timeInterval.intersects(startsInEndsAfter), is(true));
 
         TimeInterval startsOnEndEndsAfter = new TimeInterval(end, end.plusHours(1));
-        assertThat(timeInterval.intersects(startsOnEndEndsAfter), is(false));
+        assertThat(timeInterval.intersects(startsOnEndEndsAfter), is(true));
 
         TimeInterval startsAfterEndsAfter = new TimeInterval(start.plusHours(4), end.plusHours(4));
         assertThat(timeInterval.intersects(startsAfterEndsAfter), is(false));
     }
 
     @Test
-    // TODO Should start and end be in Interval?
     public void timeInIntervalRight() {
         LocalDateTime before = start.minusHours(3);
         assertThat(timeInterval.timeInInterval(before), is(false));
 
-//        LocalDateTime onStart = start;
-//        assertThat(timeInterval.timeInInterval(onStart), is(true));
+        LocalDateTime onStart = start;
+        assertThat(timeInterval.timeInInterval(onStart), is(true));
 
         LocalDateTime inInterval = start.plusHours(1);
         assertThat(timeInterval.timeInInterval(inInterval), is(true));
 
-//        LocalDateTime onEnd = end;
-//        assertThat(timeInterval.timeInInterval(onEnd), is(true));
+        LocalDateTime onEnd = end;
+        assertThat(timeInterval.timeInInterval(onEnd), is(true));
 
         LocalDateTime after = end.plusHours(3);
         assertThat(timeInterval.timeInInterval(after), is(false));
