@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 public class DayMenu {
+
     @Id @GeneratedValue Long id;
 
     @Setter @NonNull private LocalDate day;
@@ -39,10 +40,12 @@ public class DayMenu {
 
     public void addMenuItem(DayMenuItem newItem) {
         dayMenuItems.add(newItem);
+        newItem.addDayMenu(this);
     }
 
     public void removeMenuItem(DayMenuItem dayMenuItem) {
         dayMenuItems.remove(dayMenuItem);
+        dayMenuItem.removeDayMenu(this);
     }
 
 }

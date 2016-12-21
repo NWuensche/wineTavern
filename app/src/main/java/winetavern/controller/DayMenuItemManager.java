@@ -114,7 +114,7 @@ public class DayMenuItemManager {
         DayMenu dayMenu = optionalDayMenu.get();
         if(dayMenuItem.getDayMenus().size() > 1) {
             // remove connection from old daymenuitem to daymenu
-            dayMenuItem.removeDayMenu(dayMenu);
+            dayMenu.removeMenuItem(dayMenuItem);
 
             // clone dayMenuItem
             dayMenuItem = dayMenuItem.clone(dayMenu);
@@ -181,7 +181,7 @@ public class DayMenuItemManager {
                                                      ModelAndView modelAndView) {
         DayMenuItem dayMenuItem = dayMenuItemRepository.findOne(itemId).get();
         DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
-        dayMenuItem.removeDayMenu(dayMenu);
+        dayMenu.removeMenuItem(dayMenuItem);
         dayMenuItemRepository.save(dayMenuItem);
 
         modelAndView.setViewName("redirect:/admin/menu/edit/"+String.valueOf(dayMenuId));

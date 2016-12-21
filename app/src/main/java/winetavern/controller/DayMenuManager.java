@@ -139,7 +139,7 @@ public class DayMenuManager {
         if(dayMenu != null) {
             dayMenu.getDayMenuItems().forEach((dayMenuItem) ->
             {
-                dayMenuItem.removeDayMenu(dayMenu);
+                dayMenu.removeMenuItem(dayMenuItem);
             });
             dayMenuRepository.delete(dayMenu);
         }
