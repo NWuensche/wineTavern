@@ -58,6 +58,7 @@ public class DayMenuItemManager {
      * @param dayMenu
      * @return
      */
+    // TODO Should be function of dayMenu
     public List<DayMenuItem> getNotAddedDayMenuItems(Iterable<DayMenuItem> dayMenuItems, DayMenu dayMenu) {
         List<DayMenuItem> resultSet = new ArrayList<>();
         dayMenuItems.forEach(dayMenuItem -> {
