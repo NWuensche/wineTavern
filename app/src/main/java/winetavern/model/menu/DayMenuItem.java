@@ -59,14 +59,12 @@ public class DayMenuItem implements Cloneable {
         dayMenus = new ArrayList<>();
     }
 
-    // TODO Is this really necessary? shouldn't dayMenu.add(item) be enough?
-    public void addDayMenu(DayMenu dayMenu) {
-        dayMenus.add(dayMenu);
+    protected void addDayMenu(DayMenu newMenu) {
+        dayMenus.add(newMenu);
     }
 
-    // TODO Is this really necessary? Shouldn't dayMenu.remove(item) be enough?
-    public void removeDayMenu(DayMenu dayMenu) {
-        dayMenus.remove(dayMenu);
+    protected void removeDayMenu(DayMenu removeMenu) {
+        dayMenus.remove(removeMenu);
     }
 
     public DayMenuItem clone(DayMenu dayMenu)  {
