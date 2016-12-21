@@ -67,6 +67,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
     }
 
     @Test
+    //TODO Should be DayMenu(Item) Test
     public void getNotAddedDayMenuItemsRight() {
         dayMenu.addMenuItem(dayMenuItem);
 
@@ -79,18 +80,6 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         assertThat(notAdded.get(0), is(notInMenu));
     }
 
-    @Test
-    //TODO Should be DayMenu(Item) Test
-    public void addDayMenuToItemRight() {
-        DayMenuItem newItem = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
-        dayMenu.addMenuItem(newItem);
-
-        assertThat(dayMenu.getDayMenuItems().contains(newItem), is(true));
-        assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
-    }
-
-    //TODO Test Remove alot
-    //TODO Should be DayMenu(Item) Test
     @Test
     public void addNewItemRight() throws Exception {
         Product newProduct = new Product("Prod", Money.of(3, EURO));
@@ -135,12 +124,12 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         mvc.perform(request);
 
         assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
-      //  assertThat(dayMenu.contains(newItem), is(true));
+        assertThat(dayMenu.getDayMenuItems().contains(newItem), is(true));
     }
 
     @Test
     public void deleteItemRight() throws Exception {
-        //dayMenuItem.addDayMenu(dayMenu);
+        dayMenu.addMenuItem(dayMenuItem);
 
         RequestBuilder request = post("/admin/menuitem/remove/"+
                 dayMenu.getId().toString() + "/" +
@@ -150,7 +139,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         mvc.perform(request);
 
         assertThat(dayMenuItem.getDayMenus().contains(dayMenu), is(false));
-        //  assertThat(dayMenu.contains(dayMenuItem), is(false));
+        assertThat(dayMenu.getDayMenuItems().contains(dayMenuItem), is(false));
     }
 
     @Test
@@ -199,7 +188,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
         mvc.perform(request)
-                .andExpect(view().name("error")); // TODO Cant find error.html
+                .andExpect(view().name("error"));
     }
 
     @Test
@@ -218,7 +207,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
                 .param("enabled", new Boolean(true).toString());
 
         mvc.perform(request)
-                .andExpect(view().name("error")); // TODO Cant find error.html
+                .andExpect(view().name("error"));
     }
 
 }

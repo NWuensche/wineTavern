@@ -33,8 +33,8 @@ public class DayMenuItemTests {
     private DayMenu addDayMenus() {
         DayMenu mockedDayMenu = mock(DayMenu.class);
         DayMenu mockedDayMenu2 = mock(DayMenu.class);
-        //dayMenuItem.addDayMenu(mockedDayMenu);
-        //dayMenuItem.addDayMenu(mockedDayMenu2);
+        dayMenuItem.addDayMenu(mockedDayMenu);
+        dayMenuItem.addDayMenu(mockedDayMenu2);
 
         return mockedDayMenu;
     }
