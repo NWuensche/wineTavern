@@ -45,27 +45,11 @@ public class DayMenuItemManager {
      */
     @RequestMapping("/admin/menuitem/add")
     public String addMenuItem(Model model, @RequestParam("frommenuitemid") Long cameFrom) {
-        model.addAttribute("daymenuitems", getNotAddedDayMenuItems(dayMenuItemRepository.findByEnabled(true),
-                dayMenuRepository.findOne(cameFrom).get()));
+        model.addAttribute("daymenuitems", dayMenuRepository.findOne(cameFrom).get()
+                .getNotAddedDayMenuItems(dayMenuItemRepository.findByEnabled(true)));
         model.addAttribute("dayMenu", dayMenuRepository.findOne(cameFrom).get());
         model.addAttribute("stock", stock);
         return "addmenuitem";
-    }
-
-    /**
-     * Returns a List of DayMenuItem's that are not in the given DayMenu already
-     * @param dayMenuItems
-     * @param dayMenu
-     * @return
-     */
-    // TODO Should be function of dayMenu
-    public List<DayMenuItem> getNotAddedDayMenuItems(Iterable<DayMenuItem> dayMenuItems, DayMenu dayMenu) {
-        List<DayMenuItem> resultSet = new ArrayList<>();
-        dayMenuItems.forEach(dayMenuItem -> {
-            if(!dayMenuItem.getDayMenus().contains(dayMenu))
-                resultSet.add(dayMenuItem);
-        });
-        return resultSet;
     }
 
     private Boolean pathVariablesValid(Long dayMenuId, Long dayMenuItemId) {

@@ -66,19 +66,7 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
             .andExpect(view().name("addmenuitem"));
     }
 
-    @Test
-    //TODO Should be DayMenu(Item) Test
-    public void getNotAddedDayMenuItemsRight() {
-        dayMenu.addMenuItem(dayMenuItem);
 
-        DayMenuItem notInMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
-
-        Iterable<DayMenuItem> dayMenuItems = Arrays.asList(dayMenuItem, notInMenu);
-        List<DayMenuItem> notAdded = dayMenuItemManager.getNotAddedDayMenuItems(dayMenuItems, dayMenu);
-
-        assertThat(notAdded.size(),is(1));
-        assertThat(notAdded.get(0), is(notInMenu));
-    }
 
     @Test
     public void addNewItemRight() throws Exception {

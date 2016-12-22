@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Michel
@@ -46,6 +48,17 @@ public class DayMenu {
     public void removeMenuItem(DayMenuItem dayMenuItem) {
         dayMenuItems.remove(dayMenuItem);
         dayMenuItem.removeDayMenu(this);
+    }
+
+    /**
+     * Returns a List of DayMenuItem's that are not in the given DayMenu already
+     * @param menuItems
+     * @return
+     */
+    public List<DayMenuItem> getNotAddedDayMenuItems(Iterable<DayMenuItem> menuItems) {
+        return StreamSupport.stream(menuItems.spliterator(), false)
+                .filter(item -> !this.dayMenuItems.contains(item))
+                .collect(Collectors.toList());
     }
 
 }

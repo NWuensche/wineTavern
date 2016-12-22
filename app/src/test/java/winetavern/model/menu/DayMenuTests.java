@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Niklas Wünsche
@@ -81,6 +83,19 @@ public class DayMenuTests {
         assertThat(dayMenu.getDayMenuItems().contains(newItem), is(false));
         assertThat(newItem.getDayMenus().contains(dayMenu), is(false));
 
+    }
+
+    @Test
+    public void getNotAddedDayMenuItemsRight() {
+        // TODO mock Items
+        DayMenuItem inMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
+        dayMenu.addMenuItem(inMenu);
+
+        DayMenuItem notInMenu = new DayMenuItem("Coke", "Awesome", Money.of(2, EURO), 3.0);
+        List<DayMenuItem> notAdded = dayMenu.getNotAddedDayMenuItems(Arrays.asList(inMenu, notInMenu));
+
+        assertThat(notAdded.size(),is(1));
+        assertThat(notAdded.get(0), is(notInMenu));
     }
 
 }
