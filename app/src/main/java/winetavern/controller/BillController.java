@@ -13,6 +13,8 @@ import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.user.EmployeeManager;
+import winetavern.splitter.SplitBuilder;
+import winetavern.splitter.Splitter;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -116,16 +118,21 @@ public class BillController {
             Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
             bills.save(newBill);
             Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
-            for (BillItem billItem : bill.getItems()) { //work with every item that existed before
-                if (!args.keySet().contains(billItem)) {
-                    bill.changeItem(billItem, 0);
-                    newBill.changeItem(billItem, billItem.getQuantity());
-                } else {
-                    newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
-                    bills.save(newBill);
-                    bill.changeItem(billItem, args.get(billItem));
-                }
-            }
+
+            SplitBuilder<BillItem> splitBillItems = new SplitBuilder<BillItem>(bill.getItems());
+
+            splitBillItems
+                    .splitBy(billItem -> args.keySet().contains(billItem))
+                    .forEachPassed(billItem -> {
+                        newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
+                        bills.save(newBill);
+                        bill.changeItem(billItem, args.get(billItem));
+                    })
+                    .forEachNotPassed(billItem -> {
+                        bill.changeItem(billItem, 0);
+                        newBill.changeItem(billItem, billItem.getQuantity());
+                    });
+
             bills.save(bill);
             bills.save(newBill);
             model.addAttribute("leftbill",bill);
