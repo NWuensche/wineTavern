@@ -31,7 +31,7 @@
                 <a th:href="@{'/service/bills/details/' + ${bill.id} + '/split'}">
                     <button class="btn btn-primary">Aufteilen</button>
                 </a>
-                <a th:href="@{'/service/bills/details/' + ${bill.id} + '/print'}" target="_blank">
+                <a th:onclick="'closeBill(' + ${bill.id} + ')'">
                     <button class="btn btn-primary">Drucken</button>
                 </a>
             </div>
@@ -187,6 +187,15 @@
         document.getElementById("itemname").value=name;
         document.getElementById("quantity").value=1;
         $("#addItem").modal("show");
+    }
+
+    function closeBill(id){
+        printWindow =
+            window.open(("/service/bills/details/" + id + "/print"),"printWindow","width=500,height=780,left=200,status=no,scrollbars=no,titlebar=no,menubar=no,location=no,toolbar=no,resizable=no,");
+        printWindow.focus;
+        setTimeout(function(){
+            window.location.href=("/service/bills");
+        },1000);
     }
 
     /*]]>*/
