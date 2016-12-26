@@ -106,7 +106,7 @@ public class BillController {
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
 
-        if (query.isPresent() && !query.equals("")) {
+        if (query.isPresent() && !query.get().equals("")) {
             Map<BillItem, Integer> args = queryToMap(query.get());
             args.keySet()
                     .stream()
@@ -156,7 +156,7 @@ public class BillController {
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
 
-        if(!query.isPresent()) {
+        if(!query.isPresent() || query.get().equals("")) {
             model.addAttribute("bill", bill);
             return "splitbill";
         }
