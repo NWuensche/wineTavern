@@ -80,14 +80,21 @@ public class BillController {
         // TODO, was, wenn negativ?
         int diff = quantity - billItem.getQuantity();
         if (diff > 0) { //adds orders to expenses of staff
-            accountancy.add( //the staff pays 90% of the selling price
-                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
-                            "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
-                            employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
-                            expenseGroups.findByName("Bestellung").get())
-            );
+            addNewExpenseForEmployee(bill, billItem, diff);
         }
         bill.changeItem(billItem, quantity);
+    }
+
+    /**
+     * the staff pays 90% of the selling price
+     */
+    private void addNewExpenseForEmployee(Bill bill, BillItem billItem, int diff) {
+         accountancy.add(new Expense(
+                                billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
+                                "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
+                                employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
+                                expenseGroups.findByName("Bestellung").get()
+                         ));
     }
 
     /**
