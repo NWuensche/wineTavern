@@ -77,7 +77,7 @@
                     <tbody>
                     <tr th:each="bill: ${old}">
                         <td th:text="${bill.id}"></td>
-                        <td th:text="${bill.closeTime}"></td>
+                        <td th:text="${bill.closeTime.toLocalDate()} + ' ' + ${bill.closeTime.toLocalTime()}"></td>
                         <td th:text="${bill.desk}"></td>
                     </tr>
                     </tbody>
