@@ -19,6 +19,7 @@ import winetavern.model.user.Roles;
 import javax.transaction.Transactional;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -41,13 +42,13 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private BillItemRepository billItemRepository;
     @Autowired private EmployeeManager employeeManager;
-    @Autowired private UserAccountManager userAccountManager;
 
     private BillItem fries;
     private Bill bill;
 
     @Before
     public void before() {
+        dayMenuItemRepository.deleteAll();
         DayMenuItem dayMenuItem = new DayMenuItem("Pommes", "Description", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(dayMenuItem);
         fries = new BillItem(dayMenuItem);
@@ -135,11 +136,15 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void dontAddAnythingInDetails() throws Exception {
+        DayMenuItem notAdded = new DayMenuItem("Not There", "Desc", Money.of(3, EURO), 3.0);
+        dayMenuItemRepository.save(notAdded);
+
         RequestBuilder noQueryRequest = get("/service/bills/details/" + bill.getId())
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
         mvc.perform(noQueryRequest)
-                .andExpect(model().attributeExists("menuitems"))
+                .andExpect(model().attribute("bill", bill))
+                .andExpect(model().attribute("menuitems", Arrays.asList(notAdded)))
                 .andExpect(view().name("billdetails"));
     }
 

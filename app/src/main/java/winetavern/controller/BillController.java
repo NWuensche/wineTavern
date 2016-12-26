@@ -18,6 +18,8 @@ import winetavern.splitter.Splitter;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Louis
@@ -90,11 +92,23 @@ public class BillController {
             return "redirect:/service/bills/details/" + billid;
         } else {
             model.addAttribute("bill", bill);
-            List<DayMenuItem> menuItems = Helper.convertToList(dayMenuItems.findAll());
-            bill.getItems().forEach(it -> menuItems.remove(it.getItem()));
+
+            List<DayMenuItem> menuItems = StreamSupport
+                    .stream(dayMenuItems.findAll().spliterator(), false)
+                    .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
+                    .collect(Collectors.toList());
+
             model.addAttribute("menuitems", menuItems); //TODO show only items of the day
             return "billdetails";
         }
+    }
+
+    private Set<DayMenuItem> dayMenuItemsOfBill(Bill bill) {
+        return bill
+                .getItems()
+                .stream()
+                .map(BillItem::getItem)
+                .collect(Collectors.toSet());
     }
 
     @RequestMapping("/service/bills/details/{billid}/print")
