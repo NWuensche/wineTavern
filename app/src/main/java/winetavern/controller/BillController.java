@@ -14,7 +14,6 @@ import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.user.EmployeeManager;
 import winetavern.splitter.SplitBuilder;
-import winetavern.splitter.Splitter;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -134,7 +133,7 @@ public class BillController {
             bills.save(newBill);
             Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
 
-            SplitBuilder<BillItem> splitBillItems = new SplitBuilder<BillItem>(bill.getItems());
+            SplitBuilder<BillItem> splitBillItems = new SplitBuilder<>(bill.getItems());
 
             splitBillItems
                     .splitBy(billItem -> args.keySet().contains(billItem))
@@ -161,12 +160,28 @@ public class BillController {
     }
 
     private Map<BillItem, Integer> queryToMap(String query) {
+        String[] args = splitQuery(query);
+
+        return getResources(args);
+    }
+
+    private String[] splitQuery(String query) {
+        return query.substring(0, query.length() - 1).split("\\|");
+    }
+
+    /**
+     * split bill into \<BillItem, quantity\> Map
+     * @return
+     */
+    private Map<BillItem, Integer> getResources(String[] args) {
         Map<BillItem, Integer> res = new HashMap<>();
-        String[] args = query.substring(0, query.length() - 1).split("\\|"); //split bill in arguments
-        for (String arg : args) { //split bill in billItemId,quantity
-            String[] itemString = arg.split(",");
-            res.put(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
+
+        for (String arg : args) {
+            Long billItemId = Long.parseLong(arg.split(",")[0]);
+            Integer quantityOfItem = Integer.parseInt(arg.split(",")[1]);
+            res.put(billItems.findOne(billItemId).get(), quantityOfItem);
         }
+
         return res;
     }
 
