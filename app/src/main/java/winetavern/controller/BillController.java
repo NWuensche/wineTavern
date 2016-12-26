@@ -104,6 +104,7 @@ public class BillController {
             bill.close(businessTime);
             bills.save(bill);
         }
+        model.addAttribute("time",Helper.localDateTimeToDateTimeString(businessTime.getTime()));
         model.addAttribute("bill", bill);
         return "printbill";
     }
