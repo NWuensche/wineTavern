@@ -164,8 +164,7 @@ public class BillController {
         Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
         Map<BillItem, Integer> args = queryToMap(query.get());
 
-        SplitBuilder<BillItem> splitBillItems = new SplitBuilder<>(bill.getItems());
-        splitBillItems
+        SplitBuilder.splitCollection(bill.getItems())
                 .splitBy(billItem -> args.keySet().contains(billItem))
                 .forEachPassed(billItem -> {
                     newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
