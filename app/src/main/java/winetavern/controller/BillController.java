@@ -106,10 +106,11 @@ public class BillController {
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
         if (query.isPresent() && !query.equals("")) {
-            Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
-            for (BillItem billItem : args.keySet()) {
-                changeBillItem(bill, billItem, args.get(billItem));
-            }
+            Map<BillItem, Integer> args = queryToMap(query.get());
+            args.keySet()
+                    .stream()
+                    .forEach(bItem -> changeBillItem(bill, bItem, args.get(bItem)));
+
             bills.save(bill);
             return "redirect:/service/bills/details/" + billid;
         } else {
