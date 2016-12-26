@@ -111,6 +111,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
                 .param("person", employee.getId().toString())
                 .param("cover", employee1.getId() + "|");
 
+        // TODO Sometimes wrong
         mvc.perform(request)
                 .andExpect(model().attribute("expOpen", Sets.newSet(employee2)))
                 .andExpect(model().attributeExists("expCovered"))

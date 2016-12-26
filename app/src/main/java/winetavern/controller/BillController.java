@@ -105,6 +105,7 @@ public class BillController {
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
+
         if (query.isPresent() && !query.equals("")) {
             Map<BillItem, Integer> args = queryToMap(query.get());
             args.keySet()
@@ -112,18 +113,20 @@ public class BillController {
                     .forEach(bItem -> changeBillItem(bill, bItem, args.get(bItem)));
 
             bills.save(bill);
+
             return "redirect:/service/bills/details/" + billid;
-        } else {
-            model.addAttribute("bill", bill);
-
-            List<DayMenuItem> menuItems = StreamSupport
-                    .stream(dayMenuItems.findAll().spliterator(), false)
-                    .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
-                    .collect(Collectors.toList());
-
-            model.addAttribute("menuitems", menuItems); //TODO show only items of the day
-            return "billdetails";
         }
+
+        model.addAttribute("bill", bill);
+
+        List<DayMenuItem> menuItems = StreamSupport
+                .stream(dayMenuItems.findAll().spliterator(), false)
+                .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
+                .collect(Collectors.toList());
+
+        model.addAttribute("menuitems", menuItems); //TODO show only items of the day
+        return "billdetails";
+
     }
 
     private Set<DayMenuItem> dayMenuItemsOfBill(Bill bill) {
@@ -152,35 +155,35 @@ public class BillController {
     @RequestMapping("/service/bills/details/{billid}/split")
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
-        if(query.isPresent()) {
-            Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
-            bills.save(newBill);
-            Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
-
-            SplitBuilder<BillItem> splitBillItems = new SplitBuilder<>(bill.getItems());
-
-            splitBillItems
-                    .splitBy(billItem -> args.keySet().contains(billItem))
-                    .forEachPassed(billItem -> {
-                        newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
-                        bills.save(newBill);
-                        bill.changeItem(billItem, args.get(billItem));
-                    })
-                    .forEachNotPassed(billItem -> {
-                        bill.changeItem(billItem, 0);
-                        newBill.changeItem(billItem, billItem.getQuantity());
-                    });
-
-            bills.save(bill);
-            bills.save(newBill);
-            model.addAttribute("leftbill",bill);
-            model.addAttribute("rightbill",newBill);
-            return "splitbill";
-
-        } else {
+        
+        if(!query.isPresent()) {
             model.addAttribute("bill", bill);
             return "splitbill";
         }
+
+        Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
+        bills.save(newBill);
+        Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
+
+        SplitBuilder<BillItem> splitBillItems = new SplitBuilder<>(bill.getItems());
+
+        splitBillItems
+                .splitBy(billItem -> args.keySet().contains(billItem))
+                .forEachPassed(billItem -> {
+                    newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
+                    bills.save(newBill);
+                    bill.changeItem(billItem, args.get(billItem));
+                })
+                .forEachNotPassed(billItem -> {
+                    bill.changeItem(billItem, 0);
+                    newBill.changeItem(billItem, billItem.getQuantity());
+                });
+
+        bills.save(bill);
+        bills.save(newBill);
+        model.addAttribute("leftbill",bill);
+        model.addAttribute("rightbill",newBill);
+        return "splitbill";
     }
 
     private Map<BillItem, Integer> queryToMap(String query) {
