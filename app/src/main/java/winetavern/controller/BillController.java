@@ -12,9 +12,11 @@ import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
+import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
 import winetavern.splitter.SplitBuilder;
 
+import javax.money.MonetaryAmount;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,13 +90,13 @@ public class BillController {
     /**
      * the staff pays 90% of the selling price
      */
-    private void addNewExpenseForEmployee(Bill bill, BillItem billItem, int diff) {
-         accountancy.add(new Expense(
-                                billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
-                                "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
-                                employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
-                                expenseGroups.findByName("Bestellung").get()
-                         ));
+    private void addNewExpenseForEmployee(Bill bill, BillItem billItem, int difference) {
+        MonetaryAmount toPay = billItem.getItem().getPrice().multiply(difference).multiply(0.9).negate();
+        String description = "Rechnung Nr. " + bill.getId() + ": " + difference + " x " + billItem.getItem().getName();
+        Employee currUser = employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get();
+        ExpenseGroup orderGroup = expenseGroups.findByName("Bestellung").get();
+
+        accountancy.add(new Expense(toPay, description, currUser, orderGroup));
     }
 
     /**
