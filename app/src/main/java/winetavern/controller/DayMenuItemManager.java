@@ -56,10 +56,7 @@ public class DayMenuItemManager {
         Optional<DayMenuItem> optionalDayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId);
         Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
 
-        if(optionalDayMenuItem.isPresent() == false || optionalDayMenu.isPresent() == false) {
-            return false;
-        }
-        return true;
+        return optionalDayMenuItem.isPresent() && optionalDayMenu.isPresent();
     }
 
     /**
@@ -69,7 +66,7 @@ public class DayMenuItemManager {
     public String editMenuItem(@PathVariable("daymenuid") Long dayMenuId,
                                @PathVariable("itemid") Long itemId,
                                Model model) {
-        if (pathVariablesValid(dayMenuId, itemId) == false) {
+        if (!pathVariablesValid(dayMenuId, itemId)) {
             return "error";
         }
         model.addAttribute("menuitem", dayMenuItemRepository.findOne(itemId).get());
@@ -90,7 +87,7 @@ public class DayMenuItemManager {
                                          ModelAndView mvc) {
         Optional<DayMenuItem> optionalDayMenuItem = dayMenuItemRepository.findOne(itemId);
         Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
-        if (pathVariablesValid(dayMenuId, itemId) == false) {
+        if (!pathVariablesValid(dayMenuId, itemId)) {
             mvc.setViewName("error");
             return mvc;
         }
