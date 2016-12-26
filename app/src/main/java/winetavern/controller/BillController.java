@@ -76,6 +76,20 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
+    private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
+        // TODO, was, wenn negativ?
+        int diff = quantity - billItem.getQuantity();
+        if (diff > 0) { //adds orders to expenses of staff
+            accountancy.add( //the staff pays 90% of the selling price
+                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
+                            "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
+                            employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
+                            expenseGroups.findByName("Bestellung").get())
+            );
+        }
+        bill.changeItem(billItem, quantity);
+    }
+
     /**
      * @param query Format: billItemID,newNumberOfItems|billItemId,...
      */
@@ -185,16 +199,4 @@ public class BillController {
         return res;
     }
 
-    private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
-        int diff = quantity - billItem.getQuantity();
-        if (diff > 0) { //adds orders to expenses of staff
-            accountancy.add( //the staff pays 90% of the selling price
-                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
-                    "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
-                            employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
-                    expenseGroups.findByName("Bestellung").get())
-            );
-        }
-        bill.changeItem(billItem, quantity);
-    }
 }
