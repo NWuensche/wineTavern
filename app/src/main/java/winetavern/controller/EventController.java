@@ -187,6 +187,8 @@ public class EventController {
     @param externalName optional - the name of the external to create
     @param externalWage optional - the wage of the external to create
      */
+
+    //TODO Isn't mapped to!
     @PostMapping("/admin/events/add")
     public String addEvent(@RequestParam String name, @RequestParam String desc, @RequestParam String date,
                            @RequestParam String price, @RequestParam String external, @RequestParam String externalName,

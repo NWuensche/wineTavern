@@ -99,7 +99,6 @@ public class DayMenuManager {
                     .map(event -> Optional.of((Vintner) event.getPerson()))
                     .orElse(Optional.empty());
 
-        // TODO is this fDayMenuStuff right?
         if(vintner.isPresent()) {
             // set vintnerday products
             DayMenu fDayMenu = new DayMenu();
