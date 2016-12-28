@@ -16,6 +16,9 @@ import winetavern.model.reservation.ReservationRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Sev, Michel Kunkler
@@ -40,14 +43,14 @@ public class ReservationManager {
     public List<Desk> getReservatedTablesByTime(LocalDateTime localDateTime) {
         List<Desk> reservedDesks = new ArrayList<Desk>();
 
-        for(Desk desk : desks.findAll()) {
-            for(Reservation reservation : desk.getReservationList()) {
-                if(isActive(reservation, localDateTime)) {
-                    reservedDesks.add(desk);
-                    break;
-                }
-            }
-        }
+        Predicate<Desk> filterReservated = (desk) -> desk.getReservationList()
+                .stream()
+                .anyMatch(reservation -> isActive(reservation, localDateTime));
+
+        StreamSupport
+                .stream(desks.findAll().spliterator(), false)
+                .filter(filterReservated)
+                .forEach((s) -> reservedDesks.add(s));
 
         return reservedDesks;
     }
@@ -56,11 +59,9 @@ public class ReservationManager {
      * makes thymeleaf working with the desk object by removing everything but the name :)
      */
     public List<String> deskToName(List<Desk> deskList) {
-        List<String> nameList = new ArrayList<String>();
-
-        deskList.forEach(desk -> nameList.add(desk.getName()));
-
-        return nameList;
+        return deskList.stream()
+                .map(Desk::getName)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -78,23 +79,23 @@ public class ReservationManager {
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("desk") Optional<String> deskName,
                                            ModelAndView modelAndView) {
-        LocalDateTime reservationTime = reservationTimeString.isPresent() ?
-                LocalDateTime.parse(reservationTimeString.get(), dateTimeFormatter) :
-                businessTime.getTime();
+        LocalDateTime reservationTime = reservationTimeString
+                                .map(time -> LocalDateTime.parse(time, dateTimeFormatter))
+                                .orElse(businessTime.getTime());
 
-        if(deskName.isPresent()) {
-            modelAndView.addObject("desk", deskName.get());
-            Desk desk = desks.findByName(deskName.get());
+        deskName.ifPresent(name -> {
+            modelAndView.addObject("desk", name);
+            Desk desk = desks.findByName(name);
+
             //show only future reservations
-            List<Reservation> reservations = desk.getReservationList();
-            List<Reservation> finalReservations = new ArrayList<>();
-            reservations.forEach((reservation) -> {
-                if(!reservation.getReservationEnd().isBefore(reservationTime))
-                    finalReservations.add(reservation);
-            });
+            List<Reservation> finalReservations = desk.getReservationList()
+                    .stream()
+                    .filter(reservation -> !reservation.getReservationEnd().isBefore(reservationTime))
+                    .collect(Collectors.toList());
+
             modelAndView.addObject("deskReservations", finalReservations);
             modelAndView.addObject("deskcapacity", desk.getCapacity());
-        }
+        });
 
         reservationTableData(sort, reservationTime, modelAndView);
         return reservationTime(reservationTime, modelAndView);
@@ -161,12 +162,9 @@ public class ReservationManager {
     }
 
     private List<Reservation> pickLater(LocalDateTime time, List<Reservation> list) {
-        List<Reservation> res = new LinkedList<>();
-        for (Reservation reservation: list)
-            if (reservation.getInterval().getEnd().isAfter(time))
-                res.add(reservation);
-
-        return res;
+        return list.stream()
+                .filter(reservation -> reservation.getInterval().getEnd().isAfter(time))
+                .collect(Collectors.toList());
     }
 
 }
