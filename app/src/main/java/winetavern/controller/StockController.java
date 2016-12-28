@@ -60,13 +60,12 @@ public class StockController {
         newProduct.addCategory(category);
         stock.save(new InventoryItem(newProduct, Quantity.of(1)));
 
-        if (category.contains("wein")) { //every wine must be specified with a vintner
-            Optional<Vintner> vintnerOptional = vintnerManager.findOne(vintnerId);
-            if (vintnerOptional.isPresent()) {
-                Vintner vintner = vintnerOptional.get();
-                vintner.addWine(newProduct);
-                vintnerManager.save(vintner);
-            }
+        if (category.toLowerCase().contains("wein")) { //every wine must be specified with a vintner
+            vintnerManager.findOne(vintnerId)
+                    .ifPresent(vintner -> {
+                        vintner.addWine(newProduct);
+                        vintnerManager.save(vintner);
+                    });
         }
 
         return "redirect:/admin/stock";
@@ -84,12 +83,13 @@ public class StockController {
         product = removeAllCategories(product);
         product.addCategory(category);
 
-        if (category.contains("wein")) { //every wine must be specified with a vintner
+        if (category.toLowerCase().contains("wein")) { //every wine must be specified with a vintner
             for (Vintner vintner : vintnerManager.findAll()) {
                 if (vintner.getId().equals(vintnerId)) { //add wine to the selected vintner
                     vintner.addWine(product);
                     vintnerManager.save(vintner);
                 } else if (vintner.removeWine(product)) { //remove wine from all other vintners
+                    //TODO What does this else-if-statement?
                     vintnerManager.save(vintner); //only need to save if vintner was changed
                 }
             }

@@ -96,15 +96,19 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
         RequestBuilder request = post("/admin/stock/addProduct/")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", "prod")
+                .param("name", "new drink")
                 .param("price", "3.4")
-                .param("category", Category.SNACK.toString())
+                .param("category", "New WeißWein")
                 .param("vintner", vintner.getId().toString());
 
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(Helper.getFirstItem(products.findByName("prod")).getPrice(), is(Money.of(3.4, EURO)));
+        assertThat(Helper.getFirstItem(products.findByName("new drink")).getPrice(), is(Money.of(3.4, EURO)));
+        assertThat(vintner.getWineSet()
+                        .stream()
+                        .anyMatch(product -> product.getName().equals("new drink")),
+                    is(true));
     }
 
     @Test
@@ -114,14 +118,18 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
                 .param("productid", product.getId().toString())
                 .param("productname", "Schnaps")
                 .param("productprice", "10")
-                .param("productcategory", Category.LIQUOR.toString())
+                .param("productcategory", "Awesome WhiteWein")
                 .param("productvintner", vintner.getId().toString());
 
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(products.findByName("Äpfel").spliterator().getExactSizeIfKnown(), is(0l));
-        assertThat(Helper.getFirstItem(products.findByName("Schnaps")).getPrice(), is(Money.of(10, EURO)));
+        assertThat(Helper.getFirstItem(products.findByName("Schnaps")).getPrice(), is(Money.of(10, EURO)));        assertThat(Helper.getFirstItem(products.findByName("Schnaps")).getPrice(), is(Money.of(10, EURO)));
+        assertThat(vintner.getWineSet()
+                            .stream()
+                            .anyMatch(product -> product.getName().equals("Schnaps"))
+                    , is(true));
+
     }
 
 }
