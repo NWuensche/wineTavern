@@ -23,6 +23,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Louis
@@ -50,6 +52,7 @@ public class ShiftController {
      * calendar.
      * @return JSON parsable String
      */
+    //TODO Connect with EventController.buildCalendarString?
     private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
@@ -114,8 +117,7 @@ public class ShiftController {
 
     @RequestMapping("/admin/management/shifts/remove/{shiftid}")
     public String changeShift(@PathVariable Long shiftid) {
-        Shift shift = shifts.findOne(shiftid).get();
-        shifts.delete(shift);
+        shifts.findOne(shiftid).ifPresent(shifts::delete);
         return "redirect:/admin/management/shifts";
     }
 
@@ -156,18 +158,18 @@ public class ShiftController {
     }
 
     public List<Shift> getShiftsOfWeek(TimeInterval week) {
-        List<Shift> res = new LinkedList<>();
-        for (Shift shift : shifts.findAll())
-            if (shift.getInterval().intersects(week)) res.add(shift);
+        List<Shift> res = StreamSupport.stream(shifts.findAll().spliterator(), false)
+                .filter(shift -> shift.getInterval().intersects(week))
+                .collect(Collectors.toList());
 
         Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
         return res;
     }
 
     public List<Shift> getShiftsOfDay(LocalDate day) {
-        List<Shift> res = new LinkedList<>();
-        for (Shift shift : shifts.findAll())
-            if (shift.getInterval().timeInInterval(day.atStartOfDay())) res.add(shift);
+        List<Shift> res = StreamSupport.stream(shifts.findAll().spliterator(), false)
+                .filter(shift -> shift.getInterval().timeInInterval(day.atStartOfDay()))
+                .collect(Collectors.toList());
 
         Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
         return res;
