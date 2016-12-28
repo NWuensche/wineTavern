@@ -74,7 +74,7 @@ public class Bill {
 
     public LocalDateTime getCloseTime() {
         if (!isClosed()) throw new IllegalStateException("the bill must be closed to consist a time");
-        return payTime;
+        return this.payTime;
     }
 
     public MonetaryAmount getPrice() {
