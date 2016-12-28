@@ -21,6 +21,7 @@ import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
+import winetavern.model.management.EventCatalog;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
@@ -28,6 +29,9 @@ import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.Roles;
+import winetavern.model.user.Vintner;
+import winetavern.model.user.VintnerManager;
+import winetavern.model.user.VintnerTests;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -44,18 +48,26 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private DayMenuRepository dayMenuRepository;
     @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private VintnerManager vintnerManager;
+    @Autowired private EventCatalog eventCatalog;
 
     private DayMenu dayMenu;
     private DayMenuItem dayMenuItem;
+    private Vintner vintner;
 
     @Before
     public void before() {
+        eventCatalog.deleteAll();
         Product prod = new Product("Prod", Money.of(3, EURO));
         prod.addCategory(Category.MENU.toString());
         productCatalog.save(prod);
 
         InventoryItem iItem = new InventoryItem(prod, Quantity.of(3.0));
         stock.save(iItem);
+
+        vintner = new Vintner("test", 2);
+        vintnerManager.save(vintner);
+        addVintnerDays();
 
         dayMenuItem = new DayMenuItem("Name", "Desc", Money.of(3, EURO), 4.0);
         dayMenuItem.setProduct(prod);
@@ -64,6 +76,17 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
         dayMenu = new DayMenu(LocalDate.of(2016,11,11));
         dayMenu.addMenuItem(dayMenuItem);
         dayMenuRepository.save(dayMenu);
+    }
+
+    private void addVintnerDays() {
+        RequestBuilder request = post("/admin/events")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        try {
+            mvc.perform(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -103,10 +126,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     @Test
     public void createDayMenuWithRealDate() throws Exception {
         RequestBuilder request = post("/admin/menu/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("date", "09.11.1918");
+                .param("date", "04.09.2015");
         mvc.perform(request);
 
-        LocalDate givenDate = LocalDate.of(1918, 11, 9);
+        LocalDate givenDate = LocalDate.of(2015, 9, 4);
 
         boolean[] isDateInRepo = {false};
         Iterable<DayMenu> allDayMenus = dayMenuRepository.findAll();

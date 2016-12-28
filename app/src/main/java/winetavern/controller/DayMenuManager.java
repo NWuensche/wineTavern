@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.StreamSupport;
 
 
 /**
@@ -82,67 +83,62 @@ public class DayMenuManager {
     public String addMenuPost(@ModelAttribute("date") String date) {
         LocalDate creationDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         LocalDateTime creationDateTime = LocalDateTime.of(creationDate, LocalTime.MIN);
-        DayMenu dayMenu = copyPreDayMenu(creationDate);
-
-        if(dayMenu == null) {
-            dayMenu = new DayMenu(creationDate);
-        }
+        DayMenu dayMenu = copyPreDayMenu(creationDate).orElse(new DayMenu(creationDate)); // TODO Wirklich hier deklarieren?
 
         //check if daymenu already exists
-        if(dayMenuRepository.findByDay(dayMenu.getDay()) == null) {
-
-            //check for vintner day
-            Vintner vintner = null;
-            for( Event event : eventCatalog.findAll() ) {
-                if(event.getInterval().timeInInterval(creationDateTime) && event.isVintnerDay()) {
-                    vintner = (Vintner)event.getPerson();
-                    break;
-                }
-            }
-            if(vintner != null) {
-                // set vintnerday products
-                dayMenu = new DayMenu();
-                dayMenu.setDay(creationDate);
-                for( DayMenuItem dayMenuItem : dayMenuItemRepository.findAll() )  {
-                    if(!dayMenuItem.isEnabled())
-                        continue;
-                    for( Product wine : vintner.getWineSet()) {
-                       if(wine == dayMenuItem.getProduct()) {
-                           DayMenuItem discountedDayMenuItem = new DayMenuItem();
-                           discountedDayMenuItem.setQuantityPerProduct(dayMenuItem.getQuantityPerProduct());
-                           discountedDayMenuItem.setDescription(dayMenuItem.getDescription());
-                           discountedDayMenuItem.setName(dayMenuItem.getName());
-                           discountedDayMenuItem.setProduct(dayMenuItem.getProduct());
-                           discountedDayMenuItem.setPrice(dayMenuItem.getPrice().divide(2.0));
-                           dayMenu.addMenuItem(discountedDayMenuItem);
-                           discountedDayMenuItem.setEnabled(false);
-                           dayMenuItemRepository.save(discountedDayMenuItem);
-                           dayMenu.addMenuItem(discountedDayMenuItem);
-                       }
-                    }
-                }
-                dayMenuRepository.save(dayMenu);
-            } else {
-                // set preday menu
-                dayMenuRepository.save(dayMenu);
-            }
-            return "redirect:/admin/menu/edit/" + dayMenu.getId();
-        } else {
-            Long existingId = dayMenuRepository.findByDay(dayMenu.getDay()).getId();
+        if(dayMenuRepository.findByDay(dayMenu.getDay()).isPresent()) {
+            Long existingId = dayMenuRepository.findByDay(dayMenu.getDay()).get().getId();
+            dayMenuRepository.save(dayMenu);
             return "redirect:/admin/menu/edit/" + existingId.toString();
         }
+
+        //check for vintner day
+        Optional<Vintner> vintner = StreamSupport.stream(eventCatalog.findAll().spliterator(), false)
+                .filter(event -> event.getInterval().timeInInterval(creationDateTime) && event.isVintnerDay())
+                .findFirst()
+                    .map(event -> Optional.of((Vintner) event.getPerson()))
+                    .orElse(Optional.empty());
+
+        // TODO is this fDayMenuStuff right?
+        if(vintner.isPresent()) {
+            // set vintnerday products
+            DayMenu fDayMenu = new DayMenu();
+            fDayMenu.setDay(creationDate);
+            StreamSupport.stream(dayMenuItemRepository.findAll().spliterator(), false)
+                    .filter(DayMenuItem::isEnabled)
+                    .forEach(item -> {
+                        vintner.get().getWineSet().stream()
+                                .filter(wine -> wine == item.getProduct())
+                                .forEach(wine -> {
+                                    DayMenuItem discountedDayMenuItem = new DayMenuItem();
+                                    discountedDayMenuItem.setQuantityPerProduct(item.getQuantityPerProduct());
+                                    discountedDayMenuItem.setDescription(item.getDescription());
+                                    discountedDayMenuItem.setName(item.getName());
+                                    discountedDayMenuItem.setProduct(item.getProduct());
+                                    discountedDayMenuItem.setPrice(item.getPrice().divide(2.0));
+                                    fDayMenu.addMenuItem(discountedDayMenuItem);
+                                    discountedDayMenuItem.setEnabled(false);
+                                    dayMenuItemRepository.save(discountedDayMenuItem);
+                                    fDayMenu.addMenuItem(discountedDayMenuItem);
+                                });
+                    });
+            dayMenuRepository.save(fDayMenu);
+        }
+        else {
+            dayMenuRepository.save(dayMenu);
+        }
+
+        return "redirect:/admin/menu/edit/" + dayMenu.getId();
     }
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public String removeMenu(@RequestParam("daymenuid") Long dayMenuId) {
-        DayMenu dayMenu = dayMenuRepository.findOne(dayMenuId).get();
-        if(dayMenu != null) {
-            dayMenu.getDayMenuItems().forEach((dayMenuItem) ->
-            {
-                dayMenu.removeMenuItem(dayMenuItem);
-            });
-            dayMenuRepository.delete(dayMenu);
-        }
+        dayMenuRepository.findOne(dayMenuId)
+                .ifPresent(dayMenu -> {
+                    dayMenu.getDayMenuItems().forEach(dayMenu::removeMenuItem);
+                    dayMenuRepository.delete(dayMenu);
+                });
+
         return "redirect:/admin/menu/show";
     }
 
@@ -156,16 +152,19 @@ public class DayMenuManager {
     }
 
 
-    protected DayMenu copyPreDayMenu(LocalDate today) {
+    protected Optional<DayMenu> copyPreDayMenu(LocalDate today) {
         LocalDate yesterday = today.minusDays(1);
-        DayMenu preDayMenu = dayMenuRepository.findByDay(yesterday);
-        if (preDayMenu == null)
-            return null;
-        DayMenu newDayMenu = new DayMenu(today); //preDayMenu.clone(dayMenuItemRepository);
-        dayMenuRepository.save(newDayMenu);
-        for(DayMenuItem dayMenuItem : preDayMenu.getDayMenuItems()) {
-            newDayMenu.addMenuItem(dayMenuItem);
-        }
+        Optional<DayMenu> preDayMenu = dayMenuRepository.findByDay(yesterday);
+
+        Optional<DayMenu> newDayMenu = preDayMenu
+                .map(pDM -> {
+                    DayMenu todayMenu = new DayMenu(today);
+                    dayMenuRepository.save(todayMenu); // TODO Should this be before or after stream?
+                    pDM.getDayMenuItems().forEach(todayMenu::addMenuItem);
+                    return Optional.of(todayMenu);
+                })
+                .orElse(Optional.empty());
+
         return newDayMenu;
     }
 
@@ -227,7 +226,7 @@ public class DayMenuManager {
                     menuItems.addCell(cellPrice);
                 }
 
-                if (itemList.size() > 0) { //only print category if it contains items
+                if (!itemList.isEmpty()) { //only print category if it contains items
                     Paragraph categoryTitle = new Paragraph("\n" + category, boldFont);
                     categoryTitle.setSpacingAfter(5);
                     categoryTitle.setIndentationLeft(40);
