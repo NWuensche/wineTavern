@@ -32,7 +32,6 @@ public class ExternalTests {
         wage = Money.of(300, EURO);
         external = new External("name", wage);
         event = new Event("testEvent", Money.of(10, EURO), timeInterval, "new testEvent", external);
-
     }
 
     @Test

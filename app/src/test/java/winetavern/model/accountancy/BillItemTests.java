@@ -31,10 +31,9 @@ public class BillItemTests {
         billItem.changeQuantity(quantity);
     }
 
-    // TODO Should this be here?
     @Test
     public void getCorrectPrice() {
-        assertEquals(mockedDayMenuItem.getPrice().multiply(quantity), billItem.getPrice());
+        assertEquals(billItem.getPrice(), is(mockedDayMenuItem.getPrice().multiply(quantity)));
     }
 
     @Test(expected = IllegalArgumentException.class)

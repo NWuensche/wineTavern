@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 /**
  * @author Niklas Wünsche
  */
-
 public class VintnerTests {
 
     @Test(expected = NullPointerException.class)

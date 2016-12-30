@@ -9,6 +9,7 @@ import winetavern.Helper;
 import winetavern.model.menu.DayMenuItem;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -50,7 +51,7 @@ public class AccountancyIntegrationTests extends AbstractIntegrationTests {
     public void saveBill() {
         Bill bill = new Bill("B1", null);
         bills.save(bill);
-        assertThat(bills.findOne(bill.getId()).get(), is(bill));
+        assertThat(bills.findOne(bill.getId()), is(Optional.of(bill)));
     }
 
 }
