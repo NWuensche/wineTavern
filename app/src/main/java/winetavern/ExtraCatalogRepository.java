@@ -12,12 +12,6 @@ import java.util.stream.StreamSupport;
  */
 public interface ExtraCatalogRepository<T extends Product> extends Catalog<T> {
 
-    default T getFirstItem() {
-        return StreamSupport.stream(findAll().spliterator(), false)
-                .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
-    }
-
     default Stream<T> stream() {
         return StreamSupport.stream(findAll().spliterator(), false);
     }

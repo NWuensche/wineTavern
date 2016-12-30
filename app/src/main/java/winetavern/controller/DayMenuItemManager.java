@@ -29,14 +29,10 @@ import java.util.Optional;
 @Controller
 public class DayMenuItemManager {
 
-    @Autowired
-    private DayMenuItemRepository dayMenuItemRepository;
-    @Autowired
-    private ProductCatalog productCatalog;
-    @Autowired
-    private Inventory<InventoryItem> stock;
-    @Autowired
-    private DayMenuRepository dayMenuRepository;
+    @Autowired private DayMenuItemRepository dayMenuItemRepository;
+    @Autowired private ProductCatalog productCatalog;
+    @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private DayMenuRepository dayMenuRepository;
 
 
     /**

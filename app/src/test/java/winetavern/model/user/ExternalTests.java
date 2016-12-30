@@ -41,4 +41,9 @@ public class ExternalTests {
         assertThat(external.toString(), is("name"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void throwWhenNameBlank() {
+        new External("  ", Money.of(3, EURO));
+    }
+
 }

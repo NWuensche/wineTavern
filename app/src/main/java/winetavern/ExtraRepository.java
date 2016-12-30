@@ -16,11 +16,6 @@ import java.util.stream.StreamSupport;
 @NoRepositoryBean
 public interface ExtraRepository<T, I extends Serializable> extends SalespointRepository<T, I> {
 
-    default List<T> convertToList() {
-        return StreamSupport.stream(findAll().spliterator(), false)
-                .collect(Collectors.toList());
-    }
-
     default T getFirst() {
         return stream()
                 .findFirst()
