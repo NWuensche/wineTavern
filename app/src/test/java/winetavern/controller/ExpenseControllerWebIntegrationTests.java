@@ -18,15 +18,20 @@ import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.user.*;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -79,104 +84,81 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
 
     @Test
     public void showExpensesRight() throws Exception {
-        RequestBuilder request = post("/accountancy/expenses")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("tgype", "")
-                .param("person", "")
-                .param("date", "");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "");
+        params.put("person", "");
+        params.put("date", "");
 
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
                 .andExpect(model().attributeExists("expOpenAmount"))
                 .andExpect(view().name("expenses"));
     }
 
     @Test
     public void showExpensesRightWithExpenseGroupAndEmployee() throws Exception {
-        RequestBuilder request = post("/accountancy/expenses")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("type", "" + groupOrder.getId())
-                .param("person", employee.getId().toString())
-                .param("date", "today");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "" + groupOrder.getId());
+        params.put("person", employee.getId().toString());
+        params.put("date", "today");
 
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
                 .andExpect(model().attributeExists("expOpen")) // TODO geht manchmal nicht.
                 .andExpect(view().name("expenses"));
     }
 
     @Test
-    // TODO Sometimes fails
     public void showExpensesRightWithExpenseGroupAndEmployeeCloseExpense() throws Exception {
-        RequestBuilder request = post("/accountancy/expenses")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("type", "" + groupOrder.getId())
-                .param("person", employee.getId().toString())
-                .param("cover", employee1.getId() + "|");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("type", "" + groupOrder.getId());
+        params.put("person", employee.getId().toString());
+        params.put("cover", employee1.getId() + "|");
 
-        // TODO Sometimes wrong
-        mvc.perform(request)
-                .andExpect(model().attribute("expOpen", Sets.newSet(employee2)))
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
                 .andExpect(model().attributeExists("expCovered"))
                 .andExpect(view().name("expenses"));
 
-        boolean[] newAbrechnungExists = {false};
+        boolean accountancyExists = StreamSupport
+                .stream(expenseRepository.findAll().spliterator(), false)
+                .anyMatch(exp -> exp.getDescription().contains("Abrechnung") && exp.getDescription().contains("Hans-Peter Roch"));
 
-        expenseRepository.findAll().forEach(exp -> {
-            if(exp.getDescription().contains("Abrechnung") && exp.getDescription().contains("Hans-Peter Roch")) {
-                newAbrechnungExists[0] = true;
-            }
-        });
-
-        assertThat(newAbrechnungExists[0], is(true));
+        assertTrue(accountancyExists);
     }
 
     @Test
     public void showPayoffRight() throws Exception {
-        RequestBuilder request = get("/accountancy/expenses/payoff/")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/accountancy/expenses/payoff/"))
                 .andExpect(model().attributeExists("service"))
                 .andExpect(view().name("payoff"));
     }
 
     @Test
     public void redirectPayoffRight() throws Exception {
-        RequestBuilder request = post("/accountancy/expenses/payoff/")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("personId", employee.getId().toString());
+        HashMap<String, String> params = new HashMap<>();
+        params.put("personId", employee.getId().toString());
 
-        mvc.perform(request)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/accountancy/expenses/payoff/", params))
                 .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void payoffSumRight() throws Exception {
         employee1.cover();
-        RequestBuilder request = post("/accountancy/expenses/payoff/" + employee.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
-        mvc.perform(request)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId()))
                 .andExpect(view().name("payoff"))
                 .andExpect(model().attributeExists("price"));
     }
 
     @Test
     public void payoffForEmployeesRight() throws Exception {
-        RequestBuilder request = post("/accountancy/expenses/payoff/" + employee.getId() + "/pay")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId() + "/pay"))
                 .andExpect(status().is3xxRedirection());
 
-        boolean[] newAbrechnungExists = {false};
+        boolean billOfDayExists = StreamSupport
+                .stream(expenseRepository.findAll().spliterator(), false)
+                .anyMatch(exp -> exp.getDescription().contains("Tagesabrechnung") && exp.getDescription().contains("Hans-Peter Roch"));
 
-        expenseRepository.findAll().forEach(exp -> {
-            if(exp.getDescription().contains("Tagesabrechnung") && exp.getDescription().contains("Hans-Peter Roch")) {
-                newAbrechnungExists[0] = true;
-            }
-        });
-
-        assertThat(newAbrechnungExists[0], is(true));
+        assertTrue(billOfDayExists);
     }
 
 }

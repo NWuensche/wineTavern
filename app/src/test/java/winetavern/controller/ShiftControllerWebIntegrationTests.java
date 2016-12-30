@@ -17,6 +17,7 @@ import winetavern.model.user.PersonTitle;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -26,6 +27,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -55,43 +58,33 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void showShiftsRight() throws Exception {
-        RequestBuilder request = post("/admin/management/shifts/")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/management/shifts/"))
                 .andExpect(model().attributeExists("shifts"))
                 .andExpect(view().name("shifts"));
     }
 
     @Test
     public void addShiftsGetRight() throws Exception {
-        RequestBuilder request = get("/admin/management/shifts/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/admin/management/shifts/add"))
                 .andExpect(model().attributeExists("employees"))
                 .andExpect(view().name("shifts"));
     }
 
     @Test
     public void addShiftsPostRight() throws Exception {
-        RequestBuilder request = post("/admin/management/shifts/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("employee", employee.getId().toString())
-                .param("date", "11.11.2016")
-                .param("start", "08:00")
-                .param("end", "11:11");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("employee", employee.getId().toString());
+        params.put("date", "11.11.2016");
+        params.put("start", "08:00");
+        params.put("end", "11:11");
 
-        mvc.perform(request)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/admin/management/shifts/add", params))
                 .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void removeShiftRight() throws Exception {
-        RequestBuilder request = post("/admin/management/shifts/remove/" + shift.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/management/shifts/remove/" + shift.getId()))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(shiftRepository.findOne(shift.getId()), is(Optional.empty()));
@@ -99,24 +92,20 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void changeShiftGetRight() throws Exception {
-        RequestBuilder request = get("/admin/management/shifts/change/" + shift.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/admin/management/shifts/change/" + shift.getId()))
                 .andExpect(model().attributeExists("time"))
                 .andExpect(view().name("shifts"));
     }
 
     @Test
     public void changeShiftPostRight() throws Exception {
-        RequestBuilder request = post("/admin/management/shifts/change/" + shift.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("employee", employee.getId().toString())
-                .param("date", "11.11.2016")
-                .param("start", "08:00")
-                .param("end", "11:11");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("employee", employee.getId().toString());
+        params.put("date", "11.11.2016");
+        params.put("start", "08:00");
+        params.put("end", "11:11");
 
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/management/shifts/change/" + shift.getId(), params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(shift.getInterval().getStart(), is(LocalDateTime.of(2016, 11, 11, 8, 0)));
