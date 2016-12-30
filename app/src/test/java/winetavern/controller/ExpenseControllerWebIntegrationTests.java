@@ -104,6 +104,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     }
 
     @Test
+    // TODO Sometimes fails
     public void showExpensesRightWithExpenseGroupAndEmployeeCloseExpense() throws Exception {
         RequestBuilder request = post("/accountancy/expenses")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))

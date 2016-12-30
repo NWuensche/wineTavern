@@ -18,9 +18,11 @@ import winetavern.model.user.Person;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,11 +39,9 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     @Autowired EventCatalog eventCatalog;
     @Autowired ExternalManager externalManager;
     private Event event;
-    private long numberOfEventsInDataInit;
 
     @Before
     public void before() {
-        numberOfEventsInDataInit = 2;
         Person external = Helper.getFirstItem(externalManager.findAll());
         TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
         event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", external);
@@ -58,7 +58,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
-    public void addEventRight() throws Exception {
+    public void addSameEventRight() throws Exception {
         RequestBuilder request = post("/admin/events/add")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("name", event.getName())
@@ -73,11 +73,29 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(eventCatalog.count(), is(numberOfEventsInDataInit + 1));
-
         Event storedEvent = Helper.getFirstItem(eventCatalog.findByName(event.getName()));
 
         assertThat(storedEvent.compareTo(event), is(0));
+    }
+
+    @Test
+    public void addDifferentEventRight() throws Exception {
+        RequestBuilder request = post("/admin/events/add")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("name", "New")
+                .param("desc", "Desc")
+                .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
+                .param("price", "6.66")
+                .param("external", event.getPerson().getId() + "")
+                .param("externalName", "")
+                .param("externalWage", "");
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertTrue(Helper.convertToList(eventCatalog.findAll())
+                    .stream()
+                    .anyMatch(event -> event.getName().equals("New")));
     }
 
     /*
