@@ -205,6 +205,7 @@ public class EventController {
                     externalPerson = personManager.findOne(Long.parseLong(external)).get();
                 }
 
+                //TODO doesnt save
                 eventCatalog.save(new Event(name, Money.of((Float.parseFloat(price)), EURO),
                                   new TimeInterval(start, end), desc, externalPerson));
             }
