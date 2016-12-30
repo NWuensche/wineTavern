@@ -42,9 +42,11 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Before
     public void before() {
+        eventCatalog.deleteAll();
         Person external = Helper.getFirstItem(externalManager.findAll());
         TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
         event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", external);
+        eventCatalog.save(event);
     }
 
     @Test
@@ -58,28 +60,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
-    public void addSameEventRight() throws Exception {
-        RequestBuilder request = post("/admin/events/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", event.getName())
-                .param("desc", event.getDescription())
-                .param("date", Helper.localDateTimeToDateTimeString(event.getInterval().getStart()) + " - " +
-                               Helper.localDateTimeToDateTimeString(event.getInterval().getEnd()))
-                .param("price", event.getPrice().getNumber().doubleValue() + "")
-                .param("external", event.getPerson().getId() + "")
-                .param("externalName", "")
-                .param("externalWage", "");
-
-        mvc.perform(request)
-                .andExpect(status().is3xxRedirection());
-
-        Event storedEvent = Helper.getFirstItem(eventCatalog.findByName(event.getName()));
-
-        assertThat(storedEvent.compareTo(event), is(0));
-    }
-
-    @Test
-    public void addDifferentEventRight() throws Exception {
+    public void addEventRight() throws Exception {
         RequestBuilder request = post("/admin/events/add")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("name", "New")
@@ -93,8 +74,8 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertTrue(Helper.convertToList(eventCatalog.findAll())
-                    .stream()
+        assertThat(eventCatalog.count(), is(2l));
+        assertTrue(eventCatalog.stream()
                     .anyMatch(event -> event.getName().equals("New")));
     }
 
