@@ -122,7 +122,7 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
         params.put("productcategory", "Awesome WhiteWein");
         params.put("productvintner", vintner.getId().toString());
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/admin/stock/changeProduct/", params))
+        mvc.perform(buildPostAdminRequest("/admin/stock/changeProduct/", params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(products.findByName("Schnaps").iterator().next().getPrice(), is(Money.of(10, EURO)));

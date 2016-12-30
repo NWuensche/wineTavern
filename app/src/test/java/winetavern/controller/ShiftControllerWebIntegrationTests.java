@@ -78,7 +78,7 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
         params.put("start", "08:00");
         params.put("end", "11:11");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/admin/management/shifts/add", params))
+        mvc.perform(buildPostAdminRequest("/admin/management/shifts/add", params))
                 .andExpect(status().is3xxRedirection());
     }
 
