@@ -16,28 +16,35 @@ import java.time.LocalDateTime;
 public class ReservationTests {
 
     private Reservation reservation;
-    private Desk mockedDesk;
+    private Desk desk;
     private TimeInterval mockedTimeInterval;
 
     @Before
     public void before() {
         mockedTimeInterval = mock(TimeInterval.class);
-        mockedDesk = mock(Desk.class);
+        desk = new Desk("Tisch 1", 3);
 
-        reservation = new Reservation("Gast 1", 3, mockedDesk, mockedTimeInterval);
+        reservation = new Reservation("Gast 1", 3, desk, mockedTimeInterval);
     }
 
     @Test
     public void setNewDesk() {
-        Desk newDesk = mock(Desk.class);
+        Given:
+        assertThat(desk.getReservationList().contains(reservation), is(true));
+        Desk newDesk = new Desk("Tisch New", 3);
+
+        When:
         reservation.setDesk(newDesk);
 
+        Then:
+        assertThat(desk.getReservationList().contains(reservation), is(false));
         assertThat(reservation.getDesk(), is(newDesk));
+        assertThat(newDesk.getReservationList().contains(reservation), is(true));
     }
 
     @Test(expected = NumberOutOfRange.class)
     public void throwWhenNegativePersons() {
-        new Reservation("Gast", -1, mockedDesk, mockedTimeInterval);
+        new Reservation("Gast", -1, desk, mockedTimeInterval);
     }
 
     @Test(expected = NumberOutOfRange.class)

@@ -33,7 +33,7 @@ public class BillItemTests {
 
     @Test
     public void getCorrectPrice() {
-        assertEquals(billItem.getPrice(), is(mockedDayMenuItem.getPrice().multiply(quantity)));
+        assertThat(billItem.getPrice(), is(mockedDayMenuItem.getPrice().multiply(quantity)));
     }
 
     @Test(expected = IllegalArgumentException.class)

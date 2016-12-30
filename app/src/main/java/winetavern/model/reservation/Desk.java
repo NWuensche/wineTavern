@@ -21,7 +21,7 @@ public class Desk {
     @Id @GeneratedValue private long id;
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="desk", fetch = FetchType.EAGER)
-    List<Reservation> reservationList;
+    private List<Reservation> reservationList;
 
     @Setter private String name;
     private int capacity;
@@ -41,7 +41,7 @@ public class Desk {
         this.capacity = capacity;
     }
 
-    public void addReservation(Reservation reservation) {
+    protected void addReservation(Reservation reservation) {
         this.reservationList.add(reservation);
     }
 
