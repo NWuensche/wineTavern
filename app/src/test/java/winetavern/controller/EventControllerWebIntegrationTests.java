@@ -4,24 +4,23 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 import winetavern.model.user.ExternalManager;
-import winetavern.model.user.Roles;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -48,11 +47,8 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     private void addVintnerDays() {
-        RequestBuilder request = post("/admin/events")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
         try {
-            mvc.perform(request);
+            mvc.perform(buildPostAdminRequest("/admin/events"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,10 +56,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void manageEventsRightWhenVintnerExisits() throws Exception {
-        RequestBuilder request = post("/admin/events")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/events"))
                 .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
                 .andExpect(model().attributeExists("calendarString"))
                 .andExpect(view().name("events"));
@@ -71,10 +64,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void manageEventsRightWhenVintnersEmpty() throws Exception {
-        RequestBuilder request = post("/admin/events")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/events"))
                 .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
                 .andExpect(model().attributeExists("calendarString"))
                 .andExpect(view().name("events"));
@@ -82,31 +72,28 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void addEventPostRight() throws Exception {
-        RequestBuilder request = post("/admin/events/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", "New")
-                .param("desc", "Desc")
-                .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
-                .param("price", "6.66")
-                .param("external", event.getPerson().getId() + "")
-                .param("externalName", "")
-                .param("externalWage", "");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "New");
+        params.put("desc", "Desc");
+        params.put("date", "11.11.2016 11:11 - 11.11.2016 23:11");
+        params.put("price", "6.66");
+        params.put("external", "" + event.getPerson().getId());
+        params.put("externalName", "t");
+        params.put("externalWage", "t");
 
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/events/add", params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.count(), is(2l));
-        assertTrue(eventCatalog.stream()
-                    .anyMatch(event -> event.getName().equals("New")));
+        assertTrue(eventCatalog
+                .stream()
+                .anyMatch(event -> event.getName().equals("New")));
     }
 
 
     @Test
     public void addEventGetRight() throws Exception {
-        RequestBuilder request = get("/admin/events/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/admin/events/add"))
                 .andExpect(model().attributeExists("externals"))
                 .andExpect(view().name("addevent"));
     }
@@ -114,16 +101,11 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void removeEventRight() throws Exception {
-        Given:
         assertThat(eventCatalog.count(), is(1l));
-        RequestBuilder request = get("/admin/events/remove/" + event.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
 
-        When:
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/admin/events/remove/" + event.getId()))
                 .andExpect(status().is3xxRedirection());
 
-        Then:
         assertThat(eventCatalog.count(), is(0l));
     }
 
@@ -131,27 +113,23 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     public void changeEventGetRight() throws Exception {
         addVintnerDays();
 
-        RequestBuilder request = get("/admin/events/change/" + event.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/admin/events/change/" + event.getId()))
                 .andExpect(model().attributeExists("event"))
                 .andExpect(view().name("events"));
     }
 
     @Test
     public void changeEventPostRight() throws Exception {
-        RequestBuilder request = post("/admin/events/change/" + event.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", "new")
-                .param("desc", "new")
-                .param("date", "11.11.2015 11:11 - 11.11.2016 11:11")
-                .param("price", "6.50")
-                .param("external", vintner.getId().toString())
-                .param("externalName", "Hugo") // TODO wird das in view richtig gemacht?
-                .param("externalWage", "100.0");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "new");
+        params.put("desc", "new");
+        params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
+        params.put("price", "6.50");
+        params.put("external", vintner.getId().toString());
+        params.put("externalName", "Hugo"); // TODO wird das in view richtig gemacht?
+        params.put("externalWage", "100.0");
 
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
@@ -159,22 +137,17 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void showVintnerRightWithNoQuery() throws Exception {
-        RequestBuilder request = post("/admin/events/vintner/")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/events/vintner/"))
                 .andExpect(model().attributeExists("missing"))
                 .andExpect(view().name("vintner"));
-
     }
 
     @Test
     public void showVintnerRightWithEmptyQuery() throws Exception {
-        RequestBuilder request = post("/admin/events/vintner/")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("query", "");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("query", "");
 
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/admin/events/vintner", params))
                 .andExpect(status().is3xxRedirection());
     }
 
@@ -182,11 +155,11 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     public void showVintnerRightWithQuery() throws Exception {
         Vintner newVintner = new Vintner("new", 3);
         vintnerManager.save(newVintner);
-        RequestBuilder request = post("/admin/events/vintner/")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("query", vintner.getName().concat("|").concat("newSavedVintner"));
 
-        mvc.perform(request)
+        HashMap<String, String> params = new HashMap<>();
+        params.put("query", vintner.getName().concat("|").concat("newSavedVintner"));
+
+        mvc.perform(buildPostAdminRequest("/admin/events/vintner", params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(vintner.isActive(), is(true));
