@@ -22,12 +22,6 @@ import java.util.Optional;
 
 public class Helper {
 
-    public static <T> List<T> convertToList(Iterable<T> iterable) {
-        ArrayList<T> returnList = new ArrayList<T>();
-        iterable.forEach(item -> returnList.add(item));
-        return returnList;
-    }
-
     public static List<Person> findAllPersons(EmployeeManager employeeManager, ExternalManager externalManager) {
         List<Person> res = new ArrayList<>();
         employeeManager.findAll().forEach(res::add);

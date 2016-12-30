@@ -83,7 +83,9 @@ public class ShiftController {
      * @return String color - format: "rgb(r, g, b)"
      */
     private Map<Employee, String> getColorMap() {
-        List<Employee> employeeList = Helper.convertToList(employees.findAll());
+        List<Employee> employeeList = employees
+                .stream()
+                .collect(Collectors.toList());
         Map<Employee, String> res = new HashMap<>();
 
         for (int i = 0; i < employeeList.size(); i++) {

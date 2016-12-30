@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -270,7 +271,9 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void removeReservationRight() throws Exception {
-        assertThat(Helper.convertToList(reservationRepository.findAll()).contains(reservation2), is(true));
+        assertTrue(reservationRepository
+                .stream()
+                .anyMatch(res -> res.equals(reservation2)));
 
         RequestBuilder request = post("/service/reservation/remove")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
@@ -279,7 +282,9 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(Helper.convertToList(reservationRepository.findAll()).contains(reservation2), is(false));
+        assertTrue(reservationRepository
+                .stream()
+                .noneMatch(res -> res.equals(reservation2)));
     }
 
 }

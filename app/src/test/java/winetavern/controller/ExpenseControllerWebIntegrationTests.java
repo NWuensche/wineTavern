@@ -120,8 +120,6 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
 
         boolean[] newAbrechnungExists = {false};
 
-        List<AccountancyEntry> test = Helper.convertToList(expenseRepository.findAll());
-
         expenseRepository.findAll().forEach(exp -> {
             if(exp.getDescription().contains("Abrechnung") && exp.getDescription().contains("Hans-Peter Roch")) {
                 newAbrechnungExists[0] = true;

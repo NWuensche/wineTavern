@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -114,7 +115,10 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
         assertThat(bill.getItems().size(), is(2));
 
-        BillItem secondBillItem = Helper.convertToList(bill.getItems()).get(1);
+        BillItem secondBillItem = bill.getItems()
+                .stream()
+                .collect(Collectors.toList())
+                    .get(1);
         assertThat(secondBillItem.getQuantity(), is(4));
         assertThat(secondBillItem.getItem(), is(dayMenuItem2));
     }
@@ -178,7 +182,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
                 .andExpect(model().attributeExists("bill"))
                 .andExpect(view().name("splitbill"));
 
-        assertThat(Helper.convertToList(billRepository.findAll()).size(), is(1));
+        assertThat(billRepository.count(), is(1l));
     }
 
     @Test
@@ -201,9 +205,15 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
                 .andExpect(view().name("splitbill"));
 
 
-        Bill secondBill = Helper.convertToList(billRepository.findAll()).get(1);
+        Bill secondBill = billRepository
+                .stream()
+                .collect(Collectors.toList())
+                    .get(1);
 
-        List<BillItem> secondBillItems = Helper.convertToList(secondBill.getItems());
+        List<BillItem> secondBillItems = secondBill.getItems()
+                .stream()
+                .collect(Collectors.toList());
+
         BillItem wineOnSecondBill = secondBillItems.get(0);
         BillItem friesOnSecondBill = secondBillItems.get(1);
 

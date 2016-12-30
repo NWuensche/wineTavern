@@ -18,6 +18,7 @@ import winetavern.model.user.Roles;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
@@ -93,7 +94,9 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        List<DayMenuItem> storedDayMenuItems = Helper.convertToList(dayMenuItemRepository.findAll());
+        List<DayMenuItem> storedDayMenuItems = dayMenuItemRepository
+                .stream()
+                .collect(Collectors.toList());
 
         assertThat(storedDayMenuItems.size(), is(2));
         assertThat(storedDayMenuItems.get(1).getName(), is(nameOfMenuItem));
