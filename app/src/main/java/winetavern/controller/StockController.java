@@ -88,9 +88,9 @@ public class StockController {
                 if (vintner.getId().equals(vintnerId)) { //add wine to the selected vintner
                     vintner.addWine(product);
                     vintnerManager.save(vintner);
-                } else if (vintner.removeWine(product)) { //remove wine from all other vintners
-                    //TODO What does this else-if-statement?
-                    vintnerManager.save(vintner); //only need to save if vintner was changed
+                } else if (vintner.getWineSet().contains(product)) { //remove wine from all other vintners
+                    vintner.removeWine(product);
+                    vintnerManager.save(vintner);
                 }
             }
         }

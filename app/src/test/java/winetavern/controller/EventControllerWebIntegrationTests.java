@@ -126,7 +126,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
         params.put("price", "6.50");
         params.put("external", vintner.getId().toString());
-        params.put("externalName", "Hugo"); // TODO wird das in view richtig gemacht?
+        params.put("externalName", "Hugo");
         params.put("externalWage", "100.0");
 
         mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))

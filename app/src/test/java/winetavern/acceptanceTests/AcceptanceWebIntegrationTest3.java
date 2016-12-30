@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.AccountCredentials;
 import winetavern.Helper;
+import winetavern.controller.RequestHelper;
 import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
@@ -19,6 +20,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -77,14 +79,9 @@ public class AcceptanceWebIntegrationTest3 extends AbstractWebIntegrationTests {
     }
 
     private void disableServiceNumber(String number) throws Exception {
-        // TODO New Method for this!
-        Employee toRemove = employeeManager
-                .findByUserAccount(userAccountManager.findByUsername("Kellner " + number).get()).get();
+        Employee toRemove = employeeManager.findByUsername("Kellner " + number).get();
 
-        RequestBuilder serviceRequest = post("/admin/management/users/disable/" + toRemove.getId().toString())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(serviceRequest);
+        mvc.perform(buildPostAdminRequest("/admin/management/users/disable/" + toRemove.getId().toString()));
     }
 
     private void addNewServiceMember() {

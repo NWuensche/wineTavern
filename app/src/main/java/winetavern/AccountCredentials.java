@@ -7,7 +7,6 @@ import lombok.Setter;
  * Class to store credentials from the login page.
  * @author michel
  */
-// TODO Make this an inner class of EmployeeManagerController
 @Getter
 @Setter
 public class AccountCredentials {

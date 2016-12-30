@@ -193,7 +193,7 @@ public class EventController {
     public String addEvent(@RequestParam String name, @RequestParam String desc, @RequestParam String date,
                            @RequestParam String price, @RequestParam String external, @RequestParam String externalName,
                            @RequestParam String externalWage) {
-        //TODO Was passiert, wenn keine neue Person angelegt werden muss, und dso externalName und -Wage leer bleiben?
+        //TODO Was passiert, wenn keine neue Person angelegt werden muss, und so externalName und -Wage leer bleiben?
 
         if (!date.isEmpty()) {
             DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");

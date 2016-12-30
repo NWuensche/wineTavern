@@ -102,7 +102,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
         params.put("date", "today");
 
         mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
-                .andExpect(model().attributeExists("expOpen")) // TODO geht manchmal nicht.
+                .andExpect(model().attributeExists("expOpen"))
                 .andExpect(view().name("expenses"));
     }
 
