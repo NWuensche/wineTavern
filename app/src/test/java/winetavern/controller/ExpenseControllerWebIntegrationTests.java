@@ -136,7 +136,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
         HashMap<String, String> params = new HashMap<>();
         params.put("personId", employee.getId().toString());
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/accountancy/expenses/payoff/", params))
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses/payoff/", params))
                 .andExpect(status().is3xxRedirection());
     }
 
@@ -144,14 +144,14 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     public void payoffSumRight() throws Exception {
         employee1.cover();
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId()))
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId()))
                 .andExpect(view().name("payoff"))
                 .andExpect(model().attributeExists("price"));
     }
 
     @Test
     public void payoffForEmployeesRight() throws Exception {
-        mvc.perform(RequestHelper.buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId() + "/pay"))
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId() + "/pay"))
                 .andExpect(status().is3xxRedirection());
 
         boolean billOfDayExists = StreamSupport
