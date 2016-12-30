@@ -5,6 +5,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
 
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void redirectsIfAdmin() throws Exception {
-        mvc.perform(get("/").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
+        mvc.perform(buildGetAdminRequest("/"))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
                 .andExpect(view().name("backend-temp"));

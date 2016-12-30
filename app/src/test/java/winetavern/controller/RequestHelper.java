@@ -41,4 +41,19 @@ public interface RequestHelper {
 
     }
 
+    static RequestBuilder buildGetAdminRequest(String url, @NonNull Map<String, String> params) {
+        MockHttpServletRequestBuilder request = get(url)
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
+
+        if(params == null) {
+            return request;
+        }
+
+        for(String paramName : params.keySet()) {
+            request = request.param(paramName, params.get(paramName));
+        }
+
+        return request;
+    }
+
 }

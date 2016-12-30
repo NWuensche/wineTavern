@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -76,28 +79,20 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void showBillsModelAttributesRight() throws Exception{
-        RequestBuilder request = post("/service/bills")
-                .with(user("service").roles(Roles.SERVICE.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/service/bills"))
                 .andExpect(model().attributeExists("active"))
                 .andExpect(view().name("bills"));
     }
 
     @Test
     public void addBillRight() throws Exception {
-        String desk = "Table 1";
+        HashMap<String, String> params = new HashMap<>();
+        params.put("table", "Table 1");
 
-        RequestBuilder request = post("/service/bills/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("table", desk);
-
-        mvc.perform(request)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/add", params))
                 .andExpect(status().is3xxRedirection());
 
-        Bill firstBill = billRepository.getFirst();
-
-        assertThat(firstBill.getDesk(), is(desk));
+        assertThat(billRepository.getFirst().getDesk(), is("Table 1"));
     }
 
     @Test
@@ -105,32 +100,30 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         DayMenuItem dayMenuItem2 = new DayMenuItem("New Produtt", "Desc", Money.of(5, EURO), 3.5);
         dayMenuItemRepository.save(dayMenuItem2);
 
-        RequestBuilder request = post("/service/bills/details/" + bill.getId() + "/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("itemid", "" + dayMenuItem2.getId())
-                .param("quantity", "" + 4);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("itemid", "" + dayMenuItem2.getId());
+        params.put("quantity", "" + 4);
 
-        mvc.perform(request)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/add", params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(bill.getItems().size(), is(2));
 
-        BillItem secondBillItem = bill.getItems()
+        BillItem newBillItem = bill.getItems()
                 .stream()
-                .collect(Collectors.toList())
-                    .get(1);
-        assertThat(secondBillItem.getQuantity(), is(4));
-        assertThat(secondBillItem.getItem(), is(dayMenuItem2));
+                .filter(bill -> bill.getQuantity() == 4)
+                .findFirst()
+                    .get();
+
+        assertThat(newBillItem.getQuantity(), is(4));
+        assertThat(newBillItem.getItem(), is(dayMenuItem2));
     }
 
     @Test
     public void printBillRight() throws Exception {
         assertThat(bill.isClosed(), is(false));
 
-        RequestBuilder request = post("/service/bills/details/" + bill.getId() + "/print")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/print"))
                 .andExpect(model().attributeExists("bill"))
                 .andExpect(view().name("printbill"));
 
@@ -143,10 +136,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         DayMenuItem notAdded = new DayMenuItem("Not There", "Desc", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(notAdded);
 
-        RequestBuilder noQueryRequest = get("/service/bills/details/" + bill.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(noQueryRequest)
+        mvc.perform(RequestHelper.buildGetAdminRequest("/service/bills/details/" + bill.getId()))
                 .andExpect(model().attribute("bill", bill))
                 .andExpect(model().attribute("menuitems", Arrays.asList(notAdded)))
                 .andExpect(view().name("billdetails"));
@@ -159,11 +149,10 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         BillItem billItem2 = new BillItem(dayMenuItem2);
         billItemRepository.save(billItem2);
 
-        RequestBuilder queryRequest = get("/service/bills/details/" + bill.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("save", fries.getId() + ",7|" + billItem2.getId() + ",3|");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("save", fries.getId() + ",7|" + billItem2.getId() + ",3|");
 
-        mvc.perform(queryRequest)
+        mvc.perform(buildGetAdminRequest("/service/bills/details/" + bill.getId(), params))
                 .andExpect(status().is3xxRedirection());
 
         assertThat(bill.getItems().size(), is(2));
@@ -174,10 +163,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void dontSplitBill() throws Exception {
-        RequestBuilder noSplitRequest = post("/service/bills/details/" + bill.getId() + "/split")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(noSplitRequest)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/split"))
                 .andExpect(model().attributeDoesNotExist("leftbill"))
                 .andExpect(model().attributeExists("bill"))
                 .andExpect(view().name("splitbill"));
@@ -196,19 +182,18 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
         billRepository.save(bill);
 
-        RequestBuilder splitRequest = post("/service/bills/details/" + bill.getId() + "/split")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("query", fries.getId() + ",3|");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("query", fries.getId() + ",3|");
 
-        mvc.perform(splitRequest)
+        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/split", params))
                 .andExpect(model().attributeExists("leftbill"))
                 .andExpect(view().name("splitbill"));
 
-
         Bill secondBill = billRepository
                 .stream()
-                .collect(Collectors.toList())
-                    .get(1);
+                .filter(b -> b.getId() != bill.getId())
+                .findAny()
+                    .get();
 
         List<BillItem> secondBillItems = secondBill.getItems()
                 .stream()
