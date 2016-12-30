@@ -4,9 +4,10 @@ import org.salespointframework.core.SalespointRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -20,8 +21,14 @@ public interface ExtraRepository<T, I extends Serializable> extends SalespointRe
                 .collect(Collectors.toList());
     }
 
-    default T getFirstItem() {
-        return convertToList().get(0);
+    default T getFirst() {
+        return stream()
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    default Stream<T> stream() {
+        return StreamSupport.stream(findAll().spliterator(), false);
     }
 
 }

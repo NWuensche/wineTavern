@@ -3,22 +3,17 @@ package winetavern.controller;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
-import org.salespointframework.quantity.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.user.External;
 import winetavern.model.user.ExternalManager;
 import winetavern.model.user.Person;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -43,7 +38,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     @Before
     public void before() {
         eventCatalog.deleteAll();
-        Person external = Helper.getFirstItem(externalManager.findAll());
+        Person external = externalManager.getFirst();
         TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
         event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", external);
         eventCatalog.save(event);
