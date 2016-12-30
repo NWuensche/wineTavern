@@ -104,7 +104,7 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(Helper.getFirstItem(products.findByName("new drink")).getPrice(), is(Money.of(3.4, EURO)));
+        assertThat(products.findByName("new drink").iterator().next().getPrice(), is(Money.of(3.4, EURO)));
         assertThat(vintner.getWineSet()
                         .stream()
                         .anyMatch(product -> product.getName().equals("new drink")),
@@ -124,12 +124,11 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(Helper.getFirstItem(products.findByName("Schnaps")).getPrice(), is(Money.of(10, EURO)));        assertThat(Helper.getFirstItem(products.findByName("Schnaps")).getPrice(), is(Money.of(10, EURO)));
+        assertThat(products.findByName("Schnaps").iterator().next().getPrice(), is(Money.of(10, EURO)));
         assertThat(vintner.getWineSet()
                             .stream()
                             .anyMatch(product -> product.getName().equals("Schnaps"))
                     , is(true));
-
     }
 
 }

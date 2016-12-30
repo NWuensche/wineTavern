@@ -94,7 +94,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        Bill firstBill = Helper.getFirstItem(billRepository.findAll());
+        Bill firstBill = billRepository.getFirst();
 
         assertThat(firstBill.getDesk(), is(desk));
     }
@@ -163,7 +163,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
                 .andExpect(status().is3xxRedirection());
 
         assertThat(bill.getItems().size(), is(2));
-        assertThat(Helper.getFirstItem(bill.getItems()).getQuantity(), is(7));
+        assertThat(bill.getItems().stream().findFirst().get().getQuantity(), is(7));
         assertThat(bill.getItems().contains(billItem2), is(true));
     }
 

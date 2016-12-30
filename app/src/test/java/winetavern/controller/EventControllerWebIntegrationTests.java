@@ -6,14 +6,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.*;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+import winetavern.model.user.ExternalManager;
+import winetavern.model.user.Roles;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -84,29 +84,6 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     public void addEventPostRight() throws Exception {
         RequestBuilder request = post("/admin/events/add")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", event.getName())
-                .param("desc", event.getDescription())
-                .param("date", Helper.localDateTimeToDateTimeString(event.getInterval().getStart()) + " - " +
-                               Helper.localDateTimeToDateTimeString(event.getInterval().getEnd()))
-                .param("price", event.getPrice().getNumber().doubleValue() + "")
-                .param("external", event.getPerson().getId() + "")
-                .param("externalName", "")
-                .param("externalWage", "");
-
-        mvc.perform(request)
-                .andExpect(status().is3xxRedirection());
-
-        assertThat(eventCatalog.count(), is(2l));
-
-        Event storedEvent = Helper.getFirstItem(eventCatalog.findByName(event.getName()));
-
-        assertThat(storedEvent.compareTo(event), is(0));
-    }
-
-    @Test
-    public void addDifferentEventRight() throws Exception {
-        RequestBuilder request = post("/admin/events/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
                 .param("name", "New")
                 .param("desc", "Desc")
                 .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
@@ -118,8 +95,8 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertTrue(Helper.convertToList(eventCatalog.findAll())
-                    .stream()
+        assertThat(eventCatalog.count(), is(2l));
+        assertTrue(eventCatalog.stream()
                     .anyMatch(event -> event.getName().equals("New")));
     }
 
