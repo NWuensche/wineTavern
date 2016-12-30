@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -103,6 +104,27 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
+    public void addDifferentEventRight() throws Exception {
+        RequestBuilder request = post("/admin/events/add")
+                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+                .param("name", "New")
+                .param("desc", "Desc")
+                .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
+                .param("price", "6.66")
+                .param("external", event.getPerson().getId() + "")
+                .param("externalName", "")
+                .param("externalWage", "");
+
+        mvc.perform(request)
+                .andExpect(status().is3xxRedirection());
+
+        assertTrue(Helper.convertToList(eventCatalog.findAll())
+                    .stream()
+                    .anyMatch(event -> event.getName().equals("New")));
+    }
+
+
+    @Test
     public void addEventGetRight() throws Exception {
         RequestBuilder request = get("/admin/events/add")
                 .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
@@ -127,7 +149,6 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         Then:
         assertThat(eventCatalog.count(), is(0l));
     }
-
 
     @Test
     public void changeEventGetRight() throws Exception {

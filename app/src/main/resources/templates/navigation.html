@@ -6,22 +6,12 @@
                         <a th:href="@{/}">Zur fröhlichen Reblaus</a>
                     </div>
                 </div>
-                <div class="col-xs-4">
+                <div class="col-xs-4 text-xs-center">
                     <div class="nav-time">
                         <span id="clock"></span>
                     </div>
                 </div>
-                <div class="col-xs-2">
-                    <div>
-                        <div class="nav-mail__wrap">
-                            <a th:href="@{/notifications}">
-                                <i class="fa fa-envelope fa-lg"></i>
-                                <span class="tag tag-pill tag-notifications">4</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-2">
+                <div class="col-xs-4 text-xs-right">
                     <a th:href="@{/logout}"  sec:authorize="isAuthenticated()">
                         <button type="button" class="logout__btn btn">
                             <span class="fa fa-sign-out"></span> Abmelden
