@@ -104,7 +104,7 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(Helper.getFirstItem(products.findByName("prod")).getPrice(), is(Money.of(3.4, EURO)));
+        assertThat(products.findByName("prod").iterator().next().getPrice(), is(Money.of(3.4, EURO)));
     }
 
     @Test
@@ -121,7 +121,8 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
                 .andExpect(status().is3xxRedirection());
 
         assertThat(products.findByName("Äpfel").spliterator().getExactSizeIfKnown(), is(0l));
-        assertThat(Helper.getFirstItem(products.findByName("Schnaps")).getPrice(), is(Money.of(10, EURO)));
+        assertThat(products.findByName("Schnaps").iterator().next().getPrice(), is(Money.of(10, EURO)));
+
     }
 
 }

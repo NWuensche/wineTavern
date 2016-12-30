@@ -54,7 +54,7 @@ public class DayMenuItemTests {
         DayMenu mockedDayMenu = mock(DayMenu.class);
         DayMenuItem clonedItem = dayMenuItem.clone(mockedDayMenu);
         assertThat(clonedItem, is(not(dayMenuItem)));
-        assertThat(Helper.getFirstItem(clonedItem.getDayMenus()), is(mockedDayMenu));
+        assertThat(clonedItem.getDayMenus().stream().findFirst().get(), is(mockedDayMenu));
     }
 
 }

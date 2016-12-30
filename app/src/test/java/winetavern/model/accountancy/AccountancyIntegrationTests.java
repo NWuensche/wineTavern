@@ -40,7 +40,7 @@ public class AccountancyIntegrationTests extends AbstractIntegrationTests {
 
     @Test
     public void isPreconditionRight() {
-        Bill firstStoredBill = Helper.getFirstItem(bills.findAll());
+        Bill firstStoredBill = bills.getFirst();
 
         assertThat(firstStoredBill, is(bill));
         assertThat(firstStoredBill.getItems().size(), is(2));

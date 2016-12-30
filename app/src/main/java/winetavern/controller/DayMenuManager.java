@@ -202,7 +202,10 @@ public class DayMenuManager {
             Map<String, List<DayMenuItem>> sortedItems = new HashMap<>();
 
             for (DayMenuItem item : dayMenu.getDayMenuItems()) { //map every item to its category
-                String category = Helper.getFirstItem(item.getProduct().getCategories());
+                String category = item.getProduct().getCategories()
+                        .stream()
+                        .findFirst()
+                            .orElse("");
                 if (!sortedItems.containsKey(category))
                     sortedItems.put(category, new LinkedList<>());
 

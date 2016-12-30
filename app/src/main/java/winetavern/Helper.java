@@ -31,10 +31,6 @@ public class Helper {
         return (T[]) convertToList(iterable).toArray();
     }
 
-    public static <T> T getFirstItem(Iterable<T> stream) {
-        return convertToArray(stream)[0];
-    }
-
     public static List<Person> findAllPersons(EmployeeManager employeeManager, ExternalManager externalManager) {
         List<Person> res = new ArrayList<>();
         employeeManager.findAll().forEach(res::add);
