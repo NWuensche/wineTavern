@@ -63,7 +63,23 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
+    public void manageEventsRightWhenAddingVinterDaysTwice() throws Exception {
+        mvc.perform(buildPostAdminRequest("/admin/events"))
+                .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
+                .andExpect(model().attributeExists("calendarString"))
+                .andExpect(view().name("events"));
+
+        mvc.perform(buildPostAdminRequest("/admin/events"))
+                .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
+                .andExpect(model().attributeExists("calendarString"))
+                .andExpect(view().name("events"));
+    }
+
+    @Test
     public void manageEventsRightWhenVintnersEmpty() throws Exception {
+        vintner.setActive(false);
+        vintnerManager.save(vintner);
+
         mvc.perform(buildPostAdminRequest("/admin/events"))
                 .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
                 .andExpect(model().attributeExists("calendarString"))
