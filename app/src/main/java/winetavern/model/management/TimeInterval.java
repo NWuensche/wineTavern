@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * @author Louis
  */
-
+// TODO Should this really be an entity? We do not even have a Repository
 @Entity
 public class TimeInterval {
     @Getter @Id @GeneratedValue private long id;

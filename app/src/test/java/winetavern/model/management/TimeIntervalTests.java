@@ -51,6 +51,7 @@ public class TimeIntervalTests {
     @Test
     public void createRightInterval() {
         assertThat(timeInterval.toInterval(), is(Interval.from(start).to(end)));
+        assertThat(timeInterval.getId(), is(0l));
     }
 
     @Test
