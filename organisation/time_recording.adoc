@@ -173,6 +173,15 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 14.12.2016    | 14:00     | 16:00     | Tests für Controller
 | 15.12.2016    | 14:00     | 16:30     | Präsentation
 | 17.12.2016    | 10:00     | 12:00     | Tests + Präsentation
+| 21.12.2016    | 17:00     | 19:00     | Einarbeiten in Optionals + Stream
+| 23.12.2016    | 14:00     | 16:00     | Einarbeiten in Optionals + Stream
+| 25.12.2016    | 15:00     | 17:00     | Splitter machen
+| 26.12.2016    | 18:00     | 20:00     | Optionals in Programm besser nutzen
+| 27.12.2016    | 15:00     | 17:00     | Streams nutzen
+| 28.12.2016    | 08:00     | 10:00     | Streams nutzen
+| 29.12.2016    | 17:00     | 19:00     | DB-Tabellen streambar machen
+| 30.12.2016    | 08:00     | 11:00     | 100% CC
+| 31.12.2016    | 06:30     | 09:00     | 100% CC
 |===
 
 == Katharina
