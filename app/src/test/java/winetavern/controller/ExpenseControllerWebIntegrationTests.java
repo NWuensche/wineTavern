@@ -141,8 +141,20 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     }
 
     @Test
-    public void payoffSumRight() throws Exception {
+    public void payoffSumRightWhenExpenseCovered() throws Exception {
         employee1.cover();
+
+        mvc.perform(buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId()))
+                .andExpect(view().name("payoff"))
+                .andExpect(model().attributeExists("price"));
+    }
+
+    @Test
+    public void payoffSumRightWhenExpenseUncovered() throws Exception {
+        Expense expense =
+                new Expense(Money.of(3, EURO), "Desc", employee, expenseGroupRepository.findByName("Bestellung").get());
+
+        expenseRepository.add(expense);
 
         mvc.perform(buildPostAdminRequest("/accountancy/expenses/payoff/" + employee.getId()))
                 .andExpect(view().name("payoff"))
