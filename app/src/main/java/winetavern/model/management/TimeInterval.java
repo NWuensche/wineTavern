@@ -58,6 +58,10 @@ public class TimeInterval {
         return this;
     }
 
+    public TimeInterval returnMovedIntervalByMinutes(int minutes) {
+        return new TimeInterval(start.plusMinutes(minutes), end.plusMinutes(minutes));
+    }
+
     public boolean intersects(TimeInterval other) {
         return timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
                 (start.compareTo(other.getStart()) != -1 && end.compareTo(other.getEnd()) != 1);

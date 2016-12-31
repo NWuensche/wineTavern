@@ -16,8 +16,11 @@ import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.PersonTitle;
 import winetavern.model.user.Roles;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -38,6 +41,7 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
     @Autowired private ShiftRepository shiftRepository;
     @Autowired private EmployeeManager employeeManager;
     @Autowired private UserAccountManager userAccountManager;
+    @Autowired private ShiftController shiftController;
 
     private Employee employee;
     private Shift shift;
@@ -51,7 +55,7 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
         employee = new Employee(userAccount, "Address", "2016/11/11", PersonTitle.MISTER.getGerman());
         employeeManager.save(employee);
 
-        TimeInterval now = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
+        TimeInterval now = new TimeInterval(LocalDateTime.now().minusDays(1), LocalDateTime.now().plusHours(3));
         shift = new Shift(now, employee);
         shiftRepository.save(shift);
     }
@@ -109,6 +113,16 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
                 .andExpect(status().is3xxRedirection());
 
         assertThat(shift.getInterval().getStart(), is(LocalDateTime.of(2016, 11, 11, 8, 0)));
+    }
+
+    @Test
+    public void sortListRight() {
+        Shift earlierShift = new Shift(shift.getInterval().returnMovedIntervalByMinutes(-10), employee); // TODO Is moving right?
+        shiftRepository.save(earlierShift);
+
+        List<Shift> shifts = shiftController.getShiftsOfDay(LocalDate.now());
+
+        assertThat(shifts, is(Arrays.asList(earlierShift, shift)));
     }
 
 }

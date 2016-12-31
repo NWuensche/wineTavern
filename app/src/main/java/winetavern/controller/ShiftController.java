@@ -168,13 +168,12 @@ public class ShiftController {
         return res;
     }
 
+    //TODO Delete this?
     public List<Shift> getShiftsOfDay(LocalDate day) {
-        List<Shift> res = StreamSupport.stream(shifts.findAll().spliterator(), false)
+        return StreamSupport.stream(shifts.findAll().spliterator(), false)
                 .filter(shift -> shift.getInterval().timeInInterval(day.atStartOfDay()))
+                .sorted(Comparator.comparing(shift -> shift.getInterval().getStart()))
                 .collect(Collectors.toList());
-
-        Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
-        return res;
     }
 
     private List<String> getTimes(){
