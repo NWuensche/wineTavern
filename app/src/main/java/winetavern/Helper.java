@@ -75,8 +75,9 @@ public class Helper {
      * @param date
      * @return boolean is vintner day
      */
-    public boolean isVintnerDay(LocalDate date) {
-        return (date.getDayOfWeek() == DayOfWeek.FRIDAY && (date.getMonthValue() % 2) == 1 && date.getDayOfMonth() < 6);
+    //TODO Can this be deleted?
+    public static boolean isVintnerDay(LocalDate date) {
+        return (date.getDayOfWeek() == DayOfWeek.FRIDAY) && ((date.getMonthValue() % 2) == 1) && (date.getDayOfMonth() < 6);
     }
 
 }
