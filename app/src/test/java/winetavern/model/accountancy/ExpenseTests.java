@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.useraccount.UserAccount;
+import winetavern.model.management.Event;
 import winetavern.model.user.Employee;
 
 /**
@@ -83,6 +84,11 @@ public class ExpenseTests {
         Expense expense2 = new Expense(Money.of(3, EURO), "Abrechnung", mockedEmployee, mockedExpenseGroup2);
 
         return expense2;
+    }
+
+    @Test
+    public void tryDeprecatedConstructor() {
+        Expense expense = new Expense();
     }
 
 }
