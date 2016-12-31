@@ -48,13 +48,6 @@ public class DayMenuItemManager {
         return "addmenuitem";
     }
 
-    private Boolean pathVariablesValid(Long dayMenuId, Long dayMenuItemId) {
-        Optional<DayMenuItem> optionalDayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId);
-        Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
-
-        return optionalDayMenuItem.isPresent() && optionalDayMenu.isPresent();
-    }
-
     /**
      *
      */
@@ -69,6 +62,13 @@ public class DayMenuItemManager {
         model.addAttribute("menu", dayMenuRepository.findOne(dayMenuId).get());
         model.addAttribute("stock", stock);
         return "editmenuitem";
+    }
+
+    private boolean pathVariablesValid(Long dayMenuId, Long dayMenuItemId) {
+        Optional<DayMenuItem> optionalDayMenuItem = dayMenuItemRepository.findOne(dayMenuItemId);
+        Optional<DayMenu> optionalDayMenu = dayMenuRepository.findOne(dayMenuId);
+
+        return optionalDayMenuItem.isPresent() && optionalDayMenu.isPresent();
     }
 
     @RequestMapping(value = "/admin/menuitem/edit/{daymenuid}/{itemid}", method = RequestMethod.POST)

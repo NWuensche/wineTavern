@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,7 +41,6 @@ import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegrationTests {
 
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
-    @Autowired private DayMenuItemManager dayMenuItemManager;
     @Autowired private DayMenuRepository dayMenuRepository;
     @Autowired private ProductCatalog productCatalog;
     private DayMenuItem dayMenuItem;
@@ -130,6 +130,10 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
     @Test
     public void editMenuItemRightPost() throws Exception{
         dayMenu.addMenuItem(dayMenuItem);
+
+        DayMenu secoundMenu = new DayMenu(LocalDate.now());
+        secoundMenu.addMenuItem(dayMenuItem);
+
         Product newProduct = new Product("product", Money.of(4,EURO));
 
         String url = "/admin/menuitem/edit/"
@@ -147,8 +151,15 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
 
         mvc.perform(RequestHelper.buildPostAdminRequest(url, params));
 
-        assertThat(dayMenuItemRepository.findOne(dayMenuItem.getId()).isPresent(), is(true));
-        assertThat(dayMenuItemRepository.findOne(dayMenuItem.getId()).get().getName(), is("Neu"));
+        assertTrue(dayMenuItemRepository
+                .stream()
+                .anyMatch(dItem -> dItem.getName().equals("Neu")));
+
+        // Test if there is still the old item for the second dayMenu
+        assertTrue(dayMenuItemRepository
+                .stream()
+                .anyMatch(dItem -> dItem.getName().equals("Coke")));
+
     }
 
 
