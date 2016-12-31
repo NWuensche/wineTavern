@@ -71,7 +71,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
-    public void addEventPostRight() throws Exception {
+    public void addEventPostWithExistingExternalRight() throws Exception {
         HashMap<String, String> params = new HashMap<>();
         params.put("name", "New");
         params.put("desc", "Desc");
@@ -79,7 +79,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         params.put("price", "6.66");
         params.put("external", "" + event.getPerson().getId());
         params.put("externalName", "t");
-        params.put("externalWage", "t");
+        params.put("externalWage", "5");
 
         mvc.perform(buildPostAdminRequest("/admin/events/add", params))
                 .andExpect(status().is3xxRedirection());
@@ -88,6 +88,28 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         assertTrue(eventCatalog
                 .stream()
                 .anyMatch(event -> event.getName().equals("New")));
+    }
+
+    @Test
+    public void addEventPostWithNewExternalRight() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "New");
+        params.put("desc", "Desc");
+        params.put("date", "11.11.2016 11:11 - 11.11.2016 23:11");
+        params.put("price", "6.66");
+        params.put("external", "0");
+        params.put("externalName", "t");
+        params.put("externalWage", "5");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/add", params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.count(), is(2l));
+        assertTrue(eventCatalog
+                .stream()
+                .anyMatch(event -> event.getName().equals("New")));
+
+        assertThat(externalManager.findByName("t").isPresent(), is(true));
     }
 
 
@@ -119,7 +141,7 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
     }
 
     @Test
-    public void changeEventPostRight() throws Exception {
+    public void changeEventPostWithExistingExternalRight() throws Exception {
         HashMap<String, String> params = new HashMap<>();
         params.put("name", "new");
         params.put("desc", "new");
@@ -133,6 +155,24 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
+    }
+
+    @Test
+    public void changeEventPostWithNewExternalRight() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "new");
+        params.put("desc", "new");
+        params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
+        params.put("price", "6.50");
+        params.put("external", "0");
+        params.put("externalName", "Hugo");
+        params.put("externalWage", "100.0");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
+        assertThat(externalManager.findByName("Hugo").isPresent(), is(true));
     }
 
     @Test
