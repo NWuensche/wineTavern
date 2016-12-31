@@ -1,5 +1,7 @@
 package winetavern.controller;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -11,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static winetavern.controller.RequestHelper.buildGetAdminRequest;
 import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
+import com.itextpdf.text.DocumentException;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.salespointframework.catalog.Catalog;
@@ -37,10 +40,7 @@ import winetavern.model.user.VintnerTests;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Michel, Niklas
@@ -118,7 +118,80 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     }
 
     @Test
-    public void createDayMenuWithRealDate() throws Exception {
+    public void createDayMenuWithRealDateWithoutPreDayMenu() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("date", "04.09.2015");
+
+        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+
+        LocalDate givenDate = LocalDate.of(2015, 9, 4);
+
+        assertTrue(dayMenuRepository
+                .stream()
+                .anyMatch(date -> date.getDay().equals(givenDate)));
+    }
+
+    @Test
+    public void createDayMenuWithRealDateWithPreDayMenu() throws Exception {
+        DayMenu preDayMenu = new DayMenu(LocalDate.of(2015, 9, 3));
+        dayMenuRepository.save(preDayMenu);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("date", "04.09.2015");
+
+        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+
+        LocalDate givenDate = LocalDate.of(2015, 9, 4);
+
+        assertTrue(dayMenuRepository
+                .stream()
+                .anyMatch(date -> date.getDay().equals(givenDate)));
+    }
+
+    @Test
+    public void createDayMenuWithWineInVintner() throws Exception {
+        Product wine = new Product("wine", Money.of(3, EURO));
+        productCatalog.save(wine);
+
+        DayMenuItem item = new DayMenuItem("test", "desc", Money.of(3, EURO), 3.4);
+        item.setProduct(wine);
+        dayMenuItemRepository.save(item);
+
+        vintner.addWine(wine);
+        vintnerManager.save(vintner);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("date", "04.09.2015");
+
+        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+
+        LocalDate givenDate = LocalDate.of(2015, 9, 4);
+
+        assertTrue(dayMenuRepository
+                .stream()
+                .anyMatch(date -> date.getDay().equals(givenDate)));
+    }
+
+    @Test
+    public void createDayMenuWithoutEvents() throws Exception {
+        eventCatalog.deleteAll();
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("date", "04.09.2015");
+
+        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+
+        LocalDate givenDate = LocalDate.of(2015, 9, 4);
+
+        assertTrue(dayMenuRepository
+                .stream()
+                .anyMatch(date -> date.getDay().equals(givenDate)));
+    }
+
+    @Test
+    public void createNoNewMenuIfThereIsOneForDate() throws Exception {
+        createDayMenuWithWineInVintner();
+
         HashMap<String, String> params = new HashMap<>();
         params.put("date", "04.09.2015");
 
@@ -157,6 +230,11 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     public void pdfRight() throws Exception {
         mvc.perform(buildPostAdminRequest("/admin/menu/print/" + dayMenu.getId()))
                 .andExpect(view().name("daymenupdf"));
+    }
+
+    @Test
+    public void pdfCatchRight() throws Exception {
+        mvc.perform(buildPostAdminRequest("/admin/menu/print/13366040")); //wrong id
     }
 
 }

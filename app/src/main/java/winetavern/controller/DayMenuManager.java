@@ -130,6 +130,22 @@ public class DayMenuManager {
         return "redirect:/admin/menu/edit/" + dayMenu.getId();
     }
 
+    protected Optional<DayMenu> copyPreDayMenu(LocalDate today) {
+        LocalDate yesterday = today.minusDays(1);
+        Optional<DayMenu> preDayMenu = dayMenuRepository.findByDay(yesterday);
+
+        Optional<DayMenu> newDayMenu = preDayMenu
+                .map(pDM -> {
+                    DayMenu todayMenu = new DayMenu(today);
+                    dayMenuRepository.save(todayMenu); // TODO Should this be before or after stream?
+                    pDM.getDayMenuItems().forEach(todayMenu::addMenuItem);
+                    return Optional.of(todayMenu);
+                })
+                .orElse(Optional.empty());
+
+        return newDayMenu;
+    }
+
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public String removeMenu(@RequestParam("daymenuid") Long dayMenuId) {
         dayMenuRepository.findOne(dayMenuId)
@@ -150,30 +166,12 @@ public class DayMenuManager {
         return "editdaymenu";
     }
 
-
-    protected Optional<DayMenu> copyPreDayMenu(LocalDate today) {
-        LocalDate yesterday = today.minusDays(1);
-        Optional<DayMenu> preDayMenu = dayMenuRepository.findByDay(yesterday);
-
-        Optional<DayMenu> newDayMenu = preDayMenu
-                .map(pDM -> {
-                    DayMenu todayMenu = new DayMenu(today);
-                    dayMenuRepository.save(todayMenu); // TODO Should this be before or after stream?
-                    pDM.getDayMenuItems().forEach(todayMenu::addMenuItem);
-                    return Optional.of(todayMenu);
-                })
-                .orElse(Optional.empty());
-
-        return newDayMenu;
-    }
-
     /**
      * prints all daymenu items in a pdf file.
      * @param id the daymenu id
      */
     @RequestMapping("/admin/menu/print/{pid}")
     public String printMenu(@PathVariable("pid") Long id) {
-        DayMenu dayMenu = dayMenuRepository.findOne(id).get();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         Document document = new Document();
@@ -184,6 +182,8 @@ public class DayMenuManager {
         catFont.setSize(18);
 
         try {
+            DayMenu dayMenu = dayMenuRepository.findOne(id).get();
+
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream
                     ("src\\main\\resources\\daymenu\\daymenu.pdf"));
             document.open();
@@ -239,7 +239,7 @@ public class DayMenuManager {
 
             document.close();
             writer.close();
-        } catch (DocumentException | FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException | NoSuchElementException e) {
             e.printStackTrace();
         }
 
