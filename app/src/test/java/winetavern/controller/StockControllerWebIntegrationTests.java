@@ -115,6 +115,10 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void changeProductRight() throws Exception {
+        Vintner hasWine = new Vintner("new", 5);
+        hasWine.addWine(product);
+        vintnerManager.save(hasWine);
+
         HashMap<String, String> params = new HashMap<>();
         params.put("productid", product.getId().toString());
         params.put("productname", "Schnaps");
