@@ -27,14 +27,14 @@ public class Vintner extends Person {
             throw new IllegalArgumentException("name");
         }
         this.name = name;
-        if (position < 0) //maybe lombok?
+        if (position < 0)
             throw new IllegalArgumentException("the position in the vintner evening sequence must not be negative");
         this.position = position;
         this.active = true;
     }
 
     public void setPosition(int position) {
-        if (position < 0) //maybe lombok?
+        if (position < 0)
             throw new IllegalArgumentException("the position in the vintner evening sequence must not be negative");
         this.position = position;
     }

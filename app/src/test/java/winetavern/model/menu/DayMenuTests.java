@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class DayMenuTests {
 
-    // TODO PreRemove?
     private DayMenu dayMenu;
 
     @Before
@@ -38,7 +37,6 @@ public class DayMenuTests {
 
     @Test
     public void getReadableDayRight() {
-
         assertThat(dayMenu.getReadableDay(), is(dayMenu.getDay().toString()));
     }
 
@@ -71,30 +69,30 @@ public class DayMenuTests {
 
     @Test
     public void addAndRemoveDayMenuItemRight() {
-        // TODO mocked Item + DayMenuItem tests
         DayMenuItem newItem = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
         dayMenu.addMenuItem(newItem);
 
+        Given:
         assertThat(dayMenu.getDayMenuItems().contains(newItem), is(true));
         assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
 
+        When:
         dayMenu.removeMenuItem(newItem);
 
+        Then:
         assertThat(dayMenu.getDayMenuItems().contains(newItem), is(false));
         assertThat(newItem.getDayMenus().contains(dayMenu), is(false));
-
     }
 
     @Test
     public void getNotAddedDayMenuItemsRight() {
-        // TODO mock Items
         DayMenuItem inMenu = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
         dayMenu.addMenuItem(inMenu);
 
         DayMenuItem notInMenu = new DayMenuItem("Coke", "Awesome", Money.of(2, EURO), 3.0);
         List<DayMenuItem> notAdded = dayMenu.getNotAddedDayMenuItems(Arrays.asList(inMenu, notInMenu));
 
-        assertThat(notAdded.size(),is(1));
+        assertThat(notAdded.size(), is(1));
         assertThat(notAdded.get(0), is(notInMenu));
     }
 

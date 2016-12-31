@@ -3,115 +3,224 @@ package winetavern.controller;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
-import org.salespointframework.quantity.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
-import winetavern.model.user.External;
-import winetavern.model.user.ExternalManager;
-import winetavern.model.user.Person;
-import winetavern.model.user.Roles;
-
+import winetavern.model.user.*;
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
+import java.util.HashMap;
+import java.util.Optional;
+import winetavern.model.user.ExternalManager;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
  */
 public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTests {
 
-    @Autowired EventCatalog eventCatalog;
-    @Autowired ExternalManager externalManager;
+    @Autowired private EventCatalog eventCatalog;
+    @Autowired private ExternalManager externalManager;
+    @Autowired VintnerManager vintnerManager;
     private Event event;
+    private Vintner vintner;
 
     @Before
     public void before() {
-        Person external = Helper.getFirstItem(externalManager.findAll());
+        eventCatalog.deleteAll();
+        vintnerManager.deleteAll();
+        externalManager.deleteAll();
+
+        vintner = new Vintner("test", 2);
+        vintnerManager.save(vintner);
         TimeInterval timeInterval = new TimeInterval(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
-        event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", external);
+        event = new Event("Event", Money.of(3, EURO), timeInterval, "Descritpion", vintner);
+        eventCatalog.save(event);
+    }
+
+    private void addVintnerDays() {
+        try {
+            mvc.perform(buildPostAdminRequest("/admin/events"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void manageEventsRight() throws Exception {
-        RequestBuilder request = post("/admin/events")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
-                .andExpect(model().attributeExists("eventAmount"))
+    public void manageEventsRightWhenVintnerExisits() throws Exception {
+        mvc.perform(buildPostAdminRequest("/admin/events"))
+                .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
+                .andExpect(model().attributeExists("calendarString"))
                 .andExpect(view().name("events"));
     }
 
     @Test
-    public void addSameEventRight() throws Exception {
-        RequestBuilder request = post("/admin/events/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", event.getName())
-                .param("desc", event.getDescription())
-                .param("date", Helper.localDateTimeToDateTimeString(event.getInterval().getStart()) + " - " +
-                               Helper.localDateTimeToDateTimeString(event.getInterval().getEnd()))
-                .param("price", event.getPrice().getNumber().doubleValue() + "")
-                .param("external", event.getPerson().getId() + "")
-                .param("externalName", "")
-                .param("externalWage", "");
+    public void manageEventsRightWhenAddingVinterDaysTwice() throws Exception {
+        mvc.perform(buildPostAdminRequest("/admin/events"))
+                .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
+                .andExpect(model().attributeExists("calendarString"))
+                .andExpect(view().name("events"));
 
-        mvc.perform(request)
-                .andExpect(status().is3xxRedirection());
-
-        Event storedEvent = Helper.getFirstItem(eventCatalog.findByName(event.getName()));
-
-        assertThat(storedEvent.compareTo(event), is(0));
+        mvc.perform(buildPostAdminRequest("/admin/events"))
+                .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
+                .andExpect(model().attributeExists("calendarString"))
+                .andExpect(view().name("events"));
     }
 
     @Test
-    public void addDifferentEventRight() throws Exception {
-        RequestBuilder request = post("/admin/events/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("name", "New")
-                .param("desc", "Desc")
-                .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
-                .param("price", "6.66")
-                .param("external", event.getPerson().getId() + "")
-                .param("externalName", "")
-                .param("externalWage", "");
+    public void manageEventsRightWhenVintnersEmpty() throws Exception {
+        vintner.setActive(false);
+        vintnerManager.save(vintner);
 
-        mvc.perform(request)
-                .andExpect(status().is3xxRedirection());
-
-        assertTrue(Helper.convertToList(eventCatalog.findAll())
-                    .stream()
-                    .anyMatch(event -> event.getName().equals("New")));
+        mvc.perform(buildPostAdminRequest("/admin/events"))
+                .andExpect(model().attribute("eventAmount", is(eventCatalog.count())))
+                .andExpect(model().attributeExists("calendarString"))
+                .andExpect(view().name("events"));
     }
 
-    /*
+    @Test
+    public void addEventPostWithExistingExternalRight() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "New");
+        params.put("desc", "Desc");
+        params.put("date", "11.11.2016 11:11 - 11.11.2016 23:11");
+        params.put("price", "6.66");
+        params.put("external", "" + event.getPerson().getId());
+        params.put("externalName", "t");
+        params.put("externalWage", "5");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/add", params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.count(), is(2l));
+        assertTrue(eventCatalog
+                .stream()
+                .anyMatch(event -> event.getName().equals("New")));
+    }
+
+    @Test
+    public void addEventPostWithNewExternalRight() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "New");
+        params.put("desc", "Desc");
+        params.put("date", "11.11.2016 11:11 - 11.11.2016 23:11");
+        params.put("price", "6.66");
+        params.put("external", "0");
+        params.put("externalName", "t");
+        params.put("externalWage", "5");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/add", params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.count(), is(2l));
+        assertTrue(eventCatalog
+                .stream()
+                .anyMatch(event -> event.getName().equals("New")));
+
+        assertThat(externalManager.findByName("t").isPresent(), is(true));
+    }
+
+
+    @Test
+    public void addEventGetRight() throws Exception {
+        mvc.perform(buildGetAdminRequest("/admin/events/add"))
+                .andExpect(model().attributeExists("externals"))
+                .andExpect(view().name("addevent"));
+    }
+
+
     @Test
     public void removeEventRight() throws Exception {
-        eventCatalog.save(event);
-        System.out.println("id: "+event.getId());
+        assertThat(eventCatalog.count(), is(1l));
 
-        RequestBuilder request = get("/admin/events/remove/" + event.getId())
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()));
-
-        mvc.perform(request)
+        mvc.perform(buildGetAdminRequest("/admin/events/remove/" + event.getId()))
                 .andExpect(status().is3xxRedirection());
 
-        assertThat(eventCatalog.count(), is(numberOfEventsInDataInit + 0));
+        assertThat(eventCatalog.count(), is(0l));
     }
-    */
+
+    @Test
+    public void changeEventGetRight() throws Exception {
+        addVintnerDays();
+
+        mvc.perform(buildGetAdminRequest("/admin/events/change/" + event.getId()))
+                .andExpect(model().attributeExists("event"))
+                .andExpect(view().name("events"));
+    }
+
+    @Test
+    public void changeEventPostWithExistingExternalRight() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "new");
+        params.put("desc", "new");
+        params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
+        params.put("price", "6.50");
+        params.put("external", vintner.getId().toString());
+        params.put("externalName", "Hugo");
+        params.put("externalWage", "100.0");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
+    }
+
+    @Test
+    public void changeEventPostWithNewExternalRight() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", "new");
+        params.put("desc", "new");
+        params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
+        params.put("price", "6.50");
+        params.put("external", "0");
+        params.put("externalName", "Hugo");
+        params.put("externalWage", "100.0");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
+        assertThat(externalManager.findByName("Hugo").isPresent(), is(true));
+    }
+
+    @Test
+    public void showVintnerRightWithNoQuery() throws Exception {
+        mvc.perform(buildPostAdminRequest("/admin/events/vintner/"))
+                .andExpect(model().attributeExists("missing"))
+                .andExpect(view().name("vintner"));
+    }
+
+    @Test
+    public void showVintnerRightWithEmptyQuery() throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("query", "");
+
+        mvc.perform(buildPostAdminRequest("/admin/events/vintner", params))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void showVintnerRightWithQuery() throws Exception {
+        Vintner newVintner = new Vintner("new", 3);
+        vintnerManager.save(newVintner);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("query", vintner.getName().concat("|").concat("newSavedVintner"));
+
+        mvc.perform(buildPostAdminRequest("/admin/events/vintner", params))
+                .andExpect(status().is3xxRedirection());
+
+        assertThat(vintner.isActive(), is(true));
+        assertThat(newVintner.isActive(), is(false));
+        assertThat(vintnerManager.findByName("newSavedVintner").isPresent(), is(true));
+    }
 
 }

@@ -19,7 +19,6 @@ import static org.salespointframework.core.Currencies.EURO;
 @Entity
 public class Bill {
     @GeneratedValue @Id private long id;
-    // TODO Why No OneToOne to Desk?
     private String desk;
     private boolean isClosed = false;
     private MonetaryAmount totalPrice = Money.of(0, EURO);

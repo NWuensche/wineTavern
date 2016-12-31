@@ -75,7 +75,8 @@ public class ReservationIntegrationTests extends AbstractIntegrationTests{
 
     @Test
     public void findAllByOrderByGuestNameWorks() {
-        assertArrayEquals(reservationRepository.findAllByOrderByGuestName().toArray(), new Reservation[]{reservation2, reservation});
+        assertArrayEquals(reservationRepository.findAllByOrderByGuestName().toArray(),
+                new Reservation[]{reservation2, reservation});
     }
 
     @Test

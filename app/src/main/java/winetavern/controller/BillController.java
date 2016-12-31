@@ -12,12 +12,15 @@ import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.reservation.DeskRepository;
+import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
 import winetavern.splitter.SplitBuilder;
-import winetavern.splitter.Splitter;
 
+import javax.money.MonetaryAmount;
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Louis
@@ -75,26 +78,63 @@ public class BillController {
         return "redirect:/service/bills/details/" + bill.getId();
     }
 
+    private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
+        // TODO, was, wenn negativ?
+        int diff = quantity - billItem.getQuantity();
+        if (diff > 0) { //adds orders to expenses of staff
+            addNewExpenseForEmployee(bill, billItem, diff);
+        }
+        bill.changeItem(billItem, quantity);
+    }
+
+    /**
+     * the staff pays 90% of the selling price
+     */
+    private void addNewExpenseForEmployee(Bill bill, BillItem billItem, int difference) {
+        MonetaryAmount toPay = billItem.getItem().getPrice().multiply(difference).multiply(0.9).negate();
+        String description = "Rechnung Nr. " + bill.getId() + ": " + difference + " x " + billItem.getItem().getName();
+        Employee currUser = employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get();
+        ExpenseGroup orderGroup = expenseGroups.findByName("Bestellung").get();
+
+        accountancy.add(new Expense(toPay, description, currUser, orderGroup));
+    }
+
     /**
      * @param query Format: billItemID,newNumberOfItems|billItemId,...
      */
     @RequestMapping(value = "/service/bills/details/{billid}",method = RequestMethod.GET)
     public String showBillDetails(@PathVariable("billid") Long billid, @ModelAttribute("save") Optional<String> query, Model model) {
         Bill bill = bills.findOne(billid).get();
-        if (query.isPresent() && !query.equals("")) {
-            Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
-            for (BillItem billItem : args.keySet()) {
-                changeBillItem(bill, billItem, args.get(billItem));
-            }
+
+        if (query.isPresent() && !query.get().equals("")) {
+            Map<BillItem, Integer> args = queryToMap(query.get());
+            args.keySet()
+                    .stream()
+                    .forEach(bItem -> changeBillItem(bill, bItem, args.get(bItem)));
+
             bills.save(bill);
+
             return "redirect:/service/bills/details/" + billid;
-        } else {
-            model.addAttribute("bill", bill);
-            List<DayMenuItem> menuItems = Helper.convertToList(dayMenuItems.findAll());
-            bill.getItems().forEach(it -> menuItems.remove(it.getItem()));
-            model.addAttribute("menuitems", menuItems); //TODO show only items of the day
-            return "billdetails";
         }
+
+        model.addAttribute("bill", bill);
+
+        List<DayMenuItem> menuItems = StreamSupport
+                .stream(dayMenuItems.findAll().spliterator(), false)
+                .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
+                .collect(Collectors.toList());
+
+        model.addAttribute("menuitems", menuItems); //TODO show only items of the day
+        return "billdetails";
+
+    }
+
+    private Set<DayMenuItem> dayMenuItemsOfBill(Bill bill) {
+        return bill
+                .getItems()
+                .stream()
+                .map(BillItem::getItem)
+                .collect(Collectors.toSet());
     }
 
     @RequestMapping("/service/bills/details/{billid}/print")
@@ -115,57 +155,57 @@ public class BillController {
     @RequestMapping("/service/bills/details/{billid}/split")
     public String splitBill(@PathVariable("billid") Long billid, @ModelAttribute("query") Optional<String> query, Model model){
         Bill bill = bills.findOne(billid).get();
-        if(query.isPresent()) {
-            Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
-            bills.save(newBill);
-            Map<BillItem, Integer> args = queryToMap(query.get()); //split bill in billItemId,quantity
 
-            SplitBuilder<BillItem> splitBillItems = new SplitBuilder<BillItem>(bill.getItems());
-
-            splitBillItems
-                    .splitBy(billItem -> args.keySet().contains(billItem))
-                    .forEachPassed(billItem -> {
-                        newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
-                        bills.save(newBill);
-                        bill.changeItem(billItem, args.get(billItem));
-                    })
-                    .forEachNotPassed(billItem -> {
-                        bill.changeItem(billItem, 0);
-                        newBill.changeItem(billItem, billItem.getQuantity());
-                    });
-
-            bills.save(bill);
-            bills.save(newBill);
-            model.addAttribute("leftbill",bill);
-            model.addAttribute("rightbill",newBill);
-            return "splitbill";
-
-        } else {
+        if(!query.isPresent() || query.get().equals("")) {
             model.addAttribute("bill", bill);
             return "splitbill";
         }
+
+        Bill newBill = new Bill(bill.getDesk(), bill.getStaff());
+        Map<BillItem, Integer> args = queryToMap(query.get());
+
+        SplitBuilder.splitCollection(bill.getItems())
+                .splitBy(billItem -> args.keySet().contains(billItem))
+                .forEachPassed(billItem -> {
+                    newBill.changeItem(new BillItem(billItem.getItem()), (billItem.getQuantity() - args.get(billItem)));
+                    bill.changeItem(billItem, args.get(billItem));
+                })
+                .forEachNotPassed(billItem -> {
+                    newBill.changeItem(billItem, billItem.getQuantity());
+                    bill.changeItem(billItem, 0);
+                });
+
+        bills.save(bill);
+        bills.save(newBill);
+        model.addAttribute("leftbill",bill);
+        model.addAttribute("rightbill",newBill);
+        return "splitbill";
     }
 
     private Map<BillItem, Integer> queryToMap(String query) {
+        String[] args = splitQuery(query);
+
+        return getResources(args);
+    }
+
+    private String[] splitQuery(String query) {
+        return query.substring(0, query.length() - 1).split("\\|");
+    }
+
+    /**
+     * split bill into \<BillItem, quantity\> Map
+     * @return
+     */
+    private Map<BillItem, Integer> getResources(String[] args) {
         Map<BillItem, Integer> res = new HashMap<>();
-        String[] args = query.substring(0, query.length() - 1).split("\\|"); //split bill in arguments
-        for (String arg : args) { //split bill in billItemId,quantity
-            String[] itemString = arg.split(",");
-            res.put(billItems.findOne(Long.parseLong(itemString[0])).get(), Integer.parseInt(itemString[1]));
+
+        for (String arg : args) {
+            Long billItemId = Long.parseLong(arg.split(",")[0]);
+            Integer quantityOfItem = Integer.parseInt(arg.split(",")[1]);
+            res.put(billItems.findOne(billItemId).get(), quantityOfItem);
         }
+
         return res;
     }
 
-    private void changeBillItem(Bill bill, BillItem billItem, int quantity) {
-        int diff = quantity - billItem.getQuantity();
-        if (diff > 0) { //adds orders to expenses of staff
-            accountancy.add( //the staff pays 90% of the selling price
-                    new Expense(billItem.getItem().getPrice().multiply(diff).multiply(0.9).negate(),
-                    "Rechnung Nr. " + bill.getId() + ": " + diff + " x " + billItem.getItem().getName(),
-                            employees.findByUserAccount(authenticationManager.getCurrentUser().get()).get(),
-                    expenseGroups.findByName("Bestellung").get())
-            );
-        }
-        bill.changeItem(billItem, quantity);
-    }
 }

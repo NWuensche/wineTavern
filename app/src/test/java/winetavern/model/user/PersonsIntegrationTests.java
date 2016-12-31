@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractIntegrationTests;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,24 +70,27 @@ public class PersonsIntegrationTests extends AbstractIntegrationTests {
 
         List<Employee> enabled = employeeManager.findEnabled();
 
-        Employee employee3 = employeeManager
-                .findByUserAccount(userAccountManager.findByUsername("testAccount3").get()).get();
-        Employee[] array = {employee, employee3};
-        assertThat(enabled.toArray(), is(array));
+        Employee employee3 = employeeManager.findByUsername("testAccount3").get();
+        assertThat(enabled, is(Arrays.asList(employee, employee3)));
     }
 
     private void disableAllEmployeeFromInitalizer() {
-        employeeManager.findAll().forEach(employee -> employee.getUserAccount().setEnabled(false));
+        employeeManager
+                .stream()
+                .forEach(employee -> employee.getUserAccount().setEnabled(false));
     }
 
     private void saveEmployee() {
         UserAccount acc2 = userAccountManager.create("testAccount2", "1234", Roles.SERVICE.getRole());
         UserAccount acc3 = userAccountManager.create("testAccount3", "1234", Roles.SERVICE.getRole());
+
         userAccountManager.save(acc2);
         userAccountManager.save(acc3);
+
         employee = new Employee(acc, address, birthday, personTitle);
         Employee employee2 = new Employee(acc2, address, birthday, personTitle);
         Employee employee3 = new Employee(acc3, address, birthday, personTitle);
+
         employeeManager.save(employee);
         employeeManager.save(employee2);
         employeeManager.save(employee3);

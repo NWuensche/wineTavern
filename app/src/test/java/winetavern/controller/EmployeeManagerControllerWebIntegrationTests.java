@@ -1,13 +1,14 @@
 package winetavern.controller;
 
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.controller.RequestHelper.buildPostAdminRequest;
 
 import org.junit.Before;
 import org.salespointframework.useraccount.Role;
@@ -23,6 +24,7 @@ import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -45,69 +47,71 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
 
     @Test
     public void redirectToUsers() throws Exception {
-        mvc.perform(get("/admin/management/users").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())))
+        mvc.perform(buildGetAdminRequest("/admin/management/users"))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
                 .andExpect(view().name("users"));
     }
 
-    private RequestBuilder createRequestBuilder(String userName, String password) {
-        RequestBuilder request = post("/admin/management/users/add").with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("personTitle", "Herr")
-                .param("firstName", "Hans")
-                .param("lastName", "Müller")
-                .param("birthday", "1990/12/12")
-                .param("username", userName)
-                .param("password", password)
-                .param("role", Roles.COOK.getNameOfRoleWithPrefix())
-                .param("address", "Mein Haus");
-        return request;
+    private RequestBuilder createAddUserRequest(String userName, String password) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("personTitle", "Herr");
+        params.put("firstName", "Hans");
+        params.put("lastName", "Müller");
+        params.put("birthday", "1990/12/12");
+        params.put("username", userName);
+        params.put("password", password);
+        params.put("role", Roles.COOK.getNameOfRoleWithPrefix());
+        params.put("address", "Mein Haus");
+
+        return buildPostAdminRequest("/admin/management/users/add", params);
     }
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoName() throws Exception {
-        RequestBuilder request = createRequestBuilder(null, password);
+        RequestBuilder request = createAddUserRequest(null, password);
 
         mvc.perform(request);
     }
 
     @Test(expected = NestedServletException.class)
     public void throwWhenNoPassword() throws Exception {
-        RequestBuilder request = createRequestBuilder(userName, null);
+        RequestBuilder request = createAddUserRequest(userName, null);
 
         mvc.perform(request);
     }
 
     @Test
     public void savedNewEmployee() throws Exception {
-        RequestBuilder request = createRequestBuilder(userName, password);
+        RequestBuilder request = createAddUserRequest(userName, password);
         mvc.perform(request);
 
         Optional<UserAccount> user = userAccountManager.findByUsername(userName);
         assertThat(user.isPresent(), is(true));
         assertThat(user.get().getRoles().stream().findFirst().get(), is(Role.of("ROLE_COOK")));
-        assertThat(user.get().getUsername(), is("userName"));
-        assertThat(user.get().getFirstname(), is("Hans"));
-        assertThat(user.get().getLastname(), is("Müller"));
+        assertThat(user.map(UserAccount::getUsername), is(Optional.of("userName")));
+        assertThat(user.map(UserAccount::getFirstname), is(Optional.of("Hans")));
+        assertThat(user.map(UserAccount::getLastname), is(Optional.of("Müller")));
 
         Optional<Employee> employee = employeeManager.findByUserAccount(user.get());
         assertThat(employee.isPresent(), is(true));
-        assertThat(employee.get().getBirthday(), is(LocalDate.of(1990,12,12)));
-        assertThat(employee.get().getAddress(), is("Mein Haus"));
-        assertThat(employee.get().getDisplayNameOfRole(), is("Koch"));
-        assertThat(employee.get().getPersonTitle(), is("Herr"));
+        assertThat(employee.map(Employee::getBirthday), is(Optional.of(LocalDate.of(1990,12,12))));
+        assertThat(employee.map(Employee::getAddress), is(Optional.of("Mein Haus")));
+        assertThat(employee.map(Employee::getDisplayNameOfRole), is(Optional.of("Koch")));
+        assertThat(employee.map(Employee::getPersonTitle), is(Optional.of("Herr")));
     }
 
     @Test
-    public void changeNewEmployee() throws Exception{
+    public void changeNewEmployee() throws Exception {
         saveNewEmployee();
-        String employeeId = getEmployeeId();
 
-        mvc.perform(get("/admin/management/users/edit/" + employeeId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
-                .param("firstName", "DontSave")
-                .param("lastName", "Schwab")
-                .param("address", "Best House")
-                .param("role", Roles.SERVICE.getNameOfRoleWithPrefix()));
+        HashMap<String, String> params = new HashMap<>();
+        params.put("firstName", "DontSave");
+        params.put("lastName", "Schwab");
+        params.put("address", "Best House");
+        params.put("role", Roles.SERVICE.getNameOfRoleWithPrefix());
+
+        mvc.perform(buildGetAdminRequest("/admin/management/users/edit/" + getEmployeeId(), params));
 
         Employee changedEmployee = employeeManager.findByUsername(userName).get();
 
@@ -118,12 +122,12 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
     }
 
     private void saveNewEmployee() throws Exception{
-        RequestBuilder request = createRequestBuilder(userName, password);
+        RequestBuilder request = createAddUserRequest(userName, password);
         mvc.perform(request);
     }
 
     private String getEmployeeId() {
-        return employeeManager.findByUsername(userName).get().getId().toString();
+        return employeeManager.findByUsername(userName).map(Employee::getId).get().toString();
     }
 
     @Test
@@ -131,7 +135,7 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
         saveNewEmployee();
         String employeeId = getEmployeeId();
 
-        mvc.perform(get("/admin/management/users/disable/" + employeeId).with(user("admin").roles(Roles.ADMIN.getRealNameOfRole())));
+        mvc.perform(buildGetAdminRequest("/admin/management/users/disable/" + employeeId));
 
         Employee deletedEmployee = employeeManager.findByUsername(userName).get();
 
@@ -141,11 +145,10 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
 
     @Test
     public void redirectIfUsernamesIsTaken() throws Exception {
-        RequestBuilder request = createRequestBuilder("admin", "1234");
-        mvc.perform(request)
-                .andExpect(view().name("users"))
+        mvc.perform(createAddUserRequest("admin", "1234"))
                 .andExpect(model().attribute("usernameTaken", true))
-                .andExpect(model().attributeExists("accountcredentials"));
+                .andExpect(model().attributeExists("accountcredentials"))
+                .andExpect(view().name("users"));
     }
 
 }

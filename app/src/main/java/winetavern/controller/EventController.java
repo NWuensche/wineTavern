@@ -1,6 +1,7 @@
 package winetavern.controller;
 
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.javamoney.moneta.Money;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,7 +162,7 @@ public class EventController {
             calendarString = calendarString +
                     "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson();
 
-            if(event.getPrice().getNumber().doubleValue() == 0)
+            if(event.getPrice().getNumber().doubleValue() == 0.0)
                 calendarString += "<br/>Freier Eintritt!\"}";
             else
                 calendarString += "<br/>Eintritt: " + Helper.moneyToEuroString(event.getPrice())+ "\"}";
@@ -186,10 +187,13 @@ public class EventController {
     @param externalName optional - the name of the external to create
     @param externalWage optional - the wage of the external to create
      */
+
+    //TODO Isn't mapped to!
     @PostMapping("/admin/events/add")
     public String addEvent(@RequestParam String name, @RequestParam String desc, @RequestParam String date,
                            @RequestParam String price, @RequestParam String external, @RequestParam String externalName,
                            @RequestParam String externalWage) {
+        //TODO Was passiert, wenn keine neue Person angelegt werden muss, und so externalName und -Wage leer bleiben?
 
         if (!date.isEmpty()) {
             DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -260,9 +264,13 @@ public class EventController {
         return "redirect:/admin/events";
     }
 
+    /**
+     * @param query the String which contains all vintners to keep in the system (in that order)
+     *              format: vintnerName|vintnerName|...|
+     */
     @RequestMapping("/admin/events/vintner")
     public String showVintner(@RequestParam Optional<String> query, Model model){
-        if (query.isPresent()) {
+        if (query.isPresent()) { // TODO What if Query is " "?
             setVintnerSequence(query.get());
             return "redirect:/admin/events";
         }
@@ -290,14 +298,17 @@ public class EventController {
                 vintner.setActive(true);
                 vintnerManager.save(vintner);
                 vintnersToRemove.remove(vintner);
-            } else if(!vintnerNames[i].replace(" ", "").equals("")) {
+            } else if(!StringUtils.isBlank(vintnerNames[i])) {
                 vintnerManager.save(new Vintner(vintnerNames[i], i));
             }
         }
 
-        for (Vintner vintnerToRemove : vintnersToRemove) { //hide all unused vintners - keep for events in the past
-            vintnerToRemove.setActive(false);
-            vintnerManager.save(vintnerToRemove);
-        }
+        vintnersToRemove //hide all unused vintners - keep for events in the past
+                .stream()
+                .forEach(vintner -> {
+                    vintner.setActive(false);
+                    vintnerManager.save(vintner);
+                });
+
     }
 }

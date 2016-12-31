@@ -1,6 +1,6 @@
 package winetavern.model.user;
 
-import org.salespointframework.core.SalespointRepository;
+import winetavern.ExtraRepository;
 
 import java.util.Optional;
 
@@ -8,6 +8,6 @@ import java.util.Optional;
  * Repository interface to handle {@link External}s.
  * @author Niklas Wünsche
  */
-public interface ExternalManager extends SalespointRepository<External, Long> {
+public interface ExternalManager extends ExtraRepository<External, Long> {
     Optional<External> findByName(String name);
 }

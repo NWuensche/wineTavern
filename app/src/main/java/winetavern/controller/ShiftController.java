@@ -23,6 +23,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Louis
@@ -50,6 +52,7 @@ public class ShiftController {
      * calendar.
      * @return JSON parsable String
      */
+    //TODO Connect with EventController.buildCalendarString?
     private String buildCalendarString() {
         String calendarString = "[";
         boolean noComma = true;
@@ -80,7 +83,9 @@ public class ShiftController {
      * @return String color - format: "rgb(r, g, b)"
      */
     private Map<Employee, String> getColorMap() {
-        List<Employee> employeeList = Helper.convertToList(employees.findAll());
+        List<Employee> employeeList = employees
+                .stream()
+                .collect(Collectors.toList());
         Map<Employee, String> res = new HashMap<>();
 
         for (int i = 0; i < employeeList.size(); i++) {
@@ -114,8 +119,7 @@ public class ShiftController {
 
     @RequestMapping("/admin/management/shifts/remove/{shiftid}")
     public String changeShift(@PathVariable Long shiftid) {
-        Shift shift = shifts.findOne(shiftid).get();
-        shifts.delete(shift);
+        shifts.findOne(shiftid).ifPresent(shifts::delete);
         return "redirect:/admin/management/shifts";
     }
 
@@ -156,21 +160,20 @@ public class ShiftController {
     }
 
     public List<Shift> getShiftsOfWeek(TimeInterval week) {
-        List<Shift> res = new LinkedList<>();
-        for (Shift shift : shifts.findAll())
-            if (shift.getInterval().intersects(week)) res.add(shift);
+        List<Shift> res = StreamSupport.stream(shifts.findAll().spliterator(), false)
+                .filter(shift -> shift.getInterval().intersects(week))
+                .collect(Collectors.toList());
 
         Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
         return res;
     }
 
+    //TODO Delete this?
     public List<Shift> getShiftsOfDay(LocalDate day) {
-        List<Shift> res = new LinkedList<>();
-        for (Shift shift : shifts.findAll())
-            if (shift.getInterval().timeInInterval(day.atStartOfDay())) res.add(shift);
-
-        Collections.sort(res, (o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
-        return res;
+        return StreamSupport.stream(shifts.findAll().spliterator(), false)
+                .filter(shift -> shift.getInterval().timeInInterval(day.atStartOfDay()))
+                .sorted(Comparator.comparing(shift -> shift.getInterval().getStart()))
+                .collect(Collectors.toList());
     }
 
     private List<String> getTimes(){

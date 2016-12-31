@@ -9,6 +9,7 @@ import winetavern.Helper;
 import winetavern.model.menu.DayMenuItem;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -40,7 +41,7 @@ public class AccountancyIntegrationTests extends AbstractIntegrationTests {
 
     @Test
     public void isPreconditionRight() {
-        Bill firstStoredBill = Helper.getFirstItem(bills.findAll());
+        Bill firstStoredBill = bills.getFirst();
 
         assertThat(firstStoredBill, is(bill));
         assertThat(firstStoredBill.getItems().size(), is(2));
@@ -50,7 +51,7 @@ public class AccountancyIntegrationTests extends AbstractIntegrationTests {
     public void saveBill() {
         Bill bill = new Bill("B1", null);
         bills.save(bill);
-        assertThat(bills.findOne(bill.getId()).get(), is(bill));
+        assertThat(bills.findOne(bill.getId()), is(Optional.of(bill)));
     }
 
 }

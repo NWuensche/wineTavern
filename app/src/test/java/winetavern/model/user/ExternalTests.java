@@ -32,7 +32,6 @@ public class ExternalTests {
         wage = Money.of(300, EURO);
         external = new External("name", wage);
         event = new Event("testEvent", Money.of(10, EURO), timeInterval, "new testEvent", external);
-
     }
 
     @Test
@@ -40,6 +39,11 @@ public class ExternalTests {
         assertThat(external.getName(), is("name"));
         assertThat(external.getWage(), is(wage));
         assertThat(external.toString(), is("name"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void throwWhenNameBlank() {
+        new External("  ", Money.of(3, EURO));
     }
 
 }

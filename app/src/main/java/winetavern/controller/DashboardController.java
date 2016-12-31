@@ -14,10 +14,8 @@ import winetavern.model.management.ShiftRepository;
 
 @Controller
 public class DashboardController {
-    @NonNull @Autowired
-    BusinessTime time;
-    @NonNull @Autowired
-    ShiftRepository shifts;
+    @NonNull @Autowired BusinessTime time;
+    @NonNull @Autowired ShiftRepository shifts;
 
     @RequestMapping("/dashboard")
     public String showDashboard(Model model){
@@ -25,4 +23,5 @@ public class DashboardController {
         model.addAttribute("time",time);
         return "startadmin";
     }
+
 }

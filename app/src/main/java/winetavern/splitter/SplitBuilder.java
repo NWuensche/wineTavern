@@ -11,7 +11,12 @@ public class SplitBuilder<T> {
 
     private Collection<T> collection;
 
-    public SplitBuilder(Collection<T> collection) {
+    public static <T> SplitBuilder<T> splitCollection(Collection<T> collection) {
+        SplitBuilder<T> splitBuilder = new SplitBuilder<T>(collection);
+        return splitBuilder;
+    }
+
+    private SplitBuilder(Collection<T> collection) {
         this.collection = collection;
     }
 

@@ -41,8 +41,11 @@ public class Reservation {
     }
 
     public void setDesk(Desk desk) {
+        if(this.desk != null) { // Dont do this in Constructor
+            this.desk.getReservationList().remove(this); // Delete this reservation from the old desk
+        }
+
         this.desk = desk;
-        // TODO Old Desk might not be deleted, is this necessary?
         desk.addReservation(this);
     }
 

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ public class External extends Person {
     private MonetaryAmount wage;
 
     public External(@NonNull String name, @NonNull MonetaryAmount wage) {
-        if (name.equals(""))
+        if (StringUtils.isBlank(name))
             throw new IllegalArgumentException("the name of an external must not be empty");
         this.name = name;
         this.wage = wage;

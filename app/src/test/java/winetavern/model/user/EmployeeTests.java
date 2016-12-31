@@ -55,8 +55,6 @@ public class EmployeeTests {
     @Test(expected = IllegalArgumentException.class)
     public void throwWhenEmployeeHas2Roles() {
         acc = new UserAccount();
-        // TODO Knackbar, wenn ich zu UserAccount eines employees noch eine Rolle hinzufüge?
-        // TODO UserAccount nicht rausgeben
         acc.add(Roles.ADMIN.getRole());
         acc.add(Roles.SERVICE.getRole());
         employee = new Employee(acc, address, birthday, personTitle);

@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.useraccount.UserAccount;
+import winetavern.model.management.Event;
 import winetavern.model.user.Employee;
 
 /**
@@ -68,12 +69,12 @@ public class ExpenseTests {
 
     @Test
     public void compareRight() {
-        Expense expense2 = setUpExpensesToCompare("Müller", "Schulz");
+        Expense latterExpense = setUpExpensesToCompare();
 
-        assertThat(expense.compareTo(expense2), is(lessThan(0)));
+        assertThat(expense.compareTo(latterExpense), is(lessThan(0)));
     }
 
-    private Expense setUpExpensesToCompare(String lastName1, String lastName2) {
+    private Expense setUpExpensesToCompare() {
         ExpenseGroup mockedExpenseGroup = mock(ExpenseGroup.class);
         ExpenseGroup mockedExpenseGroup2 = mock(ExpenseGroup.class);
         when(mockedExpenseGroup.getId()).thenReturn(0l);
@@ -83,6 +84,11 @@ public class ExpenseTests {
         Expense expense2 = new Expense(Money.of(3, EURO), "Abrechnung", mockedEmployee, mockedExpenseGroup2);
 
         return expense2;
+    }
+
+    @Test
+    public void tryDeprecatedConstructor() {
+        Expense expense = new Expense();
     }
 
 }

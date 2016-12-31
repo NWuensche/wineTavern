@@ -20,7 +20,7 @@ public class SplitterTests {
     @Before
     public void before() {
         words = Arrays.asList("a", "A", "b", "B", "c", "C");
-        splitBuilder = new SplitBuilder<>(words);
+        splitBuilder = SplitBuilder.splitCollection(words);
     }
 
     @Test

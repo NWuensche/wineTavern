@@ -3,6 +3,7 @@ package winetavern.model.user;
 import org.salespointframework.core.SalespointRepository;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.data.jpa.repository.Query;
+import winetavern.ExtraRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,7 @@ import java.util.Optional;
  * Repository interface to handle {@link Employee}s
  * @author Niklas Wünsche
  */
-public interface EmployeeManager extends SalespointRepository<Employee, Long> {
+public interface EmployeeManager extends ExtraRepository<Employee, Long> {
     Optional<Employee> findByUserAccount(UserAccount account);
 
     @Query(value = "select * from person " +
