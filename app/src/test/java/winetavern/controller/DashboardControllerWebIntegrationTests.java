@@ -5,7 +5,7 @@ import winetavern.AbstractWebIntegrationTests;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche

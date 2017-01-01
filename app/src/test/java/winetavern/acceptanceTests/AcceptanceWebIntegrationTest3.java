@@ -8,19 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.AccountCredentials;
-import winetavern.Helper;
-import winetavern.controller.RequestHelper;
+import winetavern.RequestHelper;
 import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
-
-import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -95,8 +92,7 @@ public class AcceptanceWebIntegrationTest3 extends AbstractWebIntegrationTests {
         newService.setBirthday("1960/10/10");
         newService.setPersonTitle("Mister");
 
-        RequestBuilder serviceRequest = post("/admin/management/users/add")
-                .with(user("admin").roles(Roles.ADMIN.getRealNameOfRole()))
+        RequestBuilder serviceRequest = buildPostAdminRequest("/admin/management/users/add")
                 .param("personTitle", newService.getPersonTitle())
                 .param("firstName", newService.getFirstName())
                 .param("lastName", newService.getLastName())

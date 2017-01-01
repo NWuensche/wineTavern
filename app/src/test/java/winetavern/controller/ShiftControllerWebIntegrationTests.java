@@ -8,6 +8,7 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
+import winetavern.RequestHelper;
 import winetavern.model.management.Shift;
 import winetavern.model.management.ShiftRepository;
 import winetavern.model.management.TimeInterval;
@@ -26,12 +27,11 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -76,13 +76,13 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void addShiftsPostRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("employee", employee.getId().toString());
-        params.put("date", "11.11.2016");
-        params.put("start", "08:00");
-        params.put("end", "11:11");
+        RequestBuilder request = buildPostAdminRequest("/admin/management/shifts/add")
+                .param("employee", employee.getId().toString())
+                .param("date", "11.11.2016")
+                .param("start", "08:00")
+                .param("end", "11:11");
 
-        mvc.perform(buildPostAdminRequest("/admin/management/shifts/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
     }
 
@@ -103,13 +103,14 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void changeShiftPostRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("employee", employee.getId().toString());
-        params.put("date", "11.11.2016");
-        params.put("start", "08:00");
-        params.put("end", "11:11");
+        RequestBuilder request = buildPostAdminRequest("/admin/management/shifts/change/" + shift.getId())
+                .param("employee", employee.getId().toString())
+                .param("date", "11.11.2016")
+                .param("start", "08:00")
+                .param("end", "11:11");
 
-        mvc.perform(buildPostAdminRequest("/admin/management/shifts/change/" + shift.getId(), params))
+
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(shift.getInterval().getStart(), is(LocalDateTime.of(2016, 11, 11, 8, 0)));
@@ -117,7 +118,7 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void sortListRight() {
-        Shift earlierShift = new Shift(shift.getInterval().returnMovedIntervalByMinutes(-10), employee); // TODO Is moving right?
+        Shift earlierShift = new Shift(shift.getInterval().returnMovedIntervalByMinutes(-10), employee);
         shiftRepository.save(earlierShift);
 
         List<Shift> shifts = shiftController.getShiftsOfDay(LocalDate.now());

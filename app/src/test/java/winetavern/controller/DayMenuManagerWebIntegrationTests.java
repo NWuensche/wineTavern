@@ -1,31 +1,28 @@
 package winetavern.controller;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.salespointframework.core.Currencies.EURO;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
-import com.itextpdf.text.DocumentException;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
-import org.salespointframework.catalog.Catalog;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.web.util.NestedServletException;
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.RequestBuilder;
+import winetavern.RequestHelper;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
@@ -33,13 +30,10 @@ import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.user.Roles;
 import winetavern.model.user.Vintner;
 import winetavern.model.user.VintnerManager;
-import winetavern.model.user.VintnerTests;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 /**
@@ -104,11 +98,11 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void createDayMenuWithWrongYear() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", "30.11.wrong");
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/add")
+                .param("date", "30.11.wrong");
 
         try {
-            mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+            mvc.perform(request);
             fail();
         }
         catch (NestedServletException e) {
@@ -119,10 +113,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void createDayMenuWithRealDateWithoutPreDayMenu() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", "04.09.2015");
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/add")
+                .param("date", "04.09.2015");
 
-        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+        mvc.perform(request);
 
         LocalDate givenDate = LocalDate.of(2015, 9, 4);
 
@@ -136,10 +130,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
         DayMenu preDayMenu = new DayMenu(LocalDate.of(2015, 9, 3));
         dayMenuRepository.save(preDayMenu);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", "04.09.2015");
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/add")
+                .param("date", "04.09.2015");
 
-        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+        mvc.perform(request);
 
         LocalDate givenDate = LocalDate.of(2015, 9, 4);
 
@@ -160,10 +154,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
         vintner.addWine(wine);
         vintnerManager.save(vintner);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", "04.09.2015");
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/add")
+                .param("date", "04.09.2015");
 
-        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+        mvc.perform(request);
 
         LocalDate givenDate = LocalDate.of(2015, 9, 4);
 
@@ -176,10 +170,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     public void createDayMenuWithoutEvents() throws Exception {
         eventCatalog.deleteAll();
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", "04.09.2015");
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/add")
+                .param("date", "04.09.2015");
 
-        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+        mvc.perform(request);
 
         LocalDate givenDate = LocalDate.of(2015, 9, 4);
 
@@ -192,10 +186,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
     public void createNoNewMenuIfThereIsOneForDate() throws Exception {
         createDayMenuWithWineInVintner();
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("date", "04.09.2015");
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/add")
+                .param("date", "04.09.2015");
 
-        mvc.perform(buildPostAdminRequest("/admin/menu/add", params));
+        mvc.perform(request);
 
         LocalDate givenDate = LocalDate.of(2015, 9, 4);
 
@@ -209,10 +203,10 @@ public class DayMenuManagerWebIntegrationTests extends AbstractWebIntegrationTes
         DayMenu willBeDeleted = new DayMenu(LocalDate.now());
         dayMenuRepository.save(willBeDeleted);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("daymenuid", willBeDeleted.getId().toString());
+        RequestBuilder request = buildPostAdminRequest("/admin/menu/remove")
+                .param("daymenuid", willBeDeleted.getId().toString());
 
-        mvc.perform(buildPostAdminRequest("/admin/menu/remove", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(dayMenuRepository.findOne(willBeDeleted.getId()), is(Optional.empty()));

@@ -8,33 +8,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 import org.salespointframework.catalog.Product;
-import org.salespointframework.core.Streamable;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.transaction.annotation.Transactional;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
+import winetavern.RequestHelper;
 import winetavern.model.stock.Category;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.user.PersonManager;
-import winetavern.model.user.Roles;
 import winetavern.model.user.Vintner;
 import winetavern.model.user.VintnerManager;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * @author Louis
@@ -97,13 +89,13 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void addProductRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", "new drink");
-        params.put("price", "3.4");
-        params.put("category", "New WeißWein");
-        params.put("vintner", vintner.getId().toString());
+        RequestBuilder request = buildPostAdminRequest("/admin/stock/addProduct/")
+                .param("name", "new drink")
+                .param("price", "3.4")
+                .param("category", "New WeißWein")
+                .param("vintner", vintner.getId().toString());
 
-        mvc.perform(buildPostAdminRequest("/admin/stock/addProduct/", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(products.findByName("new drink").iterator().next().getPrice(), is(Money.of(3.4, EURO)));
@@ -119,14 +111,14 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
         hasWine.addWine(product);
         vintnerManager.save(hasWine);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("productid", product.getId().toString());
-        params.put("productname", "Schnaps");
-        params.put("productprice", "10");
-        params.put("productcategory", "Awesome WhiteWein");
-        params.put("productvintner", vintner.getId().toString());
+        RequestBuilder request = buildPostAdminRequest("/admin/stock/changeProduct/")
+                .param("productid", product.getId().toString())
+                .param("productname", "Schnaps")
+                .param("productprice", "10")
+                .param("productcategory", "Awesome WhiteWein")
+                .param("productvintner", vintner.getId().toString());
 
-        mvc.perform(buildPostAdminRequest("/admin/stock/changeProduct/", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(products.findByName("Schnaps").iterator().next().getPrice(), is(Money.of(10, EURO)));

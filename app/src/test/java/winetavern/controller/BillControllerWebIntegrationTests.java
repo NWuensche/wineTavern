@@ -1,13 +1,13 @@
 package winetavern.controller;
 
+import org.bouncycastle.ocsp.Req;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
+import winetavern.RequestHelper;
 import winetavern.model.accountancy.Bill;
 import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillItemRepository;
@@ -16,7 +16,6 @@ import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
-import javax.transaction.Transactional;
 
 
 import java.util.Arrays;
@@ -34,8 +33,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -86,10 +85,10 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
     @Test
     public void addBillRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("table", "Table 1");
+        RequestBuilder request = RequestHelper.buildPostAdminRequest("/service/bills/add")
+                .param("table", "Table 1");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(billRepository.getFirst().getDesk(), is("Table 1"));
@@ -100,11 +99,11 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         DayMenuItem dayMenuItem2 = new DayMenuItem("New Produtt", "Desc", Money.of(5, EURO), 3.5);
         dayMenuItemRepository.save(dayMenuItem2);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("itemid", "" + dayMenuItem2.getId());
-        params.put("quantity", "" + 4);
+        RequestBuilder request = buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/add")
+                .param("itemid", "" + dayMenuItem2.getId())
+                .param("quantity", "" + 4);
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(bill.getItems().size(), is(2));
@@ -149,10 +148,11 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
         BillItem billItem2 = new BillItem(dayMenuItem2);
         billItemRepository.save(billItem2);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("save", fries.getId() + ",7|" + billItem2.getId() + ",3|");
 
-        mvc.perform(buildGetAdminRequest("/service/bills/details/" + bill.getId(), params))
+        RequestBuilder request = buildGetAdminRequest("/service/bills/details/" + bill.getId())
+                .param("save", fries.getId() + ",7|" + billItem2.getId() + ",3|");
+
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(bill.getItems().size(), is(2));
@@ -182,10 +182,10 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
 
         billRepository.save(bill);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("query", fries.getId() + ",3|");
+        RequestBuilder request = buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/split")
+                .param("query", fries.getId() + ",3|");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/bills/details/" + bill.getId() + "/split", params))
+        mvc.perform(request)
                 .andExpect(model().attributeExists("leftbill"))
                 .andExpect(view().name("splitbill"));
 

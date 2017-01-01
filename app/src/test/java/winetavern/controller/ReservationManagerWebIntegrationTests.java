@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
+import winetavern.RequestHelper;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.reservation.Reservation;
 import winetavern.model.reservation.ReservationRepository;
 import winetavern.model.reservation.Desk;
-import winetavern.model.user.Roles;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -27,8 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Sev, Michel Kunkler
@@ -159,10 +158,10 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void reservationTimeValidatorRightIfDesk() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("desk", "Table 1");
+        RequestBuilder request = buildPostAdminRequest("/service/reservation")
+                .param("desk", "Table 1");
 
-        mvc.perform(buildPostAdminRequest("/service/reservation", params))
+        mvc.perform(request)
                 .andExpect(model().attributeExists("reservationTableList"))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(model().attributeExists("deskReservations"))
@@ -171,11 +170,11 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void sortReservationTimeValidatorByDateRightIfReservationTime() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("reservationtime", "2016/11/11 11:11");
-        params.put("sort", "date");
+        RequestBuilder request = buildPostAdminRequest("/service/reservation")
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "date");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/reservation", params))
+        mvc.perform(request)
                 .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation4, reservation3)))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
@@ -183,11 +182,11 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void sortReservationTimeValidatorByNameRightIfReservationTime() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("reservationtime", "2016/11/11 11:11");
-        params.put("sort", "name");
+        RequestBuilder request = buildPostAdminRequest("/service/reservation")
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "name");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/reservation", params))
+        mvc.perform(request)
                 .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
@@ -195,11 +194,11 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void sortReservationTimeValidatorByPersonsRightIfReservationTime() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("reservationtime", "2016/11/11 11:11");
-        params.put("sort", "persons");
+        RequestBuilder request = buildPostAdminRequest("/service/reservation")
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("sort", "persons");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/reservation", params))
+        mvc.perform(request)
                 .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation3, reservation2, reservation4)))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
@@ -207,10 +206,10 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
 
     @Test
     public void ReservationTimeValidatorRightIfReservationTime() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("reservationtime", "2016/11/11 11:11");
+        RequestBuilder request = buildPostAdminRequest("/service/reservation")
+                .param("reservationtime", "2016/11/11 11:11");
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/service/reservation", params))
+        mvc.perform(request)
                 .andExpect(model().attribute("reservationTableList", Arrays.asList(reservation2, reservation3, reservation4)))
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name("reservation"));
@@ -220,17 +219,15 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
     public void addReservationRight() throws Exception {
         String newGuestName = "Alfons";
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("reservationtime", "2016/11/11 11:11");
-        params.put("desk", "Table 1");
-        params.put("amount", "4");
-        params.put("duration", "180");
-        params.put("name", newGuestName);
+        RequestBuilder request = buildPostAdminRequest("/service/reservation/add")
+                .param("reservationtime", "2016/11/11 11:11")
+                .param("desk", "Table 1")
+                .param("amount", "4")
+                .param("duration", "180")
+                .param("name", newGuestName);
 
-
-        mvc.perform(buildPostAdminRequest("/service/reservation/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
-
 
         assertTrue(reservationRepository
                         .stream()
@@ -243,10 +240,10 @@ public class ReservationManagerWebIntegrationTests extends AbstractWebIntegratio
                 .stream()
                 .anyMatch(res -> res.equals(reservation2)));
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("reservation", "" + reservation2.getId());
+        RequestBuilder request = buildPostAdminRequest("/service/reservation/remove")
+                .param("reservation", "" + reservation2.getId());
 
-        mvc.perform(buildPostAdminRequest("/service/reservation/remove", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertTrue(reservationRepository

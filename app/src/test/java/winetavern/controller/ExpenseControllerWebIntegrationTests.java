@@ -3,15 +3,13 @@ package winetavern.controller;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.util.collections.Sets;
 import org.salespointframework.accountancy.Accountancy;
-import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
+import winetavern.RequestHelper;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
@@ -19,7 +17,6 @@ import winetavern.model.user.*;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 import static org.hamcrest.core.Is.is;
@@ -30,8 +27,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -84,42 +81,43 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
 
     @Test
     public void showExpensesRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("type", "");
-        params.put("person", "");
-        params.put("date", "");
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
+                .param("type", "")
+                .param("person", "")
+                .param("date", "");
 
-        mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
+        mvc.perform(request)
                 .andExpect(model().attributeExists("expOpenAmount"))
                 .andExpect(view().name("expenses"));
     }
 
     @Test
     public void showExpensesRightWithExpenseGroupAndEmployee() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("type", "" + groupOrder.getId());
-        params.put("person", employee.getId().toString());
-        params.put("date", "today");
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
+                .param("type", "" + groupOrder.getId())
+                .param("person", employee.getId().toString())
+                .param("date", "today");
 
-        mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
+        mvc.perform(request)
                 .andExpect(model().attributeExists("expOpen"))
                 .andExpect(view().name("expenses"));
     }
 
     @Test
     public void showExpensesRightWithExpenseGroupAndEmployeeCloseExpense() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("type", "" + groupOrder.getId());
-        params.put("person", employee.getId().toString());
-        params.put("cover", employee1.getId() + "|");
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
+                .param("type", "" + groupOrder.getId())
+                .param("person", employee.getId().toString())
+                .param("cover", employee1.getId() + "|");
 
-        mvc.perform(buildPostAdminRequest("/accountancy/expenses", params))
+        mvc.perform(request)
                 .andExpect(model().attributeExists("expCovered"))
                 .andExpect(view().name("expenses"));
 
         boolean accountancyExists = StreamSupport
                 .stream(expenseRepository.findAll().spliterator(), false)
-                .anyMatch(exp -> exp.getDescription().contains("Abrechnung") && exp.getDescription().contains("Hans-Peter Roch"));
+                .anyMatch(exp -> exp.getDescription().contains("Abrechnung")
+                        && exp.getDescription().contains("Hans-Peter Roch"));
 
         assertTrue(accountancyExists);
     }
@@ -133,10 +131,10 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
 
     @Test
     public void redirectPayoffRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("personId", employee.getId().toString());
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses/payoff/")
+                .param("personId", employee.getId().toString());
 
-        mvc.perform(buildPostAdminRequest("/accountancy/expenses/payoff/", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
     }
 

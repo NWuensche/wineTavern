@@ -7,16 +7,14 @@ import org.salespointframework.catalog.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.Helper;
+import winetavern.RequestHelper;
 import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.ProductCatalog;
-import winetavern.model.user.Roles;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,8 +30,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -62,10 +60,10 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         productCatalog.save(product);
         dayMenuItem.setProduct(product);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("frommenuitemid", "" + dayMenu.getId());
+        RequestBuilder request = buildGetAdminRequest("/admin/menuitem/add")
+                .param("frommenuitemid", "" + dayMenu.getId());
 
-        mvc.perform(buildGetAdminRequest("/admin/menuitem/add", params))
+        mvc.perform(request)
             .andExpect(model().attributeExists("daymenuitems"))
             .andExpect(view().name("addmenuitem"));
     }
@@ -76,16 +74,16 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         String nameOfMenuItem = "Beer";
         Long redirectToMenu = dayMenu.getId();
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("product", newProduct.getId().toString());
-        params.put("name", nameOfMenuItem);
-        params.put("price", Money.of(3, EURO).toString());
-        params.put("description", "Awesome");
-        params.put("quantityPerProduct", "" + 4.5);
-        params.put("enabled", "" + false);
-        params.put("dayMenu", redirectToMenu.toString());
+        RequestBuilder request = buildPostAdminRequest("/admin/menuitem/add")
+                .param("product", newProduct.getId().toString())
+                .param("name", nameOfMenuItem)
+                .param("price", Money.of(3, EURO).toString())
+                .param("description", "Awesome")
+                .param("quantityPerProduct", "" + 4.5)
+                .param("enabled", "" + false)
+                .param("dayMenu", redirectToMenu.toString());
 
-        mvc.perform(buildPostAdminRequest("/admin/menuitem/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         List<DayMenuItem> storedDayMenuItems = dayMenuItemRepository
@@ -101,11 +99,11 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
         DayMenuItem newItem = new DayMenuItem("new", "new", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(newItem);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("daymenuitem", newItem.getId().toString());
-        params.put("dayMenu", dayMenu.getId().toString());
+        RequestBuilder request = buildPostAdminRequest("/admin/menuitem/addExisting")
+                .param("daymenuitem", newItem.getId().toString())
+                .param("dayMenu", dayMenu.getId().toString());
 
-        mvc.perform(RequestHelper.buildPostAdminRequest("/admin/menuitem/addExisting", params));
+        mvc.perform(request);
 
         assertThat(newItem.getDayMenus().contains(dayMenu), is(true));
         assertThat(dayMenu.getDayMenuItems().contains(newItem), is(true));
@@ -141,15 +139,15 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
                 .concat("/")
                 .concat(dayMenuItem.getId().toString());
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("product", newProduct.toString());
-        params.put("name", "Neu");
-        params.put("price", Money.of(5, EURO).toString());
-        params.put("description", "New Desc");
-        params.put("quantityPerProduct", "" + 10);
-        params.put("enabled", new Boolean(true).toString());
+        RequestBuilder request = buildPostAdminRequest(url)
+                .param("product", newProduct.toString())
+                .param("name", "Neu")
+                .param("price", Money.of(5, EURO).toString())
+                .param("description", "New Desc")
+                .param("quantityPerProduct", "" + 10)
+                .param("enabled", new Boolean(true).toString());
 
-        mvc.perform(RequestHelper.buildPostAdminRequest(url, params));
+        mvc.perform(request);
 
         assertTrue(dayMenuItemRepository
                 .stream()
@@ -172,15 +170,15 @@ public class DayMenuItemManagerWebIntegrationTests extends AbstractWebIntegratio
                 .concat("/")
                 .concat("1337101"); // Not existing DayMenuItem id
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("product", newProduct.toString());
-        params.put("name", "Neu");
-        params.put("price", Money.of(5, EURO).toString());
-        params.put("description", "New Desc");
-        params.put("quantityPerProduct", "" + 10);
-        params.put("enabled", new Boolean(true).toString());
+        RequestBuilder request = buildPostAdminRequest(url)
+                .param("product", newProduct.toString())
+                .param("name", "Neu")
+                .param("price", Money.of(5, EURO).toString())
+                .param("description", "New Desc")
+                .param("quantityPerProduct", "" + 10)
+                .param("enabled", new Boolean(true).toString());
 
-        mvc.perform(RequestHelper.buildPostAdminRequest(url, params))
+        mvc.perform(request)
                 .andExpect(view().name("error"));
     }
 

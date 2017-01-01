@@ -5,11 +5,10 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
 
 import winetavern.AbstractWebIntegrationTests;
 import org.junit.Test;
-import winetavern.model.user.Roles;
 
 /**
  * Web integration tests for the {@link WelcomeController}

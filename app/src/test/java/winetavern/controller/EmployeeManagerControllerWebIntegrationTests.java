@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 import org.junit.Before;
 import org.salespointframework.useraccount.Role;
@@ -19,6 +19,7 @@ import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.RequestBuilder;
+import winetavern.RequestHelper;
 import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
@@ -54,17 +55,16 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
     }
 
     private RequestBuilder createAddUserRequest(String userName, String password) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("personTitle", "Herr");
-        params.put("firstName", "Hans");
-        params.put("lastName", "Müller");
-        params.put("birthday", "1990/12/12");
-        params.put("username", userName);
-        params.put("password", password);
-        params.put("role", Roles.COOK.getNameOfRoleWithPrefix());
-        params.put("address", "Mein Haus");
+        return buildPostAdminRequest("/admin/management/users/add")
+                .param("personTitle", "Herr")
+                .param("firstName", "Hans")
+                .param("lastName", "Müller")
+                .param("birthday", "1990/12/12")
+                .param("username", userName)
+                .param("password", password)
+                .param("role", Roles.COOK.getNameOfRoleWithPrefix())
+                .param("address", "Mein Haus");
 
-        return buildPostAdminRequest("/admin/management/users/add", params);
     }
 
     @Test(expected = NestedServletException.class)
@@ -105,13 +105,14 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
     public void changeNewEmployee() throws Exception {
         saveNewEmployee();
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("firstName", "DontSave");
-        params.put("lastName", "Schwab");
-        params.put("address", "Best House");
-        params.put("role", Roles.SERVICE.getNameOfRoleWithPrefix());
+        RequestBuilder request = buildGetAdminRequest("/admin/management/users/edit/" + getEmployeeId())
+                .param("firstName", "DontSave")
+                .param("lastName", "Schwab")
+                .param("address", "Best House")
+                .param("role", Roles.SERVICE.getNameOfRoleWithPrefix());
 
-        mvc.perform(buildGetAdminRequest("/admin/management/users/edit/" + getEmployeeId(), params));
+        mvc.perform(request);
+
 
         Employee changedEmployee = employeeManager.findByUsername(userName).get();
 

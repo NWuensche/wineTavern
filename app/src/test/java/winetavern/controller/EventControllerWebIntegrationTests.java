@@ -4,7 +4,9 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
+import winetavern.RequestHelper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
@@ -19,8 +21,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static winetavern.controller.RequestHelper.buildGetAdminRequest;
-import static winetavern.controller.RequestHelper.buildPostAdminRequest;
+import static winetavern.RequestHelper.buildGetAdminRequest;
+import static winetavern.RequestHelper.buildPostAdminRequest;
 
 /**
  * @author Niklas Wünsche
@@ -88,16 +90,16 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void addEventPostWithExistingExternalRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", "New");
-        params.put("desc", "Desc");
-        params.put("date", "11.11.2016 11:11 - 11.11.2016 23:11");
-        params.put("price", "6.66");
-        params.put("external", "" + event.getPerson().getId());
-        params.put("externalName", "t");
-        params.put("externalWage", "5");
+        RequestBuilder request = buildPostAdminRequest("/admin/events/add")
+                .param("name", "New")
+                .param("desc", "Desc")
+                .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
+                .param("price", "6.66")
+                .param("external", "" + event.getPerson().getId())
+                .param("externalName", "t")
+                .param("externalWage", "5");
 
-        mvc.perform(buildPostAdminRequest("/admin/events/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.count(), is(2l));
@@ -108,16 +110,16 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void addEventPostWithNewExternalRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", "New");
-        params.put("desc", "Desc");
-        params.put("date", "11.11.2016 11:11 - 11.11.2016 23:11");
-        params.put("price", "6.66");
-        params.put("external", "0");
-        params.put("externalName", "t");
-        params.put("externalWage", "5");
+        RequestBuilder request = buildPostAdminRequest("/admin/events/add")
+                .param("name", "New")
+                .param("desc", "Desc")
+                .param("date", "11.11.2016 11:11 - 11.11.2016 23:11")
+                .param("price", "6.66")
+                .param("external", "0")
+                .param("externalName", "t")
+                .param("externalWage", "5");
 
-        mvc.perform(buildPostAdminRequest("/admin/events/add", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.count(), is(2l));
@@ -158,16 +160,16 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void changeEventPostWithExistingExternalRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", "new");
-        params.put("desc", "new");
-        params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
-        params.put("price", "6.50");
-        params.put("external", vintner.getId().toString());
-        params.put("externalName", "Hugo");
-        params.put("externalWage", "100.0");
+        RequestBuilder request = buildPostAdminRequest("/admin/events/change/" + event.getId())
+                .param("name", "new")
+                .param("desc", "new")
+                .param("date", "11.11.2015 11:11 - 11.11.2016 11:11")
+                .param("price", "6.50")
+                .param("external", vintner.getId().toString())
+                .param("externalName", "Hugo")
+                .param("externalWage", "100.0");
 
-        mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
@@ -175,16 +177,16 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void changeEventPostWithNewExternalRight() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("name", "new");
-        params.put("desc", "new");
-        params.put("date", "11.11.2015 11:11 - 11.11.2016 11:11");
-        params.put("price", "6.50");
-        params.put("external", "0");
-        params.put("externalName", "Hugo");
-        params.put("externalWage", "100.0");
+        RequestBuilder request = buildPostAdminRequest("/admin/events/change/" + event.getId())
+                .param("name", "new")
+                .param("desc", "new")
+                .param("date", "11.11.2015 11:11 - 11.11.2016 11:11")
+                .param("price", "6.50")
+                .param("external", "0")
+                .param("externalName", "Hugo")
+                .param("externalWage", "100.0");
 
-        mvc.perform(buildPostAdminRequest("/admin/events/change/" + event.getId(), params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(eventCatalog.findOne(event.getId()).map(Event::getName), is(Optional.of("new")));
@@ -200,11 +202,10 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
 
     @Test
     public void showVintnerRightWithEmptyQuery() throws Exception {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("query", "");
+        RequestBuilder request = buildPostAdminRequest("/admin/events/vintner")
+                .param("query", "");
 
-        mvc.perform(buildPostAdminRequest("/admin/events/vintner", params))
-                .andExpect(status().is3xxRedirection());
+        mvc.perform(request);
     }
 
     @Test
@@ -212,10 +213,10 @@ public class EventControllerWebIntegrationTests extends AbstractWebIntegrationTe
         Vintner newVintner = new Vintner("new", 3);
         vintnerManager.save(newVintner);
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("query", vintner.getName().concat("|").concat("newSavedVintner"));
+        RequestBuilder request = buildPostAdminRequest("/admin/events/vintner")
+                .param("query", vintner.getName().concat("|").concat("newSavedVintner"));
 
-        mvc.perform(buildPostAdminRequest("/admin/events/vintner", params))
+        mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
 
         assertThat(vintner.isActive(), is(true));
