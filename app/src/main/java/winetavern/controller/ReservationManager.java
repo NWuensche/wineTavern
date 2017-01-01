@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -164,6 +165,33 @@ public class ReservationManager {
     private List<Reservation> pickLater(LocalDateTime time, List<Reservation> list) {
         return list.stream()
                 .filter(reservation -> reservation.getInterval().getEnd().isAfter(time))
+                .collect(Collectors.toList());
+    }
+
+}
+
+interface SortStrategy {
+
+    static List<Reservation> byDate(Stream<Reservation> allReservations) {
+        return allReservations
+                .sorted(Comparator.comparing(res -> res.getInterval().getStart()))
+                .collect(Collectors.toList());
+    }
+
+    static List<Reservation> byNothing(Stream<Reservation> allReservations) {
+        return allReservations
+                .collect(Collectors.toList());
+    }
+
+    static List<Reservation> byName(Stream<Reservation> allReservations) {
+        return allReservations
+                .sorted(Comparator.comparing(res -> res.getGuestName()))
+                .collect(Collectors.toList());
+    }
+
+    static List<Reservation> byNumberOfPersons(Stream<Reservation> allReservations) {
+        return allReservations
+                .sorted(Comparator.comparing(res -> res.getPersons()))
                 .collect(Collectors.toList());
     }
 
