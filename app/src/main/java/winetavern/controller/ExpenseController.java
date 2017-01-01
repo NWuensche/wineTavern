@@ -176,10 +176,12 @@ public class ExpenseController {
                 personId, false, "");
         model.addAttribute("expenses", expenses);
         model.addAttribute("staff", staff);
-        MonetaryAmount sum = Money.of(0, EURO);
-        for (Expense exp : expenses) {
-            sum = sum.add(exp.getValue());
-        }
+
+        MonetaryAmount sum = expenses
+                .stream()
+                .map(Expense::getValue)
+                .reduce(Money.of(0, EURO), MonetaryAmount::add);
+
         model.addAttribute("price", sum);
         return "payoff";
     }
