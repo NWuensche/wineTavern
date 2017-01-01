@@ -16,6 +16,7 @@ import winetavern.model.reservation.ReservationRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -142,22 +143,23 @@ public class ReservationManager {
     public ModelAndView reservationTableData(Optional<String> sort,
                                              LocalDateTime time,
                                              ModelAndView modelAndView) {
-        Map<String, SortStrategy> sortStrategyMap = createSortMap();
+        Map<String, Function<Stream<Reservation>, List<Reservation>>> sortStrategyMap = createSortMap();
         String sortBy = sort.orElse("nothing");
-        List<Reservation> reservationList = sortStrategyMap.get(sortBy).sort(reservations.findAll());
 
-        reservationList = pickLater(time, reservationList);
+        List<Reservation> sortedAfterParam = sortStrategyMap.get(sortBy).apply(reservations.stream());
+        List<Reservation> afterTime = pickLater(time, sortedAfterParam);
 
-        modelAndView.addObject("reservationTableList", reservationList);
+        modelAndView.addObject("reservationTableList", afterTime);
         return modelAndView;
     }
 
-    private Map<String, SortStrategy> createSortMap() {
-        Map<String, SortStrategy> strategyMap = new HashMap<>();
-        strategyMap.put("nothing", new DontSortStrategy());
-        strategyMap.put("date", new DateSortStrategy());
-        strategyMap.put("name", new NameSortStrategy());
-        strategyMap.put("persons", new PersonSortStrategy());
+    private Map<String, Function<Stream<Reservation>, List<Reservation>>> createSortMap() {
+        Map<String, Function<Stream<Reservation>, List<Reservation>>> strategyMap = new HashMap<>();
+
+        strategyMap.put("nothing", SortStrategy::byNothing);
+        strategyMap.put("date", SortStrategy::byDate);
+        strategyMap.put("name", SortStrategy::byName);
+        strategyMap.put("persons", SortStrategy::byNumberOfPersons);
 
         return  strategyMap;
     }
