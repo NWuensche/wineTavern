@@ -142,14 +142,16 @@ public class ReservationManager {
     public ModelAndView reservationTableData(Optional<String> sort,
                                              LocalDateTime time,
                                              ModelAndView modelAndView) {
-        Map<String, Function<Stream<Reservation>, List<Reservation>>> sortStrategyMap = createSortMap();
         String sortBy = sort.orElse("nothing");
 
-        List<Reservation> sortedAfterParam = sortStrategyMap.get(sortBy).apply(reservations.stream());
-        List<Reservation> afterTime = pickLater(time, sortedAfterParam);
+        List<Reservation> sortedAndAfterTime = pickLater(time, sortReservationsBy(reservations.stream(), sortBy));
 
-        modelAndView.addObject("reservationTableList", afterTime);
+        modelAndView.addObject("reservationTableList", sortedAndAfterTime);
         return modelAndView;
+    }
+
+    private List<Reservation> sortReservationsBy(Stream<Reservation> reservations, String sortBy) {
+        return createSortMap().get(sortBy).apply(reservations);
     }
 
     private Map<String, Function<Stream<Reservation>, List<Reservation>>> createSortMap() {
