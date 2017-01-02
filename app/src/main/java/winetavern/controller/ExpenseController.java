@@ -66,9 +66,9 @@ public class ExpenseController {
                                @ModelAttribute(value="person") Optional<Long> person,
                                @ModelAttribute(value="date") String date,
                                @ModelAttribute(value="cover") Optional<String> cover, Model model) {
-        if (cover.isPresent()) { //the query of expenses to pay off is not empty
 
-            String[] idQuery = cover.get().split("\\|"); //split into multiple ExpenseID's
+        cover.ifPresent(query -> {
+            String[] idQuery = query.split("\\|"); //split into multiple ExpenseID's
             Pair<Expense, MonetaryAmount> result = coverExpenses(idQuery); //the last expense and sum (@see method)
 
             Expense payoff = new Expense(result.getValue(),
@@ -78,7 +78,7 @@ public class ExpenseController {
                     expenseGroups.findByName("Abrechnung").get());
 
             accountancy.add(payoff);
-        }
+        });
 
         Set<Expense> expOpen = filter(group, person, CoverStatus.OPEN, date); //all open expenses with the given filter
         Set<Expense> expCovered = filter(group, person, CoverStatus.CLOSED, date); //all covered expenses with the given filter
