@@ -14,6 +14,7 @@ public class BillItem implements Comparable<BillItem> {
     @GeneratedValue @Id private long id;
     @OneToOne(cascade = CascadeType.ALL) private DayMenuItem item;
     private int quantity;
+    private boolean ready;
 
     @Deprecated
     protected BillItem() {}
@@ -22,6 +23,7 @@ public class BillItem implements Comparable<BillItem> {
         if (item == null) throw new NullPointerException("the item must not be null");
         this.item = item;
         this.quantity = 0;
+        this.ready = false;
     }
 
     public MonetaryAmount getPrice() {
@@ -48,6 +50,14 @@ public class BillItem implements Comparable<BillItem> {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void ready(){
+        this.ready = true;
+    }
+
+    public boolean getReady(){
+        return this.ready;
     }
 
     @Override

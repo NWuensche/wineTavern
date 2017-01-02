@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:include="backend-temp :: page">
+<head th:include="links::links">
+
+    <title>Dashboard</title>
+
+</head>
+<body th:fragment="content">
+<div class="dashboard__wrap">
+    <div class="container__wrap">
+        <h1 class="text-xs-center">Heute,
+            <span th:text="${helper.localDateTimeToDateString(time.getTime())}"></span></h1>
+    </div>
+    <div class="row row-eq-height">
+        <div class="col-xs-8">
+            <div class="container__wrap umsatz__container">
+                <h1>Bestellungen</h1>
+                <div th:if="${orders.size() == 0}" class="padding__box">
+                    <br/>
+                    <div class="alert alert-success text-xs-center">Aktuell keine offenen
+                    Bestellungen!</div>
+                </div>
+
+                <table class="table table-striped text-xs-center" th:if="${orders.size()>0}">
+                    <thead>
+                    <tr style="font-weight:bold;">
+                        <td>Stückzahl</td>
+                        <td>Produkt</td>
+                        <td>Fertig?</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order:${orders}">
+                        <td><b th:text="${order.quantity}"></b></td>
+                        <td th:text="${order.item.name}"></td>
+                        <td>
+                            <a th:href="@{'/cook/ready/' + ${order.id}}">
+                                <button type="button" class="btn btn-primary">
+                                    <i class="fa fa-check fa-lg"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <span></span>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="container__wrap umsatz__container">
+                <h1>Tageskarte</h1>
+
+                <div th:if="!${menu}" class="padding__box">
+                    <br/>
+                    <div class="alert alert-danger text-xs-center">Noch keine Tageskarte für den heutigen Tag!</div>
+                </div>
+
+                <table class="table table-striped text-xs-center" th:if="${menu}">
+                    <thead>
+                    <tr>
+                        <td><b>Produkt</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item:${menu.dayMenuItems}">
+                        <td th:text="${item.name}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    setTimeout(function(){
+        window.location.reload();
+    },10000);
+    /*]]>*/
+</script>
+
+</body>
+</html>

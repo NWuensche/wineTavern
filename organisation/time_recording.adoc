@@ -68,8 +68,11 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 16.12.2016 | 12:00 | 14:00 | calendar view to localStorage
 | 19.12.2016 | 12:00 | 13:00 | introducing charts
 | 19.12.2016 | 16:00 | 18:00 | admin dashboard
-| 20.12.2016 | 11:00 | 13:00 | dashboard reservation chart
-| 20.12.2016 | 18:00 | 20:00 | dashboard income chart
+| 20.12.2016 | 11:00 | 13:00 | TimelineChart
+| 20.12.2016 | 18:00 | 20:00 | Income Bar Chart
+| 23.12.2016 | 10:00 | 12:00 | Service Dashboard
+| 26.12.2016 | 10:00 | 12:00 | Cook Dashboard
+
 
 |===
 
@@ -128,6 +131,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 14.12.2016 | 21:00 | 23:30 | Automatisches PDF als Tageskarte
 | 15.12.2016 | 10:00 | 14:30 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen
 | 15.12.2016 | 17:00 | 19:00 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen, Präsentation vorbereiten
+
 |===
 
 == Niklas

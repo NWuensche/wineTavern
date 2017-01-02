@@ -55,6 +55,11 @@ public interface Helper {
         return dateTime.format(formatter);
     }
 
+    static String localDateTimeToTimeString(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return dateTime.format(formatter);
+    }
+
     static String localDateTimeToJavascriptDateString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss").withLocale(new Locale("en"));
         return dateTime.format(formatter);

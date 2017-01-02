@@ -37,7 +37,8 @@ public class WelcomeController {
 
 	@RequestMapping("/")
 	public String index() {
-        return authenticationManager.getCurrentUser().map((user) -> "backend-temp").orElse("index");
+        return authenticationManager.getCurrentUser().map((user) -> "redirect:/dashboard").orElse("index");
+
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)

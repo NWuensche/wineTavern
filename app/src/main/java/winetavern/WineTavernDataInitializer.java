@@ -1,6 +1,7 @@
 package winetavern;
 
 import org.javamoney.moneta.Money;
+import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
@@ -11,6 +12,7 @@ import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.management.*;
@@ -44,6 +46,7 @@ public class WineTavernDataInitializer implements DataInitializer{
     @Autowired private EmployeeManager employeeManager;
     @Autowired private EventCatalog eventCatalog;
     @Autowired private Inventory<InventoryItem> stock;
+    @Autowired private Accountancy accountancy;
     @Autowired private ExpenseGroupRepository expenseGroups;
     @Autowired private ShiftRepository shifts;
     @Autowired private DeskRepository deskRepository;
@@ -136,6 +139,13 @@ public class WineTavernDataInitializer implements DataInitializer{
                 new TimeInterval(LocalDate.now().atTime(16, 0), LocalDate.now().atTime(19, 0)),
                 "Moderne Poesie gibt es nicht? - Falsch! Studenten der TU Dresden zeigen ihr Können.",
                 new External("Poetry Slam CLub Dresden", Money.of(50, EURO))));
+
+        Expense exp1 = new Expense(Money.of(180,"EUR"),
+                "Maria Sanfler Buchvorstellung",
+                (Person) externalManager.findByName("Maria Sanfler").get(),
+                expenseGroups.findByName("Künstlergage").get());
+        accountancy.add(exp1);
+        exp1.cover();
     }
 
     private void initializeStockWithVintners() {

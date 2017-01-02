@@ -174,6 +174,16 @@ public class ShiftController {
                 .filter(shift -> shift.getInterval().timeInInterval(day.atStartOfDay()))
                 .sorted(Comparator.comparing(shift -> shift.getInterval().getStart()))
                 .collect(Collectors.toList());
+
+        /* not sure if and how Niklas part above is working
+        List<Shift> res = new LinkedList<>();
+        TimeInterval interval = new TimeInterval(day.atStartOfDay().withNano(1),day.atTime(23,59,59));
+        for (Shift shift : shifts.findAll())
+            if (interval.intersects(shift.getInterval())) res.add(shift);
+
+        res.sort((o1, o2) -> (o1.getInterval().getStart().compareTo(o2.getInterval().getStart())));
+        return res;*/
+
     }
 
     private List<String> getTimes(){

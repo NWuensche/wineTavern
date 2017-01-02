@@ -13,5 +13,6 @@ import java.util.List;
 public interface ReservationRepository extends ExtraRepository<Reservation, Long> {
     public List<Reservation> findByDesk(Desk desk);
     public List<Reservation> findAllByOrderByGuestName();
+    public List<Reservation> findAllByOrderByDesk();
     public List<Reservation> findAllByOrderByPersons();
 }
