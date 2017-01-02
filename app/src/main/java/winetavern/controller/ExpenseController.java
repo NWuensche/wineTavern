@@ -127,18 +127,16 @@ public class ExpenseController {
     private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
         Set<Expense> res = new TreeSet<>();
 
-        if (date.equals("today")) { //Interval filter: today
-            date = bt.getTime().format(formatter);
-            date += " - " + date;
-        }
-        if (!date.equals("")) { //Interval filter: start - end
-            String[] interval = date.split("(\\s-\\s)");
+
+        if (!rightFormattedDate.equals("")) { //Interval filter: start - end
+            String[] interval = rightFormattedDate.split("(\\s-\\s)");
             LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withNano(1);
             LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
             accountancy.find(Interval.from(start).to(end)).forEach(it -> res.add(((Expense) it)));
         } else { //no filter
             accountancy.findAll().forEach(it -> res.add(((Expense) it)));
         }
+        String filterByInterval = getCurrentDayIfDateIsToday(interval);
 
         if (!typeId.equals("0")) { //ExpenseGroup filter: must contain expenseGroup
             ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
@@ -154,6 +152,18 @@ public class ExpenseController {
         res.removeIf(expense -> expense.isCovered() != covered);
 
         return res;
+    }
+
+    private String getCurrentDayIfDateIsToday(String date) {
+        String rightFormattedDate;
+        if (date.equals("today")) {
+            String currentBusinessTime = bt.getTime().format(formatter);
+            rightFormattedDate = currentBusinessTime + " - " + currentBusinessTime;
+        } else {
+            rightFormattedDate = date;
+        }
+
+        return rightFormattedDate;
     }
 
     @RequestMapping("/accountancy/expenses/payoff")
