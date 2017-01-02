@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.salespointframework.core.Currencies.EURO;
@@ -127,60 +128,51 @@ public class ExpenseController {
      *                 format: 'dd.MM.yyyy - dd.MM.yyyy'
      * @return Set<Expense> the set filled with all expense that 'passed' the filter criteria
      */
-    private Set<Expense> filter(Optional<String> groupId, Optional<String> personId, boolean covered, String interval) {
-        Set<Expense> res;
+    private Set<Expense> filter(Optional<Long> groupId, Optional<Long> personId, CoverStatus covered, String interval) {
 
-        String filterByInterval = getCurrentDayIfDateIsToday(interval);
+        Predicate<Expense> filterGroup = exp -> groupId
+                .map(id -> Long.toString(exp.getExpenseGroup().getId()).equals(id))
+                .orElse(true);
 
-        res = filterExpensesByInterval(filterByInterval);
+        Predicate<Expense> filterPerson = exp -> personId
+                .map(id -> Long.toString(exp.getPerson().getId()).equals(id))
+                .orElse(true);
 
-        //ExpenseGroup filter: must contain expenseGroup
-        groupId.ifPresent(id -> {
-            ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(id)).get();
-            res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
-        });
+        Predicate<Expense> filterCovered = exp -> exp.isCovered() == covered.getStatus();
 
-        //Person filter: must contain person
-        personId.ifPresent(id -> {
-            Person person = persons.findOne(Long.parseLong(id)).get();
-            res.removeIf(expense -> !expense.getPerson().getId().equals(person.getId()));
-        });
+        Optional<TimeInterval> parsedInterval = parseInterval(interval);
 
-        //isCovered filter: true -> returns only paid expenses
-        res.removeIf(expense -> expense.isCovered() != covered);
+        Predicate<Expense> filterInterval = exp -> parsedInterval
+                .map(time -> time.timeInInterval(exp.getDate().get()))
+                .orElse(true);
 
-        return res;
+        return accountancy.findAll()
+                .stream()
+                .map(entry -> (Expense) entry)
+                .filter(filterInterval)
+                .filter(filterGroup)
+                .filter(filterPerson)
+                .filter(filterCovered)
+                .collect(Collectors.toSet());
     }
 
-    private String getCurrentDayIfDateIsToday(String date) {
-        String rightFormattedDate;
-        if (date.equals("today")) {
+    private Optional<TimeInterval> parseInterval(String date) {
+        if(StringUtils.isBlank(date)) {
+            return Optional.empty();
+        } else if (date.equals("today")) {
             String currentBusinessTime = bt.getTime().format(formatter);
-            rightFormattedDate = currentBusinessTime + " - " + currentBusinessTime;
+            String currentBusinessInterval = currentBusinessTime + " - " + currentBusinessTime;
+            return Optional.of(parseStringToInterval(currentBusinessInterval));
         } else {
-            rightFormattedDate = date;
+            return Optional.of(parseStringToInterval(date));
         }
-
-        return rightFormattedDate;
     }
-    
-    private Set<Expense> filterExpensesByInterval(String interval) {
-        Function<AccountancyEntry, Expense> castEntries = entry -> (Expense) entry;
 
-        if(StringUtils.isBlank(interval)) {
-            return accountancy.findAll()
-                    .stream()
-                    .map(castEntries)
-                    .collect(Collectors.toSet());
-        }
-
+    private TimeInterval parseStringToInterval(String interval) {
         String[] splitInterval = interval.split("(\\s-\\s)");
         LocalDateTime start = LocalDate.parse(splitInterval[0], formatter).atStartOfDay().withNano(1);
         LocalDateTime end = LocalDate.parse(splitInterval[1], formatter).atTime(23, 59, 59, 999999999);
-        return accountancy.find(Interval.from(start).to(end))
-                .stream()
-                .map(castEntries)
-                .collect(Collectors.toSet());
+        return new TimeInterval(start, end);
     }
 
     @RequestMapping("/accountancy/expenses/payoff")
