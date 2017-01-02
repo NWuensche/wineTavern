@@ -107,7 +107,7 @@ public class DayMenuManager {
                     .filter(DayMenuItem::isEnabled)
                     .forEach(item -> {
                         vintner.get().getWineSet().stream()
-                                .filter(wine -> wine == item.getProduct())
+                                .filter(wine -> wine.equals(item.getProduct()))
                                 .forEach(wine -> {
                                     DayMenuItem discountedDayMenuItem = new DayMenuItem();
                                     discountedDayMenuItem.setQuantityPerProduct(item.getQuantityPerProduct());
