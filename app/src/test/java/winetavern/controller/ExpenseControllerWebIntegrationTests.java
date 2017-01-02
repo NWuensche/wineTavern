@@ -82,7 +82,7 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     @Test
     public void showExpensesRight() throws Exception {
         RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
-                .param("type", "")
+                .param("type", " ")
                 .param("person", "")
                 .param("date", "");
 

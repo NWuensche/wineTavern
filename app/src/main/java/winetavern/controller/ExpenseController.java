@@ -62,7 +62,8 @@ public class ExpenseController {
      */
     // TODO group gleich als Optional<Long> übergeben?
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute(value="type") String group, @ModelAttribute(value="person") String person,
+    public String showExpenses(@ModelAttribute(value="type") Optional<Long> group,
+                               @ModelAttribute(value="person") Optional<Long> person,
                                @ModelAttribute(value="date") String date,
                                @ModelAttribute(value="cover") Optional<String> cover, Model model) {
         if (cover.isPresent()) { //the query of expenses to pay off is not empty
@@ -79,9 +80,6 @@ public class ExpenseController {
             accountancy.add(payoff);
         }
 
-        Optional<String> groupId = !StringUtils.isBlank(group) ? Optional.of(group) : Optional.empty();
-        Optional<String> personId = !StringUtils.isBlank(person) ? Optional.of(person) : Optional.empty();
-
         Set<Expense> expOpen = filter(group, person, CoverStatus.OPEN, date); //all open expenses with the given filter
         Set<Expense> expCovered = filter(group, person, CoverStatus.CLOSED, date); //all covered expenses with the given filter
 
@@ -91,8 +89,8 @@ public class ExpenseController {
         model.addAttribute("expCovered", expCovered);
         model.addAttribute("persons", Helper.findAllPersons(employees, externals)); //all employees and externals
         model.addAttribute("groups", expenseGroups.findAll());
-        model.addAttribute("selectedType", Long.parseLong(groupId.orElse("0")));
-        model.addAttribute("selectedPerson", Long.parseLong(personId.orElse("0")));
+        model.addAttribute("selectedType", group.orElse(0l));
+        model.addAttribute("selectedPerson", group.orElse(0l));
         model.addAttribute("selectedDate", date);
         return "expenses";
     }
@@ -190,10 +188,9 @@ public class ExpenseController {
     }
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}")
-    public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
-        Employee staff = employees.findOne(Long.parseLong(personId)).get();
-        Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")),
-                Optional.of(personId), CoverStatus.OPEN, "");
+    public String doPayoffForPerson(@PathVariable("pid") Long personId, Model model) {
+        Employee staff = employees.findOne(personId).get();
+        Set<Expense> expenses = filter(idOfGroup("Bestellung"), Optional.of(personId), CoverStatus.OPEN, "");
         model.addAttribute("expenses", expenses);
         model.addAttribute("staff", staff);
 
@@ -206,16 +203,16 @@ public class ExpenseController {
         return "payoff";
     }
 
-    private String idOfGroup(String groupName) {
+    private Optional<Long> idOfGroup(String groupName) {
         return expenseGroups
                 .findByName(groupName)
-                .map(id -> Long.toString(id.getId()))
-                    .orElse("");
+                .map(id -> Optional.of(id.getId()))
+                    .orElse(Optional.empty());
     }
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
-    public String coverExpensesForPerson(@PathVariable("pid") String personId) {
-        Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")), Optional.of(personId), CoverStatus.OPEN, "");
+    public String coverExpensesForPerson(@PathVariable("pid") Long personId) {
+        Set<Expense> expenses = filter(idOfGroup("Bestellung"), Optional.of(personId), CoverStatus.OPEN, "");
 
         MonetaryAmount sum = Money.of(0, EURO);
         for(Expense expense : expenses){
@@ -227,7 +224,7 @@ public class ExpenseController {
         accountancy.add(new Expense(sum,
                 "Tagesabrechnung " + bt.getTime().toLocalDate().format(formatter) + " durch " +
                         employees.findByUserAccount(am.getCurrentUser().get()).get(),
-                employees.findOne(Long.parseLong(personId)).get(),
+                employees.findOne(personId).get(),
                 expenseGroups.findByName("Abrechnung").get()));
 
         return "redirect:/accountancy/expenses/payoff";
