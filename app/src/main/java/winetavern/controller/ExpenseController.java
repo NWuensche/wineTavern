@@ -21,6 +21,7 @@ import winetavern.Helper;
 import winetavern.model.accountancy.Expense;
 import winetavern.model.accountancy.ExpenseGroup;
 import winetavern.model.accountancy.ExpenseGroupRepository;
+import winetavern.model.management.TimeInterval;
 import winetavern.model.user.*;
 
 import javax.money.MonetaryAmount;
@@ -81,8 +82,8 @@ public class ExpenseController {
         Optional<String> groupId = !StringUtils.isBlank(group) ? Optional.of(group) : Optional.empty();
         Optional<String> personId = !StringUtils.isBlank(person) ? Optional.of(person) : Optional.empty();
 
-        Set<Expense> expOpen = filter(groupId, personId, false, date); //all open expenses with the given filter
-        Set<Expense> expCovered = filter(groupId, personId, true, date); //all covered expenses with the given filter
+        Set<Expense> expOpen = filter(group, person, CoverStatus.OPEN, date); //all open expenses with the given filter
+        Set<Expense> expCovered = filter(group, person, CoverStatus.CLOSED, date); //all covered expenses with the given filter
 
         model.addAttribute("expOpenAmount", expOpen.size());
         model.addAttribute("expCoveredAmount", expCovered.size());
@@ -192,7 +193,7 @@ public class ExpenseController {
     public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
         Employee staff = employees.findOne(Long.parseLong(personId)).get();
         Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")),
-                Optional.of(personId), false, "");
+                Optional.of(personId), CoverStatus.OPEN, "");
         model.addAttribute("expenses", expenses);
         model.addAttribute("staff", staff);
 
@@ -214,7 +215,7 @@ public class ExpenseController {
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
     public String coverExpensesForPerson(@PathVariable("pid") String personId) {
-        Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")), Optional.of(personId), false, "");
+        Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")), Optional.of(personId), CoverStatus.OPEN, "");
 
         MonetaryAmount sum = Money.of(0, EURO);
         for(Expense expense : expenses){
@@ -230,6 +231,23 @@ public class ExpenseController {
                 expenseGroups.findByName("Abrechnung").get()));
 
         return "redirect:/accountancy/expenses/payoff";
+    }
+
+}
+
+enum CoverStatus {
+
+    CLOSED(true),
+    OPEN(false);
+
+    boolean status;
+
+    CoverStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean getStatus() {
+        return status;
     }
 
 }
