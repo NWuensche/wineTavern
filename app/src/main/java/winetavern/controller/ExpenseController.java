@@ -1,10 +1,12 @@
 package winetavern.controller;
 
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.AuthenticationManager;
@@ -26,6 +28,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -120,23 +124,16 @@ public class ExpenseController {
      * @see            Person
      * @param covered  true: only return expenses which are covered
      *                 false: only return open expenses
-     * @param date     the interval in which the expense must lay in
+     * @param interval     the interval in which the expense must lay in
      *                 format: 'dd.MM.yyyy - dd.MM.yyyy'
      * @return Set<Expense> the set filled with all expense that 'passed' the filter criteria
      */
-    private Set<Expense> filter(String typeId, String personId, boolean covered, String date) {
-        Set<Expense> res = new TreeSet<>();
+    private Set<Expense> filter(String typeId, String personId, boolean covered, String interval) {
+        Set<Expense> res;
 
-
-        if (!rightFormattedDate.equals("")) { //Interval filter: start - end
-            String[] interval = rightFormattedDate.split("(\\s-\\s)");
-            LocalDateTime start = LocalDate.parse(interval[0], formatter).atStartOfDay().withNano(1);
-            LocalDateTime end = LocalDate.parse(interval[1], formatter).atTime(23, 59, 59, 999999999);
-            accountancy.find(Interval.from(start).to(end)).forEach(it -> res.add(((Expense) it)));
-        } else { //no filter
-            accountancy.findAll().forEach(it -> res.add(((Expense) it)));
-        }
         String filterByInterval = getCurrentDayIfDateIsToday(interval);
+
+        res = filterExpensesByInterval(filterByInterval);
 
         if (!typeId.equals("0")) { //ExpenseGroup filter: must contain expenseGroup
             ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
@@ -164,6 +161,25 @@ public class ExpenseController {
         }
 
         return rightFormattedDate;
+    }
+    
+    private Set<Expense> filterExpensesByInterval(String interval) {
+        Function<AccountancyEntry, Expense> castEntries = entry -> (Expense) entry;
+
+        if(StringUtils.isBlank(interval)) {
+            return accountancy.findAll()
+                    .stream()
+                    .map(castEntries)
+                    .collect(Collectors.toSet());
+        }
+
+        String[] splitInterval = interval.split("(\\s-\\s)");
+        LocalDateTime start = LocalDate.parse(splitInterval[0], formatter).atStartOfDay().withNano(1);
+        LocalDateTime end = LocalDate.parse(splitInterval[1], formatter).atTime(23, 59, 59, 999999999);
+        return accountancy.find(Interval.from(start).to(end))
+                .stream()
+                .map(castEntries)
+                .collect(Collectors.toSet());
     }
 
     @RequestMapping("/accountancy/expenses/payoff")
