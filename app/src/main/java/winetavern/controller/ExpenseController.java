@@ -76,13 +76,11 @@ public class ExpenseController {
             accountancy.add(payoff);
         }
 
-        if (type.equals("")) //the type will be parsed in long, so it should be a number
-            type = "0";
-        if (person.equals(""))
-            person = "0";
+        Optional<String> groupId = !StringUtils.isBlank(group) ? Optional.of(group) : Optional.empty();
+        Optional<String> personId = !StringUtils.isBlank(person) ? Optional.of(person) : Optional.empty();
 
-        Set<Expense> expOpen = filter(type, person, false, date); //all open expenses with the given filter
-        Set<Expense> expCovered = filter(type, person, true, date); //all covered expenses with the given filter
+        Set<Expense> expOpen = filter(groupId, personId, false, date); //all open expenses with the given filter
+        Set<Expense> expCovered = filter(groupId, personId, true, date); //all covered expenses with the given filter
 
         model.addAttribute("expOpenAmount", expOpen.size());
         model.addAttribute("expCoveredAmount", expCovered.size());
@@ -128,22 +126,24 @@ public class ExpenseController {
      *                 format: 'dd.MM.yyyy - dd.MM.yyyy'
      * @return Set<Expense> the set filled with all expense that 'passed' the filter criteria
      */
-    private Set<Expense> filter(String typeId, String personId, boolean covered, String interval) {
+    private Set<Expense> filter(Optional<String> groupId, Optional<String> personId, boolean covered, String interval) {
         Set<Expense> res;
 
         String filterByInterval = getCurrentDayIfDateIsToday(interval);
 
         res = filterExpensesByInterval(filterByInterval);
 
-        if (!typeId.equals("0")) { //ExpenseGroup filter: must contain expenseGroup
-            ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(typeId)).get();
+        //ExpenseGroup filter: must contain expenseGroup
+        groupId.ifPresent(id -> {
+            ExpenseGroup expenseGroup = expenseGroups.findOne(Long.parseLong(id)).get();
             res.removeIf(expense -> expense.getExpenseGroup() != expenseGroup);
-        }
+        });
 
-        if (!personId.equals("0")) { //Person filter: must contain person
-            Person person = persons.findOne(Long.parseLong(personId)).get();
+        //Person filter: must contain person
+        personId.ifPresent(id -> {
+            Person person = persons.findOne(Long.parseLong(id)).get();
             res.removeIf(expense -> !expense.getPerson().getId().equals(person.getId()));
-        }
+        });
 
         //isCovered filter: true -> returns only paid expenses
         res.removeIf(expense -> expense.isCovered() != covered);
@@ -198,8 +198,8 @@ public class ExpenseController {
     @RequestMapping("/accountancy/expenses/payoff/{pid}")
     public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
         Employee staff = employees.findOne(Long.parseLong(personId)).get();
-        Set<Expense> expenses = filter(""+expenseGroups.findByName("Bestellung").get().getId(),
-                personId, false, "");
+        Set<Expense> expenses = filter(Optional.of("Bestellung"),
+                Optional.of(personId), false, "");
         model.addAttribute("expenses", expenses);
         model.addAttribute("staff", staff);
 
@@ -212,21 +212,28 @@ public class ExpenseController {
         return "payoff";
     }
 
+    private String idOfGroup(String groupName) {
+        return "" + expenseGroups.findByName(groupName).get().getId();
+    }
+
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
     public String coverExpensesForPerson(@PathVariable("pid") String personId) {
-        Set<Expense> expenses = filter("" + expenseGroups.findByName("Bestellung").get().getId(),
-                personId, false, "");
+        Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")), Optional.of(personId), false, "");
+
         MonetaryAmount sum = Money.of(0, EURO);
         for(Expense expense : expenses){
             sum = sum.add(expense.getValue());
             expense.cover();
             accountancy.add(expense);
         }
+
         accountancy.add(new Expense(sum,
                 "Tagesabrechnung " + bt.getTime().toLocalDate().format(formatter) + " durch " +
                         employees.findByUserAccount(am.getCurrentUser().get()).get(),
                 employees.findOne(Long.parseLong(personId)).get(),
                 expenseGroups.findByName("Abrechnung").get()));
+
         return "redirect:/accountancy/expenses/payoff";
     }
+
 }
