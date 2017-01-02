@@ -49,7 +49,7 @@ public class ExpenseController {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     /**
-     * @param type   the ExpenseGroup (long id) to filter with (only remain expenses with this group)
+     * @param group   the ExpenseGroup (long id) to filter with (only remain expenses with this group)
      * @see          ExpenseGroup
      * @param person the Person (long id) to filter with
      * @see          Person
@@ -58,8 +58,9 @@ public class ExpenseController {
      * @param cover  if present: cover multiple open expenses (the user checked the checkbox of at least one expense)
      *               format:     'expenseID|expenseId|...|'
      */
+    // TODO group gleich als Optional<Long> übergeben?
     @RequestMapping("/accountancy/expenses")
-    public String showExpenses(@ModelAttribute(value="type") String type, @ModelAttribute(value="person") String person,
+    public String showExpenses(@ModelAttribute(value="type") String group, @ModelAttribute(value="person") String person,
                                @ModelAttribute(value="date") String date,
                                @ModelAttribute(value="cover") Optional<String> cover, Model model) {
         if (cover.isPresent()) { //the query of expenses to pay off is not empty
@@ -88,8 +89,8 @@ public class ExpenseController {
         model.addAttribute("expCovered", expCovered);
         model.addAttribute("persons", Helper.findAllPersons(employees, externals)); //all employees and externals
         model.addAttribute("groups", expenseGroups.findAll());
-        model.addAttribute("selectedType", Long.parseLong(type));
-        model.addAttribute("selectedPerson", Long.parseLong(person));
+        model.addAttribute("selectedType", Long.parseLong(groupId.orElse("0")));
+        model.addAttribute("selectedPerson", Long.parseLong(personId.orElse("0")));
         model.addAttribute("selectedDate", date);
         return "expenses";
     }
@@ -116,7 +117,7 @@ public class ExpenseController {
 
     /**
      * @see Expense
-     * @param typeId   the ExpenseGroup (long id) to filter with (only remain expenses with this group)
+     * @param groupId   the ExpenseGroup (long id) to filter with (only remain expenses with this group)
      * @see            ExpenseGroup
      * @param personId the Person (long id) to filter with
      * @see            Person
@@ -198,7 +199,7 @@ public class ExpenseController {
     @RequestMapping("/accountancy/expenses/payoff/{pid}")
     public String doPayoffForPerson(@PathVariable("pid") String personId, Model model) {
         Employee staff = employees.findOne(Long.parseLong(personId)).get();
-        Set<Expense> expenses = filter(Optional.of("Bestellung"),
+        Set<Expense> expenses = filter(Optional.of(idOfGroup("Bestellung")),
                 Optional.of(personId), false, "");
         model.addAttribute("expenses", expenses);
         model.addAttribute("staff", staff);
@@ -213,7 +214,10 @@ public class ExpenseController {
     }
 
     private String idOfGroup(String groupName) {
-        return "" + expenseGroups.findByName(groupName).get().getId();
+        return expenseGroups
+                .findByName(groupName)
+                .map(id -> Long.toString(id.getId()))
+                    .orElse("");
     }
 
     @RequestMapping("/accountancy/expenses/payoff/{pid}/pay")
