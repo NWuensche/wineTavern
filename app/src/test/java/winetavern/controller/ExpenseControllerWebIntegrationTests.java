@@ -3,7 +3,9 @@ package winetavern.controller;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.util.collections.Sets;
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import winetavern.model.accountancy.ExpenseGroupRepository;
 import winetavern.model.user.*;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.stream.StreamSupport;
 
@@ -42,16 +47,23 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
     @Autowired EmployeeManager employeeManager;
     @Autowired UserAccountManager userAccountManager;
     @Autowired ExternalManager externalManager;
+    @Autowired BusinessTime businessTime;
 
     ExpenseGroup groupArtists;
     ExpenseGroup groupOrder;
+    External artist;
+    Employee employee;
     Expense artist1;
     Expense artist2;
+    Expense artist3;
     Expense employee1;
     Expense employee2;
-    Employee employee;
-    External artist;
 
+
+    /**
+     * @implNote You have to save the Expenses before you change businessTime, because otherwise the expenses of today
+     * have the date of tomorrow (because businessTime changes faster than objects are initialized)
+     */
     @Before
     public void before() {
         UserAccount account = userAccountManager.create("Hans", "1234", Roles.ADMIN.getRole());
@@ -69,39 +81,92 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
         expenseGroupRepository.save(groupOrder);
 
         artist1 = new Expense(Money.of(3, EURO), "Artist", artist, groupArtists);
-        artist2 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupArtists);
         employee1 = new Expense(Money.of(100, EURO), "Employee 1", employee, groupOrder);
-        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupOrder);
-
         expenseRepository.add(artist1);
-        expenseRepository.add(artist2);
         expenseRepository.add(employee1);
+
+        businessTime.forward(Duration.ofDays(1)); // For the tests, today is tomorrow
+        artist2 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupArtists);
+        artist3 = new Expense(Money.of(100, EURO), "Artist 2", artist, groupOrder);
+        employee2 = new Expense(Money.of(200, EURO), "Employee 2", employee, groupOrder);
+        expenseRepository.add(artist2);
+        expenseRepository.add(artist3);
         expenseRepository.add(employee2);
+        businessTime.forward(Duration.ofDays(-1)); // For the tests, today is tomorrow
+
     }
 
     @Test
-    public void showExpensesRight() throws Exception {
+    public void showExpensesRightWithoutFilters() throws Exception {
         RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
                 .param("type", " ")
-                .param("person", "")
-                .param("date", "");
+                .param("person", "  ")
+                .param("date", "  ");
 
         mvc.perform(request)
-                .andExpect(model().attributeExists("expOpenAmount"))
+                .andExpect(model().attribute("expOpen", is(Sets.newSet(artist1, artist2, artist3, employee1, employee2))))
                 .andExpect(view().name("expenses"));
     }
 
     @Test
-    public void showExpensesRightWithExpenseGroupAndEmployee() throws Exception {
+    public void showExpensesRight() throws Exception {
+        employee2.cover();
+
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
+                .param("type", " ")
+                .param("person", employee.getId().toString())
+                .param("date", "  ");
+
+        mvc.perform(request)
+                .andExpect(model().attribute("expOpen", is(Sets.newSet(employee1))))
+                .andExpect(model().attribute("expCovered", is(Sets.newSet(employee2))))
+                .andExpect(view().name("expenses"));
+    }
+
+    @Test
+    public void showExpensesRightWithExpenseGroupAndEmployeeAndTodayDate() throws Exception {
         RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
                 .param("type", "" + groupOrder.getId())
                 .param("person", employee.getId().toString())
                 .param("date", "today");
 
         mvc.perform(request)
-                .andExpect(model().attributeExists("expOpen"))
+                .andExpect(model().attribute("expOpen", is(Sets.newSet(employee1))))
                 .andExpect(view().name("expenses"));
     }
+
+    @Test
+    public void showExpensesRightWithExpenseGroupAndEmployeeAndDateIsToday() throws Exception {
+        LocalDateTime today = businessTime.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
+                .param("type", "" + groupArtists.getId())
+                .param("person", artist.getId().toString())
+                .param("date", today.format(formatter).concat(" - ").concat(today.format(formatter)));
+
+        mvc.perform(request)
+                .andExpect(model().attribute("expOpen", is(Sets.newSet(artist1))))
+                .andExpect(model().attribute("expCovered", is(Sets.newSet())))
+                .andExpect(view().name("expenses"));
+    }
+
+    @Test
+    public void showExpensesRightWithExpenseGroupAndEmployeeAndDateIsTodayAndTomorrow() throws Exception {
+        LocalDateTime today = businessTime.getTime();
+        LocalDateTime tomorrow = businessTime.getTime().plusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        RequestBuilder request = buildPostAdminRequest("/accountancy/expenses")
+                .param("type", "" + groupOrder.getId())
+                .param("person", artist.getId().toString())
+                .param("date", today.format(formatter).concat(" - ").concat(tomorrow.format(formatter)));
+
+        mvc.perform(request)
+                .andExpect(model().attribute("expOpen", is(Sets.newSet(artist3))))
+                .andExpect(model().attribute("expCovered", is(Sets.newSet())))
+                .andExpect(view().name("expenses"));
+    }
+
+
 
     @Test
     public void showExpensesRightWithExpenseGroupAndEmployeeCloseExpense() throws Exception {
@@ -111,11 +176,12 @@ public class ExpenseControllerWebIntegrationTests extends AbstractWebIntegration
                 .param("cover", employee1.getId() + "|");
 
         mvc.perform(request)
-                .andExpect(model().attributeExists("expCovered"))
+                .andExpect(model().attribute("expOpen", is(Sets.newSet(employee2))))
+                .andExpect(model().attribute("expCovered", is(Sets.newSet(employee1))))
                 .andExpect(view().name("expenses"));
 
-        boolean accountancyExists = StreamSupport
-                .stream(expenseRepository.findAll().spliterator(), false)
+        boolean accountancyExists = expenseRepository.findAll()
+                .stream()
                 .anyMatch(exp -> exp.getDescription().contains("Abrechnung")
                         && exp.getDescription().contains("Hans-Peter Roch"));
 

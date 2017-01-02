@@ -60,7 +60,6 @@ public class ExpenseController {
      * @param cover  if present: cover multiple open expenses (the user checked the checkbox of at least one expense)
      *               format:     'expenseID|expenseId|...|'
      */
-    // TODO group gleich als Optional<Long> übergeben?
     @RequestMapping("/accountancy/expenses")
     public String showExpenses(@ModelAttribute(value="type") Optional<Long> group,
                                @ModelAttribute(value="person") Optional<Long> person,
@@ -129,21 +128,21 @@ public class ExpenseController {
      */
     private Set<Expense> filter(Optional<Long> groupId, Optional<Long> personId, CoverStatus covered, String interval) {
 
-        Predicate<Expense> filterGroup = exp -> groupId
-                .map(id -> Long.toString(exp.getExpenseGroup().getId()).equals(id))
-                .orElse(true);
-
-        Predicate<Expense> filterPerson = exp -> personId
-                .map(id -> Long.toString(exp.getPerson().getId()).equals(id))
-                .orElse(true);
-
-        Predicate<Expense> filterCovered = exp -> exp.isCovered() == covered.getStatus();
-
         Optional<TimeInterval> parsedInterval = parseInterval(interval);
 
         Predicate<Expense> filterInterval = exp -> parsedInterval
                 .map(time -> time.timeInInterval(exp.getDate().get()))
                 .orElse(true);
+
+        Predicate<Expense> filterGroup = exp -> groupId
+                .map(id -> exp.getExpenseGroup().getId() == id.longValue())
+                .orElse(true);
+
+        Predicate<Expense> filterPerson = exp -> personId
+                .map(id -> exp.getPerson().getId() == id.longValue())
+                .orElse(true);
+
+        Predicate<Expense> filterCovered = exp -> exp.isCovered() == covered.getStatus();
 
         return accountancy.findAll()
                 .stream()
@@ -167,6 +166,9 @@ public class ExpenseController {
         }
     }
 
+    /**
+     * @implNote Interval will start at 00:00 of start and end at 24:00 of end
+     */
     private TimeInterval parseStringToInterval(String interval) {
         String[] splitInterval = interval.split("(\\s-\\s)");
         LocalDateTime start = LocalDate.parse(splitInterval[0], formatter).atStartOfDay().withNano(1);
