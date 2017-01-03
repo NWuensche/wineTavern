@@ -63,8 +63,8 @@ public class DashboardController {
             model.addAttribute("shifts", shiftController.getShiftsOfDay(time.getTime().toLocalDate()));
 
             Optional<DayMenu> menu = daymenus.findByDay(time.getTime().toLocalDate());
-            if (menu.isPresent())
-                model.addAttribute("daymenu", menu);
+            menu.ifPresent(m ->  model.addAttribute("daymenu", m));
+               ;
 
             model.addAttribute("reservations", reservationString());
             model.addAttribute("income", incomeString());
@@ -78,8 +78,7 @@ public class DashboardController {
             model.addAttribute("shifts", shiftController.getShiftsOfDay(time.getTime().toLocalDate()));
 
             Optional<DayMenu> menu = daymenus.findByDay(time.getTime().toLocalDate());
-            if (menu.isPresent())
-                model.addAttribute("daymenu", menu);
+            menu.ifPresent(m ->  model.addAttribute("daymenu", m));
 
             model.addAttribute("reservations", reservationString());
             model.addAttribute("income", personalIncomeString(
@@ -92,7 +91,9 @@ public class DashboardController {
         } else if (authenticationManager.getCurrentUser().get().hasRole(Role.of("ROLE_COOK"))){
             model.addAttribute("time", time);
 
-            model.addAttribute("menu", daymenus.findByDay(time.getTime().toLocalDate()));
+            // TODO, was wenn es nicht existert?
+            Optional<DayMenu> menu = daymenus.findByDay(time.getTime().toLocalDate());
+            menu.ifPresent(m ->  model.addAttribute("menu", m));
 
             model.addAttribute("orders",billItemRepository.findByReadyFalse());
 
