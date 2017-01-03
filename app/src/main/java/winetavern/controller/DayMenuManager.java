@@ -148,11 +148,13 @@ public class DayMenuManager {
 
     @RequestMapping(value = "/admin/menu/remove", method = RequestMethod.POST)
     public String removeMenu(@RequestParam("daymenuid") Long dayMenuId) {
-        dayMenuRepository.findOne(dayMenuId)
-                .ifPresent(dayMenu -> {
-                    dayMenu.getDayMenuItems().forEach(dayMenu::removeMenuItem);
-                    dayMenuRepository.delete(dayMenu);
-                });
+
+        dayMenuRepository.findOne(dayMenuId).ifPresent(menu -> {
+            menu.getDayMenuItems()
+                    .stream()
+                    .forEach(menu::removeMenuFromMenuItem);
+            dayMenuRepository.delete(menu);
+        });
 
         return "redirect:/admin/menu/show";
     }

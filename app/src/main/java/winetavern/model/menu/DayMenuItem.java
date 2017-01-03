@@ -4,15 +4,11 @@ import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javamoney.moneta.Money;
-import org.mockito.internal.stubbing.answers.ClonesArguments;
 import org.salespointframework.catalog.Product;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Michel

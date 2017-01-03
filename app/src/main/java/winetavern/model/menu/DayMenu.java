@@ -50,6 +50,10 @@ public class DayMenu {
         dayMenuItem.removeDayMenu(this);
     }
 
+    public void removeMenuFromMenuItem(DayMenuItem item) {
+        item.removeDayMenu(this);
+    }
+
     /**
      * Returns a List of DayMenuItem's that are not in the given DayMenu already
      * @param menuItems
