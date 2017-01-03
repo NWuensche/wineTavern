@@ -3,12 +3,13 @@ package winetavern.controller;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
+import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.AbstractWebIntegrationTests;
-import winetavern.model.accountancy.BillItem;
-import winetavern.model.accountancy.BillItemRepository;
+import winetavern.model.accountancy.*;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.user.Employee;
@@ -16,6 +17,10 @@ import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.PersonTitle;
 import winetavern.model.user.Roles;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
@@ -37,6 +42,9 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
     @Autowired private EmployeeManager employeeManager;
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private BillItemRepository billItemRepository;
+    @Autowired private Accountancy accountancy;
+    @Autowired private ExpenseGroupRepository expenseGroupRepository;
+    @Autowired private BusinessTime time;
 
     @Before
     public void before() {
@@ -77,8 +85,32 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
     @Test
     public void showDashboardAsAccountantRight() throws Exception {
         mvc.perform(post("/dashboard").with(user("accountant").roles(Roles.ACCOUNTANT.getRealNameOfRole())))
-                .andExpect(model().attributeExists("time"))
-                .andExpect(view().name("startcook"));
+                .andExpect(model().attributeDoesNotExist("time"))
+                .andExpect(view().name("backend-temp"));
+    }
+
+    @Test
+    public void showDashboardWithExpensesAsAdminRight() throws Exception {
+        time.forward(Duration.ofDays(ChronoUnit.DAYS.between(time.getTime(), LocalDateTime.of(2016,11,11, 11, 11))));
+        Expense positiveExpense = new Expense(Money.of(3, EURO), "desc", employeeManager.findByUsername("admin").get(),
+                expenseGroupRepository.findByName("Künstlergage").get());
+        Expense negativeExpense = new Expense(Money.of(-3, EURO), "desc", employeeManager.findByUsername("admin").get(),
+                expenseGroupRepository.findByName("Künstlergage").get());
+        Expense notInList = new Expense(Money.of(-3, EURO), "desc", employeeManager.findByUsername("admin").get(),
+                expenseGroupRepository.findByName("Bestellung").get());
+        positiveExpense.cover();
+        negativeExpense.cover();
+
+        accountancy.add(positiveExpense);
+        accountancy.add(negativeExpense);
+        accountancy.add(notInList);
+
+        mvc.perform(buildPostAdminRequest("/dashboard"))
+                .andExpect(model().attribute("income", "[[\"Tag\",\"Einnahmen\",\"Ausgaben\",\"Schnitt\"]," +
+                        "[\"Freitag\",0.0,0.0,0.0],[\"Samstag\",0.0,0.0,0.0],[\"Sonntag\",0.0,0.0,0.0]," +
+                        "[\"Montag\",0.0,0.0,0.0],[\"Dienstag\",0.0,0.0,0.0],[\"Mittwoch\",0.0,0.0,0.0]," +
+                        "[\"Donnerstag\",0.0,0.0,0.0],[\"Freitag\",3.0,-3.0,0.0]]"))
+                .andExpect(view().name("startadmin"));
     }
 
     @Test
