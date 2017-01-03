@@ -43,6 +43,7 @@ public class Employee extends Person {
     }
 
     private LocalDate parseBirthday(String birthday) {
+        //TODO Make this formatter also dd.MM.yyyy
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate localDate = LocalDate.parse(birthday, formatter);
 

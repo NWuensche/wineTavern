@@ -103,6 +103,7 @@ public class DashboardController {
         }
     }
 
+    // TODO Should this be here?
     @RequestMapping("/cook/ready/{billItemId}")
     public String ready(@PathVariable Long billItemId){
         BillItem item = billItemRepository.findOne(billItemId).get();

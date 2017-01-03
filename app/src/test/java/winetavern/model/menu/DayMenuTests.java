@@ -68,6 +68,21 @@ public class DayMenuTests {
     }
 
     @Test
+    public void removeFromItemRight() {
+        DayMenuItem item = new DayMenuItem("name", "desc", Money.of(3, EURO), 4.5);
+        dayMenu.addMenuItem(item);
+
+        Given:
+        assertThat(item.getDayMenus().contains(dayMenu), is(true));
+
+        When:
+        dayMenu.removeMenuFromMenuItem(item);
+
+        Then:
+        assertThat(item.getDayMenus().contains(dayMenu), is(false));
+    }
+
+    @Test
     public void addAndRemoveDayMenuItemRight() {
         DayMenuItem newItem = new DayMenuItem("Pepse", "Awesome", Money.of(2, EURO), 3.0);
         dayMenu.addMenuItem(newItem);
