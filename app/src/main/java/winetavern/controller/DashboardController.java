@@ -152,8 +152,9 @@ public class DashboardController {
         Stream<Expense> expenseStream = accountancy.findAll()
                 .stream()
                 .map(entry -> (Expense) entry)
-                .filter(expense -> expense.isCovered() && groups.contains(expense.getExpenseGroup()) &&
-                        incomeMap.containsKey(expense.getDate().get().toLocalDate()));
+                .filter(Expense::isCovered)
+                .filter(expense -> groups.contains(expense.getExpenseGroup()))
+                .filter(expense -> incomeMap.containsKey(expense.getDate().get().toLocalDate()));
 
         SplitBuilder.splitCollection(expenseStream.collect(Collectors.toList()))
                 .splitBy(expense -> expense.getValue().isLessThan(Money.of(0,"EUR")))
@@ -166,9 +167,7 @@ public class DashboardController {
                     lossMap.put(date, lossMap.get(date).add(expense.getValue()));
                 });
 
-        String res = "[[\"Tag\",\"Einnahmen\",\"Ausgaben\",\"Schnitt\"],";
-
-        incomeMap.entrySet()
+        String res = incomeMap.entrySet()
                 .stream()
                 .map(entry -> "[\"" + entry.getKey().getDayOfWeek().getDisplayName(TextStyle.FULL,Locale.GERMAN) +
                         "\"," + entry.getValue().negate().getNumber().doubleValue() +
@@ -191,51 +190,48 @@ public class DashboardController {
             lossMap.put(time.getTime().toLocalDate().minusDays(i), Money.of(0, "EUR"));
         }
 
-        for(Bill bill : bills.findByIsClosedTrue()){
-            LocalDate date = bill.getCloseTime().toLocalDate();
-            if(bill.getStaff().equals(employee) && incomeMap.containsKey(date))
-                incomeMap.put(date,incomeMap.get(date).add(bill.getPrice()));
-        }
+        bills.findByIsClosedFalse()
+                .stream()
+                .filter(bill -> bill.getStaff().equals(employee))
+                .filter(bill -> incomeMap.containsKey(bill.getCloseTime().toLocalDate()))
+                .forEach(bill -> {
+                    LocalDate date = bill.getCloseTime().toLocalDate();
+                    incomeMap.put(date, incomeMap.get(date).add(bill.getPrice()));
+                });
 
-        for (AccountancyEntry entry : accountancy.findAll()) {
-            Expense expense  = (Expense) entry;
-            LocalDate date = expense.getDate().get().toLocalDate();
-            if((expense.getPerson() == employee) &&
-                    (expense.isCovered()) &&
-                    (expense.getExpenseGroup().getName().equals("Abrechnung")))
-                lossMap.put(date,lossMap.get(date).add(expense.getValue()));
-        }
+        accountancy.findAll()
+                .stream()
+                .map(entry -> (Expense) entry)
+                .filter(expense -> expense.getPerson().equals(employee))
+                .filter(expense -> expense.getExpenseGroup().getName().equals("Abrechnung"))
+                .forEach(expense -> {
+                    LocalDate date = expense.getDate().get().toLocalDate();
+                    lossMap.put(date,lossMap.get(date).add(expense.getValue()));
+                });
 
 
-        String res = "[[\"Tag\",\"Ausgaben\",\"Gewinn\"],";
+        String res = lossMap.entrySet()
+                .stream()
+                .map(entry -> "[\"" + entry.getKey().getDayOfWeek().getDisplayName(TextStyle.FULL,Locale.GERMAN) +
+                        "\"," + entry.getValue().negate().getNumber().doubleValue() +
+                        "," + incomeMap.get(entry.getKey()).add(entry.getValue()).getNumber().doubleValue() +
+                        "],")
+                .reduce("[[\"Tag\",\"Ausgaben\",\"Gewinn\"],", (acc, entry) -> acc.concat(entry));
 
-        for(Map.Entry<LocalDate, MonetaryAmount> entry : lossMap.entrySet()){
-            res += "[\"" + entry.getKey().getDayOfWeek().getDisplayName(TextStyle.FULL,Locale.GERMAN) +
-                    "\"," + entry.getValue().negate().getNumber().doubleValue() +
-                    "," + incomeMap.get(entry.getKey()).add(entry.getValue()).getNumber().doubleValue() +
-                    "],";
-        }
-
-        res = res.substring(0,res.length()-1) + "]";
+        res = res.substring(0,res.length()-1) + "]"; // TODO Isn't this res = res.concat("]");?
 
         return res;
     }
 
     private Set<String> getNews(){
-        Set<String> res = new HashSet<>();
-
-        for(Event event : events.findAll()){
-            if(event.getInterval().getStart().toLocalDate().equals(time.getTime().toLocalDate())){
-                res.add("<b>" + event.getName() + "</b> <i>" +
+        return events
+                .stream()
+                .filter(event -> event.getInterval().getStart().toLocalDate().equals(time.getTime().toLocalDate()))
+                .map(event -> "<b>" + event.getName() + "</b> <i>" +
                         Helper.localDateTimeToTimeString(event.getInterval().getStart()) + " - " +
                         Helper.localDateTimeToTimeString(event.getInterval().getEnd()) + "</i><br/>" +
-                        event.getDescription() + "<hr/>");
-            }
-        }
-
-
-
-        return res;
+                        event.getDescription() + "<hr/>")
+                .collect(Collectors.toSet());
     }
 
 }
