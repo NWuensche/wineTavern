@@ -51,6 +51,7 @@ public class EventController {
      */
     private void checkVintnerDays() {
         LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
+
         if (vintnerSequence.isEmpty())
             return;
 

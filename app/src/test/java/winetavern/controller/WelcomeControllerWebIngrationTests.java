@@ -20,8 +20,7 @@ public class WelcomeControllerWebIngrationTests extends AbstractWebIntegrationTe
     public void redirectsIfAdmin() throws Exception {
         mvc.perform(buildGetAdminRequest("/"))
                 .andExpect(authenticated())
-                .andExpect(status().isOk())
-                .andExpect(view().name("backend-temp"));
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
