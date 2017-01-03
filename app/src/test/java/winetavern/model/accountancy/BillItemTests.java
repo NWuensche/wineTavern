@@ -46,4 +46,16 @@ public class BillItemTests {
         assertThat(billItem.toString(), is("6 x Schinken"));
     }
 
+    @Test
+    public void isReadyRight() {
+        Given:
+        assertThat(billItem.getReady(), is(false));
+
+        When:
+        billItem.ready();
+
+        Then:
+        assertThat(billItem.getReady(), is(true));
+    }
+
 }
