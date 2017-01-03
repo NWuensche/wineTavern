@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
  * @author Niklas Wünsche
  */
 @Transactional
-public class PersonsIntegrationTests extends AbstractIntegrationTests {
+public class PersonIntegrationTests extends AbstractIntegrationTests {
 
     @Autowired private UserAccountManager userAccountManager;
     @Autowired private EmployeeManager employeeManager;

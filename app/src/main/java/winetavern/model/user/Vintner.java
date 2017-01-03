@@ -17,6 +17,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class Vintner extends Person {
+
     private String name;
     private int position; //the position in the vintner evening sequence
     @OneToMany private Set<Product> wineSet = new HashSet<>();
