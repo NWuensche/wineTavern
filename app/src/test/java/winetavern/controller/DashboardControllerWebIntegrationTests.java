@@ -10,6 +10,8 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.model.accountancy.*;
+import winetavern.model.management.Event;
+import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
@@ -52,6 +54,10 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
     @Autowired private ExpenseGroupRepository expenseGroupRepository;
     @Autowired private BusinessTime time;
     @Autowired private ReservationRepository reservationRepository;
+    @Autowired private BillRepository billRepository;
+    @Autowired private EventCatalog eventCatalog;
+
+    private Employee serviceE;
 
     @Before
     public void before() {
@@ -64,7 +70,7 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
         userAccountManager.save(cook);
         userAccountManager.save(acc);
 
-        Employee serviceE = new Employee(service, "asd", "2016/12/12", PersonTitle.MISTER.getGerman());
+        serviceE = new Employee(service, "asd", "2016/12/12", PersonTitle.MISTER.getGerman());
         Employee cookE = new Employee(cook, "asd", "2016/12/12", PersonTitle.MISTER.getGerman());
         Employee accE = new Employee(acc, "asd", "2016/12/12", PersonTitle.MISTER.getGerman());
         employeeManager.save(Arrays.asList(serviceE, cookE, accE));
@@ -139,6 +145,63 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
                         "\"end\":\"November 11, 2016 11:11:",
                         "\"|"))))
                 .andExpect(view().name("startadmin"));
+    }
+
+    @Test
+    public void showDashboardWithBillsAsServiceRight() throws Exception {
+        DayMenuItem dItem = new DayMenuItem("name", "desc", Money.of(3, EURO), 4.5);
+        dayMenuItemRepository.save(dItem);
+        BillItem bItem = new BillItem(dItem);
+        billItemRepository.save(bItem);
+
+        Bill closed = new Bill("Table 1", serviceE);
+        Bill open = new Bill("Table 1", serviceE);
+
+        closed.changeItem(bItem, 4);
+        closed.close(time);
+
+        billRepository.save(Arrays.asList(open, closed));
+
+        mvc.perform(post("/dashboard").with(user("service").roles(Roles.SERVICE.getRealNameOfRole())))
+                .andExpect(model().attribute("income", "[[\"Tag\",\"Ausgaben\",\"Gewinn\"],[\"Freitag\",0.0,0.0]," +
+                        "[\"Samstag\",0.0,0.0],[\"Sonntag\",0.0,0.0],[\"Montag\",0.0,0.0],[\"Dienstag\",0.0,0.0]," +
+                        "[\"Mittwoch\",0.0,0.0],[\"Donnerstag\",0.0,0.0],[\"Freitag\",0.0,12.0]]"))
+                .andExpect(view().name("startservice"));
+    }
+
+    @Test
+    public void showDashboardWithExpensesAsServiceRight() throws Exception {
+        Expense positiveExpense = new Expense(Money.of(3, EURO), "desc", employeeManager.findByUsername("service").get(),
+                expenseGroupRepository.findByName("Abrechnung").get());
+        Expense negativeExpense = new Expense(Money.of(-4, EURO), "desc", employeeManager.findByUsername("service").get(),
+                expenseGroupRepository.findByName("Abrechnung").get());
+        Expense notInList = new Expense(Money.of(-3, EURO), "desc", employeeManager.findByUsername("service").get(),
+                expenseGroupRepository.findByName("Bestellung").get());
+
+        accountancy.add(positiveExpense);
+        accountancy.add(negativeExpense);
+        accountancy.add(notInList);
+
+        mvc.perform(post("/dashboard").with(user("service").roles(Roles.SERVICE.getRealNameOfRole())))
+                .andExpect(model().attribute("income", "[[\"Tag\",\"Ausgaben\",\"Gewinn\"],[\"Freitag\",0.0,0.0]," +
+                        "[\"Samstag\",0.0,0.0],[\"Sonntag\",0.0,0.0],[\"Montag\",0.0,0.0],[\"Dienstag\",0.0,0.0]," +
+                        "[\"Mittwoch\",0.0,0.0],[\"Donnerstag\",0.0,0.0],[\"Freitag\",1.0,-1.0]]"))
+                .andExpect(view().name("startservice"));
+    }
+
+    @Test
+    public void showDashboardWithNewsAsServiceRight() throws Exception {
+        Event yesterday = new Event("yesterday", Money.of(3, EURO),
+                        new TimeInterval(time.getTime().minusDays(1), time.getTime().minusDays(1)), "Desc", serviceE);
+
+        Event today = new Event("awesome today", Money.of(3, EURO),
+                new TimeInterval(time.getTime(), time.getTime()), "Desc", serviceE);
+
+        eventCatalog.save(Arrays.asList(yesterday, today));
+
+        mvc.perform(post("/dashboard").with(user("service").roles(Roles.SERVICE.getRealNameOfRole())))
+                .andExpect(model().attributeExists("news"))
+                .andExpect(view().name("startservice"));
     }
 
     @Test

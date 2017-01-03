@@ -190,7 +190,7 @@ public class DashboardController {
             lossMap.put(time.getTime().toLocalDate().minusDays(i), Money.of(0, "EUR"));
         }
 
-        bills.findByIsClosedFalse()
+        bills.findByIsClosedTrue()
                 .stream()
                 .filter(bill -> bill.getStaff().equals(employee))
                 .filter(bill -> incomeMap.containsKey(bill.getCloseTime().toLocalDate()))
