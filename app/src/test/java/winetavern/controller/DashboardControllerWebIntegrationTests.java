@@ -10,8 +10,12 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import winetavern.AbstractWebIntegrationTests;
 import winetavern.model.accountancy.*;
+import winetavern.model.management.TimeInterval;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
+import winetavern.model.reservation.Desk;
+import winetavern.model.reservation.Reservation;
+import winetavern.model.reservation.ReservationRepository;
 import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.PersonTitle;
@@ -23,6 +27,8 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.salespointframework.core.Currencies.EURO;
@@ -45,9 +51,12 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
     @Autowired private Accountancy accountancy;
     @Autowired private ExpenseGroupRepository expenseGroupRepository;
     @Autowired private BusinessTime time;
+    @Autowired private ReservationRepository reservationRepository;
 
     @Before
     public void before() {
+        time.forward(Duration.ofNanos(ChronoUnit.NANOS.between(time.getTime(), LocalDateTime.of(2016,11,11, 11, 11))));
+
         UserAccount service = userAccountManager.create("service", "1234", Roles.SERVICE.getRole());
         UserAccount cook = userAccountManager.create("cook", "1234", Roles.COOK.getRole());
         UserAccount acc = userAccountManager.create("accountant", "1234", Roles.ACCOUNTANT.getRole());
@@ -91,7 +100,6 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
 
     @Test
     public void showDashboardWithExpensesAsAdminRight() throws Exception {
-        time.forward(Duration.ofDays(ChronoUnit.DAYS.between(time.getTime(), LocalDateTime.of(2016,11,11, 11, 11))));
         Expense positiveExpense = new Expense(Money.of(3, EURO), "desc", employeeManager.findByUsername("admin").get(),
                 expenseGroupRepository.findByName("Künstlergage").get());
         Expense negativeExpense = new Expense(Money.of(-3, EURO), "desc", employeeManager.findByUsername("admin").get(),
@@ -110,6 +118,26 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
                         "[\"Freitag\",0.0,0.0,0.0],[\"Samstag\",0.0,0.0,0.0],[\"Sonntag\",0.0,0.0,0.0]," +
                         "[\"Montag\",0.0,0.0,0.0],[\"Dienstag\",0.0,0.0,0.0],[\"Mittwoch\",0.0,0.0,0.0]," +
                         "[\"Donnerstag\",0.0,0.0,0.0],[\"Freitag\",3.0,-3.0,0.0]]"))
+                .andExpect(view().name("startadmin"));
+    }
+
+    @Test
+    public void showDashboardWithReservationsAsAdminRight() throws Exception {
+        Desk desk = new Desk("table", 4);
+
+        Reservation yesterday = new Reservation("guest", 3, desk,
+                new TimeInterval(time.getTime().minusDays(1), time.getTime().minusDays(1)));
+        Reservation today = new Reservation("guest", 3, desk,
+                new TimeInterval(time.getTime(), time.getTime()));
+
+        reservationRepository.save(Arrays.asList(yesterday, today));
+
+        mvc.perform(buildPostAdminRequest("/dashboard"))
+                .andExpect(model().attribute("reservations", stringContainsInOrder(Arrays.asList(
+                        "\"table\":\"table\",\"person\":\"guest\",",
+                        "\"start\":\"November 11, 2016 11:11:",
+                        "\"end\":\"November 11, 2016 11:11:",
+                        "\"|"))))
                 .andExpect(view().name("startadmin"));
     }
 
