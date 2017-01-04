@@ -64,7 +64,7 @@ public class TimeInterval {
 
     public boolean intersects(TimeInterval other) {
         return timeInInterval(other.getStart()) || timeInInterval(other.getEnd()) ||
-                (start.compareTo(other.getStart()) == 0 && end.compareTo(other.getEnd()) == 0);
+               other.timeInInterval(start) || other.timeInInterval(end);
     }
 
     public boolean timeInInterval(LocalDateTime time) {
