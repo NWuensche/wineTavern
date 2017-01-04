@@ -61,7 +61,8 @@ public class DashboardController {
     @RequestMapping("/dashboard")
     public String showDashboard(Model model) {
         // TODO Why does accountant not have own his own view?
-        if (authenticationManager.getCurrentUser().get().hasRole(Role.of("ROLE_ADMIN"))) {
+        if (authenticationManager.getCurrentUser().get().hasRole(Role.of("ROLE_ADMIN")) || authenticationManager
+                .getCurrentUser().get().hasRole(Role.of("ROLE_ACCOUNTANT"))) {
             model.addAttribute("time", time);
 
             model.addAttribute("shifts", shiftController.getShiftsOfDay(time.getTime().toLocalDate()));

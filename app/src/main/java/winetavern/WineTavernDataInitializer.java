@@ -139,13 +139,14 @@ public class WineTavernDataInitializer implements DataInitializer{
                 new TimeInterval(LocalDate.now().atTime(16, 0), LocalDate.now().atTime(19, 0)),
                 "Moderne Poesie gibt es nicht? - Falsch! Studenten der TU Dresden zeigen ihr Können.",
                 new External("Poetry Slam CLub Dresden", Money.of(50, EURO))));
-        // TODO Why does this crash the DB in the tests?
-//        Expense exp1 = new Expense(Money.of(180,"EUR"),
-//                "Maria Sanfler Buchvorstellung",
-//                externalManager.findByName("Maria Sanfler").get(),
-//                expenseGroups.findByName("Künstlergage").get());
-//        exp1.cover();
-//        accountancy.add(exp1);
+        //TODO Why does this crash the DB in the tests?
+        /*Expense exp1 = new Expense(Money.of(180,"EUR"),
+                "Maria Sanfler Buchvorstellung",
+                externalManager.getFirst(),
+                expenseGroups.findByName("Künstlergage").get());
+        accountancy.add(exp1);
+        exp1.cover();
+        accountancy.add(exp1);*/
     }
 
     private void initializeStockWithVintners() {

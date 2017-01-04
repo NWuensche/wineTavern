@@ -43,7 +43,7 @@
                 <!-- KARTE -->
 
 
-                <a th:href="@{/admin/menu/show}" class="list-group-item list-group-item-action side__menu side-module__container">
+                <a th:href="@{/admin/menu/show}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasAnyRole('ROLE_ADMIN')">
                     <i class="fa fa-cutlery fa-lg" aria-hidden="true"></i>
                     <span>Karte</span>
                 </a>
@@ -58,20 +58,29 @@
 
                 <!-- ABRECHNUNG -->
 
-                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#rechnungen">
+                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container"
+                   data-toggle="collapse" data-target="#rechnungen" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
                     <span>Abrechnung</span>
                 </a>
-                <div id="rechnungen" class="collapse">
-                    <a th:href="@{/accountancy/expenses}" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT','ROLE_ADMIN')"
-                       class="list-group-item list-group-item-action side__menu side-module__container">
+                <div id="rechnungen" class="collapse" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/accountancy/expenses}" class="list-group-item list-group-item-action side__menu side-module__container">
                         <span>Tagesabrechnung</span>
                     </a>
-                    <a th:href="@{/service/bills}" sec:authorize="hasAnyRole('ROLE_SERVICE','ROLE_ADMIN')"
-                       class="list-group-item list-group-item-action side__menu side-module__container">
+                    <a th:href="@{/service/bills}" class="list-group-item list-group-item-action side__menu side-module__container">
                         <span>Rechnungen</span>
                     </a>
                 </div>
+                <a th:href="@{/accountancy/expenses}" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT')"
+                   class="list-group-item list-group-item-action side__menu side-module__container">
+                    <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
+                    <span>Tagesabrechnung</span>
+                </a>
+                <a th:href="@{/service/bills}" sec:authorize="hasAnyRole('ROLE_SERVICE')"
+                   class="list-group-item list-group-item-action side__menu side-module__container">
+                    <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
+                    <span>Rechnungen</span>
+                </a>
 
 
                 <!-- LAGER -->
@@ -83,20 +92,10 @@
 
                 <!-- EVENTS -->
 
-                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#events" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a  th:href="@{/admin/events}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
                     <span>Events</span>
                 </a>
-                <div id="events" class="collapse">
-                    <a th:href="@{/admin/events}" class="list-group-item list-group-item-action side__menu side-module__container">
-                        <i class="fa fa-circle-o" aria-hidden="true"></i>
-                        <span>Events</span>
-                    </a>
-                    <a th:href="@{/events}" class="list-group-item list-group-item-action side__menu side-module__container">
-                        <i class="fa fa-circle-o" aria-hidden="true"></i>
-                        <span>Events</span>
-                    </a>
-                </div>
 
                 <!-- MANAGEMENT-->
 
