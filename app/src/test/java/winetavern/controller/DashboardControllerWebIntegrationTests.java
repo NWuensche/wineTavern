@@ -100,6 +100,14 @@ public class DashboardControllerWebIntegrationTests extends AbstractWebIntegrati
     @Test
     public void showDashboardAsAccountantRight() throws Exception {
         mvc.perform(post("/dashboard").with(user("accountant").roles(Roles.ACCOUNTANT.getRealNameOfRole())))
+                .andExpect(model().attributeExists("time"))
+                .andExpect(view().name("startadmin"));
+    }
+
+    @Test
+    public void showDashboardAsDifferentRoleRight() throws Exception {
+        userAccountManager.findByUsername("accountant").get().remove(Roles.ACCOUNTANT.getRole());
+        mvc.perform(post("/dashboard").with(user("accountant").roles("DIFFERENT")))
                 .andExpect(model().attributeDoesNotExist("time"))
                 .andExpect(view().name("backend-temp"));
     }

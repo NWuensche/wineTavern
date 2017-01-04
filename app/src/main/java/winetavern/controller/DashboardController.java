@@ -60,7 +60,6 @@ public class DashboardController {
 
     @RequestMapping("/dashboard")
     public String showDashboard(Model model) {
-        // TODO Why does accountant not have own his own view?
         if (authenticationManager.getCurrentUser().get().hasRole(Role.of("ROLE_ADMIN")) || authenticationManager
                 .getCurrentUser().get().hasRole(Role.of("ROLE_ACCOUNTANT"))) {
             model.addAttribute("time", time);
@@ -96,16 +95,15 @@ public class DashboardController {
         } else if (authenticationManager.getCurrentUser().get().hasRole(Role.of("ROLE_COOK"))){
             model.addAttribute("time", time);
 
-            // TODO, was wenn es nicht existert?
             Optional<DayMenu> menu = daymenus.findByDay(time.getTime().toLocalDate());
             menu.ifPresent(m ->  model.addAttribute("menu", m));
 
             model.addAttribute("orders",billItemRepository.findByReadyFalse());
 
             return "startcook";
-        } else {
-            return "backend-temp";
         }
+
+        return "backend-temp";
     }
 
     // TODO Should this be here?
