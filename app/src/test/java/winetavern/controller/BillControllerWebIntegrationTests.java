@@ -4,6 +4,7 @@ import org.bouncycastle.ocsp.Req;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
 import winetavern.AbstractWebIntegrationTests;
@@ -12,8 +13,10 @@ import winetavern.model.accountancy.Bill;
 import winetavern.model.accountancy.BillItem;
 import winetavern.model.accountancy.BillItemRepository;
 import winetavern.model.accountancy.BillRepository;
+import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
+import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
 
@@ -45,6 +48,8 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private DayMenuItemRepository dayMenuItemRepository;
     @Autowired private BillItemRepository billItemRepository;
     @Autowired private EmployeeManager employeeManager;
+    @Autowired private BusinessTime businessTime;
+    @Autowired private DayMenuRepository dayMenuRepository;
 
     private BillItem fries;
     private Bill bill;
@@ -134,7 +139,9 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     public void dontAddAnythingInDetails() throws Exception {
         DayMenuItem notAdded = new DayMenuItem("Not There", "Desc", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(notAdded);
-        //TODO add to daymenu
+        DayMenu dayMenu = new DayMenu(businessTime.getTime().toLocalDate());
+        dayMenu.addMenuItem(notAdded);
+        dayMenuRepository.save(dayMenu);
 
         mvc.perform(RequestHelper.buildGetAdminRequest("/service/bills/details/" + bill.getId()))
                 .andExpect(model().attribute("bill", bill))
