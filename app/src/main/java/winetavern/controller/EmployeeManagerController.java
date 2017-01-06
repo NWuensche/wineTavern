@@ -60,8 +60,12 @@ public class EmployeeManagerController {
 
         userAccountManager.save(newAccount);
 
-        Employee newEmployee = new Employee(newAccount, registerCredentials.getAddress(),
-                registerCredentials.getBirthday(), registerCredentials.getPersonTitle());
+        String[] birthday = registerCredentials.getBirthday().split("\\.");
+
+        Employee newEmployee = new Employee(newAccount,
+                registerCredentials.getAddress(),
+                birthday[2] + "/" + birthday[1] + "/" + birthday[0],
+                registerCredentials.getPersonTitle());
         employeeManager.save(newEmployee);
     }
 

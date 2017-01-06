@@ -14,9 +14,8 @@ import java.time.LocalDateTime;
 /**
  * @author Louis
  */
-// TODO Should this really be an entity? We do not even have a Repository
 @Entity
-public class TimeInterval {
+public class TimeInterval implements Comparable<TimeInterval>{
     @Getter @Id @GeneratedValue private long id;
     @Getter @NonNull private LocalDateTime start;
     @Getter @NonNull private LocalDateTime end;
@@ -69,5 +68,10 @@ public class TimeInterval {
 
     public boolean timeInInterval(LocalDateTime time) {
         return (this.start.isBefore(time) && this.end.isAfter(time)) || this.start.isEqual(time) || this.end.isEqual(time);
+    }
+
+    @Override
+    public int compareTo(TimeInterval o) {
+        return start.compareTo(o.getStart());
     }
 }
