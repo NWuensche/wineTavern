@@ -112,11 +112,12 @@ public class StockControllerWebIntegrationTests extends AbstractWebIntegrationTe
         vintnerManager.save(hasWine);
 
         RequestBuilder request = buildPostAdminRequest("/admin/stock/changeProduct/")
-                .param("productid", product.getId().toString())
+                .param("itemid", inventoryItem.getId().toString())
                 .param("productname", "Schnaps")
                 .param("productprice", "10")
                 .param("productcategory", "Awesome WhiteWein")
-                .param("productvintner", vintner.getId().toString());
+                .param("productvintner", vintner.getId().toString())
+                .param("productquantity",inventoryItem.getQuantity().toString());
 
         mvc.perform(request)
                 .andExpect(status().is3xxRedirection());
