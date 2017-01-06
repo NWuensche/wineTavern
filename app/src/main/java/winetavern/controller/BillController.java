@@ -125,14 +125,15 @@ public class BillController {
         List<DayMenuItem>  menuItems = new LinkedList<>();
 
         Optional<DayMenu> menuOfDay = dayMenus.findByDay(businessTime.getTime().toLocalDate());
-        menuOfDay.ifPresent(dayMenu -> menuItems.addAll(dayMenu.getDayMenuItems()));
+        //menuOfDay.ifPresent(dayMenu -> menuItems.addAll(dayMenu.getDayMenuItems()));
 
-        /*
-        List<DayMenuItem> menuItems = StreamSupport
-                .stream(dayMenuItems.findAll().spliterator(), false)
-                .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
-                .collect(Collectors.toList());
-        */
+        if (menuOfDay.isPresent()) {
+            menuItems = StreamSupport
+                    .stream(menuOfDay.get().getDayMenuItems().spliterator(), false)
+                    .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
+                    .collect(Collectors.toList());
+        }
+
 
         model.addAttribute("menuitems", menuItems);
         return "billdetails";

@@ -134,6 +134,7 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     public void dontAddAnythingInDetails() throws Exception {
         DayMenuItem notAdded = new DayMenuItem("Not There", "Desc", Money.of(3, EURO), 3.0);
         dayMenuItemRepository.save(notAdded);
+        //TODO add to daymenu
 
         mvc.perform(RequestHelper.buildGetAdminRequest("/service/bills/details/" + bill.getId()))
                 .andExpect(model().attribute("bill", bill))
