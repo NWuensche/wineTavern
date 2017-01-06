@@ -59,4 +59,4 @@ Hier können die Schichten der Angestellten eingesehen und bearbeitet werden.
 
 === Einstellungen
 
-Benutzverwaltung
+Benutzerverwaltung
