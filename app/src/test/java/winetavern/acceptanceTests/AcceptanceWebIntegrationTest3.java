@@ -89,7 +89,7 @@ public class AcceptanceWebIntegrationTest3 extends AbstractWebIntegrationTests {
         newService.setFirstName("Thmoas");
         newService.setLastName("Müller");
         newService.setAddress("Bergstraße 61");
-        newService.setBirthday("1960/10/10");
+        newService.setBirthday("10.10.1960");
         newService.setPersonTitle("Mister");
 
         RequestBuilder serviceRequest = buildPostAdminRequest("/admin/management/users/add")

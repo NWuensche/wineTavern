@@ -59,7 +59,7 @@ public class EmployeeManagerControllerWebIntegrationTests extends AbstractWebInt
                 .param("personTitle", "Herr")
                 .param("firstName", "Hans")
                 .param("lastName", "Müller")
-                .param("birthday", "1990/12/12")
+                .param("birthday", "12.12.1990")
                 .param("username", userName)
                 .param("password", password)
                 .param("role", Roles.COOK.getNameOfRoleWithPrefix())
