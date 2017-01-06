@@ -104,7 +104,7 @@ public class WelcomeController {
 
     private String getTimeIfEventIsNotFullDay(LocalDateTime start, LocalDateTime end) {
         return !start.equals(end) ? Helper.localDateTimeToTimeString(start) + " - " +
-                Helper.localDateTimeToTimeString(start) : "";
+                Helper.localDateTimeToTimeString(end) : "ganztägig";
     }
 
 }
