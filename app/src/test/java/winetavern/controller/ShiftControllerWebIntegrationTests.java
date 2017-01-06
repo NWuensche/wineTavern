@@ -2,6 +2,7 @@ package winetavern.controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
@@ -42,12 +43,14 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
     @Autowired private EmployeeManager employeeManager;
     @Autowired private UserAccountManager userAccountManager;
     @Autowired private ShiftController shiftController;
+    @Autowired private BusinessTime businessTime;
 
     private Employee employee;
     private Shift shift;
 
     @Before
     public void before() {
+        shiftRepository.deleteAll();
         UserAccount userAccount = userAccountManager.create("Test", "Test", Role.of(Roles.ADMIN.getRealNameOfRole()));
         userAccount.setFirstname("Hans");
         userAccount.setLastname("Müller");
@@ -55,7 +58,7 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
         employee = new Employee(userAccount, "Address", "2016/11/11", PersonTitle.MISTER.getGerman());
         employeeManager.save(employee);
 
-        TimeInterval now = new TimeInterval(LocalDateTime.now().minusDays(1), LocalDateTime.now().plusHours(3));
+        TimeInterval now = new TimeInterval(businessTime.getTime().minusDays(1), businessTime.getTime().plusHours(3));
         shift = new Shift(now, employee);
         shiftRepository.save(shift);
     }
@@ -121,7 +124,7 @@ public class ShiftControllerWebIntegrationTests extends AbstractWebIntegrationTe
         Shift earlierShift = new Shift(shift.getInterval().returnMovedIntervalByMinutes(-10), employee);
         shiftRepository.save(earlierShift);
 
-        List<Shift> shifts = shiftController.getShiftsOfDay(LocalDate.now());
+        List<Shift> shifts = shiftController.getShiftsOfDay(businessTime.getTime().toLocalDate());
 
         assertThat(shifts, is(Arrays.asList(earlierShift, shift)));
     }
