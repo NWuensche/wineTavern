@@ -117,14 +117,9 @@ public class EventController {
     }
 
     /**
-     * compiles all events into a String which can be parsed into an Object by JSON (javascript) and then put into the
-     * calendar. Also add virtual events to the future. These are the estimated vine evening events.
-     * @return JSON parsable String
+     * @return Set<Event> events - set with all events and virtual wintnerdays
      */
-    private String buildCalendarString() {
-        String calendarString = "[";
-        boolean noComma = true;
-
+    public Set<Event> getAllEvents() {
         Set<Event> events = eventCatalog.findAll(); //all existing events
 
         LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
@@ -142,7 +137,19 @@ public class EventController {
             }
         }
 
-        for (Event event : events) { //add all events
+        return events;
+    }
+
+    /**
+     * compiles all events into a String which can be parsed into an Object by JSON (javascript) and then put into the
+     * calendar. Also add virtual events to the future. These are the estimated vine evening events.
+     * @return JSON parsable String
+     */
+    private String buildCalendarString() {
+        String calendarString = "[";
+        boolean noComma = true;
+
+        for (Event event : getAllEvents()) { //add all events
             if (noComma)
                 noComma = false;
             else
