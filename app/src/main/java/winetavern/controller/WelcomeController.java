@@ -29,8 +29,11 @@ import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
 import winetavern.model.user.VintnerManager;
+import winetavern.splitter.SplitBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -82,18 +85,26 @@ public class WelcomeController {
                 .stream()
                 .filter(event -> interval.intersects(event.getInterval()))
                 .sorted(Comparator.comparing(event -> event.getInterval().getStart()))
-                .map(event -> "<h2>" + Helper.localDateTimeToDateString(event.getInterval().getStart())  +
-                        "</h2><b>" + event
-                        .getName() +
-                        "</b> " +
-                        "<i>" +
-                        Helper.localDateTimeToTimeString(event.getInterval().getStart()) + " - " +
-                        Helper.localDateTimeToTimeString(event.getInterval().getEnd()) + "</i><br/>" +
-                        event.getDescription() + "<hr/>")
+                .map(event -> {
+                    LocalDateTime start = event.getInterval().getStart();
+                    LocalDateTime end = event.getInterval().getEnd();
+
+                    return  "<h2>" + Helper.localDateTimeToDateString(start)  +
+                            "</h2><b>" + event
+                            .getName() +
+                            "</b> " +
+                            "<i>" +
+                            getTimeIfEventIsNotFullDay(start, end) +
+                             "</i><br/>" + event.getDescription() + "<hr/>";
+                })
                 .collect(Collectors.toList());
 
-        System.out.println(res);
         return res;
+    }
+
+    private String getTimeIfEventIsNotFullDay(LocalDateTime start, LocalDateTime end) {
+        return !start.equals(end) ? Helper.localDateTimeToTimeString(start) + " - " +
+                Helper.localDateTimeToTimeString(start) : "";
     }
 
 }
