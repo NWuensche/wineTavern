@@ -49,7 +49,7 @@ public class EventController {
     /**
      * automatically creates Events for the vintner days till the present day and the next one
      */
-    private void checkVintnerDays() {
+    public void checkVintnerDays() {
         LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
 
         if (vintnerSequence.isEmpty())
@@ -110,7 +110,7 @@ public class EventController {
      */
     private Event createVintnerDay(Vintner vintner, LocalDate date) {
         Event vintnerDay = new Event("Weinprobe: " + vintner, Money.of(0, EURO),
-                new TimeInterval(date.atStartOfDay(), date.atStartOfDay()),
+                new TimeInterval(date.atStartOfDay().withNano(1), date.atStartOfDay().withNano(1)),
                 "Weinprobe mit Weinen von " + vintner + ". Alle Weine zum halben Preis!", vintner);
         vintnerDay.setVintnerDay(true);
         return vintnerDay;
@@ -119,7 +119,7 @@ public class EventController {
     /**
      * @return Set<Event> events - set with all events and virtual wintnerdays
      */
-    public Set<Event> getAllEvents() {
+    public Set<Event> getAllEvents(VintnerManager vintnerManager, EventCatalog eventCatalog) {
         Set<Event> events = eventCatalog.findAll(); //all existing events
 
         LinkedList<Vintner> vintnerSequence = vintnerManager.findByActiveTrueOrderByPosition(); //active vintners sorted
@@ -149,7 +149,7 @@ public class EventController {
         String calendarString = "[";
         boolean noComma = true;
 
-        for (Event event : getAllEvents()) { //add all events
+        for (Event event : getAllEvents(vintnerManager, eventCatalog)) { //add all events
             if (noComma)
                 noComma = false;
             else

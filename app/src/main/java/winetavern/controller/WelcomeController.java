@@ -28,8 +28,10 @@ import winetavern.Helper;
 import winetavern.model.management.Event;
 import winetavern.model.management.EventCatalog;
 import winetavern.model.management.TimeInterval;
+import winetavern.model.user.VintnerManager;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 
@@ -41,6 +43,9 @@ import java.util.stream.Collectors;
 @Controller
 public class WelcomeController {
 	@Autowired UserAccountManager manager;
+	@Autowired EventController eventController;
+	@Autowired EventCatalog eventCatalog;
+	@Autowired VintnerManager vintnerManager;
     @NonNull @Autowired EventCatalog events;
     @NonNull @Autowired BusinessTime time;
 
@@ -69,13 +74,14 @@ public class WelcomeController {
     }
 
 
-    private Set<String> news(){
+    private List<String> news(){
         TimeInterval interval = new TimeInterval(time.getTime(),time.getTime().plusMonths(2));
+        eventController.checkVintnerDays();
 
-        return events
+        List<String> res = eventController.getAllEvents(vintnerManager,eventCatalog)
                 .stream()
                 .filter(event -> interval.intersects(event.getInterval()))
-                .sorted(Comparator.comparing(Event::getInterval))
+                .sorted(Comparator.comparing(event -> event.getInterval().getStart()))
                 .map(event -> "<h2>" + Helper.localDateTimeToDateString(event.getInterval().getStart())  +
                         "</h2><b>" + event
                         .getName() +
@@ -84,7 +90,10 @@ public class WelcomeController {
                         Helper.localDateTimeToTimeString(event.getInterval().getStart()) + " - " +
                         Helper.localDateTimeToTimeString(event.getInterval().getEnd()) + "</i><br/>" +
                         event.getDescription() + "<hr/>")
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
+
+        System.out.println(res);
+        return res;
     }
 
 }

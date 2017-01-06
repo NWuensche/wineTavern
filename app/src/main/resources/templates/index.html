@@ -7,14 +7,12 @@
 </head>
 <body class="frontend">
 <header>
-    <nav class="navbar navbar-light navbar-fixed-top">
+    <nav class="navbar navbar-dark navbar-fixed-top">
         <div class="row ">
             <div class=" offset-xs-1 col-xs-10">
                 <div class="nav navbar-nav float-xs-right">
-                    <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="#">Features</a>
-                    <a class="nav-item nav-link" href="#">Pricing</a>
-                    <a class="nav-item nav-link" href="#">About</a>
+                    <a class="nav-item nav-link active" href="#top">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="#events">Events</a>
                 </div>
             </div>
         </div>
@@ -22,7 +20,7 @@
 </header>
 
 <main class="main container-fluid">
-    <div class="row">
+    <div class="row" id="top">
         <div class="col-xs-12 no-gutter">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
@@ -54,6 +52,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
+            <a name="events"><h2>Kommende Events:</h2></a>
             <span th:each="event:${events}" th:utext="${event}"></span>
         </div>
     </div>
