@@ -53,7 +53,7 @@
 
                     <div class="form-group"> 
                         <label>Password</label> 
-                        <input type="password" class="form-control" placeholder="automatisch erstellt? hmueller" /> 
+                        <input type="password" class="form-control" /> 
                     </div>
 
                      <div class="dark__bg">
@@ -82,5 +82,34 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+
+    // add calendar plugin to date input
+    var firstDayOfYear = new Date(businessTime);
+    firstDayOfYear.setMonth(0);
+    firstDayOfYear.setDate(1);
+    $('input[name="date"]').daterangepicker({
+        startDate:new Date(businessTime.getTime() + (24*60*60*1000)),
+        singleDatePicker:true,
+        linkedCalendars:false,
+        showISOWeekNumbers:true,
+        opens:"right",
+        buttonClasses:"btn",
+        applyClass:"btn-primary",
+        locale: {
+            format:"DD.MM.YYYY",
+            applyLabel:"&#10004;",
+            cancelLabel:"&#128473;",
+            customRangeLabel:"Benutzerdefiniert",
+            daysOfWeek:["So","Mo","Di","Mi","Do","Fr","Sa"],
+            monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+            firstDay:1
+        },
+    });
+
+    /*]]>*/
+</script>
 </body>
 </html>

@@ -15,6 +15,8 @@
  */
 package winetavern.controller;
 
+import lombok.NonNull;
+import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,11 +24,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.springframework.web.bind.annotation.RequestMethod;
+import winetavern.Helper;
+import winetavern.model.management.Event;
+import winetavern.model.management.EventCatalog;
+import winetavern.model.management.TimeInterval;
+
+import java.util.Comparator;
+import java.util.Set;
+
+
+
+
+import java.util.stream.Collectors;
 
 
 @Controller
 public class WelcomeController {
 	@Autowired UserAccountManager manager;
+    @NonNull @Autowired EventCatalog events;
+    @NonNull @Autowired BusinessTime time;
 
     private AuthenticationManager authenticationManager;
 
@@ -36,14 +52,39 @@ public class WelcomeController {
     }
 
 	@RequestMapping("/")
-	public String index() {
-        return authenticationManager.getCurrentUser().map((user) -> "redirect:/dashboard").orElse("index");
+	public String index(Model model) {
+        if(authenticationManager.getCurrentUser().isPresent()){
+            return "redirect:/dashboard";
+        } else {
+            model.addAttribute("events",news());
+
+            return "index";
+        }
 
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
     public String login() {
         return "login";
+    }
+
+
+    private Set<String> news(){
+        TimeInterval interval = new TimeInterval(time.getTime(),time.getTime().plusMonths(2));
+
+        return events
+                .stream()
+                .filter(event -> interval.intersects(event.getInterval()))
+                .sorted(Comparator.comparing(Event::getInterval))
+                .map(event -> "<h2>" + Helper.localDateTimeToDateString(event.getInterval().getStart())  +
+                        "</h2><b>" + event
+                        .getName() +
+                        "</b> " +
+                        "<i>" +
+                        Helper.localDateTimeToTimeString(event.getInterval().getStart()) + " - " +
+                        Helper.localDateTimeToTimeString(event.getInterval().getEnd()) + "</i><br/>" +
+                        event.getDescription() + "<hr/>")
+                .collect(Collectors.toSet());
     }
 
 }

@@ -52,6 +52,11 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <span th:each="event:${events}" th:utext="${event}"></span>
+        </div>
+    </div>
 </main>
 
 <footer>
