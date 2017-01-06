@@ -42,6 +42,7 @@ public class StockController {
     @RequestMapping("/admin/stock/details/{pid}")
     public String detail(@PathVariable("pid") InventoryItem stockItem, Model model) {
 
+        model.addAttribute("id",stockItem.getId());
         model.addAttribute("product", stockItem.getProduct());
         model.addAttribute("quantity", stockItem.getQuantity());
         model.addAttribute("categories", stockItem.getProduct().getCategories());
@@ -72,14 +73,20 @@ public class StockController {
     }
 
     @RequestMapping(value = "/admin/stock/changeProduct", method = RequestMethod.POST)
-    public String changeProduct(@ModelAttribute("productid") Product product,
+    public String changeProduct(@ModelAttribute("itemid") InventoryItem item,
                              @ModelAttribute("productname") String name,
                              @ModelAttribute("productprice") String price,
                              @ModelAttribute("productcategory") String category,
-                             @ModelAttribute("productvintner") Long vintnerId) {
+                             @ModelAttribute("productvintner") Long vintnerId,
+                             @ModelAttribute("productquantity") Long quantity) {
+
+        Product product = item.getProduct();
+        System.out.println(item.getId());
+        item.increaseQuantity(Quantity.of(quantity).subtract(item.getQuantity()));
 
         product.setName(name);
         product.setPrice(Money.of(Float.parseFloat(price), EURO));
+
         product = removeAllCategories(product);
         product.addCategory(category);
 

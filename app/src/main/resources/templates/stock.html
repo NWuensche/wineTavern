@@ -34,7 +34,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="item : ${stockItems}">
+                <tr th:each="item : ${stockItems}"
+                    th:style="(${item.quantity.amount} &lt; 10)? ('background-color:#e52d27;color:white')">
                     <td th:text="${item.product.getCategories().stream().findFirst().get()}"></td>
                     <td th:text="${item.product.name}"></td>
                     <td th:text="${helper.moneyToEuroString(item.product.price)}"></td>
@@ -115,9 +116,9 @@
                 <div class="modal-body">
                     <form id="productDetailsForm" th:action="@{/admin/stock/changeProduct}" method="post">
                         <div class="form-group" hidden = "true">
-                            <label for="productid">Produkt</label>
-                            <input type="text" class="form-control" name="productid" id="productid" readonly="true"
-                                   th:value="${product.id}"/>
+                            <label for="itemid">Produkt</label>
+                            <input type="text" class="form-control" name="itemid" id="itemid" readonly="true"
+                                   th:value="${id}"/>
                         </div>
                         <div class="form-group">
                             <label for="productname">Name</label>
@@ -128,6 +129,11 @@
                             <label for="productprice">Preis:</label>
                             <input type="text" class="form-control" name="productprice" id="productprice"
                                    th:value="${product.price.number.doubleValue()}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="productquantity">Menge:</label>
+                            <input type="text" class="form-control" name="productquantity" id="productquantity"
+                                   th:value="${quantity}"/>
                         </div>
                         <div class="form-group">
                             <label for="productcategory">Kategorie:</label>
