@@ -9,8 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import winetavern.Helper;
 import winetavern.model.accountancy.*;
+import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
+import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.reservation.DeskRepository;
 import winetavern.model.user.Employee;
 import winetavern.model.user.EmployeeManager;
@@ -37,9 +39,10 @@ public class BillController {
     @NotNull private final Accountancy accountancy;
     @NotNull private final ExpenseGroupRepository expenseGroups;
     @NotNull private final BusinessTime businessTime;
+    @NotNull private final DayMenuRepository dayMenus;
 
     @Autowired
-    public BillController(BillRepository bills, BillItemRepository billItems, AuthenticationManager authenticationManager, EmployeeManager employees, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime) {
+    public BillController(BillRepository bills, DayMenuRepository dayMenus, BillItemRepository billItems, AuthenticationManager authenticationManager, EmployeeManager employees, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime) {
         this.bills = bills;
         this.billItems = billItems;
         this.authenticationManager = authenticationManager;
@@ -49,6 +52,7 @@ public class BillController {
         this.accountancy = accountancy;
         this.expenseGroups = expenseGroups;
         this.businessTime = businessTime;
+        this.dayMenus = dayMenus;
     }
 
     @RequestMapping("/service/bills")
@@ -118,13 +122,20 @@ public class BillController {
         }
 
         model.addAttribute("bill", bill);
+        List<DayMenuItem>  menuItems = new LinkedList<>();
 
-        List<DayMenuItem> menuItems = StreamSupport
-                .stream(dayMenuItems.findAll().spliterator(), false)
-                .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
-                .collect(Collectors.toList());
+        Optional<DayMenu> menuOfDay = dayMenus.findByDay(businessTime.getTime().toLocalDate());
+        //menuOfDay.ifPresent(dayMenu -> menuItems.addAll(dayMenu.getDayMenuItems()));
 
-        model.addAttribute("menuitems", menuItems); //TODO show only items of the day
+        if (menuOfDay.isPresent()) {
+            menuItems = StreamSupport
+                    .stream(menuOfDay.get().getDayMenuItems().spliterator(), false)
+                    .filter(dItem -> !dayMenuItemsOfBill(bill).contains(dItem))
+                    .collect(Collectors.toList());
+        }
+
+
+        model.addAttribute("menuitems", menuItems);
         return "billdetails";
 
     }

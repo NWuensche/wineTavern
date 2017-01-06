@@ -1,0 +1,62 @@
+= Benutzerhandbuch
+
+:imagesdir: images
+
+== Installation
+Zum Ausführen ist Internetzugang erforderlich.
+Das Programm verbindet sich mit einem MySQL Server. Die Verbindung erfolgt über TCP Port 3306.
+
+== Programmstart
+
+Der Start des Programms erfolgt über die Kommandozeile
+
+[source,conf]
+----
+java -jar winetavern.jar
+----
+
+
+
+== Benutzung
+Die Benutzeroberfläche unterteilt sich in verschiedene Registerkarten (Tabs), die auf der linken Bildschirmseite angezeigt werden.
+Verschiedene Benutzergruppen haben lediglich Zugriff auf die für die Erfüllung ihres jeweiligen Auftrages erforderlichen Registerkarte.
+Im folgenden eine Aufführung der einzelnen Registerkarten.
+
+=== Dashboard
+Hier wird ein Überblick angezeigt.
+
+
+=== Karte
+
+Hier können Tageskarten erstellt und modifiziert werden. Zu den jeweiligen Tageskarten können Produkte hinzugefügt werden.
+Außerdem können hier neue Produkte erstellt, sowie deren Preis und weitere Eigenschaften festgelegt werden.
+
+
+=== Reservierungen
+
+Hier werden Reservierungen verwaltet, sowie ein Überblick über aktuelle und zukünftige Reservierungen angezeigt.
+Bei der Abfrage der Reservierungen wird eine Tisch der innerhalb der nächsten Stunde reserviert wurde als reserviert angezeigt.
+
+
+=== Abrechnung
+
+Hier werden die Abrechnungen der Bedienungen erstellt.
+
+
+=== Lager
+
+Hier kann der aktuelle Bestand von Produkten eingesehen werden, sowie Lagerbestände erfasst werden.
+
+
+=== Events
+
+Hier werden Veranstaltungen verwaltet.
+
+=== Management
+
+Hier können die Schichten der Angestellten eingesehen und bearbeitet werden.
+
+
+=== Einstellungen
+
+Benutzverwaltung
