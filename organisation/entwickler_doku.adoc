@@ -66,6 +66,17 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 *** Da wir große Schwierigkeiten bekommen haben, die Tables von WineTavern, HTML und MySQL auseinander zu halten, haben wir uns beschlossen, die WineTavern Tables in Desks umzubennenen.
 
 * Verwendete Muster
+
+** Nutzung des Adapter-Patterns im Employee
+*** Weitere Eigenschaften zu einem UserAccount hinzufügen, ohne Login-Verwaltung mit UserAccount zu zerstören.
+
+** Strategy-Pattern zum Sortieren von Reservierungen
+*** Je nach gewünschter Sortierart dem Parameter-String die entsprechende Sortiermethode zugewiesen
+*** Später durch Java-8 Function<T,R> vereinfacht.
+
+** Builder-Pattern zum Splitten von Collections
+*** Splitbuilder erzeugt Splitter-Objekt, welche eine Liste nach einem Predicate teilen kann. Auf die geteilte Collection können wieder eigene Methoden angewedet werden.
+
 * Persistenz
 
 ** Nutzung von MySQL, um Daten zu speichern.
