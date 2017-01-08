@@ -67,6 +67,13 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 
 * Verwendete Muster
 * Persistenz
+
+** Nutzung von MySQL, um Daten zu speichern.
+*** Falls noch keine DB exisitiert, wird eine Neue mit Tischen und Administrator angelegt.
+
+** Nutzung von nicht persistenter HSQL DB in den Tests
+*** So laufen Tests schneller ab, ohne Release-DB zu verändern.
+
 * Benutzeroberfläche
 
 [appendix]
