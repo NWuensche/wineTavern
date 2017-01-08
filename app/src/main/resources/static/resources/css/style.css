@@ -684,6 +684,25 @@ fieldset {
     left: 5%;
 }
 
+/* EROOR */
+
+.error_bg{
+    background-color: #243648;
+}
+.error_bg h1{
+    color: #A6B2C5;
+}
+.error_bg div{
+    text-align: center;
+}
+.error_bg div #Wine404{
+    position: relative;
+}
+.error_bg div.button-wrap{
+    position: absolute;
+    bottom: 15rem;
+    right: 20rem;
+}
 /* INDEX */
 
 .frontend .navbar{
