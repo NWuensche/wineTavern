@@ -27,6 +27,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |02.12.2016 | 09:00 |11:30 | Treffen & Coden
 |09.12.2016 | 09:00 |13:30 | Treffen & Coden
 |16.12.2016 | 09:00 |12:00 | Zwischenpräsentation & Coden
+|09.12.2016 | 09:00 |11:00 | Treffen & Coden
 |===
 
 == Severin
@@ -131,7 +132,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 14.12.2016 | 21:00 | 23:30 | Automatisches PDF als Tageskarte
 | 15.12.2016 | 10:00 | 14:30 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen
 | 15.12.2016 | 17:00 | 19:00 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen, Präsentation vorbereiten
-
+| 16.01.2017 | 17:00 | 19:00 | Bug fixes
 |===
 
 == Niklas
