@@ -1,6 +1,6 @@
 = Benutzerhandbuch
 
-:imagesdir: benutzerhandbuch
+:imagesdir: benutzerhandbuch/1920x1080
 
 == Installation
 Zum Ausführen ist Internetzugang erforderlich.
