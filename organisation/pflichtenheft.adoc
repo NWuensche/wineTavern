@@ -191,7 +191,7 @@ Alle Paket-externen Beziehungen sind in den Paketdiagrammen nicht dargestellt, a
 link:src/Klassendiagramm/Klassendiagramm3.jpg[kompletten Klassendiagramm] einsehbar.
 
 === Entwurfsklassendiagramm
-image::src/EKD.png[Entwurfsklassendiagramm, 700, link=src/Klassendiagramm/EKD.png]
+image::src/EKD.png[Entwurfsklassendiagramm, 700, link=src/EKD.png]
 
 === Klassen und Enumerationen
 
