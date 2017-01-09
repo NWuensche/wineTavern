@@ -46,6 +46,10 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 ** Zuerst sollten alle externen und internen Personen ein Person-Objekt bekommen. Dieses ist allerdings fest mit einem UserAccount verbunden. Da sich externe (Künstler) allerdings nicht in das System einloggen müssen, haben wir die externen Personen zu "External" gemacht, während Interne nun "Employee" sind.
 ** Die Klasse `Vintner` repräsentiert Winzer und wird benötigt um Weinproben zu erstellen und den automatischen Rabatt auf Weine umzusetzen. Ein `Vintner` hat neben einem Namen noch eine Nummer, welche ihn in die Reihenfolge der Weinproben einordnet. So bekommt jeder Winzer der Reihe nach eine Weinprobe. Winzer kann man nur deaktivieren und nicht löschen, damit dessen Weinproben in der Vergangenheit nicht mit gelöscht werden müssen.
 
+* Trennung von Gäste-Website und Angestellten-Website
+** Da wir sowohl eine Website für die Gäste als auch für die Angestellten der Weinstube in einem Programm realisieren durften, mussten wir den Teil der Angestellten strikt von dem der Gäste trennen. 
+** Wir haben uns dafür entschieden, die Gäste Seite auf die Index Seite, also auf "/", zu legen, während die Angestellten noch "/login" zur URL hinzufügen müssen, um in ihren Bereich zu kommen.
+
 == Bausteinsicht
 * Package-Diagramme
 

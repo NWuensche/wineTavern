@@ -27,6 +27,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |02.12.2016 | 09:00 |11:30 | Treffen & Coden
 |09.12.2016 | 09:00 |13:30 | Treffen & Coden
 |16.12.2016 | 09:00 |12:00 | Zwischenpräsentation & Coden
+|09.12.2016 | 09:00 |11:00 | Treffen & Coden
 |===
 
 == Severin
@@ -131,7 +132,7 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 14.12.2016 | 21:00 | 23:30 | Automatisches PDF als Tageskarte
 | 15.12.2016 | 10:00 | 14:30 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen
 | 15.12.2016 | 17:00 | 19:00 | Automatisches PDF, verschiedene bugs, Winzer Weinen zuordnen, Präsentation vorbereiten
-
+| 16.01.2017 | 17:00 | 19:00 | Bug fixes
 |===
 
 == Niklas
@@ -186,6 +187,12 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 29.12.2016    | 17:00     | 19:00     | DB-Tabellen streambar machen
 | 30.12.2016    | 08:00     | 11:00     | 100% CC
 | 31.12.2016    | 06:30     | 09:00     | 100% CC
+| 01.01.2017    | 17:00     | 19:00     | Mehr Stream Methoden nutzen
+| 02.01.2017    | 14:00     | 19:00     | Bessere Nutzung des Strategy Patterns
+| 03.01.2017    | 15:00     | 17:00     | 100% CC
+| 04.01.2017    | 18:00     | 19:00     | 100% CC
+| 06.01.2017    | 13:00     | 14:00     | Anzeige der Events auf Startseite verbessern.
+| 08.01.2017    | 10:00     | 11:00     | Entwicklerdoku
 |===
 
 == Katharina

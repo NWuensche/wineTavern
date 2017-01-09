@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:include="links::links">
     <title>Error Page</title>
 </head>
-<body>
+<body class="error_bg">
+
     <h1>Ups! Da ist ein Fehler aufgetreten!</h1>
 
-    <a href="javascript:history.back()">
-        <button type="button">Zurück zur letzten Seite</button>
-    </a>
+    <div th:include="svgWinebottle::svgWinebottle">
 
+    </div>
+
+    <div class="button-wrap">
+    <a href="javascript:history.back()">
+        <button type="button" class="btn btn-primary">Zurück zur letzten Seite</button>
+    </a>
+    </div>
 </body>
 </html>
