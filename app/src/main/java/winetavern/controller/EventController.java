@@ -149,6 +149,7 @@ public class EventController {
         String calendarString = "[";
         boolean noComma = true;
 
+        String escapedDescription;
         for (Event event : getAllEvents(vintnerManager, eventCatalog)) { //add all events
             if (noComma)
                 noComma = false;
@@ -167,8 +168,10 @@ public class EventController {
                         "\",\"url\":\"" + "/admin/events/change/" + event.getId();
             }
 
+            escapedDescription = event.getDescription().replace("\n", "\\n")
+                                                       .replace("\r", "\\r");
             calendarString = calendarString +
-                    "\",\"description\":\"" + event.getDescription() + "<br/><br/>" + event.getPerson();
+                    "\",\"description\":\"" + escapedDescription + "<br/><br/>" + event.getPerson();
 
             if(event.getPrice().getNumber().doubleValue() == 0.0)
                 calendarString += "<br/>Freier Eintritt!\"}";
