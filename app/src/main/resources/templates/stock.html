@@ -78,8 +78,8 @@
                             <label for="category">Kategorie:</label>
                             <select class="form-control" name="category" id="category"
                                     onchange="wine(this,'vintnerfield');" required="true">
-                                <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
-                                        th:value="${category}"></option>
+                                <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category.getCategoryName()}"
+                                        th:value="${category.getCategoryName()}"></option>
                             </select>
                         </div>
                         <hr/>
@@ -141,7 +141,7 @@
                                     onchange="wine(this,'changeVintnerfield')">
                                 <option th:each="category : ${T(winetavern.model.stock.Category).values()}" th:text="${category}"
                                         th:value="${category}"
-                                        th:selected="${productCategory.toString().equals(category.toString())}"></option>
+                                        th:selected="${productCategory.equals(category)}"></option>
                             </select>
                         </div>
                         <fieldset id="changeVintnerfield"

@@ -1,5 +1,7 @@
 package winetavern.model.stock;
 
+import org.salespointframework.quantity.Metric;
+
 /**
  * Enum of all categories
  * @author Niklas Wünsche
@@ -7,18 +9,28 @@ package winetavern.model.stock;
 
 public enum Category {
 
-    RED_WINE("Rotwein"),
-    WHITE_WINE("Weißwein"),
-    SOFT_DRINK("Alkoholfreie Getränke"),
-    LIQUOR("Spirituosen"),
+    RED_WINE("Rotwein", Metric.LITER),
+    WHITE_WINE("Weißwein", Metric.LITER),
+    SOFT_DRINK("Alkoholfreie Getränke", Metric.LITER),
+    LIQUOR("Spirituosen", Metric.LITER),
 
-    SNACK("Snacks"),
-    MENU("Menüs");
+    SNACK("Snacks", Metric.UNIT),
+    MENU("Menüs", Metric.UNIT);
 
-    private final String categoryName;
+    private String categoryName;
+    private Metric metric;
 
-    Category(String categoryName) {
+    Category(String categoryName, Metric metric) {
         this.categoryName = categoryName;
+        this.metric = metric;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public Metric getMetric() {
+        return metric;
     }
 
     @Override
