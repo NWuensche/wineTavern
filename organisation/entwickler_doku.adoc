@@ -49,6 +49,8 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 == Bausteinsicht
 * Package-Diagramme
 
+image::src/packagediagram.png[Paketdiagramm, 763, 469, link=src/packagediagram.png]
+
 == Entwurfsentscheidungen
 * Architektur
 
