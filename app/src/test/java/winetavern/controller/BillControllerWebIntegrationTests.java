@@ -4,6 +4,10 @@ import org.bouncycastle.ocsp.Req;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -17,6 +21,7 @@ import winetavern.model.menu.DayMenu;
 import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
+import winetavern.model.stock.ProductCatalog;
 import winetavern.model.user.EmployeeManager;
 import winetavern.model.user.Roles;
 
@@ -50,15 +55,25 @@ public class BillControllerWebIntegrationTests extends AbstractWebIntegrationTes
     @Autowired private EmployeeManager employeeManager;
     @Autowired private BusinessTime businessTime;
     @Autowired private DayMenuRepository dayMenuRepository;
+    @Autowired private ProductCatalog productCatalog;
+    @Autowired private Inventory<InventoryItem> stock;
 
     private BillItem fries;
     private Bill bill;
 
     @Before
     public void before() {
+        Product product = new Product("prod", Money.of(3, EURO));
+        productCatalog.save(product);
+
+        InventoryItem item = new InventoryItem(product, Quantity.of(4.5));
+        stock.save(item);
+
         dayMenuItemRepository.deleteAll();
         DayMenuItem dayMenuItem = new DayMenuItem("Pommes", "Description", Money.of(3, EURO), 3.0);
+        dayMenuItem.setProduct(product);
         dayMenuItemRepository.save(dayMenuItem);
+
         fries = new BillItem(dayMenuItem);
         billItemRepository.save(fries);
         bill = new Bill("Table 1", employeeManager.findByUsername("admin").get());

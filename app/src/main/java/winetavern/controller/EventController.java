@@ -173,7 +173,7 @@ public class EventController {
             calendarString = calendarString +
                     "\",\"description\":\"" + escapedDescription + "<br/><br/>" + event.getPerson();
 
-            if(event.getPrice().getNumber().doubleValue() == 0.0)
+            if(Math.abs(event.getPrice().getNumber().doubleValue()) < 2 * Double.MIN_VALUE)
                 calendarString += "<br/>Freier Eintritt!\"}";
             else
                 calendarString += "<br/>Eintritt: " + Helper.moneyToEuroString(event.getPrice())+ "\"}";
