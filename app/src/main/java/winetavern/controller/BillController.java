@@ -1,6 +1,11 @@
 package winetavern.controller;
 
+import lombok.NonNull;
 import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +45,10 @@ public class BillController {
     @NotNull private final ExpenseGroupRepository expenseGroups;
     @NotNull private final BusinessTime businessTime;
     @NotNull private final DayMenuRepository dayMenus;
+    @NotNull private final Inventory<InventoryItem> stock;
 
     @Autowired
-    public BillController(BillRepository bills, DayMenuRepository dayMenus, BillItemRepository billItems, AuthenticationManager authenticationManager, EmployeeManager employees, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime) {
+    public BillController(BillRepository bills, DayMenuRepository dayMenus, BillItemRepository billItems, AuthenticationManager authenticationManager, EmployeeManager employees, DayMenuItemRepository dayMenuItems, DeskRepository tables, Accountancy accountancy, ExpenseGroupRepository expenseGroups, BusinessTime businessTime, Inventory<InventoryItem> stock) {
         this.bills = bills;
         this.billItems = billItems;
         this.authenticationManager = authenticationManager;
@@ -53,6 +59,7 @@ public class BillController {
         this.expenseGroups = expenseGroups;
         this.businessTime = businessTime;
         this.dayMenus = dayMenus;
+        this.stock = stock;
     }
 
     @RequestMapping("/service/bills")
@@ -154,10 +161,21 @@ public class BillController {
         if (!bill.isClosed()) {
             bill.close(businessTime);
             bills.save(bill);
+            removeBillItemsFromStock(bill);
         }
         model.addAttribute("time",Helper.localDateTimeToDateTimeString(businessTime.getTime()));
         model.addAttribute("bill", bill);
         return "printbill";
+    }
+
+    private void removeBillItemsFromStock(Bill bill) {
+        for (BillItem billItem : bill.getItems()) {
+            InventoryItem inventoryItem = stock.findByProduct(billItem.getItem().getProduct()).get();
+            inventoryItem.decreaseQuantity(
+                    Quantity.of(1 / billItem.getItem().getQuantityPerProduct())
+            );
+            stock.save(inventoryItem);
+        }
     }
 
     /**

@@ -3,36 +3,40 @@
 Dieser Testplan stellt eine vereinfachte Version der IEEE 829-1998 Vorlage dar.
 
 == Einführung
-Wozu dient das Dokument? Zielgruppe?
+Dieses Dokument dient dazu, den Aufbau der Testklassen zu verstehen, um mit ihnen weiter arbeiten oder sie ausbauen zu können. Es richtet sich sowohl an den Aufrtragsgeber, als auch an folgende Programmierer.
 
 == Aufbau der Testbezeichner
-Nach welchem Schema sind die Tests benannt?
-
-*Bsp.*
-
-*U - Unit Test, I - Integrationstest*
-
-*U-1, U-2, I-1*
+* Aufbau der Testpakete gleich dem Aufbau der Pakete im eigentlichen Programm.
+* Unit-Tests zu Klasse "A" sind in Testklasse "ATests" enthalten
+* Integration-Tests zu Klasse "A" sind in Testklasse "AIntegrationTests" enthalten
+* Web-Integration-Tests zu Klasse "A" sind in Testklasse "AWebIntegrationTests" enthalten
+* Tests wurden nach den Eingabe- und Ausgabeparametern benannt, sowie nach dem Namen der zu testenden Methode.
 
 == Test Gegenstände
+Grundlegende Gegenstände, die die Website aufweißt. Also all die Funktionen, die in den Akzeptanztestfällen gefordert sind.
 
 == Zu testende Funktionalitäten
+Grundlegende Funktionalitäten, die die Website aufweißt. Also all die Funktionen, die in den Akzeptanztestfällen gefordert sind.
 
 == Nicht zu testende Funktionalitäten
-z.B. Bibliotheken von Drittanbietern (eigene Tests beschränken sich auf Schnittstelle, bzw. Zusammenspiel).
+*Bibliotheken von Drittanbietern
+*Main-Methode (Kann nicht getestet werden)
 
 == Herangehensweise
-*Bsp.:*
-
-*Klassen werden mit JUnit getestet.*
-
-*Integrationstest nach Bottom-Up Prinzip*
+* Klassen werden mit JUnit 4 getestet.
+* Integrationstest werden nach dem Bottom-Up Prinzip auf die, durch Unit-Tests getesten Komponenten, aufgebaut.
+* Mocken von Klassenfremden Objekten in Unit-Tests
+* Erstellung aller Objekte in Integration-Tests
 
 == Umgebungsvoraussetzungen
 * Wird spezielle Hardware benötigt?
+** Nein
 * Welche Daten müssen bereitgestellt werden? Wie werden die Daten bereitgestellt?
+** Nutzung eines DataInitalizers. Objekte werden @Before Methoden der Testsklassen erstellt.
 * Wird zusätzliche Software für das Testen benötigt?
+** Alle zusätzlichen Packages (z.B. Mockito) finden sich in der pom.xml
 * Wie kommuniziert die Software während des Testens? Internet? Netzwerk?
+** Kommuniziert mit Hilfe eines MockMVC Objekts. Ansprechen der Controller über URL, aber ohne Internet.
 
 == Testfälle und Verantwortlichkeit
 Jede testbezogene Aufgabe muss einem Ansprechpartner zugeordnet werden.

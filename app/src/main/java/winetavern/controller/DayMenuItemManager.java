@@ -15,6 +15,7 @@ import winetavern.model.menu.DayMenuItem;
 import winetavern.model.menu.DayMenuItemRepository;
 import winetavern.model.menu.DayMenuRepository;
 import winetavern.model.stock.ProductCatalog;
+import java.util.regex.Pattern;
 
 import javax.money.MonetaryAmount;
 import java.beans.PropertyEditorSupport;
