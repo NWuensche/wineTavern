@@ -44,6 +44,17 @@ Jede testbezogene Aufgabe muss einem Ansprechpartner zugeordnet werden.
 // See http://asciidoctor.org/docs/user-manual/#tables
 [options="headers"]
 |===
-|ID |Anwendungsfall |Vorbedingungen |Eingabe |Ausgabe
-|…  |…              |…              |…       |…
+|Name |Anwendungsfall |Vorbedingungen |Eingabe |Ausgabe
+|WelcomeController - redirectsIfNotLoggedIn |Besucher wird auf index-Seite geleitet, auf der Events sind              |Nichtangemeldeter Nutzer |- |Besucher landet auf index.html
+|DashboardController - showDashboardAsAccountantRight |Buchhalter sieht auf Dashboard wichtige Statistiken |Buchhalter als Nutzer |- |Statistiken
+|AcceptanceTests - AcceptanceTest3  |Anlegen und löschen von Kellnern              |2 Kellner vorhanden, als Admin eingeloggt             |-       |Datenbank erneuert
+|EventController - addEventPostWithExistingExternalRight |Admin legt neues Event an |Künstler existiert schon, als Admin angemeldet |Eventdaten |Event gespeichert
+|DayMenuController - createDayMenuWithRealDateWithPreDayMenu |Admin legt auf Basis des letzten Tagesmenüs ein Neues an |gestrige Karte vorhanden |Heutiges Datum |Neue Tageskarte
+|ReservationManager - addReservationTest |Reserviere Tisch für bestimmte Zeit |Als Admin angemeldet |Datum der Reservierung |Reservierung
+|ReservationManager - sortReservationTimeValidatorByDateRightIfReservationTime |Sortiere Reservierungen (z.B. nach Datum) |Als Admin angemeldet |Sortieren nach Zeit |Sortiere Tabelle
+|BillController - addBillRight |Lege Rechnung für einen bestimmten Nutzer an |Als Kellner angemeldet |Tischname |Neue Rechnung
+|BillController - splitBillRight |Teile Rechnung, wenn diese geteilt werden soll |Als Kellner angemeldet |Zu splittende Elemente |2 geteilte Rechnungen
+|StockController - changeProductRight |Verändere Anzahl von Gegenständen im Lager, bei Unterschreitung von 10 wird Feld rot |Item in Stock |Zu änderndes Item |Neue Anzahl von Items
+|ShiftController - addShiftsPostRight |Neue Schicht im  Schichtplan für Arbeiter |Als Admin angemeldet |Neue Schicht |Neue Schicht im Schichtplan
+|SettingsController - setBusinessTimeCorrect |Verändere Zeit, um Events zu sehen |Als Admin angemeldet |Neue Zeit |Zeit ist umgestellt
 |===
