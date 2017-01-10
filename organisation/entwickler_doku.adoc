@@ -55,6 +55,30 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 
 image::src/packagediagram.png[Paketdiagramm, 763, 469, link=src/packagediagram.png]
 
+=== Accountancy-Package
+image::src/Paketdiagramme/packageAccountancy.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageAccountancy.png]
+
+=== Management-Package
+image::src/Paketdiagramme/packageManagement.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageManagement.png]
+
+=== Menu-Package
+image::src/Paketdiagramme/packageMenu.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageMenu.png]
+
+=== Reservation-Package
+image::src/Paketdiagramme/packageReservation.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageReservation.png]
+
+=== Stock-Package
+image::src/Paketdiagramme/packageStock.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageStock.png]
+
+=== User-Package
+image::src/Paketdiagramme/packageUser.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageUser.png]j
+
+=== Splitter-Package
+image::src/Paketdiagramme/packageSplitter.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageSplitter.png]
+
+=== Controller-Package
+image::src/Paketdiagramme/packageController.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageController.png]
+
 == Entwurfsentscheidungen
 * Architektur
 

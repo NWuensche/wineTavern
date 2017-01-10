@@ -251,4 +251,5 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |09.12.2016 |09:20 |14:00 |Reservation und Koordinierung
 |16.12.2016 |15:00 |17:00 |kram
 |09.01.2016 |11:00 |14:30 |Kleiner Fixes und Bedienungsanleitung
+|09.01.2016 |18:30 |21:00 |Lagermenge nach Bestellung anpassen
 |===
