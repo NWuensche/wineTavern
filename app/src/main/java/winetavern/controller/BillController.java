@@ -171,9 +171,15 @@ public class BillController {
     private void removeBillItemsFromStock(Bill bill) {
         for (BillItem billItem : bill.getItems()) {
             InventoryItem inventoryItem = stock.findByProduct(billItem.getItem().getProduct()).get();
-            inventoryItem.decreaseQuantity(
-                    Quantity.of(1 / billItem.getItem().getQuantityPerProduct())
-            );
+            try {
+                inventoryItem.decreaseQuantity(
+                        Quantity.of(1 / billItem.getItem().getQuantityPerProduct())
+                );
+            } catch (Exception e) {
+                inventoryItem.decreaseQuantity(
+                    inventoryItem.getQuantity()
+                );
+            }
             stock.save(inventoryItem);
         }
     }
