@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, onConstructor = @__({@Deprecated}))
 public class Event extends Product {
     @NonNull @OneToOne(cascade = {CascadeType.ALL}) private TimeInterval interval;
-    @NonNull @ManyToOne(cascade = {CascadeType.ALL}) private Person person;
+    @NonNull @ManyToOne(cascade = {CascadeType.PERSIST}) private Person person;
     @NonNull private String description;
     private boolean vintnerDay = false;
 
