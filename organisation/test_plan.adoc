@@ -19,8 +19,8 @@ Grundlegende Gegenstände, die die Website aufweißt. Also all die Funktionen, d
 Grundlegende Funktionalitäten, die die Website aufweißt. Also all die Funktionen, die in den Akzeptanztestfällen gefordert sind.
 
 == Nicht zu testende Funktionalitäten
-*Bibliotheken von Drittanbietern
-*Main-Methode (Kann nicht getestet werden)
+* Bibliotheken von Drittanbietern
+* Main-Methode (Kann nicht getestet werden)
 
 == Herangehensweise
 * Klassen werden mit JUnit 4 getestet.
