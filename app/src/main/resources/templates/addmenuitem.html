@@ -45,10 +45,12 @@
         </table>
     </div>
     <div class="row">
-        <div class="col-xs-4 text-xs-right">
+        <div class="col-xs-12">
+            <div class="text-xs-right">
             <button type="button" data-toggle="modal" data-target="#addNewMenuItem" class="btn btn-primary">
                 Neu Anlegen
             </button>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="addNewMenuItem" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -117,8 +119,7 @@
                     <button type="submit" id="submitbutton" class="button btn btn-primary">Hinzufügen
                     </button>
                     <input type="hidden" th:name="dayMenu" th:value="${dayMenu.id}"/>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                    </div>
             </div>
         </div>
     </div>
