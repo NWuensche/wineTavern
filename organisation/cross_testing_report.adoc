@@ -29,6 +29,7 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 | /bestandsliste | Nachbestellung <0 | negative Nachbestellung, yes, unendlich Geld bekommen | negative Lagerbestände
 | /bestandsliste | Nachbestellung > 0 | Neuer Wert wird nicht gespeichert, wenn ich Seite verlasse |
 | /product_add | Jahr = 5 | schlechtes Jahresformat, stört aber nicht | -
+| /produktverwaltung/delete | Produkt, das auf Tagesliste steht | Fehler | org.hibernate.exception.ConstraintViolationException: could not execute statement
 | /winzerverwaltung/delete | - | Winzer können nicht gelöscht werden | alert, aber nichts passiert
 | /eventplanung | - | Funktion von Event starten sowie Inputfeld? | -
 | /event_edit | Besucherzahl = 99999999999999999999999999999999999999 | Besucherzahl übergroß | Error-Seite
