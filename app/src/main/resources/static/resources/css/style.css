@@ -685,8 +685,11 @@ body .list-group-item-action .fa-circle-o{
 .dashboard__wrap  .container__wrap{
     background-color: #fff;
     min-height: 100%;
-    border-radius: 3px 3px 0 0;
+    border-radius: 5px 5px 0 0;
     overflow: hidden;
+}
+.dashboard__wrap .container__wrap.box__dashborad{
+    border-radius: 5px;
 }
 .dashboard__wrap .container__wrap p{
     position: relative;
@@ -695,7 +698,7 @@ body .list-group-item-action .fa-circle-o{
     line-height: 3;
 }
 .dashboard__wrap .container__wrap p:hover{
-    background-color: #FCB058;
+    background-color: #D3D3D3;
     color: #243648;
 }
 .dashboard__wrap  .container__wrap p::after{
