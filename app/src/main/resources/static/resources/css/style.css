@@ -407,13 +407,17 @@ body .list-group-item-action .fa-circle-o{
 
 /* BILLS */
 .bill__tabs {
-    margin: 1rem 2rem -1rem 2rem;
+    margin: 1rem 2rem -2rem 2rem;
     background:lightgrey;
+}
+.nav-tabs{
+    border-bottom: none;
 }
 .nav-tabs .nav-item {
     line-height: 3;
     font-weight: bold;
     font-size: 1.1em;
+    border-bottom: #243648;
 }
 .nav-tabs .nav-item+.nav-item{
     margin-left: 0;
@@ -437,6 +441,9 @@ body .list-group-item-action .fa-circle-o{
     background:#2F3F52;
     border:1px solid #2f3f52;
     color:white;
+}
+.payOff .container__wrap .padding__box{
+    padding: 1rem 8rem;
 }
 
 .hidespinner input[type="number"]::-webkit-outer-spin-button,
