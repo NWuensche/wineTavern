@@ -1,17 +1,41 @@
 = Cross-Testing Feedback
 
-__Durchführende Gruppe:__
-__Anwendung von Gruppe:__
+__Durchführende Gruppe:16
+
+__Anwendung von Gruppe:33
 
 == Getestetes System
-Welche Aufgabe/Problemstellung löst die Anwendung.
+Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 
 == Fehler-Report
 // See http://asciidoctor.org/docs/user-manual/#tables
 [options="header"]
 |===
 |Pfad |Parameter |Beschreibung |Rückgabe
-| … | … | … | … |
+| / | - | Weintraube Bild kann nicht geladen werden | -
+| /login | - | Box.js und form.js können nicht geladen werden | -
+| /personal | - | Fehlermeldung | "iniHight is not defined at onload"
+| /personal/delete | aktuell angemeldete Person | sich selbst löschen | nix passiert, bzw. kein Hinweis
+| /personal/delete | Admin | Admin löschen | nichts passiert (super), aber kein Hinweis
+| /personal/delete | Judith Krempel | lässt sich nicht löschen | -
+| /personal_einstellen, /personal_edit | als nicht Admin | Button als nicht Admin anklickbar |
+| /tischreservierung | Plätze>8 | schlägt trotzdem Tische vor, obwohl überbucht | -
+| /tischreservierung | Plätze>12 | schlägt garkeinen Tisch mehr vor, nur "max" beim Input | -
+| /tischreservierung | Vorschlag erhalten | man kann beliebigen Tisch auswählen | -
+| /tischreservierung | erneute Reservierung | Doppelte Buchung pro Zeit | Kommentar: "Start: 07.01.2017 12:45, Dauer:
+ 179 Minuten, benötigte Alternativkonfiguration: nein"
+| /bestandsliste | Nachbestellung <0 | negative Nachbestellung, yes, unendlich Geld bekommen | negative Lagerbestände
+| /product_add | Jahr = 5 | schlechtes Jahresformat, stört aber nicht | -
+| /winzerverwaltung/delete | - | Winzer können nicht gelöscht werden | alert, aber nichts passiert
+| /eventplanung | - | Funktion von Event starten sowie Inputfeld? | -
+| /event_edit | Besucherzahl = 99999999999999999999999999999999999999 | Besucherzahl übergroß | Error-Seite
+| /tageskarte_edit | - | kein Hinzufügen von Produkten, wenn schon etwas auf der Tageskarte steht, nur Neuwahl | -
+| /tagesabrechnung | - | Nachbestellungen sind nicht gelistet | -
+
+
+
+
+
 |===
 
 == Sonstiges
@@ -19,5 +43,9 @@ Welche Aufgabe/Problemstellung löst die Anwendung.
 * Fehlende Features
 * Interaktion mit der Anwendung (Usability)
 
+* Fehlende zurück Pfeile erschweren Benutzerfreundlichkeit
+* Schlechte Euro-Formatierung
+
 == Verbesserungsvorschläge
 * Was kann noch weiter verbessert werden?
+* GUI
