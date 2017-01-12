@@ -48,7 +48,14 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 ** "Eventkalender" schaut aus Sidebar raus
 ** Unicode Problem in /bestandsliste (Griveton ros�)
 * Fehlende Features
+** Weiterleitung der Bestellungen an die Küche
+** Vergessene Posten sind von der Bedienung selbst zu tragen
+** Die Bedienungen zahlen nur 90% des Preises der Tageskarte
+** Winzertag
+*** Kunden zahlen 50% des Preises auf Weine des Winzers an einer Weinprobe
+*** Es werden ausschließlich Weine des Winzers an der Weinprobe ausgeschenkt
 * Interaktion mit der Anwendung (Usability)
+** /bestellung: man sieht keine Preise der bereits bestellten Waren oder der Gesamtrechnung
 ** /eventkalender: Events sind nicht nach Datum sortiert
 ** /personal_edit: "Anstellung als:" mit String (scheint auch nie zu funktionieren)
 ** /personal_edit: Benutzererkennung in Textbox, obwohl nicht veränderbar.
