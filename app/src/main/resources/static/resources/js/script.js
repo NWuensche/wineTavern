@@ -23,4 +23,11 @@ $(document).ready(function(){
         $('.container__cards').slideUp('slow');
         $('.container__table').slideDown('slow');
     });
+
+    // menu active status
+    var patharray = window.location.pathname.split('/');
+    for (var i = 1; i < patharray.length; i++ ){
+        $('.col-md-3 .list-group .'+patharray[i]).addClass('active');
+
+    }
 });
