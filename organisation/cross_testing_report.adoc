@@ -58,4 +58,10 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 
 == Verbesserungsvorschläge
 * Was kann noch weiter verbessert werden?
-* GUI
+* Farbauswahl und Visuelle Anordnung in den Formularen könnte verbessert werden
+* Die Anwendung ist nicht zeitgemäß, keine Schriftformatierungen, keine optischen Feinheiten und Hilfen, durch Icons oder Dialogfelder
+* Freiräume zwischen den Elementen
+* Ausnutzung der gesamten Bildschirmfläche
+* keine responsive Unterstützung
+* Schrift auf gemustertem Hintergrund ließt sich schwierig
+* zudem tragen Sans-Serif für eine bessere Lesbarkeit bei.
