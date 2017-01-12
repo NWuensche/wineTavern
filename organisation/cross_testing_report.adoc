@@ -49,6 +49,7 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 ** Unicode Problem in /bestandsliste (Griveton ros�)
 * Fehlende Features
 * Interaktion mit der Anwendung (Usability)
+** /eventkalender: Events sind nicht nach Datum sortiert
 ** /personal_edit: "Anstellung als:" mit String (scheint auch nie zu funktionieren)
 ** /personal_edit: Benutzererkennung in Textbox, obwohl nicht veränderbar.
 ** /tischreservierungen: Obwohl Plätze nötig, kein Stern dran
