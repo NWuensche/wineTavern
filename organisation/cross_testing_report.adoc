@@ -31,6 +31,7 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 | /product_add | Jahr = 5 | schlechtes Jahresformat, stört aber nicht | -
 | /produktverwaltung/delete | Produkt, das auf Tagesliste steht | Fehler | org.hibernate.exception.ConstraintViolationException: could not execute statement
 | /winzerverwaltung/delete | - | Winzer können nicht gelöscht werden | alert, aber nichts passiert
+| /winzerverwaltung | - | man kann Winzer mit Leertaste als Namen (" ") erstellen | 
 | /eventplanung | - | Funktion von Event starten sowie Inputfeld? | -
 | /event_edit | Besucherzahl = 99999999999999999999999999999999999999 | Besucherzahl übergroß | Error-Seite
 | /tageskarte_edit | - | kein Hinzufügen von Produkten, wenn schon etwas auf der Tageskarte steht, nur Neuwahl | -
