@@ -51,6 +51,7 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 ** Weiterleitung der Bestellungen an die Küche
 ** Vergessene Posten sind von der Bedienung selbst zu tragen
 ** Die Bedienungen zahlen nur 90% des Preises der Tageskarte
+** Eine neue Tageskarte übernimmt nicht die Produkte vom Vortag ("Zusammenstellen einer Tageskarte (durch Modifizieren der Karte des vergangenen Tages)")
 ** Winzertag
 *** Kunden zahlen 50% des Preises auf Weine des Winzers an einer Weinprobe
 *** Es werden ausschließlich Weine des Winzers an der Weinprobe ausgeschenkt
@@ -66,7 +67,6 @@ Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 
 
 == Verbesserungsvorschläge
-* Was kann noch weiter verbessert werden?
 * Farbauswahl und Visuelle Anordnung in den Formularen könnte verbessert werden
 * Die Anwendung ist nicht zeitgemäß, keine Schriftformatierungen, keine optischen Feinheiten und Hilfen, durch Icons oder Dialogfelder
 * Freiräume zwischen den Elementen
