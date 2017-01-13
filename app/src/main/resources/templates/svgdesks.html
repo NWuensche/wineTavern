@@ -127,8 +127,7 @@
             var reservedDesks = [[${reservations}]];
             $(reservedDesks).each(function(index, value) {
                 console.log(value);
-                $('#Tisch-'+value).find('text').css({fill : '#f00'});
-                $('#Bar-'+value).find('text').css({fill : '#f00'});
+                $('#Tisch-'+value).find('rect').css({fill : 'rgb(150, 7, 7)'});
             });
 //            $(".st4").click(function() {
 //                var deskName = $(this).text();

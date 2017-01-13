@@ -15,7 +15,7 @@
 
     <div class="row row-eq-height">
         <div class="col-xs-4">
-            <div class="container__wrap">
+            <div class="container__wrap box__dashborad">
                 <p class="text-xs-center">Dienste
                     <a th:href="@{/admin/management/shifts/add}" style="color:unset;" sec:authorize="hasRole('ROLE_ADMIN')">
                         <i class="fa fa-plus-circle"></i>
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="col-xs-4">
-            <div class="container__wrap">
+            <div class="container__wrap box__dashborad">
             <p class="text-xs-center">
                 Reservierungen
                 <a th:href="@{/service/reservation}" style="color:unset;" sec:authorize="hasRole('ROLE_ADMIN')">
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="col-xs-4">
-            <div class="container__wrap">
+            <div class="container__wrap box__dashborad">
                 <p class="text-xs-center">
                     Speisekarte
                     <a th:href="${daymenu}? (@{'/admin/menu/edit/' + ${daymenu.id}}): (@{'/admin/menu/add'})"
@@ -72,10 +72,11 @@
                     </tbody>
                 </table>
                 <div class="padding__box" th:if="!${daymenu}">
-                    <div class="alert alert-danger" role="alert">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        Noch keine Tageskarte!<br/><br/>
-                        <div class=" text-xs-center">
+                    <div class="alert alert-danger text-xs-center" role="alert">
+                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                        <span>Noch keine Tageskarte!</span>
+                        <br/><br/>
+                        <div>
                             <a th:href="@{/admin/menu/add}"  sec:authorize="hasRole('ROLE_ADMIN')">
                                 <button type="button" class="btn btn-outline-danger">Anlegen
                             </button></a>

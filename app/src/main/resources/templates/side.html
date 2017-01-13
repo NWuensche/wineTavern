@@ -35,7 +35,7 @@
 
                 <!-- DASHBOARD-->
 
-                <a th:href="@{/}" class="list-group-item list-group-item-action side__menu side-module__container">
+                <a th:href="@{/}" class="dashboard list-group-item list-group-item-action side__menu side-module__container">
                     <i class="fa fa-th fa-lg" aria-hidden="true"></i>
                     <span>Dashboard</span>
                 </a>
@@ -43,7 +43,7 @@
                 <!-- KARTE -->
 
 
-                <a th:href="@{/admin/menu/show}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                <a th:href="@{/admin/menu/show}" class="menu list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasAnyRole('ROLE_ADMIN')">
                     <i class="fa fa-cutlery fa-lg" aria-hidden="true"></i>
                     <span>Karte</span>
                 </a>
@@ -51,14 +51,14 @@
                 <!-- RESERVIERUNG-->
                 <!-- TODO: richtige Rolle für Reservierungen setzen -->
 
-                <a th:href="@{/service/reservation}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICE')">
+                <a th:href="@{/service/reservation}" class="reservation list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICE')">
                     <i class="fa fa-list fa-lg" aria-hidden="true"></i>
                     <span>Reservierungen</span>
                 </a>
 
                 <!-- ABRECHNUNG -->
 
-                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container"
+                <a href="#" class="bills accountancy expenses list-group-item list-group-item-action side__menu side-module__container"
                    data-toggle="collapse" data-target="#rechnungen" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
                     <span>Abrechnung</span>
@@ -71,7 +71,7 @@
                         <span>Rechnungen</span>
                     </a>
                 </div>
-                <a th:href="@{/accountancy/expenses}" sec:authorize="hasAnyRole('ROLE_ACCOUNTANT')"
+                <a th:href="@{/accountancy/expenses}"  sec:authorize="hasAnyRole('ROLE_ACCOUNTANT')"
                    class="list-group-item list-group-item-action side__menu side-module__container">
                     <i class="fa fa-eur fa-lg" aria-hidden="true"></i>
                     <span>Tagesabrechnung</span>
@@ -85,21 +85,21 @@
 
                 <!-- LAGER -->
 
-                <a th:href="@{/admin/stock}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/admin/stock}" class="stock list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-list fa-lg" aria-hidden="true"></i>
                     <span>Lager</span>
                 </a>
 
                 <!-- EVENTS -->
 
-                <a  th:href="@{/admin/events}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a  th:href="@{/admin/events}" class="events list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
                     <span>Events</span>
                 </a>
 
                 <!-- MANAGEMENT-->
 
-                <a href="#" class="list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#management" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a href="#" class="management vintner list-group-item list-group-item-action side__menu side-module__container" data-toggle="collapse" data-target="#management" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-calendar fa-lg" aria-hidden="true"></i>
                     <span>Management</span>
                 </a>
@@ -121,7 +121,7 @@
 
                 <!-- SETTINGS -->
 
-                <a th:href="@{/admin/settings}" class="list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/admin/settings}" class="settings list-group-item list-group-item-action side__menu side-module__container" sec:authorize="hasRole('ROLE_ADMIN')">
                     <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
                     <span>Einstellungen</span>
                 </a>

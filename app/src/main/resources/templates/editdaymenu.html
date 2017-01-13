@@ -6,25 +6,18 @@ th:include="backend-temp :: page">
     <title>Title</title>
 </head>
 <body th:fragment="content">
-<div class="row">
-    <div class="col-xs-12">
-        <div class="white__bg p">
-            <p>Tageskarte vom <span
-                    th:text="${helper.localDateTimeToDateString(daymenu.day.atStartOfDay())}"></span></p>
-        </div>
-    </div>
-</div>
-
 <div class="container__wrap">
     <div class="heading">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-9">
                 <h1>
                     <i class="fa fa-map" aria-hidden="true"></i>
-                    MenuItems
+                    MenuItems -
+                    Tageskarte vom
+                    <span th:text="${helper.localDateTimeToDateString(daymenu.day.atStartOfDay())}"></span>
                 </h1>
             </div>
-            <div class="col-xs-6 text-xs-right">
+            <div class="col-xs-3 text-xs-right">
                 <a th:href="${'/admin/menuitem/add?frommenuitemid='+frommenuitemid}">
                     <button type="button" class="btn btn-primary ">
                         <i class="fa fa-plus fa-fw"></i>
@@ -55,7 +48,7 @@ th:include="backend-temp :: page">
                 </button>
             </td>
             <td>
-                <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary deleteBtn">
+                <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-danger deleteBtn">
                     <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
                 </button>
             </td>

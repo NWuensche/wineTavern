@@ -6,6 +6,7 @@
 
 </head>
 <body th:fragment="content">
+<div class="stock">
     <div class="container__wrap">
         <div class="heading">
             <div class="row">
@@ -93,7 +94,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button form="productData" type="reset" class="btn btn-secondary">
+                    <button form="productData" type="reset" class="btn btn-danger">
                         <i class="fa fa-times fa-lg"></i>
                     </button>
                     <button form="productData" type="submit" class="btn btn-primary">Produkt hinzufügen</button>
@@ -146,7 +147,7 @@
                         </div>
                         <fieldset id="changeVintnerfield"
                                   th:style="((${productCategory} != 'Rotwein') and (${productCategory} != 'Weißwein'))? ('display:none') : ''">
-                            <legend>&nbsp;Winzer</legend>
+                            <legend>Winzer</legend>
                             <label for="productvintner">Name:</label>
                             <select class="form-control" id="productvintner" name="productvintner">
                                 <option th:each="vintner:${vintners}" th:text="${vintner.name}" th:value="${vintner.id}"></option>
@@ -161,7 +162,7 @@
             </div>
         </div>
     </div>
-
+</div>
 <script th:inline="javascript">
     /*<![CDATA[*/
 

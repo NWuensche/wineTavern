@@ -7,16 +7,15 @@
 </head>
 <body th:fragment="content">
 <div class="addMenuItem">
-<div class="row">
-    <div class="col-xs-12">
-        <div class="white__bg">
-            <h1>Speise zur Karte hinzufügen: </h1>
-        </div>
-    </div>
-</div>
+<!--<div class="row">-->
+    <!--<div class="col-xs-12">-->
+        <!--<div class="white__bg">-->
+            <!--<h1>Speise zur Karte hinzufügen: </h1>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 
 <div class="row">
-
     <h2>Oder neu erstellen:</h2>
     <div class="col-xs-8 offset-xs-2">
         <form th:action="@{'/admin/menuitem/edit/' + ${menu.id} + '/' + ${menuitem.id}}" th:object="${menuitem}" method="post">
