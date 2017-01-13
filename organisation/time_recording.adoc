@@ -193,6 +193,9 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 | 04.01.2017    | 18:00     | 19:00     | 100% CC
 | 06.01.2017    | 13:00     | 14:00     | Anzeige der Events auf Startseite verbessern.
 | 08.01.2017    | 10:00     | 11:00     | Entwicklerdoku
+| 09.01.2017    | 19:00     | 20:00     | Diagramme in adocs
+| 10.01.2017    | 17:00     | 19:00     | test_plan + evalutation
+| 11.01.2017    | 17:00     | 21:00     | Crosstest + adocs fertig
 |===
 
 == Katharina
