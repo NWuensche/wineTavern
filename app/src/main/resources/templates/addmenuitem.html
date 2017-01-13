@@ -13,6 +13,9 @@
         <div class="heading">
             <div class="row">
                 <div class="col-xs-12">
+                    <button type="button" data-toggle="modal" data-target="#addNewMenuItem" class="btn btn-primary float-xs-right">
+                        Neu Anlegen
+                    </button>
                     <h1>Speise zur Karte hinzufügen</h1>
                 </div>
             </div>
@@ -31,7 +34,7 @@
                 <tbody>
                 <tr th:each="item : ${daymenuitems}">
                     <td th:text="${item.name}"></td>
-                    <td th:text="${item.price}"></td>
+                    <td th:text="${helper.moneyToEuroString(item.getPrice())}"></td>
                     <td th:if="${stock.findByProduct(item.product).isPresent()}"
                         th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
                     <td>
@@ -47,9 +50,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="text-xs-right">
-            <button type="button" data-toggle="modal" data-target="#addNewMenuItem" class="btn btn-primary">
-                Neu Anlegen
-            </button>
+
             </div>
         </div>
     </div>
@@ -57,10 +58,10 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <h5 class="modal-title">Tageskarteneintrag hinzuf&uuml;gen</h5>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -72,7 +73,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="menuItem">Example select</label>
+                                        <label for="menuItem">Product</label>
                                         <select class="form-control" id="menuItem" th:name="product">
                                             <option th:each="onestock : ${stock.findAll()}" th:value="${onestock.product.getId()}"
                                                     th:text="${onestock.product.name}"></option>

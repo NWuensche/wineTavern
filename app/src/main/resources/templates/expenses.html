@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <td colspan="6">
-                            <form class="form-inline text-xs-center">
+                            <form class="form-inline" id="expenses">
                                 <div class="form-group">
                                     <label for="type"><b>Typ:</b></label>
                                     <select id="type" name="type" class="form-control">
@@ -54,14 +54,16 @@
                                     <label for="date"><b>Datum:</b></label>
                                     <input th:value="${selectedDate}" type="text" id="date" name="date" class="form-control"/>
                                 </div>
+                                <br/>
+
                                 &nbsp;
-                                <button class="btn btn-primary">Neu laden</button>
-                                &nbsp;
-                                <button type="button" class="btn btn-primary" onclick="cover();" id="coverbtn"
-                                        style="display:none">
-                                    Abrechnen
-                                </button>
+
                             </form>
+                            <button class="btn btn-primary" for="expenses">Neu laden</button>
+                            <button type="button" class="btn btn-primary" onclick="cover();" id="coverbtn"
+                                                                           style="display:none">
+                                Abrechnen
+                            </button>
                         </td>
                     </tr>
                 </thead>
