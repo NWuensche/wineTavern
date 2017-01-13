@@ -2,18 +2,28 @@
 
 == Einführung und Ziele
 * Aufgabenstellung
+** Erstellung eines Kassensystems für eine Weinstube samt Tischreservierung
 * Qualitätsziele
+** Stabil lauffähig, intuitiv bedienbar
+
 
 == Randbedingungen
 * Hardware-Vorgaben
+** Auflösung: optimiert für 1920x1080
+** Internet-Verbindung für Diagramme notwendig
+
 * Software-Vorgaben
+** MySQL-Server
+** JDK8
+** Chrome, Firefox, Opera
 * Vorgaben zum Betrieb des Software
+** siehe Benutzerhandbuch
 
 == Kontextabgrenzung
 * Externe Schnittstellen
+** Google Charts
 
 == Lösungsstrategie
-Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
 
 * Nutzung von Controllern, um Personen zu beschreiben
 ** Im AKD haben wir noch für jede Mitarbeitergruppe eine eigene Klasse mit Methoden erstellt.
