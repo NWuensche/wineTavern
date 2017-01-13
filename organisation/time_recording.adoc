@@ -211,8 +211,16 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |31.10 |13:00 |17:00 |login-template bauen; Mysql
 |02.11 |12:15 |16:00 |Pflichtenheft, Design
 |02.11 |20:30 |23:00 |Pflichtenheft, Dialoglandkarte
+|04.11 |20:30 |23:30 |Backend Nav rebuild
+|05.11 |07:30 |08:15 |Fix
+|06.11 |11:00 |13:00 |Tables, Users
+|07.11 |11:00 |12:20 |Sidebar, Links, Template fixes
 |09.11 |11:00 |13:00 |Navbar Umbau, Template Re-design
 |13.11 |13:30 |17:45 |Sibebar, Btn-tootle, template Re-design
+|14.11 |19:00 |23:00 |Form-template
+|15.11 |11:00 |12:00 |Design, Menu-templates
+|19.11 |09:00 |10:00 |Bootstrap
+|21.11 |11:00 |13:00 |Navbar Umbau, Template Re-design
 |===
 
 == Michel
