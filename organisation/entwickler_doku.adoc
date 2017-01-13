@@ -15,7 +15,7 @@
 * Software-Vorgaben
 ** MySQL-Server
 ** JDK8
-** Chrome, Firefox, Opera
+** Chrome
 * Vorgaben zum Betrieb des Software
 ** siehe Benutzerhandbuch
 
