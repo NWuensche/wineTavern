@@ -40,7 +40,7 @@ th:include="backend-temp :: page">
         <tbody>
         <tr th:each="item : ${daymenu.dayMenuItems}">
             <td th:text="${item.name}"></td>
-            <td th:text="${helper.moneyToEuroString(item.price)}"></td>
+            <td th:text="${T(winetavern.Helper).moneyToEuroString(item.price)}"></td>
             <td th:text="${(stock.findByProduct(item.product).get().quantity.getAmount() * item.quantityPerProduct).intValue()}"></td>
             <td>
                 <button type="submit" th:name="daymenuitem" th:value="${item.id}"  class="btn btn-primary editBtn">
