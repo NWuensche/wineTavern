@@ -20,7 +20,7 @@ java -jar winetavern.jar
 
 == Benutzung
 Die Benutzeroberfläche unterteilt sich in verschiedene Registerkarten (Tabs), die auf der linken Bildschirmseite angezeigt werden.
-Verschiedene Benutzergruppen haben lediglich Zugriff auf die für die Erfüllung ihres jeweiligen Auftrages erforderlichen Registerkarte. Um von der öffentlichen Seite zum internen System zu gelangen muss der Adresszeile ein /login angefügt werden.
+Verschiedene Benutzergruppen haben lediglich Zugriff auf die für die Erfüllung ihres jeweiligen Auftrages erforderlichen Registerkarte. Um von der öffentlichen Seite zum internen System zu gelangen muss der Adresszeile ein /login angefügt werden. Der Login für den Administrator ist: Username: "admin", Passwort: "1234"
 
 image::public_page.png[Startseite]
 image::login.png[Login]
