@@ -57,10 +57,10 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Produkt hinzufügen</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -83,11 +83,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="formGroupExampleInput">Name</label>
-                                        <input type="text" class="form-control" id="formGroupExampleInput" th:name="name"/>
+                                        <input type="text" class="form-control" id="formGroupExampleInput" pattern="[A-Z]{1}" th:name="name"/>
                                     </div>
                                     <div class="form-group">
                                         <label for="price">Preis</label>
-                                        <input type="text" class="form-control" id="price" th:name="price"/>
+                                        <input type="text" class="form-control" id="price" pattern="[0-9]" th:name="price"/>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleTextarea">Beschreibung</label>
@@ -118,6 +118,7 @@
     $(document).ready(function () {
         $("#submitbutton").click(function (event) {
             $("#price").val($("#price").val() + " EUR");
+            console.log();
         });
     });
 </script>

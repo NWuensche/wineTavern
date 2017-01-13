@@ -66,6 +66,10 @@ public interface Helper {
     }
 
     static String moneyToEuroString(MonetaryAmount money) {
+        if(money == null) {
+            return "0 €";
+        }
+
         String res = Math.round(money.getNumber().doubleValue() * 100) / 100.0 + "";
         String[] splittetValue = res.split("\\.");
 
@@ -74,6 +78,7 @@ public interface Helper {
 
         return res + " €";
     }
+
 
     /**
      * returns whether the given date is a vintner day or not (first friday every uneven month)
