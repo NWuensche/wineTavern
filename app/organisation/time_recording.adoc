@@ -220,7 +220,23 @@ Die verwendete Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen
 |14.11 |19:00 |23:00 |Form-template
 |15.11 |11:00 |12:00 |Design, Menu-templates
 |19.11 |09:00 |10:00 |Bootstrap
-|21.11 |11:00 |13:00 |Navbar Umbau, Template Re-design
+|21.11 |12:00 |13:00 |Bootstrap
+|23.11 |17:00 |20:00 |svg erstellen, User template
+|27.11 |17:00 |18:00 |User template
+|28.11 |09:30 |11:00 |Template table, user, menu
+|02.12 |10:00 |10:45 |Menu fix
+|11.12 |20:00 |21:30 |Index, Dashboard-Design
+|12.12 |20:30 |23:00 |Template fix
+|15.12 |11:00 |11:30 |Template fix, Dashboard-Design
+|18.12 |17:00 |19:00 |Template fix
+|19.12 |13:00 |17:30 |Template fix, Error-Design
+|08.01 |15:15 |15:45 |Error page
+|10.01 |19:00 |22:00 |Template fix
+|11.01 |13:00 |16:45 |Clean Up
+|11.01 |22:30 |00:00 |Crosstesting
+|12.01 |15:00 |16:30 |Sidebar
+|13.01 |08:30 |13:00 |letzter fix 
+
 |===
 
 == Michel
