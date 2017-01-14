@@ -4,9 +4,9 @@ Dieses Programm wird im Rahmen des Softwaretechnologie-Projektes im Studiengang 
 
 ## Quicklinks
 
-* link:organisation/pflichtenheft.adoc[Pflichtenheft]
-* link:organisation/entwickler_doku.adoc[Entwicklerdokumentation]
-* link:organisation/benutzerhandbuch.adoc[Benutzerhandbuch]
+* link:app/organisation/pflichtenheft.adoc[Pflichtenheft]
+* link:app/organisation/entwickler_doku.adoc[Entwicklerdokumentation]
+* link:app/organisation/benutzerhandbuch.adoc[Benutzerhandbuch]
 
 ## Start des Systems
 
