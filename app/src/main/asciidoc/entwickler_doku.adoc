@@ -2,26 +2,129 @@
 
 == Einführung und Ziele
 * Aufgabenstellung
+** Erstellung eines Kassensystems für eine Weinstube samt Tischreservierung
 * Qualitätsziele
+** Stabil lauffähig, intuitiv bedienbar
+
 
 == Randbedingungen
 * Hardware-Vorgaben
+** Auflösung: optimiert für 1920x1080
+** Internet-Verbindung für Diagramme notwendig
+
 * Software-Vorgaben
+** MySQL-Server
+** JDK8
+** Chrome
 * Vorgaben zum Betrieb des Software
+** siehe Benutzerhandbuch
 
 == Kontextabgrenzung
 * Externe Schnittstellen
+** Google Charts
 
 == Lösungsstrategie
-Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
+
+* Nutzung von Controllern, um Personen zu beschreiben
+** Im AKD haben wir noch für jede Mitarbeitergruppe eine eigene Klasse mit Methoden erstellt.
+** In Spring haben wir uns aber dafür entschieden, jeder Gruppe einen eigenen URL Namespace zu geben (z.B. /admin), auf den nur Personen mit dieser Rolle zugreifen können
+** Personenmethoden im AKD wurden nun zu RequestMappings.
+*** So ist aus der Boss.addEvents() Methode ein RequestMapping auf /admin/events/add geworden.
+
+* Gruppierung der Requests nach Aufgaben, nicht nach Personen
+** Zuerst wollten wir jeweils einen AdminController, CookController,..., anlegen.
+** Diese Idee haben wir aber verworfen, da wir es später übersichtlicher fanden, die Controller nach den Aufgaben zu sortieren. So sieht man nun z.B. im EventController sofort, wer welche Rechte im Bezug auf die Events hat, ohne sich durch alle PersonenController suchen zu müssen. 
+** Damit einhergehend ist auch die nächste Entscheidung gefallen
+
+* Keine Nutzung von @Preauthorize
+** Diese haben zuerst genutzt, um jeder Person ihren PersonenController zuzuweisen
+** Mit der Erstellung von Namespaces (z.B. /admin) in der Application Klasse haben wir allerdings einen gleichwertigen Weg gefunden, der uns Aufgaben Controller schreiben lässt.
+
+* Verwenden eigener `Bill` Klasse, statt `Bill extends Salespoint.Order` oder `Order order` als Attribut von `Bill`
+** Obwohl die Klasse `Order` fast alle Funktionalitäten enthält, die man für eine Rechnung braucht, gab es einige Umsetzungsschwierigkeiten:
+*** Das erweitern der Klasse `Order` ist nicht möglich, da der *default constructor* private und somit in der Kindklasse nicht erreichbar ist. Dies führt wiederrum zu einer Exception von Spring: `No default constructor found; nested exception is java.lang.NoSuchMethodException`
+*** Durch das Erstellen einer `Bill` Klasse mit einem Attribut `Order order` stellten sich einige Umwege beim Suchen der Aktiven und Archivierten Rechnungen ein. Desweiteren gab es einen Konflikt mit dem Schlagwort *Order* (=sortieren) und dem Suchen nach dem Attribut `Order order` in SQL.
+** Statt den obigen Designs haben wir uns deshalb zu einer unabhängigen Rechnungsklasse `Bill` entschieden, welche ein `Set<BillItem> items` enthält und diese wiederrum eine `@OneToOne` Verbindung zu Produkten die auf der aktuellen Tageskarte stehen. Somit ist auch sichergestellt, dass ausschließlich Produkte der Tageskarte verkauft werden.
+
+* Verwenden von Java-seitiger DB-Suche, statt effizienterer Implementierung in dem Repository von `Expense`
+** Unsere Klasse `Expense` steht für Ausgaben und erweitert die Klasse `Salespoint.AccountancyEntry`. Da das Repository  `AccountancyEntryRepository` allerdings package-private ist, lässt sich dieses nicht erweitern und dort dementsprechend keine weiteren Suchfunktionen eintragen.
+** `ExpenseRepository extends Accountancy` kommt ebenfalls nicht in Frage, da `Salespoint.Accountancy` selbst kein Repository ist und unseres dann nichtmehr als Bean erkannt werden würde.
+** Ein vollständig eigenes Repository `ExpenseRepository extends SalespointRepository` ist nicht sinnvoll, da dann jegliche Funktionalitäten von Accountancy verloren gehen würden, wie etwa `package-private setDate()`, welches für unsere Verwaltung notwendig ist.
+** Die Filter für die Ausgaben lassen sich nun in dem Template beliebig setzen und werden dann im Controller angewendet, um das gewünschte Ergebnis zu liefern.
+
+* Mache Personen abstrakt und erstelle Vintner, External und Employee
+** Zuerst sollten alle externen und internen Personen ein Person-Objekt bekommen. Dieses ist allerdings fest mit einem UserAccount verbunden. Da sich externe (Künstler) allerdings nicht in das System einloggen müssen, haben wir die externen Personen zu "External" gemacht, während Interne nun "Employee" sind.
+** Die Klasse `Vintner` repräsentiert Winzer und wird benötigt um Weinproben zu erstellen und den automatischen Rabatt auf Weine umzusetzen. Ein `Vintner` hat neben einem Namen noch eine Nummer, welche ihn in die Reihenfolge der Weinproben einordnet. So bekommt jeder Winzer der Reihe nach eine Weinprobe. Winzer kann man nur deaktivieren und nicht löschen, damit dessen Weinproben in der Vergangenheit nicht mit gelöscht werden müssen.
+
+* Trennung von Gäste-Website und Angestellten-Website
+** Da wir sowohl eine Website für die Gäste als auch für die Angestellten der Weinstube in einem Programm realisieren durften, mussten wir den Teil der Angestellten strikt von dem der Gäste trennen. 
+** Wir haben uns dafür entschieden, die Gäste Seite auf die Index Seite, also auf "/", zu legen, während die Angestellten noch "/login" zur URL hinzufügen müssen, um in ihren Bereich zu kommen.
 
 == Bausteinsicht
 * Package-Diagramme
 
+image::src/packagediagram.png[Paketdiagramm, 763, 469, link=src/packagediagram.png]
+
+=== Accountancy-Package
+image::src/Paketdiagramme/packageAccountancy.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageAccountancy.png]
+
+=== Management-Package
+image::src/Paketdiagramme/packageManagement.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageManagement.png]
+
+=== Menu-Package
+image::src/Paketdiagramme/packageMenu.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageMenu.png]
+
+=== Reservation-Package
+image::src/Paketdiagramme/packageReservation.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageReservation.png]
+
+=== Stock-Package
+image::src/Paketdiagramme/packageStock.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageStock.png]
+
+=== User-Package
+image::src/Paketdiagramme/packageUser.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageUser.png]j
+
+=== Splitter-Package
+image::src/Paketdiagramme/packageSplitter.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageSplitter.png]
+
+=== Controller-Package
+image::src/Paketdiagramme/packageController.png[Paketdiagramm, 763, 469, link=src/Paketdiagramme/packageController.png]
+
 == Entwurfsentscheidungen
 * Architektur
+
+** Keine Nutzung der Visitor-Rolle
+*** Im AKD haben wir noch eine Visitor-Rolle gespeichert.
+*** Diese haben wir aber im Programm gesprichten, da die Visitor-Rolle mit einem nicht angemeldeten Nutzer gleichzusetzen
+
+** Ziehe Integration- und Unittests auseinander
+*** Als erstes wollten wir alle Tests, die zu einer Klasse gehören, in eine Klasse packen. Da so aber die Unittests sehr lange zum ausführen brauchten (Da im Hintergrund alles Nötige für die Integrationtests auch geladen wurde), haben wir uns entscheiden, diese in unterschiedliche Klassen zu stecken.ist.
+
+** Nutze Mockito um Objekte zu mocken
+*** Am Anfang haben wir in einem Unittest auch alle nötigen Hilfsobjekte erzeugt. Da so aber bei Fehlern in der Hilfsklasse auch Fehler in der anderen Klasse entstanden, haben wir uns entscheiden, Mocks zu nutzen. Dadurch sind die Unittests einer Klasse unabhängig von den Fehlern anderer Klassen.
+
+** Benenne Table in Desk um
+*** Da wir große Schwierigkeiten bekommen haben, die Tables von WineTavern, HTML und MySQL auseinander zu halten, haben wir uns beschlossen, die WineTavern Tables in Desks umzubennenen.
+
 * Verwendete Muster
+
+** Nutzung des Adapter-Patterns im Employee
+*** Weitere Eigenschaften zu einem UserAccount hinzufügen, ohne Login-Verwaltung mit UserAccount zu zerstören.
+
+** Strategy-Pattern zum Sortieren von Reservierungen
+*** Je nach gewünschter Sortierart dem Parameter-String die entsprechende Sortiermethode zugewiesen
+*** Später durch Java-8 Function<T,R> vereinfacht.
+
+** Builder-Pattern zum Splitten von Collections
+*** Splitbuilder erzeugt Splitter-Objekt, welche eine Liste nach einem Predicate teilen kann. Auf die geteilte Collection können wieder eigene Methoden angewedet werden.
+
 * Persistenz
+
+** Nutzung von MySQL, um Daten zu speichern.
+*** Falls noch keine DB exisitiert, wird eine Neue mit Tischen und Administrator angelegt.
+
+** Nutzung von nicht persistenter HSQL DB in den Tests
+*** So laufen Tests schneller ab, ohne Release-DB zu verändern.
+
 * Benutzeroberfläche
 
 [appendix]
