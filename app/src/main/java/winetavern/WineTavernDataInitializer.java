@@ -215,56 +215,56 @@ public class WineTavernDataInitializer implements DataInitializer{
         dayMenuRepository.save(dayMenu);
 
         DayMenuItem smallWhiteWine = new DayMenuItem(nameWhiteWine + " 0,2l", nameWhiteWine + ": Glas",
-                Money.of(4.75, EURO), 0.2);
+                Money.of(4.75, EURO), 1/0.2);
         smallWhiteWine.setProduct(productCatalog.findByName(nameWhiteWine).iterator().next());
         dayMenu.addMenuItem(smallWhiteWine);
         //smallWhiteWine.addDayMenu(dayMenu);
         dayMenuItemRepository.save(smallWhiteWine);
 
         DayMenuItem bigWhiteWine = new DayMenuItem(nameWhiteWine + " 0.75l", nameWhiteWine + ": Flasche",
-                Money.of(17, EURO), 0.75);
+                Money.of(17, EURO), 1/0.75);
         bigWhiteWine.setProduct(productCatalog.findByName(nameWhiteWine).iterator().next());
         dayMenu.addMenuItem(bigWhiteWine);
         dayMenuItemRepository.save(bigWhiteWine);
 
         DayMenuItem smallRedWine = new DayMenuItem(nameRedWine + " 0,2l", nameRedWine + ": Glas",
-                Money.of(12.99, EURO), 0.2);
+                Money.of(12.99, EURO), 1/0.2);
         smallRedWine.setProduct(productCatalog.findByName(nameRedWine).iterator().next());
         dayMenu.addMenuItem(smallRedWine);
         dayMenuItemRepository.save(smallRedWine);
 
         DayMenuItem bigRedWine = new DayMenuItem(nameRedWine + " 0,75l", nameRedWine + ": Flasche",
-                Money.of(45, EURO), 0.75);
+                Money.of(45, EURO), 1/0.75);
         bigRedWine.setProduct(productCatalog.findByName(nameRedWine).iterator().next());
         dayMenu.addMenuItem(bigRedWine);
         dayMenuItemRepository.save(bigRedWine);
 
         DayMenuItem smallLiquor = new DayMenuItem(nameLiquor + " 2cl", nameLiquor + ": Kurzer",
-                Money.of(2.99, EURO), 0.02);
+                Money.of(2.99, EURO), 1/0.02);
         smallLiquor.setProduct(productCatalog.findByName(nameLiquor).iterator().next());
         dayMenu.addMenuItem(smallLiquor);
         dayMenuItemRepository.save(smallLiquor);
 
         DayMenuItem bigLiquor = new DayMenuItem(nameLiquor + " 4cl", nameLiquor + ": Doppelter",
-                Money.of(4.99, EURO), 0.04);
+                Money.of(4.99, EURO), 1/0.04);
         bigLiquor.setProduct(productCatalog.findByName(nameLiquor).iterator().next());
         dayMenu.addMenuItem(bigLiquor);
         dayMenuItemRepository.save(bigLiquor);
 
         DayMenuItem smallSoftDrink = new DayMenuItem(nameSoftDrink + " 0,2l", nameSoftDrink + ": klein",
-                Money.of(2.99, EURO), 0.2);
+                Money.of(2.99, EURO), 1/0.2);
         smallSoftDrink.setProduct(productCatalog.findByName(nameSoftDrink).iterator().next());
         dayMenu.addMenuItem(smallSoftDrink);
         dayMenuItemRepository.save(smallSoftDrink);
 
         DayMenuItem mediumSoftDrink = new DayMenuItem(nameSoftDrink + " 0,4l", nameSoftDrink + ": mittel",
-                Money.of(4.29, EURO), 0.4);
+                Money.of(4.29, EURO), 1/0.4);
         mediumSoftDrink.setProduct(productCatalog.findByName(nameSoftDrink).iterator().next());
         dayMenu.addMenuItem(mediumSoftDrink);
         dayMenuItemRepository.save(mediumSoftDrink);
 
         DayMenuItem bigSoftDrink = new DayMenuItem(nameSoftDrink + " 0,8l", nameSoftDrink + ": groß",
-                Money.of(5.99, EURO), 0.8);
+                Money.of(5.99, EURO), 1/0.8);
         bigSoftDrink.setProduct(productCatalog.findByName(nameSoftDrink).iterator().next());
         dayMenu.addMenuItem(mediumSoftDrink);
         dayMenuItemRepository.save(bigSoftDrink);
