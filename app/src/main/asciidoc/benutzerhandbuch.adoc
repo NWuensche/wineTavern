@@ -1,0 +1,103 @@
+= Benutzerhandbuch
+
+:imagesdir: benutzerhandbuch/1920x1080
+
+== Installation
+Zum Ausführen ist Internetzugang erforderlich.
+Das Programm verbindet sich mit einem MySQL Server. Die Verbindung erfolgt über TCP Port 3306 mit dem Benutzer "root" und dem Passwort "test123".
+
+
+== Programmstart
+
+Der Start des Programms erfolgt über die Kommandozeile
+
+[source,conf]
+----
+java -jar winetavern.jar
+----
+
+
+
+== Benutzung
+Die Benutzeroberfläche unterteilt sich in verschiedene Registerkarten (Tabs), die auf der linken Bildschirmseite angezeigt werden.
+Verschiedene Benutzergruppen haben lediglich Zugriff auf die für die Erfüllung ihres jeweiligen Auftrages erforderlichen Registerkarte. Um von der öffentlichen Seite zum internen System zu gelangen muss der Adresszeile ein /login angefügt werden. Der Login für den Administrator ist: Username: "admin", Passwort: "1234"
+
+image::public_page.png[Startseite]
+image::login.png[Login]
+
+
+Im folgenden eine Aufführung der einzelnen Registerkarten.
+
+=== Dashboard
+Hier wird ein Überblick angezeigt.
+
+image::dashboard.png[Das Dashboard]
+
+
+=== Karte
+
+Hier können Tageskarten erstellt und modifiziert werden. Zu den jeweiligen Tageskarten können Produkte hinzugefügt werden.
+Außerdem können hier neue Produkte erstellt, sowie deren Preis und weitere Eigenschaften festgelegt werden.
+
+image::menuitems1.png[Tageskarte]
+image::addmenuitem.png[Gericht erstellen und auf die Tageskarte hinzufügen]
+
+
+=== Reservierungen
+
+Hier werden Reservierungen verwaltet, sowie ein Überblick über aktuelle und zukünftige Reservierungen angezeigt.
+Bei der Abfrage der Reservierungen wird eine Tisch der innerhalb der nächsten Stunde reserviert wurde als reserviert angezeigt.
+
+image::reservation.png[Überblick]
+image::showtable.png[Überblick über einen Tisch]
+
+
+=== Abrechnung
+
+Hier werden die Abrechnungen der Bedienungen erstellt.
+
+image::addBill.png[Neue Rechnung auf einen Tisch anlegen]
+image::billoverview.png[Offene Rechnung]
+image::addbillitem.png[Bestellung auf die Rechnung hinzufügen]
+image::splitbill.png[Rechnung aufteilen]
+image::printbill.png[Rechnung ausdrucken]
+image::closedbill.png[Geschlossene Rechnungen]
+image::openbill.png[Offene Zahlung der Bedienung]
+image::daycheckout.png[Tagesabrechnung]
+image::paid.png[Bezahlt!]
+
+
+=== Lager
+
+Hier kann der aktuelle Bestand von Produkten eingesehen werden, sowie Lagerbestände erfasst werden.
+Produkte, die weniger als 10x im Bestand sind, werden rot markiert!
+
+image::storage.png[Überblick]
+image::addproduct.png[Produkt hinzufügen]
+
+
+=== Events
+
+Hier werden Veranstaltungen verwaltet.
+
+image::events.png[Veranstaltungen]
+image::addevent.png[Veranstaltung hinzufügen]
+image::addedevent.png[Veranstaltung wurde hinzugefügt]
+
+
+=== Management
+
+Hier können die Schichten der Angestellten eingesehen und bearbeitet werden.
+Außerdem können hier Winzer hinzugefügt werden.
+
+image::shifts.png[Schichten]
+image::addshift.png[Schicht hinzufügen]
+image::addedshift.png[Hinzugefügte Schicht]
+image::addvintner.png[Winzer hinzufügen]
+
+
+=== Einstellungen
+
+Hier kann die Systemzeit bei Bedarf angepasst werden.
+
+image::settings.png[Einstellungen]

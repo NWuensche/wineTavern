@@ -1,23 +1,76 @@
 = Cross-Testing Feedback
 
-__Durchführende Gruppe:__
-__Anwendung von Gruppe:__
+__Durchführende Gruppe:17
+
+__Anwendung von Gruppe:33
 
 == Getestetes System
-Welche Aufgabe/Problemstellung löst die Anwendung.
+Kassensystem für Weinstube "Zur fröhlichen Reblaus"
 
 == Fehler-Report
 // See http://asciidoctor.org/docs/user-manual/#tables
 [options="header"]
 |===
 |Pfad |Parameter |Beschreibung |Rückgabe
-| … | … | … | … |
+| / | - | Weintraube Bild kann nicht geladen werden | -
+| /login | - | Box.js und form.js können nicht geladen werden | -
+| /personal | - | Fehlermeldung | "iniHight is not defined at onload"
+| /personal_einstellen? | Benutzerkennung = "KMuehl" | Fehlermeldung | "userAccount already exists"
+| /personal_edit | Gehalt = 99999999999999999999999999999999999999 | Fehlermeldung | "Overflow"
+| /personal/delete | aktuell angemeldete Person | sich selbst löschen | nix passiert, bzw. kein Hinweis
+| /personal/delete | Admin | Admin löschen | nichts passiert (super), aber kein Hinweis
+| /personal/delete | Judith Krempel | lässt sich nicht löschen | -
+| /personal_einstellen, /personal_edit | als nicht Admin | Button als nicht Admin anklickbar |
+| /tischreservierung | Plätze>8 | schlägt trotzdem Tische vor, obwohl überbucht | -
+| /tischreservierung | Plätze>12 | schlägt garkeinen Tisch mehr vor, nur "max" beim Input | -
+| /tischreservierung | Vorschlag erhalten | man kann beliebigen Tisch auswählen | -
+| /tischreservierung | erneute Reservierung | Doppelte Buchung pro Zeit | Kommentar: "Start: 07.01.2017 12:45, Dauer:
+ 179 Minuten, benötigte Alternativkonfiguration: nein"
+| /bestandsliste | Nachbestellung <0 | negative Nachbestellung, yes, unendlich Geld bekommen | negative Lagerbestände
+| /bestandsliste | Nachbestellung > 0 | Neuer Wert wird nicht gespeichert, wenn ich Seite verlasse |
+| /product_add | Jahr = 5 | schlechtes Jahresformat, stört aber nicht | -
+| /produktverwaltung/delete | Produkt, das auf Tagesliste steht | Fehler | org.hibernate.exception.ConstraintViolationException: could not execute statement
+| /winzerverwaltung/delete | - | Winzer können nicht gelöscht werden | alert, aber nichts passiert
+| /winzerverwaltung | - | man kann Winzer mit Leertaste als Namen (" ") erstellen | 
+| /eventplanung | - | Funktion von Event starten sowie Inputfeld? | -
+| /event_edit | Besucherzahl = 99999999999999999999999999999999999999 | Besucherzahl übergroß | Error-Seite
+| /tageskarte_edit | - | kein Hinzufügen von Produkten, wenn schon etwas auf der Tageskarte steht, nur Neuwahl | -
+| /tagesabrechnung | - | Nachbestellungen sind nicht gelistet | -
+
+
+
+
+
 |===
 
 == Sonstiges
 * Optik der Anwendung
+** "Eventkalender" schaut aus Sidebar raus
+** Unicode Problem in /bestandsliste (Griveton ros�)
 * Fehlende Features
+** Weiterleitung der Bestellungen an die Küche
+** Vergessene Posten sind von der Bedienung selbst zu tragen
+** Die Bedienungen zahlen nur 90% des Preises der Tageskarte
+** Eine neue Tageskarte übernimmt nicht die Produkte vom Vortag ("Zusammenstellen einer Tageskarte (durch Modifizieren der Karte des vergangenen Tages)")
+** Winzertag
+*** Kunden zahlen 50% des Preises auf Weine des Winzers an einer Weinprobe
+*** Es werden ausschließlich Weine des Winzers an der Weinprobe ausgeschenkt
 * Interaktion mit der Anwendung (Usability)
+** /bestellung: man sieht keine Preise der bereits bestellten Waren oder der Gesamtrechnung
+** /eventkalender: Events sind nicht nach Datum sortiert
+** /personal_edit: "Anstellung als:" mit String (scheint auch nie zu funktionieren)
+** /personal_edit: Benutzererkennung in Textbox, obwohl nicht veränderbar.
+** /tischreservierungen: Obwohl Plätze nötig, kein Stern dran
+* Fehlende zurück Pfeile erschweren Benutzerfreundlichkeit
+* Schlechte Euro-Formatierung
+** "EUR 12" in /tagesabrechnung, aber "60€" in /bestellung/tisch
+
 
 == Verbesserungsvorschläge
-* Was kann noch weiter verbessert werden?
+* Farbauswahl und Visuelle Anordnung in den Formularen könnte verbessert werden
+* Die Anwendung ist nicht zeitgemäß, keine Schriftformatierungen, keine optischen Feinheiten und Hilfen, durch Icons oder Dialogfelder
+* Freiräume zwischen den Elementen
+* Ausnutzung der gesamten Bildschirmfläche
+* keine responsive Unterstützung
+* Schrift auf gemustertem Hintergrund ließt sich schwierig
+* zudem tragen Sans-Serif für eine bessere Lesbarkeit bei.

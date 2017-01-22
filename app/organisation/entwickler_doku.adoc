@@ -6,6 +6,9 @@
 * Qualitätsziele
 ** Stabil lauffähig, intuitiv bedienbar
 
+=== Entwurfsklassendiagramm
+image::src/EKD.png[Entwurfsklassendiagramm, 700, link=src/EKD.png]
+
 
 == Randbedingungen
 * Hardware-Vorgaben

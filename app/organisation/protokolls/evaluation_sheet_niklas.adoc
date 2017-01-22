@@ -1,0 +1,35 @@
+= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2015/16
+
+**Von:** Niklas Wünsche
+
+**Gruppe:** 17
+
+== Was habe ich gelernt?
+* Ich habe viel über die Webentwicklung gelernt mit Spring gelernt.
+* Ich habe gelernt, wie man effektiv im Team programmiert.
+* Die Vorteile von Git und Versionsverwaltung allgemein.
+* Kennenlernen von Tools für UML (MagicDraw).
+
+= Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+* Die Arbeit steht und fällt mit der Gruppe.
+* Nicht einfach drauf los programmieren, sondern die Gruppe vorher fragen.
+* Ein gutes Gruppenklima motiviert ungemein.
+* Man kommt schnell voran, wenn jeder genau weiß, was er zu tun hat.
+
+== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+* Frameworks können einem die Arbeit sehr erleichern (z.B. Login/UserAccount).
+* Wenn das Framework noch Ecken und Kanten hat, muss man es selber schreiben (z.B. Order).
+* Die Erarbeitung des Frameworks im Team geht sehr schnell.
+* JavaDoc ist sehr nützlich, wenn sie existiert.
+
+== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+* Einige Designentscheidungen in Salespoint besser erklären und Hilfestellungen anbieten.
+* Nutzung eines CI Tools, welches die Gruppen auch selber konfigurieren können.
+* CI Tool sollte von Anfang bis Ende des Praktikums funktionieren.
+* UML Phase etwas verkürzen.
+
+== Sonstiges und Anmerkungen
+* Das SWT-Projekt ist ein sehr schönes Modul, in dem man erste Praxiserfahrungen sammelt.
+* Man wird nicht einfach ist kalte Wasser geworfen, sondern bekommt viel Unterstützung.
+* Wenn man eine Gruppe bekommt, die den gleichen Stand wie man selber hat, ist die Arbeit sehr spaßig.
+* Alles in allem eine schöne Erfahrung.
