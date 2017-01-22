@@ -1,0 +1,23 @@
+= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2015/16
+
+**Von:** Michel Kunkler
+
+**Gruppe:** 17
+
+== Was habe ich gelernt?
+* Gruppenarbeit
+* Kommunikation
+* Java 8
+* Spring
+
+= Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+* Kommunikation ist Alles
+
+== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+* schlechte Erfahrungen mit Salespoint. Das Framework schrenkt die Entwicklung ungemein ein und es waren viele Workarounds notwendig um private Methoden zu workarounden. Außerdem ist Salespoint an vielen Stellen sehr schlecht dokumentiert. Leider hat man häufig angefangen Salespoint zu benutzen und hat im Nachhinein festgestellt, dass es schneller gewesen wäre, teile selbst zu implementieren. Der Code wurde durch workarounds zusätzlich recht hässlich und unintuitiv.
+
+== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+* Anfangs ist es bei der Fülle an Frameworks/Libraries schwierig nachzuvollziehen, was wofür verantwortlich ist. Es ist sicher sinnvoll die unterschiedlichen Verantwortlichkeiten klar aufzuzeigen. Insbesondere "was macht Spring genau und was macht Salespoint alles 'mehr'?" Hierzu ist eine Auflistung und kurze Beschreibung alller standardmäßig verwendeten Frameworks/Libraries bei einer Einführungsunterrichtung sicherlich hifreich. 
+
+== Sonstiges und Anmerkungen
+* keine
