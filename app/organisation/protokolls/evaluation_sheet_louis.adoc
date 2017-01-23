@@ -1,0 +1,39 @@
+﻿= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2016/17
+
+**Von: Louis**
+
+**Gruppe: 17**
+
+== Was habe ich gelernt?
+* Arbeit an großen Projekten sowie GIT
+** Organisation
+** Arbeitsverteilung
+** Kommunikation (Slack)
+** Javadoc an Funktionen zu schreiben, vor allem wenn diese von anderen Teammitgliedern benötigt werden
+* Arbeiten mit Datenbanken
+* Arbeiten mit Spring
+* Arbeiten mit Thymeleaf
+
+= Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+* Trotz der guten Kommunikation auf Slack sind auch regelmäßige PERSÖNLICHE Gesrpräche notwendig
+* Man sollte sich von Anfang an auf einen Stil einigen:
+** diesselbe IDE verwenden
+** denselben Coding Style verwenden (z.B: CamelCase und Spaces statt Tabs)
+* Es ist wichtig von Anfang an die Aufgaben klar zu verteilen
+* Oft sind ähnliche Persönlichkeiten für eine gute Zusammenarbeit notwendig
+* Es war gut, Medieninformatiker und Informatiker in der Gruppe zu haben, um sowohl gute Gestaltung als auch gutes Coding zu haben
+
+== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+* Sehr viel learning by doing
+* Oft machten mir private Funktionen und Konstruktoren von Salespoint Klassen dessen Verwendung unmöglich
+* Die BigDecimals für das JavaMoney machten uns oft Probleme
+* Leider ging es oft schneller gewisse Funktionen und Klassen selbst zu schreiben, anstatt herauszufinden wie man ähnliche in Salespoint verwendet
+
+== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+* Die Vorträge von Oliver Giercke waren für mich am Anfang zu kompliziert, sie sollten vielleicht erst gehalten werden, wenn die Studenten bereits etwas Praxiserfahrung mit Salespoint haben
+* Die Programmierphase etwas nach vorne verschieben
+
+== Sonstiges und Anmerkungen
+* Fragen im Auditorium wurden immer sehr schnell beantwortet
+* Teamwünsche bitte beibehalten
+* Weiterhin darauf achten, dass die Gruppenmitglieder etwa diesselber Erfahrung haben
