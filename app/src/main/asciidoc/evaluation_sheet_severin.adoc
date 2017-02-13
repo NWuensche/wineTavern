@@ -1,0 +1,46 @@
+= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2015/16
+
+**Von: Severin Engert**
+
+**Gruppe: 17**
+
+
+== Was habe ich gelernt?
+* Thymeleaf
+* git und Github zu benutzen
+* Verbesserung meiner Fähigkeiten in der Webentwicklung
+* Tricks und Kniffe in der Java-Programmierung
+* verschiedene Bibliotheken für GUI (Kalender, Datepicker, ...)
+
+
+= Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+* Slack erleichtert die Kommunikation ungemein, aber es ersetzt nicht die persönlichen Gespräche um offene Punkte und
+ Probleme klären zu können.
+* Verschiedenste Fähigkeiten meiner
+Team-Mitglieder haben gut zu einander gepasst, sodass wir für alle Probleme einen Fachmann hatten.
+* Man sollte aufpassen, dass Teammitglieder über neue Programmteile informiert werden, damit alle den Code und die
+Logik verstehen.
+* Insgesamt lief die Zusammenarbeit sehr gut.
+
+
+== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+* Anfangs ist es mehr als kompliziert mit den neuen Bibliotheken und Frameworks zurecht zu kommen. Man findet
+Annotations und Funktionen quer durchmischt, ohne zu wissen, woher sie kommen und was sie genau bewirken. Das klärt
+sich leider erst durch viel Probieren und einzeln nachlesen.
+* Eine Liste mit allen verfügbaren Annotations und ihrer Wirkung wäre hilfreich.
+* Salespoint hat uns sehr viele Probleme bereitet. Fehlender Source-Code und unzureichende Dokumentation führten
+immer wieder zu Problemen, die oft nur dank dem Auditorium geklärt werden konnten. Hier ein privater Konstruktor, da
+eine geschützte Methode. Auch die Verwendung von unbekannten Java-Klassen wie Bigdecimal führten immer wieder zu Ärger, da man sich erst einlesen musste, wie sie zu
+verwenden sind.
+
+
+== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+* Tutorials oder Inloop-Lektionen schon vor Beginn des Praktikums zum Thema Spring, Salespoint, Thymeleaf würden den
+Start erleichtern.
+* Einführungsveranstaltungen sollten zu Salespoint passen, z.B. nicht zu GUI Entwicklung allgemein.
+* Generell wären mehr und somit detailliertere Einführungsveranstaltungen sinnvoll
+* Vorstellungen sollten zu humanen Zeiten stattfinden, sodass auch die Kontrollierenden noch motiviert sind
+
+
+== Sonstiges und Anmerkungen
+* Teamwünsche sind eine sehr gute Sache und sollten beibehalten werden

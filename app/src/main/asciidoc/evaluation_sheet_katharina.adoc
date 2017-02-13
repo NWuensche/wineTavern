@@ -1,0 +1,28 @@
+﻿= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2016/17
+
+**Von: Katharina**
+
+**Gruppe: 17**
+
+== Was habe ich gelernt?
+* Gruppenarbeit
+* Kommunikation (sowohl intern als auch extern)
+* Spring
+* Java 8
+* TDD
+* Bootstrap
+
+= Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+* Kommunikation ist der wohl wichtigste Aspekt für ein erfolgreiches Projekt
+
+== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+* Salespoint machte einige Workarounds nötig --> gute Hilfestellung durch auditorium
+* Der professionelle Umgang mit JavaDoc war noch ungewohnt, später fiel dann häufiger auf das die JavaDoc an vielen stellen unzureichend war, und man gerne in den Quellcode gesehen hätte, da dieser weningstens ein wenig übersicht über die Funktion einzelner Methoden gegeben hätte. Leider ist der Quellcode für Studenten nicht offengelegt
+
+== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+* Die Einführungsveranstaltungen sind zwar gut & sinnvoll, allerdings wäre es sicher hilfreich einen genaueren Einblick zu geben. Man kann die fülle der Informationen einfach nicht innerhalb von einer VL verarbeiten oder überhaupt erfassen
+* Die Quellcodes von Salespoint sollten offen sein. Nicht um dort Code zu kopieren, sondern um einfach tlw sehr Komplexe abläufe zu verstehen. Der Code sollte mitunter auch die beste Dokumentation für ein Framework, welches für die Lehre bestimmt ist liefern. So meine Meinung
+* SonarQube ist ein tolles Hilfsmittel, es sollte in Zukunft unbedingt vermieden werden das dieses Hilfsmittel einfach für mehrewre Wochen ausfällt.
+
+== Sonstiges und Anmerkungen
+* keine
