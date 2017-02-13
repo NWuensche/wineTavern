@@ -1,0 +1,20 @@
+= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2016/17
+
+**Von: Katharina**
+
+**Gruppe: 17**
+
+== Was habe ich gelernt?
+Das Projekt brachte mir sehr viel Erfahrung im Umgang mit GIT, Thymeleaf, Spring und SQL.  
+
+= Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+Die Augaben aufzuteilen und in kleineren Gruppen bearbeiten. Eine gute Kommunikation unter den Gruppenmitgliedern muss für ein erfolgreiche Arbeiten gegeben sein. Genaue einschätzung welche Aufgabe übernommen werden können. Zu Anfang allgemine Strukturen zu definieren. Verstehen, was die anderen Gruppenmitglieder an Ideen umsetzen wollen und dafür die beste Lösung zu finden.
+
+== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+Die Nutzung eines Freamsworks kann die arbeit ungemein erleichtern. Der Umgang mit SalesPoint fiel mir anfangs sehr schwer, da leider keine genaue Dokumentation oder Erklärungen vorhanden sind, was das arbeiten oft erschwerte und mit viel probieren verbunden ist. 
+
+== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+SalesPoint schon eher zur verfügung zu stellen, um sich schon eher damit zu beschäftigen. Eine Einführung in die Nutzung von SalesPoint.
+
+== Sonstiges und Anmerkungen
+Das Praktikum gibt einen umfangreichen Einblick in einem Projektablauf und macht mit einen guten Team wirklich Spaß. Die Möglichkeit von Teamwünschen fand ich sehr gut und sollte auch zukünftig angeboten werden.
