@@ -1,28 +1,20 @@
-﻿= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2016/17
+= Persönliches Feedback eines Teammitgliedes des Softwarepraktikums 2016/17
 
 **Von: Katharina**
 
 **Gruppe: 17**
 
 == Was habe ich gelernt?
-* Gruppenarbeit
-* Kommunikation (sowohl intern als auch extern)
-* Spring
-* Java 8
-* TDD
-* Bootstrap
+Das Projekt brachte mir sehr viel Erfahrung im Umgang mit GIT, Thymeleaf, Spring und SQL.  
 
 = Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
-* Kommunikation ist der wohl wichtigste Aspekt für ein erfolgreiches Projekt
+Die Augaben aufzuteilen und in kleineren Gruppen bearbeiten. Eine gute Kommunikation unter den Gruppenmitgliedern muss für ein erfolgreiche Arbeiten gegeben sein. Genaue einschätzung welche Aufgabe übernommen werden können. Zu Anfang allgemine Strukturen zu definieren. Verstehen, was die anderen Gruppenmitglieder an Ideen umsetzen wollen und dafür die beste Lösung zu finden.
 
 == Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
-* Salespoint machte einige Workarounds nötig --> gute Hilfestellung durch auditorium
-* Der professionelle Umgang mit JavaDoc war noch ungewohnt, später fiel dann häufiger auf das die JavaDoc an vielen stellen unzureichend war, und man gerne in den Quellcode gesehen hätte, da dieser weningstens ein wenig übersicht über die Funktion einzelner Methoden gegeben hätte. Leider ist der Quellcode für Studenten nicht offengelegt
+Die Nutzung eines Freamsworks kann die arbeit ungemein erleichtern. Der Umgang mit SalesPoint fiel mir anfangs sehr schwer, da leider keine genaue Dokumentation oder Erklärungen vorhanden sind, was das arbeiten oft erschwerte und mit viel probieren verbunden ist. 
 
 == Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
-* Die Einführungsveranstaltungen sind zwar gut & sinnvoll, allerdings wäre es sicher hilfreich einen genaueren Einblick zu geben. Man kann die fülle der Informationen einfach nicht innerhalb von einer VL verarbeiten oder überhaupt erfassen
-* Die Quellcodes von Salespoint sollten offen sein. Nicht um dort Code zu kopieren, sondern um einfach tlw sehr Komplexe abläufe zu verstehen. Der Code sollte mitunter auch die beste Dokumentation für ein Framework, welches für die Lehre bestimmt ist liefern. So meine Meinung
-* SonarQube ist ein tolles Hilfsmittel, es sollte in Zukunft unbedingt vermieden werden das dieses Hilfsmittel einfach für mehrewre Wochen ausfällt.
+SalesPoint schon eher zur verfügung zu stellen, um sich schon eher damit zu beschäftigen. Eine Einführung in die Nutzung von SalesPoint.
 
 == Sonstiges und Anmerkungen
-* keine
+Das Praktikum gibt einen umfangreichen Einblick in einem Projektablauf und macht mit einen guten Team wirklich Spaß. Die Möglichkeit von Teamwünschen fand ich sehr gut und sollte auch zukünftig angeboten werden.
