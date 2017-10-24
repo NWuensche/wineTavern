@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>de.tudresden.inf.st</groupId>
 			<artifactId>salespoint-framework</artifactId>
-			<version>6.3.2.BUILD-SNAPSHOT</version>
+			<version>6.4.0.RELEASE</version>
 		</dependency>
 
 		<!-- Persistence -->
@@ -29,12 +29,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
         </dependency>
+	
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<scope>runtime</scope>
+	</dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.5</version>
-        </dependency>
 
         <!-- Spring Boot Devtools -->
 

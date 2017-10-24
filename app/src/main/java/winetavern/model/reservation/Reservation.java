@@ -1,11 +1,11 @@
 package winetavern.model.reservation;
 
-import com.mysql.cj.core.exceptions.NumberOutOfRange;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import winetavern.model.management.TimeInterval;
+import java.lang.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class Reservation {
 
     public Reservation(String guestName, int persons, Desk desk, TimeInterval interval) {
         if(persons <= 0) {
-            throw new NumberOutOfRange("At least 1 person should reserve!");
+            throw new IllegalArgumentException("At least 1 person should reserve!");
         }
 
         this.guestName = guestName;
@@ -51,7 +51,7 @@ public class Reservation {
 
     public void setPersons(int numberOfPersons) {
         if(numberOfPersons <= 0) {
-            throw new NumberOutOfRange("At least 1 person should reserve!");
+            throw new IllegalArgumentException("At least 1 person should reserve!");
         }
 
         this.persons = numberOfPersons;
