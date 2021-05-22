@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>de.tudresden.inf.st</groupId>
 			<artifactId>salespoint-framework</artifactId>
-			<version>6.3.2.BUILD-SNAPSHOT</version>
+			<version>6.4.2.RELEASE</version>
 		</dependency>
 
 		<!-- Persistence -->
@@ -167,7 +167,7 @@
 
 		<repository>
 			<id>salespointframework</id>
-			<url>http://www.st.inf.tu-dresden.de/SalesPoint/repository</url>
+			<url>https://www.st.inf.tu-dresden.de/SalesPoint/repository</url>
 		</repository>
 
 	</repositories>
@@ -176,7 +176,7 @@
 
 		<pluginRepository>
 			<id>salespointframework</id>
-			<url>http://www.st.inf.tu-dresden.de/SalesPoint/repository</url>
+			<url>https://www.st.inf.tu-dresden.de/SalesPoint/repository</url>
 		</pluginRepository>
 
 	</pluginRepositories>

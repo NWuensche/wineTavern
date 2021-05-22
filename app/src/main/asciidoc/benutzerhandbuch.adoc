@@ -4,7 +4,7 @@
 
 == Installation
 Zum Ausführen ist Internetzugang erforderlich.
-Das Programm verbindet sich mit einem MySQL Server. Die Verbindung erfolgt über TCP Port 3306 mit dem Benutzer "root" und dem Passwort "test123".
+Das Programm verbindet sich mit einem MySQL Server. Die Verbindung erfolgt über TCP Port 3306 mit dem Benutzer "roota" und dem Passwort "test123".
 
 
 == Programmstart
