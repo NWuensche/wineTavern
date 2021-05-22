@@ -15,6 +15,22 @@ $cd ./app
 $mvn spring-boot:run
 ```
 
+oder
+
+```shell
+$cd ./app
+$mvn clean install
+java -jar ./target/swt16w17-1.2.0.BUILD-SNAPSHOT.jar
+```
+
+oder
+
+```shell
+docker build -t winetavern .
+docker run -it winetavern -p
+```
+und öffne http://172.17.0.2:8080/
+
 ## Autoren
 
 * Niklas Wünsche (https://github.com/NWuensche[@NWuensche])
