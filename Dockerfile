@@ -8,7 +8,8 @@ RUN sh -c ' /usr/bin/mysqld_safe --datadir=/var/lib/mysql &' && sleep 3 && mysql
 
 ADD ./app /opt/app
 WORKDIR /opt/app
+RUN mvn clean install #Generate Jar, only with jar can I change port + it will be run only once and not on every startup
 
 #EXPOSE 8080 Not supported by heroku
 
-CMD sh -c ' /usr/bin/mysqld_safe --datadir=/var/lib/mysql &' && sleep 3 && mvn spring-boot:run #Need to be on same line
+CMD sh -c ' /usr/bin/mysqld_safe --datadir=/var/lib/mysql &' && sleep 3 && java -Dserver.port=$PORT -jar ./target/*.jar  #Need to be on same line #Port Provided by heroku
